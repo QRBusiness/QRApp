@@ -9,6 +9,7 @@ import {
   STAFF_MANAGEMENT,
   UNAUTHENTICATED,
 } from '@/constains';
+import { useTranslation } from 'react-i18next';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import RootApp from '@/components/common/root-app';
 import UnauthenticatedRootApp from '@/components/common/unauthenticated-root-app';
@@ -21,6 +22,7 @@ import QRManagement from '@/views/qr-management';
 import StaffManagement from '@/views/staff-management';
 
 function App() {
+  const { t } = useTranslation();
   const routers = useMemo(
     () =>
       createBrowserRouter([
@@ -72,7 +74,13 @@ function App() {
     []
   );
 
-  return <RouterProvider router={routers} />;
+  return (
+    <>
+      <title>{t('module.app.name')}</title>
+      <meta name="description" content={t('module.app.description')} />
+      <RouterProvider router={routers} />
+    </>
+  );
 }
 
 export default App;

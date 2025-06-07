@@ -102,7 +102,7 @@ const SidebarApp = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <p className="text-center flex items-center justify-center bg-red-300">
-              {t('module.common.name')}
+              {t('module.app.name')}
             </p>
           </SidebarMenuItem>
         </SidebarMenu>

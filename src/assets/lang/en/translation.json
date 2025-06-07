@@ -1,7 +1,8 @@
 {
   "module": {
-    "common": {
-      "name": "Application"
+    "app": {
+      "name": "Application",
+      "description": "Description of the application."
     },
     "authentication": {
       "title": "Welcome back",
