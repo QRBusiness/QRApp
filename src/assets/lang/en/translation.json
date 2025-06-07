@@ -1,7 +1,11 @@
 {
   "module": {
+    "common": {
+      "name": "Application"
+    },
     "authentication": {
-      "title": "Welcome back !",
+      "title": "Welcome back",
+      "subtitle": "Sign in to access your personalized dashboard and services.",
       "phone": "Phone Number",
       "phoneDescription": "* This is your phone number registered with us.",
       "phonePlaceholder": "Enter your phone number",
@@ -10,9 +14,23 @@
       "password": "Password",
       "passwordDescription": "* This is your password.",
       "passwordPlaceholder": "Enter your password",
-      "passwordError": "Please enter a valid password.",
+      "passwordError": "Password must be at least 6 characters long.",
+      "passwordComplexityError": "Password must contain at least one uppercase letter, one lowercase letter, and one number.",
       "loginButton": "Login",
-      "forgotPassword": "Forgot Password?"
+      "forgotPassword": "Forgot Password?",
+      "logout": "Logout"
+    },
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "qr-management": "QR Management",
+      "menu-management": "Menu Management",
+      "order-management": "Order Management",
+      "staff-management": "Staff Management",
+      "settings": "Settings",
+      "help": "Help",
+      "logout": "Logout",
+      "account": "Account Management",
+      "greeting": "Hi, {{name}} !"
     }
   }
 }
