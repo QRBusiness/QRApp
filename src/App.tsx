@@ -10,7 +10,7 @@ import {
   UNAUTHENTICATED,
 } from '@/constains';
 import { useTranslation } from 'react-i18next';
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import RootApp from '@/components/common/root-app';
 import UnauthenticatedRootApp from '@/components/common/unauthenticated-root-app';
 import ForgotPassword from '@/views/authenticate/forgot-password';
@@ -20,6 +20,7 @@ import MenuManagement from '@/views/menu-management';
 import OrderManager from '@/views/order-management';
 import QRManagement from '@/views/qr-management';
 import StaffManagement from '@/views/staff-management';
+import QRDetails from './views/qr-management/qr-details';
 
 function App() {
   const { t } = useTranslation();
@@ -36,7 +37,17 @@ function App() {
             },
             {
               path: QR_MANAGEMENT,
-              element: <QRManagement />,
+              element: <Outlet />,
+              children: [
+                {
+                  index: true,
+                  element: <QRManagement />,
+                },
+                {
+                  path: ':id',
+                  element: <QRDetails />,
+                },
+              ],
             },
             {
               path: MENU_MANAGEMENT,

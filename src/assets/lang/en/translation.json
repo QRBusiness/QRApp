@@ -22,6 +22,7 @@
       "logout": "Logout"
     },
     "sidebar": {
+      "home": "Home",
       "dashboard": "Dashboard",
       "qr-management": "QR Management",
       "menu-management": "Menu Management",
