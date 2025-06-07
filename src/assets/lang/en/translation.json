@@ -1,0 +1,18 @@
+{
+  "module": {
+    "authentication": {
+      "title": "Welcome back !",
+      "phone": "Phone Number",
+      "phoneDescription": "* This is your phone number registered with us.",
+      "phonePlaceholder": "Enter your phone number",
+      "phoneErrorLength": "Phone number must be at least 10 characters long.",
+      "phoneErrorFormat": "Please enter a valid phone number.",
+      "password": "Password",
+      "passwordDescription": "* This is your password.",
+      "passwordPlaceholder": "Enter your password",
+      "passwordError": "Please enter a valid password.",
+      "loginButton": "Login",
+      "forgotPassword": "Forgot Password?"
+    }
+  }
+}
