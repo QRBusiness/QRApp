@@ -1,8 +1,10 @@
+import CreateQR from './create-qr';
+
 const QRManagement = () => {
   return (
-    <div>
-      <h1>QR Management</h1>
-      {/* Add QR management content here */}
+    <div className="flex flex-col items-start justify-start w-full h-full p-4">
+      <CreateQR />
+      <div>Table QR Code</div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 
@@ -21,7 +22,7 @@ const AppBreadcrumb = () => {
         <BreadcrumbItem>
           <BreadcrumbLink href="/">{t('module.sidebar.home')}</BreadcrumbLink>
         </BreadcrumbItem>
-        {pathnames.map((value, index) => {
+        {pathnames.slice(0, pathnames.length - 1).map((value, index) => {
           const href = `/${pathnames.slice(0, index + 1).join('/')}`;
           return (
             <React.Fragment key={index}>
@@ -37,6 +38,18 @@ const AppBreadcrumb = () => {
             </React.Fragment>
           );
         })}
+        {pathnames.length >= 1 && (
+          <BreadcrumbSeparator>
+            <SlashIcon />
+          </BreadcrumbSeparator>
+        )}
+        <BreadcrumbItem>
+          <BreadcrumbPage>
+            {pathnames[pathnames.length - 1] !== id
+              ? t(`module.sidebar.${pathnames[pathnames.length - 1]}`)
+              : id}
+          </BreadcrumbPage>
+        </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
   );

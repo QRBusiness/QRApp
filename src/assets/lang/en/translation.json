@@ -33,6 +33,77 @@
       "logout": "Logout",
       "account": "Account Management",
       "greeting": "Hi, {{name}} !"
+    },
+    "area": {
+      "title": "Area",
+      "description": "Select your area.",
+      "create": "Create Area"
+    },
+    "table": {
+      "title": "Table",
+      "description": "Select your table number.",
+      "create": "Create Table"
+    },
+    "qrManagement": {
+      "title": "QR Management",
+      "description": "Manage your QR codes for easy access to services.",
+      "create": "Create QR Code",
+      "reset": "Reset Form",
+      "additionalField": {
+        "title": "Additional Fields",
+        "description": "Add any additional fields you need enbedded in the QR code.",
+        "addField": "Add Field",
+        "buttonTriggerTitle": "Add Additional Fields",
+        "cancelButton": "Cancel",
+        "submitButton": "Add",
+
+        "fieldName": "Field Name",
+        "fieldNameError": "Field name cannot be empty.",
+        "fieldNameDescription": "* Enter field name",
+        "fieldNamePlaceholder": "Enter field name",
+
+        "fieldValue": "Field Value",
+        "fieldValueDescription": "* Enter field value",
+        "fieldValuePlaceholder": "Enter field value",
+        "fieldValueError": "Field value cannot be empty."
+      },
+      "addAreaField": {
+        "title": "Area",
+        "description": "Add area if not already created to embed in the QR code.",
+        "create": "Add Area",
+        "reset": "Reset Form",
+
+        "fieldName": "Area Name",
+        "fieldNameError": "Area name cannot be empty.",
+        "fieldNameDescription": "* Enter area name",
+        "fieldNamePlaceholder": "Enter area name",
+
+        "fieldDescription": "Area Description",
+        "fieldDescriptionError": "Area description cannot be empty.",
+        "fieldDescriptionDescription": "* Enter area description",
+        "fieldDescriptionPlaceholder": "Enter area description"
+      },
+      "addTableField": {
+        "title": "Table",
+        "description": "Add table if not already created to embed in the QR code.",
+        "create": "Add Table",
+        "reset": "Reset Form",
+
+        "fieldName": "Table Number",
+        "fieldNameError": "Table number cannot be empty.",
+        "fieldNameDescription": "* Enter table number",
+        "fieldNamePlaceholder": "Enter table number",
+
+        "fieldAreaId": "Area ID",
+        "fieldAreaIdError": "Area ID cannot be empty.",
+        "fieldAreaIdDescription": "* Enter area ID",
+        "fieldAreaIdPlaceholder": "Enter area ID",
+
+        "fieldDescription": "Table Description",
+        "fieldDescriptionError": "Table description cannot be empty.",
+        "fieldDescriptionDescription": "* Enter table description",
+        "fieldDescriptionPlaceholder": "Enter table description"
+      }
     }
   }
 }
