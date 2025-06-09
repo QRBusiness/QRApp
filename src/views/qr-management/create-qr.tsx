@@ -1,6 +1,6 @@
 import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CirclePlus, CircleX, Plus } from 'lucide-react';
+import { CirclePlus, CircleX, Info, Plus, Tag } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -190,8 +190,19 @@ const CreateQR = () => {
           {/* Additional Info Fields */}
           <div className="space-y-2 flex flex-col items-start justify-start">
             {additionalInfo.map((info, index) => (
-              <div key={index} className="flex items-center justify-start space-x-2">
-                <Label>{info.name}</Label>:<Badge className="ml-2">{info.value}</Badge>
+              <div
+                key={index}
+                className="flex relative items-center justify-start space-x-2 px-3 py-2 border rounded shadow-md group"
+              >
+                <Label>
+                  <Info className="mr-1" />
+                  {info.name}
+                </Label>
+                :
+                <Badge variant="secondary" className="text-base ml-2">
+                  {info.value}
+                </Badge>
+                <Tag className="absolute -right-4 -top-4 rotate-270 fill-primary text-black/50 group-hover:-right-3 group-hover:-top-3 group-hover:size-5 duration-300" />
               </div>
             ))}
           </div>

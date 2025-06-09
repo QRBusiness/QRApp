@@ -103,6 +103,16 @@
         "fieldDescriptionError": "Table description cannot be empty.",
         "fieldDescriptionDescription": "* Enter table description",
         "fieldDescriptionPlaceholder": "Enter table description"
+      },
+      "table": {
+        "title": "QR Codes",
+        "id": "ID",
+        "table": "Table",
+        "area": "Area",
+        "createdAt": "Created At",
+        "actions": "Actions Button",
+        "available": "Available",
+        "status": "Status"
       }
     }
   }
