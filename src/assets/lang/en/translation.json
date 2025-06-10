@@ -34,6 +34,19 @@
       "account": "Account Management",
       "greeting": "Hi, {{name}} !"
     },
+    "mobileSidebar": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "qr-management": "QR",
+      "menu-management": "Menu",
+      "order-management": "Order",
+      "staff-management": "Staff",
+      "settings": "Settings",
+      "help": "Help",
+      "logout": "Logout",
+      "account": "Account Management",
+      "profile": "Profile"
+    },
     "area": {
       "title": "Area",
       "description": "Select your area.",
@@ -48,6 +61,7 @@
       "title": "QR Management",
       "description": "Manage your QR codes for easy access to services.",
       "create": "Create QR Code",
+      "createSession": "Create new QR Code",
       "reset": "Reset Form",
       "additionalField": {
         "title": "Additional Fields",

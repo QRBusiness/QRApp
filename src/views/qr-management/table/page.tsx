@@ -7,28 +7,36 @@ async function getData(): Promise<QRTable[]> {
   // Fetch data from your API here.
   return [
     {
-      id: '1',
-      table: 'Table 1',
-      area: 'Area A',
-      status: 'ordering',
+      id: 'TBL-2025-0642',
+      table: 'Conference Room A',
+      area: 'East Wing, 3rd Floor',
+      status: 'cancelled',
       available: true,
-      createdAt: new Date().toISOString(),
+      createdAt: '2025-06-08T14:30:00Z',
     },
     {
-      id: '2',
-      table: 'Table 2',
-      area: 'Area B',
-      status: 'staff call',
+      id: 'TBL-2025-0643',
+      table: 'Executive Meeting Room',
+      area: 'West Wing, 5th Floor',
+      status: 'cancelled',
       available: false,
-      createdAt: new Date().toISOString(),
+      createdAt: '2025-06-07T09:15:00Z',
     },
     {
-      id: '3',
-      table: 'Table 3',
-      area: 'Area C',
+      id: 'TBL-2025-0644',
+      table: 'Collaboration Space',
+      area: 'North Building, Ground Floor',
       status: 'paid',
       available: true,
-      createdAt: new Date().toISOString(),
+      createdAt: '2025-06-09T10:45:00Z',
+    },
+    {
+      id: 'TBL-2025-0645',
+      table: 'Training Room B',
+      area: 'South Wing, 2nd Floor',
+      status: 'staff call',
+      available: true,
+      createdAt: '2025-06-05T16:20:00Z',
     },
   ];
 }
@@ -49,7 +57,7 @@ export default function QRTable() {
   }, []);
 
   return (
-    <div className="container py-10">
+    <div className="container mx-auto py-10">
       <h4 className="mb-4 scroll-m-20 text-2xl font-semibold tracking-tight">
         {t('module.qrManagement.table.title')}
       </h4>

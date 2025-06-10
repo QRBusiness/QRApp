@@ -20,7 +20,7 @@ import MenuManagement from '@/views/menu-management';
 import OrderManager from '@/views/order-management';
 import QRManagement from '@/views/qr-management';
 import StaffManagement from '@/views/staff-management';
-import QRDetails from './views/qr-management/qr-details';
+import QRDetails from './views/qr-management/details/qr-details';
 
 function App() {
   const { t } = useTranslation();

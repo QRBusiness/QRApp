@@ -7,6 +7,7 @@ export const STAFF_MANAGEMENT = '/staff-management';
 export const MENU_MANAGEMENT = '/menu-management';
 export const ORDER_MANAGEMENT = '/order-management';
 export const UNAUTHENTICATED = '/un-authenticated';
+export const PROFILE = '/profile';
 
 // Sidebar
 export const SIDEBAR_COOKIE_NAME = 'sidebar_state';

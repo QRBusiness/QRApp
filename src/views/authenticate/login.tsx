@@ -37,7 +37,7 @@ const Login = () => {
   };
 
   return (
-    <Card className="w-full h-full max-w-md mx-auto mt-20 px-2 sm:px-6">
+    <Card className="w-full h-full max-w-md mx-auto mt-20 px-2 md:px-6">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold mb-4">
           {t('module.authentication.title')}

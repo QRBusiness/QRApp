@@ -19,7 +19,7 @@ import {
   UtensilsCrossed,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Sidebar,
   SidebarContent,
@@ -80,6 +80,8 @@ const SidebarApp = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const params = useLocation();
+
   const username = 'Username'; // Replace with actual username logic if needed
 
   const accentItems = [
@@ -117,7 +119,10 @@ const SidebarApp = () => {
                   <SidebarMenuButton asChild>
                     <Button
                       variant={'ghost'}
-                      className="w-full justify-start px-4 cursor-pointer"
+                      className={cn(
+                        'w-full justify-start px-4 cursor-pointer',
+                        params.pathname === item.path_url ? 'text-primary' : ''
+                      )}
                       onClick={() => navigate(item.path_url)}
                     >
                       {item.icon}
