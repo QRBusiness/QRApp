@@ -48,19 +48,20 @@
       "profile": "Profile"
     },
     "area": {
-      "title": "Area",
+      "title": "Select Area",
       "description": "Select your area.",
       "create": "Create Area"
     },
     "table": {
-      "title": "Table",
+      "title": "Select Table",
       "description": "Select your table number.",
       "create": "Create Table"
     },
     "qrManagement": {
       "title": "QR Management",
       "description": "Manage your QR codes for easy access to services.",
-      "create": "Create QR Code",
+      "create": "Generate QR Code",
+      "createDescription": "Create a new QR code for your area or table.",
       "createSession": "Create new QR Code",
       "reset": "Reset Form",
       "additionalField": {
@@ -84,7 +85,7 @@
       "addAreaField": {
         "title": "Area",
         "description": "Add area if not already created to embed in the QR code.",
-        "create": "Add Area",
+        "create": "Add New Area",
         "reset": "Reset Form",
 
         "fieldName": "Area Name",
@@ -100,7 +101,7 @@
       "addTableField": {
         "title": "Table",
         "description": "Add table if not already created to embed in the QR code.",
-        "create": "Add Table",
+        "create": "Add New Table",
         "reset": "Reset Form",
 
         "fieldName": "Table Number",
@@ -120,13 +121,31 @@
       },
       "table": {
         "title": "QR Codes",
+        "description": "Configure the details for your new QR code.",
+        "additionalFields": "Additional Fields",
+        "additionalFieldsDescription": "Add any additional fields you need embedded in the QR code.",
         "id": "ID",
         "table": "Table",
         "area": "Area",
         "createdAt": "Created At",
         "actions": "Actions Button",
         "available": "Available",
-        "status": "Status"
+        "status": "Status",
+        "actionButton": {
+          "edit": "Edit",
+          "delete": "Delete",
+          "view": "View",
+          "download": "Download QR Code",
+          "print": "Print QR Code"
+        }
+      },
+      "preview": {
+        "title": "QR Code Preview",
+        "position": "QR code will appear here",
+        "generate": "Generate QR Code",
+        "downloadFormat": "Download Format",
+        "downloadButton": "Download QR Code",
+        "printButton": "Print QR Code"
       }
     }
   }

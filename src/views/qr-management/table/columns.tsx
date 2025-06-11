@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { Download, Edit, Eye, Trash } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -77,30 +78,32 @@ export const columns: ColumnDef<QRTable>[] = [
   },
   {
     id: 'actions',
-    header: 'module.qrManagement.table.actions',
-    cell: () => (
-      <div className="flex items-center gap-2">
-        {/* Add action buttons here, e.g., Edit, Delete */}
-        <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
-          <Eye className="mr-2" />
-          View
-        </Button>
-        <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
-          <Download className="mr-2" />
-          Download
-        </Button>
-        <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
-          <Edit className="mr-2" />
-          Edit
-        </Button>
-        <Button
-          variant={'outline'}
-          className="hover:bg-destructive hover:text-destructive-foreground"
-        >
-          <Trash className="mr-2" />
-          Delete
-        </Button>
-      </div>
-    ),
+    cell: () => {
+      const { t } = useTranslation();
+      return (
+        <div className="flex items-center gap-2">
+          {/* Add action buttons here, e.g., Edit, Delete */}
+          <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+            <Eye className="mr-2" />
+            {t('module.qrManagement.table.actionButton.view')}
+          </Button>
+          <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+            <Download className="mr-2" />
+            {t('module.qrManagement.table.actionButton.download')}
+          </Button>
+          <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+            <Edit className="mr-2" />
+            {t('module.qrManagement.table.actionButton.edit')}
+          </Button>
+          <Button
+            variant={'outline'}
+            className="hover:bg-destructive hover:text-destructive-foreground"
+          >
+            <Trash className="mr-2" />
+            {t('module.qrManagement.table.actionButton.delete')}
+          </Button>
+        </div>
+      );
+    },
   },
 ];

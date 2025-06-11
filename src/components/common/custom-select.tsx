@@ -26,7 +26,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   return (
     <Select onValueChange={onFieldChange} defaultValue={defaultValue} value={value}>
       <FormControl>
-        <SelectTrigger className="flex-1 min-w-[156px] max-w-[400px]">
+        <SelectTrigger className="flex-1 min-w-[156px]">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
       </FormControl>

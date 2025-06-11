@@ -1,5 +1,6 @@
 import { CirclePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import MobileCreateDialog from '../create/mobile-create-dialog';
 import MobileCardItem, { type MobileCardItemProps } from './mobileCardItem';
 
 export const MobileTable = () => {
@@ -40,11 +41,18 @@ export const MobileTable = () => {
   return (
     <div className="px-4 pb-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-medium text-gray-800">Tables ({cardItems.length})</h2>
-        <Button variant="default" size="sm" className="flex items-center gap-2">
-          <CirclePlus className="text-white" />
-          Add New
-        </Button>
+        <h2 className="text-lg font-medium">Tables ({cardItems.length})</h2>
+        <MobileCreateDialog
+          title="Create New QR Code"
+          description="Fill in the details to create a new QR code."
+          onSubmit={() => {}}
+          onCancel={() => {}}
+        >
+          <Button variant="default" size="sm" className="flex items-center gap-2">
+            <CirclePlus className="text-white" />
+            Add New QR
+          </Button>
+        </MobileCreateDialog>
       </div>
 
       <div className="space-y-4 w-full px-0 mx-0">

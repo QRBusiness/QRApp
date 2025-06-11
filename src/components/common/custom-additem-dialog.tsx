@@ -97,7 +97,9 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
                 name={fieldItem.name}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{fieldItem.label}</FormLabel>
+                    <FormLabel>
+                      {fieldItem.label} <span className="text-red-700">*</span>
+                    </FormLabel>
                     <FormControl>
                       <input
                         {...field}
