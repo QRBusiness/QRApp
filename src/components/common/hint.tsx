@@ -15,7 +15,7 @@ export const Hint = ({ label, children, side, align, sideOffset, alignOffset }: 
       <Tooltip delayDuration={300}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
-          className="border-primary bg-background text-black"
+          className="border-primary bg-black text-white"
           side={side}
           align={align}
           sideOffset={sideOffset}

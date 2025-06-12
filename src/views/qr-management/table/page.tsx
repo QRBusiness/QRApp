@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { t } from 'i18next';
 import { type QRTable, columns } from './columns';
 import { DataTable } from './data-table';
 
@@ -58,9 +57,6 @@ export default function QRTable() {
 
   return (
     <div className="container mx-auto py-10">
-      <h4 className="mb-4 scroll-m-20 text-2xl font-semibold tracking-tight">
-        {t('module.qrManagement.table.title')}
-      </h4>
       <DataTable columns={columns} data={data} />
     </div>
   );

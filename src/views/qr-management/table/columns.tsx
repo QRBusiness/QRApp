@@ -23,7 +23,7 @@ export const columns: ColumnDef<QRTable>[] = [
     header: 'module.qrManagement.table.table',
     cell: ({ row }) => {
       const tableName = row.getValue('table') as string;
-      return <span className="text-sm text-gray-800">{tableName}</span>;
+      return <span className="text-sm text-black font-medium">{tableName}</span>;
     },
   },
   {
@@ -32,7 +32,7 @@ export const columns: ColumnDef<QRTable>[] = [
     cell: ({ row }) => {
       const area = row.getValue('area');
       return (
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-black font-medium">
           {typeof area === 'string' && area.trim() !== '' ? area : 'No area assigned'}
         </span>
       );
@@ -78,6 +78,7 @@ export const columns: ColumnDef<QRTable>[] = [
   },
   {
     id: 'actions',
+    header: 'module.qrManagement.table.actions',
     cell: () => {
       const { t } = useTranslation();
       return (

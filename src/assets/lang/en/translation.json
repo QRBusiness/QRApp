@@ -137,6 +137,14 @@
           "view": "View",
           "download": "Download QR Code",
           "print": "Print QR Code"
+        },
+        "pagination": {
+          "rowPerPage": "Rows Per Page",
+          "pagePerTotalpages": "Page {{currentPage}} of {{totalPages}}",
+          "goToFirstPage": "Go to First Page",
+          "goToPreviousPage": "Go to Previous Page",
+          "goToNextPage": "Go to Next Page",
+          "goToLastPage": "Go to Last Page"
         }
       },
       "preview": {
