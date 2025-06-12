@@ -63,6 +63,7 @@
       "create": "Generate QR Code",
       "createDescription": "Create a new QR code for your area or table.",
       "createSession": "Create new QR Code",
+      "createSessionShortKey": "Create new",
       "reset": "Reset Form",
       "additionalField": {
         "title": "Additional Fields",
@@ -83,7 +84,7 @@
         "fieldValueError": "Field value cannot be empty."
       },
       "addAreaField": {
-        "title": "Area",
+        "title": "Add Area",
         "description": "Add area if not already created to embed in the QR code.",
         "create": "Add New Area",
         "reset": "Reset Form",
@@ -99,7 +100,7 @@
         "fieldDescriptionPlaceholder": "Enter area description"
       },
       "addTableField": {
-        "title": "Table",
+        "title": "Add Table",
         "description": "Add table if not already created to embed in the QR code.",
         "create": "Add New Table",
         "reset": "Reset Form",
@@ -120,7 +121,7 @@
         "fieldDescriptionPlaceholder": "Enter table description"
       },
       "table": {
-        "title": "QR Codes",
+        "title": "QR Codes Create",
         "description": "Configure the details for your new QR code.",
         "additionalFields": "Additional Fields",
         "additionalFieldsDescription": "Add any additional fields you need embedded in the QR code.",
@@ -131,10 +132,12 @@
         "actions": "Actions Button",
         "available": "Available",
         "status": "Status",
+        "tablesCount": "Tables ({{tablesCount}})",
         "actionButton": {
           "edit": "Edit",
           "delete": "Delete",
           "view": "View",
+          "downloadShortKey": "Download",
           "download": "Download QR Code",
           "print": "Print QR Code"
         },
@@ -149,6 +152,7 @@
       },
       "preview": {
         "title": "QR Code Preview",
+        "description": "Preview the generated QR code.",
         "position": "QR code will appear here",
         "generate": "Generate QR Code",
         "downloadFormat": "Download Format",

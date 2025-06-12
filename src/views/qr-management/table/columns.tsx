@@ -3,6 +3,7 @@ import { Download, Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import PopUpQRCode from '../details/pop-up-qr-code';
 
 export type QRTable = {
   id: string;
@@ -84,10 +85,16 @@ export const columns: ColumnDef<QRTable>[] = [
       return (
         <div className="flex items-center gap-2">
           {/* Add action buttons here, e.g., Edit, Delete */}
-          <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
-            <Eye className="mr-2" />
-            {t('module.qrManagement.table.actionButton.view')}
-          </Button>
+          <PopUpQRCode
+            title={t('module.qrManagement.preview.title')}
+            description={t('module.qrManagement.preview.description')}
+            url="https://example.com/qr-code"
+          >
+            <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+              <Eye className="mr-2" />
+              {t('module.qrManagement.table.actionButton.view')}
+            </Button>
+          </PopUpQRCode>
           <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
             <Download className="mr-2" />
             {t('module.qrManagement.table.actionButton.download')}

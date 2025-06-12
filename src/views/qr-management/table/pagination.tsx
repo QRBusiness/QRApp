@@ -109,7 +109,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               size="icon"
               className="hidden size-8 lg:flex cursor-pointer"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={false}
+              disabled={!table.getCanNextPage()}
             >
               <span className="sr-only">
                 {t('module.qrManagement.table.pagination.goToLastPage')}

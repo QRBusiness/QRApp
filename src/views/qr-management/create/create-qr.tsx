@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CircleX, Download, Info, Plus, Printer, QrCode } from 'lucide-react';
+import { CircleX, Download, Info, Plus, Printer, QrCode, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import CustomAddItemDialog, { type FieldProps } from '@/components/common/custom-additem-dialog';
 import CustomSelect from '@/components/common/custom-select';
+import { Hint } from '@/components/common/hint';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -88,6 +89,11 @@ const CreateQR = () => {
       name: 'areaId',
       label: t('module.qrManagement.addTableField.fieldAreaId'),
       description: t('module.qrManagement.addTableField.fieldAreaIdDescription'),
+      type: 'select',
+      options: areaOptions.map((area) => ({
+        value: area.value,
+        label: area.label,
+      })),
     },
     {
       name: 'description',
@@ -115,8 +121,8 @@ const CreateQR = () => {
       {/* Left pane wrapper */}
       <Card className="flex flex-col lg:col-span-4 items-start justify-between w-full p-4 space-y-8 rounded border shadow-md flex-1 mr-4 h-full">
         {/* Title and Description */}
-        <div className="flex flex-col items-start justify-start">
-          <h4 className="mb-4 scroll-m-20 text-xl font-semibold tracking-tight">
+        <div className="flex flex-col items-start justify-start space-y-2">
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
             {t('module.qrManagement.table.title')}
           </h4>
           <p className="text-muted-foreground text-sm">
@@ -213,17 +219,29 @@ const CreateQR = () => {
                 <p className="text-sm text-muted-foreground">
                   {t('module.qrManagement.table.additionalFieldsDescription')}
                 </p>
-                {additionalInfo.map((info, index) => (
-                  <div
-                    key={index}
-                    className="flex relative items-center justify-start space-x-2 px-3 py-2 border rounded shadow-md group"
-                  >
-                    <Label>
-                      <Info className="mr-1" />
-                      {info.name}
-                    </Label>
-                  </div>
-                ))}
+                <div className="grid grid-cols-5 gap-2 w-full">
+                  {additionalInfo.map((info, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between space-x-2 px-3 py-2 shadow-md group flex-1 border rounded-md group"
+                    >
+                      <Hint label={info.value} sideOffset={10}>
+                        <Label className="flex items-center cursor-pointer capitalize">
+                          <Info className="size-3 mr-1" />
+                          {info.name}
+                        </Label>
+                      </Hint>
+                      <Label
+                        className="cursor-pointer group-hover:bg-destructive group-hover:text-destructive-foreground rounded-md"
+                        onClick={() =>
+                          setAdditionalInfo((prev) => prev.filter((_, i) => i !== index))
+                        }
+                      >
+                        <X className="size-4" />
+                      </Label>
+                    </div>
+                  ))}
+                </div>
                 <div>
                   <CustomAddItemDialog
                     title={t('module.qrManagement.additionalField.title')}
@@ -269,9 +287,15 @@ const CreateQR = () => {
       </Card>
       {/* Right pane wrapper */}
       <Card className="p-6 h-full w-full flex flex-col lg:col-span-2">
-        <h4 className="mb-4 scroll-m-20 text-xl font-semibold tracking-tight">
-          {t('module.qrManagement.preview.title')}
-        </h4>
+        <div className="flex flex-col items-start justify-start mb-4 space-y-2">
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            {t('module.qrManagement.preview.title')}
+          </h4>
+          <p className="text-sm text-muted-foreground">
+            {t('module.qrManagement.preview.description')}
+          </p>
+        </div>
+        {/* QR Code Preview */}
         <div className="flex-1 flex flex-col items-center justify-center mb-6">
           <div
             className={`w-64 h-64 flex items-center justify-center border-2 ${qrGenerated ? 'border' : 'border-dashed border'} rounded-lg mb-4`}

@@ -22,13 +22,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '../ui/button';
+import CustomSelect from './custom-select';
 
 export interface FieldProps {
+  options?: { value: string; label: string }[];
   disabled?: boolean;
   label: string;
   name: string;
   placeholder?: string;
   description?: string;
+  type?: 'input' | 'select' | 'textarea';
 }
 
 interface CustomAddItemDialogProps {
@@ -75,9 +78,7 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
   const handleClose = () => {
     setOpen(false);
     form.reset();
-    if (onClose) {
-      onClose();
-    }
+    onClose && onClose();
   };
 
   return (
@@ -85,50 +86,80 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="min-w-fit">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className="flex flex-row items-center space-x-2">
+            <CirclePlus className="size-6" />
+            <p>{title}</p>
+          </DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form className="space-y-6">
-            {fields.map((fieldItem) => (
-              <FormField
-                key={fieldItem.name}
-                control={form.control}
-                name={fieldItem.name}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {fieldItem.label} <span className="text-red-700">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <input
-                        {...field}
-                        disabled={fieldItem.disabled}
-                        placeholder={fieldItem.placeholder || ''}
-                        className="w-full p-2 border rounded"
-                      />
-                    </FormControl>
-                    <FormDescription>{fieldItem.description}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-            <div className="flex justify-end space-x-2">
+            {fields.map((fieldItem) => {
+              if (fieldItem.type === 'input' || fieldItem.type === 'textarea' || !fieldItem.type) {
+                return (
+                  <FormField
+                    key={fieldItem.name}
+                    control={form.control}
+                    name={fieldItem.name}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {fieldItem.label} <span className="text-red-700">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <input
+                            {...field}
+                            disabled={fieldItem.disabled}
+                            placeholder={fieldItem.placeholder || ''}
+                            className="w-full p-2 border rounded"
+                          />
+                        </FormControl>
+                        <FormDescription>{fieldItem.description}</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                );
+              } else if (fieldItem.type === 'select') {
+                return (
+                  <FormField
+                    key={fieldItem.name}
+                    control={form.control}
+                    name={fieldItem.name}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {fieldItem.label} <span className="text-red-700">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <div className="flex items-center justify-start space-x-2">
+                            <CustomSelect
+                              options={fieldItem.options || []}
+                              onFieldChange={field.onChange}
+                              value={field.value}
+                              defaultValue={field.value}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormDescription>{fieldItem.description}</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                );
+              }
+            })}
+            <div className="grid grid-cols-2 space-x-2">
               <Button
                 type="button"
                 onClick={handleClose}
                 variant={'outline'}
-                className="hover:bg-destructive text-destructive-foreground min-w-[120px]"
+                className="hover:bg-destructive text-destructive-foreground"
               >
                 <CircleX className="size-4 mr-[6px]" />
                 <p>{t('module.qrManagement.additionalField.cancelButton')}</p>
               </Button>
-              <Button
-                type="button"
-                className="min-w-[120px]"
-                onClick={form.handleSubmit(handleSubmit)}
-              >
+              <Button type="button" onClick={form.handleSubmit(handleSubmit)}>
                 <CirclePlus className="size-4 mr-[6px]" />
                 <p>{t('module.qrManagement.additionalField.submitButton')}</p>
               </Button>
