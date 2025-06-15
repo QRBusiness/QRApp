@@ -10,7 +10,7 @@ import {
   UNAUTHENTICATED,
 } from '@/constains';
 import { useTranslation } from 'react-i18next';
-import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import RootApp from '@/components/common/root-app';
 import UnauthenticatedRootApp from '@/components/common/unauthenticated-root-app';
 import ForgotPassword from '@/views/authenticate/forgot-password';
@@ -20,10 +20,12 @@ import MenuManagement from '@/views/menu-management';
 import OrderManager from '@/views/order-management';
 import QRManagement from '@/views/qr-management';
 import StaffManagement from '@/views/staff-management';
-import QRDetails from './views/qr-management/details/qr-details';
+import { useResizeListener } from './components/common/states/viewState';
+import CartItemsDetails from './views/menu-management/cart/cart-items-details';
 
 function App() {
   const { t } = useTranslation();
+  useResizeListener();
   const routers = useMemo(
     () =>
       createBrowserRouter([
@@ -37,21 +39,15 @@ function App() {
             },
             {
               path: QR_MANAGEMENT,
-              element: <Outlet />,
-              children: [
-                {
-                  index: true,
-                  element: <QRManagement />,
-                },
-                {
-                  path: ':id',
-                  element: <QRDetails />,
-                },
-              ],
+              element: <QRManagement />,
             },
             {
               path: MENU_MANAGEMENT,
               element: <MenuManagement />,
+            },
+            {
+              path: MENU_MANAGEMENT + '/cart',
+              element: <CartItemsDetails />,
             },
             {
               path: ORDER_MANAGEMENT,

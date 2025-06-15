@@ -41,7 +41,7 @@ const MobileBottomBar = () => {
   if (window.innerWidth >= 768) return null; // Hide on larger screens
   // Hide the bottom bar on larger screens
   return (
-    <div className="fixed bottom-0 w-full bg-white border-t z-50">
+    <div className="fixed bottom-0 left-0 right-0 w-full bg-white border-t z-50">
       <div className="grid grid-cols-5 h-14">
         {sidebarItems.map((item) => (
           <Button
@@ -49,7 +49,7 @@ const MobileBottomBar = () => {
             variant="ghost"
             className={cn(
               'flex flex-col items-center justify-between',
-              params.pathname === item.path_url && 'text-primary'
+              params.pathname.includes(item.path_url) && 'text-primary'
             )}
             onClick={() => navigate(item.path_url)}
           >

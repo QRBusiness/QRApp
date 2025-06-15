@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { DataTable } from '@/components/common/tanstack-table/data-table';
 import { type QRTable, columns } from './columns';
-import { DataTable } from './data-table';
 
 async function getData(): Promise<QRTable[]> {
   // Fetch data from your API here.

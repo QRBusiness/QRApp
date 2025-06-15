@@ -42,6 +42,10 @@ interface MobileCreateDialogProps {
   description?: string;
   onSubmit?: () => void;
   onCancel?: () => void;
+  submitButtonText?: string;
+  cancelButtonText?: string;
+  submitIcon?: React.ReactNode;
+  cancelIcon?: React.ReactNode;
 }
 
 const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
@@ -52,6 +56,10 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
   description,
   onSubmit,
   onCancel,
+  submitButtonText,
+  cancelButtonText,
+  submitIcon,
+  cancelIcon,
 }) => {
   const { t } = useTranslation();
   const [additionalInfo, setAdditionalInfo] = React.useState<any[]>([]);
@@ -125,7 +133,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[760px]">
         <DialogHeader>
           <DialogTitle>{t(title)}</DialogTitle>
           <DialogDescription>{t(description ?? '')}</DialogDescription>
@@ -159,7 +167,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                         fields={addAreaFields}
                       >
                         <Button type="button" variant="default">
-                          <Plus className="size-4 md:mr-[6px]" />
+                          <Plus className="size-5 md:mr-[6px]" />
                           <p className="hidden md:block">
                             {t('module.qrManagement.addAreaField.create')}
                           </p>
@@ -199,7 +207,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                         fields={addTableFields}
                       >
                         <Button type="button" variant="default">
-                          <Plus className="size-4 md:mr-[6px]" />
+                          <Plus className="size-5 md:mr-[6px]" />
                           <p className="hidden sm:block">
                             {t('module.qrManagement.addTableField.create')}
                           </p>
@@ -236,7 +244,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                         setAdditionalInfo((prev) => prev.filter((_, i) => i !== index))
                       }
                     >
-                      <X className="size-4" />
+                      <X className="size-5" />
                     </Label>
                   </div>
                 ))}
@@ -250,7 +258,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                   fields={additionalFields}
                 >
                   <Button type="button" variant={'default'}>
-                    <Plus className="size-4 mr-[6px]" />
+                    <Plus className="size-5 mr-[6px]" />
                     <p>{t('module.qrManagement.additionalField.buttonTriggerTitle')}</p>
                   </Button>
                 </CustomAddItemDialog>
@@ -259,13 +267,13 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
             {/* Button action */}
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onCancel}>
-                <CircleX xChannelSelector="size-4" />
-                Cancel
+                {cancelIcon ? cancelIcon : <CircleX className="size-5 mr-[6px]" />}
+                {cancelButtonText ? cancelButtonText : t('module.qrManagement.cancel')}
               </Button>
 
               <Button type="submit" className="min-w-[120px]" disabled={!form.formState.isDirty}>
-                <QrCode className="size-4 mr-[6px]" />
-                {t('module.qrManagement.create')}
+                {submitIcon ? submitIcon : <QrCode className="size-5 mr-[6px]" />}
+                {submitButtonText ? submitButtonText : t('module.qrManagement.create')}
               </Button>
             </DialogFooter>
             <div className="flex items-center justify-end space-x-2">

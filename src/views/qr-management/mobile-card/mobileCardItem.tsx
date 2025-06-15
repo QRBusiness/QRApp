@@ -2,21 +2,12 @@ import React from 'react';
 import { format } from 'date-fns';
 import { Download, Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import MobileCreateDialog from '../create/mobile-create-dialog';
 import PopUpQRCode from '../details/pop-up-qr-code';
 
 export interface MobileCardItemProps {
@@ -38,6 +29,7 @@ const MobileCardItem: React.FC<MobileCardItemProps> = ({
 }) => {
   const formattedDate = format(new Date(createdAt), 'MMM dd, yyyy • h:mm a');
   const { t } = useTranslation();
+  const [open, setOpen] = React.useState(false);
   return (
     <Card className="mb-4 shadow-sm borde">
       <CardHeader className="pb-2">
@@ -72,7 +64,8 @@ const MobileCardItem: React.FC<MobileCardItemProps> = ({
 
       <Separator className="my-1" />
 
-      <CardFooter className="py-3 flex flex-row justify-between space-x-1 self-center">
+      <CardFooter className="py-3 flex flex-row justify-between space-x-1 self-center flex-1 max-full min-w-3/4">
+        {/* View */}
         <PopUpQRCode
           title={t('module.qrManagement.preview.title')}
           description={t('module.qrManagement.preview.description')}
@@ -83,41 +76,40 @@ const MobileCardItem: React.FC<MobileCardItemProps> = ({
             <span>{t('module.qrManagement.table.actionButton.view')}</span>
           </Button>
         </PopUpQRCode>
-
+        {/* Download */}
         <Button variant="outline" size="sm">
           <Download className="text-xs" />
           <span>{t('module.qrManagement.table.actionButton.downloadShortKey')}</span>
         </Button>
-
-        <Button variant="outline" size="sm">
-          <Edit className="text-xs" />
-          <span>{t('module.qrManagement.table.actionButton.edit')}</span>
-        </Button>
-
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Trash className="text-xs" />
-              <span>{t('module.qrManagement.table.actionButton.delete')}</span>
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the table record and
-                remove the data from our servers.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel className="!rounded-button">Cancel</AlertDialogCancel>
-              <AlertDialogAction className="!rounded-button bg-destructive hover:bg-destructive/90 text-destructive-foreground">
-                <Trash className="text-xs mr-2" />
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        {/* Edit */}
+        <MobileCreateDialog
+          open={open}
+          onOpenChange={setOpen}
+          title="Edit QR Code"
+          description="Edit in the details to edit the QR code."
+          onSubmit={() => setOpen(false)}
+          onCancel={() => setOpen(false)}
+          submitButtonText={t('module.qrManagement.editSession')}
+        >
+          <Button variant="outline" size="sm">
+            <Edit className="text-xs" />
+            <span>{t('module.qrManagement.table.actionButton.edit')}</span>
+          </Button>
+        </MobileCreateDialog>
+        {/* Delete */}
+        <CustomAlertDialog
+          title={t('module.qrManagement.alertDialog.title')}
+          description={t('module.qrManagement.alertDialog.description')}
+        >
+          <Button
+            variant={'outline'}
+            size={'sm'}
+            className="hover:bg-destructive hover:text-destructive-foreground"
+          >
+            <Trash className="text-xs" />
+            {t('module.qrManagement.table.actionButton.delete')}
+          </Button>
+        </CustomAlertDialog>
       </CardFooter>
     </Card>
   );

@@ -43,7 +43,7 @@ export const MobileTable = () => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   return (
-    <div className="px-4 pb-4">
+    <div className="px-4 pb-4 flex-1 w-full">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-medium">
           {t('module.qrManagement.table.tablesCount', { tablesCount: cardItems.length })}

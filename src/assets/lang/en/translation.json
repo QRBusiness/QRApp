@@ -28,6 +28,7 @@
       "menu-management": "Menu Management",
       "order-management": "Order Management",
       "staff-management": "Staff Management",
+      "cart": "Your Cart",
       "settings": "Settings",
       "help": "Help",
       "logout": "Logout",
@@ -62,12 +63,14 @@
       "description": "Manage your QR codes for easy access to services.",
       "create": "Generate QR Code",
       "createDescription": "Create a new QR code for your area or table.",
-      "createSession": "Create new QR Code",
-      "createSessionShortKey": "Create new",
+      "createSession": "Create New QR Code",
+      "createSessionShortKey": "Create New",
+      "editSession": "Edit QR Code",
+      "cancel": "Cancel",
       "reset": "Reset Form",
       "additionalField": {
         "title": "Additional Fields",
-        "description": "Add any additional fields you need enbedded in the QR code.",
+        "description": "Add any additional fields you need embedded in the QR code.",
         "addField": "Add Field",
         "buttonTriggerTitle": "Add Additional Fields",
         "cancelButton": "Cancel",
@@ -138,7 +141,7 @@
           "delete": "Delete",
           "view": "View",
           "downloadShortKey": "Download",
-          "download": "Download QR Code",
+          "download": "Download",
           "print": "Print QR Code"
         },
         "pagination": {
@@ -158,6 +161,87 @@
         "downloadFormat": "Download Format",
         "downloadButton": "Download QR Code",
         "printButton": "Print QR Code"
+      },
+      "alertDialog": {
+        "title": "Are you sure?",
+        "description": "This action cannot be undone. This will permanently delete the table record and remove data from our server.",
+        "cancelButton": "Cancel",
+        "confirmButton": "Delete"
+      }
+    },
+    "menuManagement": {
+      "title": "Menu Management",
+      "createTitle": "Create New Menu Item",
+      "createDescription": "Create a new menu item for your restaurant.",
+      "createMenuField": {
+        "name": "Menu Item Name",
+        "nameDescription": "Enter the name of the menu item.",
+        "description": "Description",
+        "descriptionDescription": "Enter a description for the menu item.",
+        "categoryName": "Category",
+        "categoryNameDescription": "Select a category for the menu item.",
+        "subCategoryName": "Subcategory",
+        "subCategoryNameDescription": "Select a subcategory for the menu item.",
+        "nameError": "Menu item name cannot be empty.",
+        "descriptionError": "Description cannot be empty.",
+        "categoryNameError": "Category must be selected.",
+        "subCategoryNameError": "Subcategory must be selected.",
+        "sizeError": "At least one size must be added."
+      },
+      "sizeField": {
+        "label": "Size Fields",
+        "description": "Add sizes for the menu item. Each size can have a different price.",
+        "name": "Size Name",
+        "price": "Price",
+        "add": "Add Size",
+        "remove": "Remove"
+      },
+      "optionField": {
+        "label": "Option Fields",
+        "description": "Add options for the menu item. Each option can have a different price.",
+        "name": "Option Name",
+        "price": "Price",
+        "add": "Add Option",
+        "remove": "Remove"
+      },
+      "action": {
+        "cancel": "Cancel",
+        "add": "Add New Menu Item"
+      },
+      "createMenuItemSizeField": {
+        "name": "Size Name",
+        "nameError": "Size name cannot be empty.",
+        "price": "Price",
+        "priceError": "Price must be a non-negative number."
+      },
+      "createMenuItemOptionField": {
+        "name": "Option Name",
+        "nameError": "Option name cannot be empty.",
+        "price": "Price",
+        "priceError": "Price must be a non-negative number."
+      },
+      "addToCartDialog": {
+        "quantity": "Quantity",
+        "sizes": "Sizes",
+        "additionalToppings": "Additional Toppings",
+        "notes": "Notes",
+        "notesPlaceholder": "Add any special requests...",
+        "cancel": "Cancel",
+        "addToCart": "Add to Cart"
+      },
+      "cart": {
+        "emptyCart": "Your cart is empty",
+        "emptyCartDescription": "Looks like you haven’t added anything to your cart yet.",
+        "continueShopping": "Continue Shopping",
+        "removeItemTitle": "Are you sure?",
+        "removeItemDescription": "Are you sure you want to remove this item from your cart?",
+        "size": "Size",
+        "remove": "Remove",
+        "cancel": "Cancel",
+        "subtotal": "Subtotal",
+        "tax": "Tax ({{taxRate}}%)",
+        "total": "Total",
+        "checkout": "Checkout"
       }
     }
   }

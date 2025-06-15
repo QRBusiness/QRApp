@@ -159,7 +159,7 @@ const CreateQR = () => {
                           fields={addAreaFields}
                         >
                           <Button type="button" variant="default">
-                            <Plus className="size-4 md:mr-[6px]" />
+                            <Plus className="size-5 md:mr-[6px]" />
                             <p className="hidden md:block">
                               {t('module.qrManagement.addAreaField.create')}
                             </p>
@@ -199,7 +199,7 @@ const CreateQR = () => {
                           fields={addTableFields}
                         >
                           <Button type="button" variant="default">
-                            <Plus className="size-4 md:mr-[6px]" />
+                            <Plus className="size-5 md:mr-[6px]" />
                             <p className="hidden sm:block">
                               {t('module.qrManagement.addTableField.create')}
                             </p>
@@ -237,7 +237,7 @@ const CreateQR = () => {
                           setAdditionalInfo((prev) => prev.filter((_, i) => i !== index))
                         }
                       >
-                        <X className="size-4" />
+                        <X className="size-5" />
                       </Label>
                     </div>
                   ))}
@@ -251,7 +251,7 @@ const CreateQR = () => {
                     fields={additionalFields}
                   >
                     <Button type="button" variant={'default'}>
-                      <Plus className="size-4 mr-[6px]" />
+                      <Plus className="size-5 mr-[6px]" />
                       <p>{t('module.qrManagement.additionalField.buttonTriggerTitle')}</p>
                     </Button>
                   </CustomAddItemDialog>
@@ -271,13 +271,13 @@ const CreateQR = () => {
                       form.reset({ area: areaOptions[0].value, table: tableOptions[0].value })
                     }
                   >
-                    <CircleX className="size-4 mr-[6px]" />
+                    <CircleX className="size-5 mr-[6px]" />
                     {t('module.qrManagement.reset')}
                   </Button>
                 )}
 
                 <Button type="submit" className="min-w-[120px]" disabled={!form.formState.isDirty}>
-                  <QrCode className="size-4 mr-[6px]" />
+                  <QrCode className="size-5 mr-[6px]" />
                   {t('module.qrManagement.create')}
                 </Button>
               </div>
@@ -333,16 +333,13 @@ const CreateQR = () => {
             </Select>
           </div>
           {/* Action Buttons */}
-          <Button
-            className="w-full !rounded-button whitespace-nowrap cursor-pointer"
-            disabled={!qrGenerated}
-          >
+          <Button className="w-full  whitespace-nowrap cursor-pointer" disabled={!qrGenerated}>
             <Download className="mr-2" /> {t('module.qrManagement.preview.downloadButton')}
           </Button>
 
           <Button
             variant="outline"
-            className="w-full !rounded-button whitespace-nowrap cursor-pointer"
+            className="w-full  whitespace-nowrap cursor-pointer"
             disabled={!qrGenerated}
           >
             <Printer className="mr-2" /> {t('module.qrManagement.preview.printButton')}

@@ -156,11 +156,11 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
                 variant={'outline'}
                 className="hover:bg-destructive text-destructive-foreground"
               >
-                <CircleX className="size-4 mr-[6px]" />
+                <CircleX className="size-5 mr-[6px]" />
                 <p>{t('module.qrManagement.additionalField.cancelButton')}</p>
               </Button>
               <Button type="button" onClick={form.handleSubmit(handleSubmit)}>
-                <CirclePlus className="size-4 mr-[6px]" />
+                <CirclePlus className="size-5 mr-[6px]" />
                 <p>{t('module.qrManagement.additionalField.submitButton')}</p>
               </Button>
             </div>

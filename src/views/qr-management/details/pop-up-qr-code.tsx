@@ -1,12 +1,9 @@
 import React from 'react';
-import { t } from 'i18next';
 import { Download, Printer, QrCode } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -47,6 +44,7 @@ const PopUpQRCode: React.FC<PopUpQRCodeProps> = ({
           <div
             className={`w-64 h-64 flex items-center justify-center border-2 ${false ? 'border' : 'border-dashed border'} rounded-lg mb-4`}
           >
+            <img src={url} alt="QR Code URL" className="w-64 h-64 object-cover hidden" />
             {/* Replace with img here */}
             <div className="text-center p-4 flex flex-col items-center justify-center">
               <QrCode className="size-16 mb-2 text-muted-foreground" />
@@ -60,14 +58,14 @@ const PopUpQRCode: React.FC<PopUpQRCodeProps> = ({
         {/* Action Buttons */}
         <DialogFooter className="grid grid-cols-2 gap-2">
           <Button
-            className="w-full !rounded-button whitespace-nowrap cursor-pointer col-span-2 md:col-span-1"
+            className="w-full  whitespace-nowrap cursor-pointer col-span-2 md:col-span-1"
             disabled={false}
           >
             <Download className="mr-2" /> {t('module.qrManagement.preview.downloadButton')}
           </Button>
           <Button
             variant="outline"
-            className="w-full !rounded-button whitespace-nowrap cursor-pointer col-span-2 md:col-span-1"
+            className="w-full  whitespace-nowrap cursor-pointer col-span-2 md:col-span-1"
             disabled={false}
           >
             <Printer className="mr-2" /> {t('module.qrManagement.preview.printButton')}

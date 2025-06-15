@@ -1,19 +1,23 @@
+import React from 'react';
+import { useViewState } from '@/components/common/states/viewState';
 import CreateQR from './create/create-qr';
 import MobileTable from './mobile-card';
 import QRTable from './table/page';
 
 const QRManagement = () => {
+  const { isMobile } = useViewState();
+
   return (
-    <div className="flex flex-col items-start justify-start w-full h-full px-0 md:p-4">
+    <div className="flex flex-col items-start justify-start w-full h-full px-0 py-4">
       {/* desktop view */}
-      <div className="hidden md:block w-full">
-        <CreateQR />
-        <QRTable />
-      </div>
-      {/* mobile view */}
-      <div className="block md:hidden w-full">
+      {isMobile ? (
         <MobileTable />
-      </div>
+      ) : (
+        <React.Fragment>
+          <CreateQR />
+          <QRTable />
+        </React.Fragment>
+      )}
     </div>
   );
 };

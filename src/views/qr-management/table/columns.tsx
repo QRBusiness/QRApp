@@ -1,8 +1,11 @@
+import React from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Download, Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import MobileCreateDialog from '../create/mobile-create-dialog';
 import PopUpQRCode from '../details/pop-up-qr-code';
 
 export type QRTable = {
@@ -81,7 +84,24 @@ export const columns: ColumnDef<QRTable>[] = [
     id: 'actions',
     header: 'module.qrManagement.table.actions',
     cell: () => {
+      const [open, setOpen] = React.useState(false);
       const { t } = useTranslation();
+      const handleDownload = async (image_url: string) => {
+        const response = await fetch(image_url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'my-image.png';
+        a.click();
+        URL.revokeObjectURL(url);
+      };
       return (
         <div className="flex items-center gap-2">
           {/* Add action buttons here, e.g., Edit, Delete */}
@@ -95,21 +115,40 @@ export const columns: ColumnDef<QRTable>[] = [
               {t('module.qrManagement.table.actionButton.view')}
             </Button>
           </PopUpQRCode>
-          <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+          <Button
+            variant={'outline'}
+            className="hover:bg-primary hover:text-primary-foreground"
+            onClick={() => handleDownload('https://example.com/qr-code')}
+          >
             <Download className="mr-2" />
             {t('module.qrManagement.table.actionButton.download')}
           </Button>
-          <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
-            <Edit className="mr-2" />
-            {t('module.qrManagement.table.actionButton.edit')}
-          </Button>
-          <Button
-            variant={'outline'}
-            className="hover:bg-destructive hover:text-destructive-foreground"
+          <MobileCreateDialog
+            open={open}
+            onOpenChange={setOpen}
+            title="Edit QR Code"
+            description="Edit in the details to edit the QR code."
+            onSubmit={() => setOpen(false)}
+            onCancel={() => setOpen(false)}
+            submitButtonText={t('module.qrManagement.editSession')}
           >
-            <Trash className="mr-2" />
-            {t('module.qrManagement.table.actionButton.delete')}
-          </Button>
+            <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+              <Edit className="mr-2" />
+              {t('module.qrManagement.table.actionButton.edit')}
+            </Button>
+          </MobileCreateDialog>
+          <CustomAlertDialog
+            title={t('module.qrManagement.alertDialog.title')}
+            description={t('module.qrManagement.alertDialog.description')}
+          >
+            <Button
+              variant={'outline'}
+              className="hover:bg-destructive hover:text-destructive-foreground"
+            >
+              <Trash className="mr-2" />
+              {t('module.qrManagement.table.actionButton.delete')}
+            </Button>
+          </CustomAlertDialog>
         </div>
       );
     },
