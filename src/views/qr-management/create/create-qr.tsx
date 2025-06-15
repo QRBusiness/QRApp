@@ -114,8 +114,6 @@ const CreateQR = () => {
     console.log('Form submitted with values:', values);
   };
 
-  console.log({ additionalInfo });
-
   return (
     <div className="container mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-6 gap-4 ">
       {/* Left pane wrapper */}

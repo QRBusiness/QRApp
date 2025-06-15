@@ -30,19 +30,19 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => 
   const sizes = [
     {
       id: 'size-small',
-      label: 'S',
+      label: 'Size S',
       value: 'small',
       price: 0, // Optional price for size
     },
     {
       id: 'size-medium',
-      label: 'M',
+      label: 'Size M',
       value: 'medium',
       price: 5, // Optional price for size
     },
     {
       id: 'size-large',
-      label: 'L',
+      label: 'Size L',
       value: 'large',
       price: 10, // Optional price for size
     },

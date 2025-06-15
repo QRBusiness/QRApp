@@ -5,7 +5,7 @@
       "description": "Description of the application."
     },
     "authentication": {
-      "title": "Welcome back",
+      "title": "WELCOME BACK!",
       "subtitle": "Sign in to access your personalized dashboard and services.",
       "phone": "Phone Number",
       "phoneDescription": "* This is your phone number registered with us.",
