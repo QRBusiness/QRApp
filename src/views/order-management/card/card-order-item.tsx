@@ -67,7 +67,7 @@ const CardOrderItem = ({ order }: { order: OrderItem }) => {
         {/* Chi tiết đơn hàng */}
         <Accordion type="single" collapsible>
           <AccordionItem value="order-details">
-            <AccordionTrigger className="text-sm font-medium text-muted-foreground flex items-center justify-between">
+            <AccordionTrigger className="text-sm font-medium text-muted-foreground flex items-center justify-between cursor-pointer">
               <p>{t('module.orderManagement.orderCard.orderDetails')}</p>
             </AccordionTrigger>
             <AccordionContent className="text-sm text-muted-foreground">
@@ -87,6 +87,12 @@ const CardOrderItem = ({ order }: { order: OrderItem }) => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+        <div className="flex flex-row items-center justify-between">
+          <div className="text-sm font-medium text-muted-foreground">
+            {t('module.orderManagement.orderCard.totalAmount')}
+          </div>
+          <div className="text-lg font-bold text-primary">{order.totalAmount}</div>
+        </div>
       </div>
       {/* Footer card */}
       <div className="flex justify-between space-x-2 w-full">

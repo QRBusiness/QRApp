@@ -273,7 +273,8 @@
         "table": "Table",
         "items": "x {{count}} Items",
         "orderDetails": "Order Details",
-        "itemQuantity": "x{{quantity}}"
+        "itemQuantity": "x{{quantity}}",
+        "totalAmount": "Total Amount: "
       }
     }
   }

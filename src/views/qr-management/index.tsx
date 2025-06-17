@@ -8,8 +8,7 @@ const QRManagement = () => {
   const { isMobile } = useViewState();
 
   return (
-    <div className="flex flex-col items-start justify-start w-full h-full px-0 py-4">
-      {/* desktop view */}
+    <>
       {isMobile ? (
         <MobileTable />
       ) : (
@@ -18,7 +17,7 @@ const QRManagement = () => {
           <QRTable />
         </React.Fragment>
       )}
-    </div>
+    </>
   );
 };
 
