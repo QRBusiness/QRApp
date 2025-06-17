@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  DASHBOARD,
-  MENU_MANAGEMENT,
-  ORDER_MANAGEMENT,
-  QR_MANAGEMENT,
-  STAFF_MANAGEMENT,
-} from '@/constains';
+import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, QR_MANAGEMENT, STAFF_MANAGEMENT } from '@/constains';
 import {
   ChartNoAxesCombined,
   ChevronLeft,
@@ -103,9 +97,7 @@ const SidebarApp = () => {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <p className="text-center flex items-center justify-center bg-red-300">
-              {t('module.app.name')}
-            </p>
+            <p className="text-center flex items-center justify-center bg-red-300">{t('module.app.name')}</p>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -162,20 +154,12 @@ const SidebarApp = () => {
                     label={t('module.sidebar.greeting', { name: username })}
                     items={accentItems}
                   >
-                    <Button
-                      variant={'ghost'}
-                      className="w-full justify-between px-4 cursor-pointer"
-                    >
+                    <Button variant={'ghost'} className="w-full justify-between px-4 cursor-pointer">
                       <div className="flex items-center gap-2">
                         <User />
                         <span>{username}</span>
                       </div>
-                      <ChevronLeft
-                        className={cn(
-                          'transition-all duration-300 ease-in-out',
-                          open ? 'rotate-90' : ''
-                        )}
-                      />
+                      <ChevronLeft className={cn('transition-all duration-300 ease-in-out', open ? 'rotate-90' : '')} />
                     </Button>
                   </CustomDropdownMenu>
                 </SidebarMenuButton>

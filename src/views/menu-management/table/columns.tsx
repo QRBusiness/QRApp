@@ -32,9 +32,7 @@ export const columns: ColumnDef<Menu>[] = [
     header: 'Image',
     cell: ({ getValue }) => {
       const value = getValue() as string;
-      return value ? (
-        <img src={value} alt="Menu Item" className="w-16 h-16 object-cover rounded-md" />
-      ) : null;
+      return value ? <img src={value} alt="Menu Item" className="w-16 h-16 object-cover rounded-md" /> : null;
     },
   },
   {
@@ -76,10 +74,7 @@ export const columns: ColumnDef<Menu>[] = [
             <Edit className="mr-2" />
             {t('module.qrManagement.table.actionButton.edit')}
           </Button>
-          <Button
-            variant={'outline'}
-            className="hover:bg-destructive hover:text-destructive-foreground"
-          >
+          <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground">
             <Trash className="mr-2" />
             {t('module.qrManagement.table.actionButton.delete')}
           </Button>

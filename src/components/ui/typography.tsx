@@ -22,10 +22,7 @@ export function TypographyH4({
   props?: React.HTMLProps<HTMLHeadingElement>;
 }) {
   return (
-    <h4
-      className={cn('scroll-m-20 text-xl font-semibold tracking-tight', props.className)}
-      {...props}
-    >
+    <h4 className={cn('scroll-m-20 text-xl font-semibold tracking-tight', props.className)} {...props}>
       {children}
     </h4>
   );

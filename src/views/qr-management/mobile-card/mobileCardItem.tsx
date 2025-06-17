@@ -19,14 +19,7 @@ export interface MobileCardItemProps {
   createdAt: string;
 }
 
-const MobileCardItem: React.FC<MobileCardItemProps> = ({
-  id,
-  table,
-  area,
-  status,
-  available,
-  createdAt,
-}) => {
+const MobileCardItem: React.FC<MobileCardItemProps> = ({ id, table, area, status, available, createdAt }) => {
   const formattedDate = format(new Date(createdAt), 'MMM dd, yyyy • h:mm a');
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
@@ -42,9 +35,7 @@ const MobileCardItem: React.FC<MobileCardItemProps> = ({
             <Badge className="font-medium" variant={'outline'}>
               {status}
             </Badge>
-            <Badge variant={available ? 'default' : 'destructive'}>
-              {available ? 'Available' : 'Unavailable'}
-            </Badge>
+            <Badge variant={available ? 'default' : 'destructive'}>{available ? 'Available' : 'Unavailable'}</Badge>
           </div>
         </div>
       </CardHeader>
@@ -101,11 +92,7 @@ const MobileCardItem: React.FC<MobileCardItemProps> = ({
           title={t('module.qrManagement.alertDialog.title')}
           description={t('module.qrManagement.alertDialog.description')}
         >
-          <Button
-            variant={'outline'}
-            size={'sm'}
-            className="hover:bg-destructive hover:text-destructive-foreground"
-          >
+          <Button variant={'outline'} size={'sm'} className="hover:bg-destructive hover:text-destructive-foreground">
             <Trash className="text-xs" />
             {t('module.qrManagement.table.actionButton.delete')}
           </Button>

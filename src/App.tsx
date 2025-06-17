@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
+import React from 'react';
 import {
   DASHBOARD,
   FORGOT_PASSWORD,
@@ -11,17 +12,20 @@ import {
 } from '@/constains';
 import { useTranslation } from 'react-i18next';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import RootApp from '@/components/common/root-app';
-import UnauthenticatedRootApp from '@/components/common/unauthenticated-root-app';
-import ForgotPassword from '@/views/authenticate/forgot-password';
-import Login from '@/views/authenticate/login';
-import Dashboard from '@/views/dashboard';
-import MenuManagement from '@/views/menu-management';
-import OrderManager from '@/views/order-management';
-import QRManagement from '@/views/qr-management';
-import StaffManagement from '@/views/staff-management';
+import Loading from './components/common/loading';
 import { useResizeListener } from './components/common/states/viewState';
-import CartItemsDetails from './views/menu-management/cart/cart-items-details';
+
+const RootApp = React.lazy(() => import('@/components/common/root-app'));
+const UnauthenticatedRootApp = React.lazy(() => import('@/components/common/unauthenticated-root-app'));
+const ForgotPassword = React.lazy(() => import('@/views/authenticate/forgot-password'));
+const Login = React.lazy(() => import('@/views/authenticate/login'));
+const Dashboard = React.lazy(() => import('@/views/dashboard'));
+const MenuManagement = React.lazy(() => import('@/views/menu-management'));
+const CartItemsDetails = React.lazy(() => import('@/views/menu-management/cart/cart-items-details'));
+const OrderManager = React.lazy(() => import('@/views/order-management'));
+const QRManagement = React.lazy(() => import('@/views/qr-management'));
+const StaffManagement = React.lazy(() => import('@/views/staff-management'));
+const OrderDetails = React.lazy(() => import('./views/order-management/details'));
 
 function App() {
   const { t } = useTranslation();
@@ -52,6 +56,10 @@ function App() {
             {
               path: ORDER_MANAGEMENT,
               element: <OrderManager />,
+            },
+            {
+              path: ORDER_MANAGEMENT + '/:id',
+              element: <OrderDetails />,
             },
             {
               path: STAFF_MANAGEMENT,
@@ -85,7 +93,9 @@ function App() {
     <>
       <title>{t('module.app.name')}</title>
       <meta name="description" content={t('module.app.description')} />
-      <RouterProvider router={routers} />
+      <Suspense fallback={<Loading />}>
+        <RouterProvider router={routers} />
+      </Suspense>
     </>
   );
 }

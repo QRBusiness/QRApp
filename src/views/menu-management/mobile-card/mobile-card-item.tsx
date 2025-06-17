@@ -30,14 +30,10 @@ const MenuCardItem: React.FC<MenuItem> = ({
   onRemoveFromCart = () => {},
 }) => {
   return (
-    <Card className="flex mb-4 overflow-hidden border shadow-sm p-2 relative" key={id}>
+    <Card className="flex overflow-hidden border shadow-sm p-2 relative" key={id}>
       <div className="flex flex-row gap-2 items-start">
         <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 overflow-hidden rounded-md">
-          <img
-            src={image}
-            alt={name}
-            className="object-cover w-full h-full object-top rounded-md"
-          />
+          <img src={image} alt={name} className="object-cover w-full h-full object-top rounded-md" />
         </div>
         <div className="flex justify-between items-start flex-1">
           <div className="flex flex-col pr-2">

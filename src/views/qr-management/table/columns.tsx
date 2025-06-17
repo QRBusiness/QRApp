@@ -141,10 +141,7 @@ export const columns: ColumnDef<QRTable>[] = [
             title={t('module.qrManagement.alertDialog.title')}
             description={t('module.qrManagement.alertDialog.description')}
           >
-            <Button
-              variant={'outline'}
-              className="hover:bg-destructive hover:text-destructive-foreground"
-            >
+            <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground">
               <Trash className="mr-2" />
               {t('module.qrManagement.table.actionButton.delete')}
             </Button>

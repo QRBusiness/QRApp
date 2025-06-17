@@ -4,6 +4,21 @@
       "name": "Application",
       "description": "Description of the application."
     },
+    "common": {
+      "loading": "Please wait, Loading...",
+      "error": "An error occurred. Please try again later.",
+      "success": "Operation completed successfully.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View",
+      "create": "Create",
+      "update": "Update",
+      "search": "Search",
+      "noDataFound": "No data found.",
+      "backToHome": "Back to Home"
+    },
     "authentication": {
       "title": "WELCOME BACK!",
       "subtitle": "Sign in to access your personalized dashboard and services.",
@@ -27,8 +42,10 @@
       "qr-management": "QR Management",
       "menu-management": "Menu Management",
       "order-management": "Order Management",
+      "order-details": "Order Details",
       "staff-management": "Staff Management",
-      "cart": "Your Cart",
+      "cart": "Your Cart Orders",
+
       "settings": "Settings",
       "help": "Help",
       "logout": "Logout",
@@ -242,6 +259,21 @@
         "tax": "Tax ({{taxRate}}%)",
         "total": "Total",
         "checkout": "Checkout"
+      }
+    },
+    "orderManagement": {
+      "title": "Order Management",
+      "description": "Manage your restaurant orders efficiently.",
+      "orderCard": {
+        "order": "Order",
+        "status": "Status",
+        "markReady": "Mark Ready",
+        "details": "Details",
+        "customer": "Customer",
+        "table": "Table",
+        "items": "x {{count}} Items",
+        "orderDetails": "Order Details",
+        "itemQuantity": "x{{quantity}}"
       }
     }
   }

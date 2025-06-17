@@ -3,13 +3,7 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-r
 import { useTranslation } from 'react-i18next';
 import { Hint } from '@/components/common/hint';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -20,9 +14,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
   return (
     <div className="flex items-center justify-between mt-4">
       <div className="flex items-center space-x-2">
-        <p className="text-sm font-medium">
-          {t('module.qrManagement.table.pagination.rowPerPage')}
-        </p>
+        <p className="text-sm font-medium">{t('module.qrManagement.table.pagination.rowPerPage')}</p>
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => {
@@ -57,9 +49,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
             >
-              <span className="sr-only">
-                {t('module.qrManagement.table.pagination.goToFirstPage')}
-              </span>
+              <span className="sr-only">{t('module.qrManagement.table.pagination.goToFirstPage')}</span>
               <ChevronsLeft />
             </Button>
           </Hint>
@@ -71,9 +61,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <span className="sr-only">
-                {t('module.qrManagement.table.pagination.goToPreviousPage')}
-              </span>
+              <span className="sr-only">{t('module.qrManagement.table.pagination.goToPreviousPage')}</span>
               <ChevronLeft />
             </Button>
           </Hint>
@@ -85,9 +73,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               onClick={() => table.setPageIndex(table.getState().pagination.pageIndex + 1)}
               disabled={!table.getCanNextPage()}
             >
-              <span className="sr-only">
-                {t('module.qrManagement.table.pagination.goToNextPage')}
-              </span>
+              <span className="sr-only">{t('module.qrManagement.table.pagination.goToNextPage')}</span>
               <ChevronsRight />
             </Button>
           </Hint>
@@ -98,9 +84,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">
-              {t('module.qrManagement.table.pagination.goToNextPage')}
-            </span>
+            <span className="sr-only">{t('module.qrManagement.table.pagination.goToNextPage')}</span>
             <ChevronRight />
           </Button>
           <Hint label={t('module.qrManagement.table.pagination.goToLastPage')} sideOffset={10}>
@@ -111,9 +95,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
             >
-              <span className="sr-only">
-                {t('module.qrManagement.table.pagination.goToLastPage')}
-              </span>
+              <span className="sr-only">{t('module.qrManagement.table.pagination.goToLastPage')}</span>
               <ChevronsRight />
             </Button>
           </Hint>

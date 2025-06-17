@@ -30,18 +30,7 @@ export interface CustomDropdownMenuProps {
 }
 
 export function CustomDropdownMenu(props: CustomDropdownMenuProps) {
-  const {
-    open,
-    modal,
-    onOpenChange,
-    children,
-    align,
-    side,
-    sideOffset,
-    alignOffset,
-    label,
-    items,
-  } = props;
+  const { open, modal, onOpenChange, children, align, side, sideOffset, alignOffset, label, items } = props;
   return (
     <DropdownMenu open={open} modal={modal} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>

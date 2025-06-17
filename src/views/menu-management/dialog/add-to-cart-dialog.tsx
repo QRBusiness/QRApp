@@ -74,12 +74,8 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => 
           <div className="flex items-center gap-4">
             <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
             <div>
-              <DialogDescription className="text-sm text-muted-foreground">
-                {item.description}
-              </DialogDescription>
-              <p className="text-lg font-semibold text-primary mt-2">
-                ${(item.price * quantity).toFixed(2)}
-              </p>
+              <DialogDescription className="text-sm text-muted-foreground">{item.description}</DialogDescription>
+              <p className="text-lg font-semibold text-primary mt-2">${(item.price * quantity).toFixed(2)}</p>
             </div>
           </div>
           {/* Quantity Selector */}
@@ -145,9 +141,7 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => 
                       if (checked) {
                         setSelectedPreferences([...selectedPreferences, topping.label]);
                       } else {
-                        setSelectedPreferences(
-                          selectedPreferences.filter((p) => p !== topping.label)
-                        );
+                        setSelectedPreferences(selectedPreferences.filter((p) => p !== topping.label));
                       }
                     }}
                   />

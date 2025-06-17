@@ -2,6 +2,7 @@ import React from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Hint } from '@/components/common/hint';
+import HorizontalFilterScroll from '@/components/common/horizontal-filter-scroll';
 import { Button } from '@/components/ui/button';
 import type { Menu } from '../table/columns';
 import MenuCardItem from './mobile-card-item';
@@ -13,7 +14,7 @@ interface MobileMenuViewProps {
 const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = React.useState<Menu[]>([]);
-  const subCategories = Array.from(new Set(items.map((item) => item.subcategory)));
+  const subCategories = ['All', ...Array.from(new Set(items.map((item) => item.subcategory)))];
   const addToCartHandler = (id: string | number) => {
     const item = items.find((item) => item.id === id);
     if (item) {
@@ -22,13 +23,14 @@ const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
   };
   return (
     <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
-      <div className="flex flex-row items-enter space-x-2 overflow-x-auto col-span-1 md:col-span-2 lg:col-span-4">
-        {subCategories.map((subcategory) => (
-          <Button variant={'outline'} key={subcategory}>
-            {subcategory}
-          </Button>
-        ))}
-      </div>
+      <HorizontalFilterScroll
+        className="col-span-1 md:col-span-2 lg:col-span-4 mb-4"
+        orderStatuses={subCategories.map((subcategory) => ({
+          id: subcategory,
+          name: subcategory,
+          value: subcategory,
+        }))}
+      />
       {items.map((item) => (
         <MenuCardItem
           key={item.id}

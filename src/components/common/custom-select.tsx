@@ -1,10 +1,4 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FormControl } from '../ui/form';
 
 interface CustomSelectProps {
@@ -16,13 +10,7 @@ interface CustomSelectProps {
   onFieldChange?: (value: string) => void;
 }
 
-const CustomSelect: React.FC<CustomSelectProps> = ({
-  options,
-  value,
-  defaultValue,
-  placeholder,
-  onFieldChange,
-}) => {
+const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, defaultValue, placeholder, onFieldChange }) => {
   return (
     <Select onValueChange={onFieldChange} defaultValue={defaultValue} value={value}>
       <FormControl>

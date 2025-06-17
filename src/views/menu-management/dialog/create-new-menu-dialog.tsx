@@ -15,15 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createMenuItemSchema } from '@/utils/schemas';
@@ -36,13 +28,7 @@ interface CreateNewMenuDialogProps {
   onCancel?: () => void;
 }
 
-const CreateNewMenuDialog = ({
-  children,
-  open,
-  onOpenChange,
-  onSubmit,
-  onCancel,
-}: CreateNewMenuDialogProps) => {
+const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel }: CreateNewMenuDialogProps) => {
   const { t } = useTranslation();
   const categories = [
     { value: 'starters', label: 'Starters' },
@@ -128,9 +114,7 @@ const CreateNewMenuDialog = ({
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>
-                    {t('module.menuManagement.createMenuField.nameDescription')}
-                  </FormDescription>
+                  <FormDescription>{t('module.menuManagement.createMenuField.nameDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -147,9 +131,7 @@ const CreateNewMenuDialog = ({
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>
-                    {t('module.menuManagement.createMenuField.descriptionDescription')}
-                  </FormDescription>
+                  <FormDescription>{t('module.menuManagement.createMenuField.descriptionDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -209,9 +191,7 @@ const CreateNewMenuDialog = ({
             {/* Size fields */}
             <div className="flex flex-col items-start gap-2">
               <Label>{t('module.menuManagement.sizeField.label')}</Label>
-              <p className="text-sm text-muted-foreground">
-                {t('module.menuManagement.sizeField.description')}
-              </p>
+              <p className="text-sm text-muted-foreground">{t('module.menuManagement.sizeField.description')}</p>
               <div className="flex flex-col justify-start">
                 {sizeFields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-5 gap-2 mb-2 justify-end items-end">
@@ -237,9 +217,7 @@ const CreateNewMenuDialog = ({
                             <Input
                               type="number"
                               {...field}
-                              onChange={(e) =>
-                                field.onChange(e.target.value === '' ? '' : Number(e.target.value))
-                              }
+                              onChange={(e) => field.onChange(e.target.value === '' ? '' : Number(e.target.value))}
                             />
                           </FormControl>
                         </FormItem>
@@ -247,9 +225,7 @@ const CreateNewMenuDialog = ({
                     />
                     <Button type="button" variant="destructive" onClick={() => removeSize(index)}>
                       <CircleX className="size-5 md:mr-2" />
-                      <p className="hidden md:block">
-                        {t('module.menuManagement.sizeField.remove')}
-                      </p>
+                      <p className="hidden md:block">{t('module.menuManagement.sizeField.remove')}</p>
                     </Button>
                   </div>
                 ))}
@@ -267,9 +243,7 @@ const CreateNewMenuDialog = ({
             {/* Option fields */}
             <div className="flex flex-col items-start gap-2">
               <Label>{t('module.menuManagement.optionField.label')}</Label>
-              <p className="text-sm text-muted-foreground">
-                {t('module.menuManagement.optionField.description')}
-              </p>
+              <p className="text-sm text-muted-foreground">{t('module.menuManagement.optionField.description')}</p>
               <div className="flex flex-col justify-start">
                 {optionFields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-5 gap-2 mb-2 justify-end items-end">
@@ -295,9 +269,7 @@ const CreateNewMenuDialog = ({
                             <Input
                               type="number"
                               {...field}
-                              onChange={(e) =>
-                                field.onChange(e.target.value === '' ? '' : Number(e.target.value))
-                              }
+                              onChange={(e) => field.onChange(e.target.value === '' ? '' : Number(e.target.value))}
                             />
                           </FormControl>
                         </FormItem>
@@ -305,9 +277,7 @@ const CreateNewMenuDialog = ({
                     />
                     <Button type="button" variant="destructive" onClick={() => removeOption(index)}>
                       <CircleX className="size-5 mdmr-2" />
-                      <p className="hidden md:block">
-                        {t('module.menuManagement.optionField.remove')}
-                      </p>
+                      <p className="hidden md:block">{t('module.menuManagement.optionField.remove')}</p>
                     </Button>
                   </div>
                 ))}

@@ -41,30 +41,25 @@ const MobileBottomBar = () => {
   if (window.innerWidth >= 768) return null; // Hide on larger screens
   // Hide the bottom bar on larger screens
   return (
-    <div className="fixed bottom-0 left-0 right-0 w-full bg-white border-t z-50">
-      <div className="grid grid-cols-5 h-14">
-        {sidebarItems.map((item) => (
-          <Button
-            key={item.title}
-            variant="ghost"
-            className={cn(
-              'flex flex-col items-center justify-between',
-              params.pathname.includes(item.path_url) && 'text-primary'
-            )}
-            onClick={() => navigate(item.path_url)}
+    <div className="grid grid-cols-5 h-14 fixed bottom-0 left-0 right-0 w-full bg-white border-t z-50">
+      {sidebarItems.map((item) => (
+        <Button
+          key={item.title}
+          variant="ghost"
+          className={cn(
+            'flex flex-col items-center justify-between',
+            params.pathname.includes(item.path_url) && 'text-primary'
+          )}
+          onClick={() => navigate(item.path_url)}
+        >
+          {item.icon}
+          <span
+            className={cn('text-xs mt-1 text-black', params.pathname === item.path_url ? 'text-primary' : 'text-black')}
           >
-            {item.icon}
-            <span
-              className={cn(
-                'text-xs mt-1 text-black',
-                params.pathname === item.path_url ? 'text-primary' : 'text-black'
-              )}
-            >
-              {t(item.title)}
-            </span>
-          </Button>
-        ))}
-      </div>
+            {t(item.title)}
+          </span>
+        </Button>
+      ))}
     </div>
   );
 };

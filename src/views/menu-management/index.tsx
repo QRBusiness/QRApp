@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Laptop, Plus, Tablet } from 'lucide-react';
 import { Hint } from '@/components/common/hint';
-import {
-  toggleMenuDisplayOptionState,
-  useMenuDisplayOptionState,
-} from '@/components/common/states/menuStates';
+import { toggleMenuDisplayOptionState, useMenuDisplayOptionState } from '@/components/common/states/menuStates';
 import { Button } from '@/components/ui/button';
 import CreateNewMenuDialog from './dialog/create-new-menu-dialog';
 import MobileMenuView from './mobile-card/mobile-view';
@@ -17,8 +14,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '1',
       name: 'Avocado Toast with Poached Egg',
-      description:
-        'Sourdough bread topped with smashed avocado, poached eggs, cherry tomatoes, and microgreens.',
+      description: 'Sourdough bread topped with smashed avocado, poached eggs, cherry tomatoes, and microgreens.',
       price: 12.99,
       image:
         'https://readdy.ai/api/search-image?query=Gourmet%20avocado%20toast%20with%20poached%20egg%20on%20sourdough%20bread%2C%20topped%20with%20cherry%20tomatoes%20and%20microgreens%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20shallow%20depth%20of%20field%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=1&orientation=squarish',
@@ -29,8 +25,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '2',
       name: 'Truffle Mushroom Risotto',
-      description:
-        'Creamy Arborio rice with wild mushrooms, truffle oil, parmesan cheese, and fresh herbs.',
+      description: 'Creamy Arborio rice with wild mushrooms, truffle oil, parmesan cheese, and fresh herbs.',
       price: 18.5,
       image:
         'https://readdy.ai/api/search-image?query=Creamy%20mushroom%20risotto%20with%20truffle%20oil%20and%20parmesan%20cheese%20garnished%20with%20fresh%20herbs%2C%20professional%20food%20photography%2C%20soft%20natural%20lighting%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=2&orientation=squarish',
@@ -41,8 +36,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '3',
       name: 'Grilled Salmon Bowl',
-      description:
-        'Grilled salmon fillet served with quinoa, roasted vegetables, avocado, and lemon-dill sauce.',
+      description: 'Grilled salmon fillet served with quinoa, roasted vegetables, avocado, and lemon-dill sauce.',
       price: 22.99,
       image:
         'https://readdy.ai/api/search-image?query=Grilled%20salmon%20fillet%20with%20quinoa%2C%20roasted%20vegetables%20and%20avocado%20in%20a%20bowl%20with%20lemon-dill%20sauce%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=3&orientation=squarish',
@@ -53,8 +47,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '4',
       name: 'Spicy Korean Fried Chicken',
-      description:
-        'Crispy double-fried chicken tossed in spicy gochujang sauce, served with pickled radish.',
+      description: 'Crispy double-fried chicken tossed in spicy gochujang sauce, served with pickled radish.',
       price: 16.99,
       image:
         'https://readdy.ai/api/search-image?query=Crispy%20Korean%20fried%20chicken%20pieces%20glazed%20with%20spicy%20red%20gochujang%20sauce%2C%20garnished%20with%20sesame%20seeds%20and%20green%20onions%2C%20served%20with%20pickled%20radish%2C%20professional%20food%20photography%2C%20bright%20lighting%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=4&orientation=squarish',
@@ -65,8 +58,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '5',
       name: 'Mediterranean Mezze Platter',
-      description:
-        'Assortment of hummus, baba ganoush, tabbouleh, falafel, olives, and warm pita bread.',
+      description: 'Assortment of hummus, baba ganoush, tabbouleh, falafel, olives, and warm pita bread.',
       price: 24.5,
       image:
         'https://readdy.ai/api/search-image?query=Mediterranean%20mezze%20platter%20with%20hummus%2C%20baba%20ganoush%2C%20tabbouleh%2C%20falafel%2C%20olives%20and%20pita%20bread%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20overhead%20shot%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=5&orientation=squarish',
@@ -77,8 +69,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '6',
       name: 'Wagyu Beef Burger',
-      description:
-        'Premium Wagyu beef patty with caramelized onions, aged cheddar, truffle aioli on a brioche bun.',
+      description: 'Premium Wagyu beef patty with caramelized onions, aged cheddar, truffle aioli on a brioche bun.',
       price: 26.99,
       image:
         'https://readdy.ai/api/search-image?query=Gourmet%20Wagyu%20beef%20burger%20with%20caramelized%20onions%2C%20melted%20aged%20cheddar%20cheese%2C%20and%20truffle%20aioli%20on%20a%20brioche%20bun%2C%20professional%20food%20photography%2C%20dramatic%20lighting%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=6&orientation=squarish',
@@ -100,8 +91,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '8',
       name: 'Classic Margherita Pizza',
-      description:
-        'Wood-fired pizza with San Marzano tomato sauce, fresh mozzarella, basil, and olive oil.',
+      description: 'Wood-fired pizza with San Marzano tomato sauce, fresh mozzarella, basil, and olive oil.',
       price: 15.0,
       image:
         'https://readdy.ai/api/search-image?query=Mediterranean%20mezze%20platter%20with%20hummus%2C%20baba%20ganoush%2C%20tabbouleh%2C%20falafel%2C%20olives%20and%20pita%20bread%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20overhead%20shot%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=5&orientation=squarish',
@@ -134,8 +124,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '11',
       name: 'Chicken Caesar Wrap',
-      description:
-        'Grilled chicken, romaine, parmesan, and Caesar dressing wrapped in a spinach tortilla.',
+      description: 'Grilled chicken, romaine, parmesan, and Caesar dressing wrapped in a spinach tortilla.',
       price: 12.5,
       image:
         'https://readdy.ai/api/search-image?query=Mediterranean%20mezze%20platter%20with%20hummus%2C%20baba%20ganoush%2C%20tabbouleh%2C%20falafel%2C%20olives%20and%20pita%20bread%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20overhead%20shot%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=5&orientation=squarish',
@@ -146,8 +135,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '12',
       name: 'Vegan Buddha Bowl',
-      description:
-        'Brown rice, chickpeas, roasted sweet potato, kale, avocado, and tahini dressing.',
+      description: 'Brown rice, chickpeas, roasted sweet potato, kale, avocado, and tahini dressing.',
       price: 14.0,
       image:
         'https://readdy.ai/api/search-image?query=Mediterranean%20mezze%20platter%20with%20hummus%2C%20baba%20ganoush%2C%20tabbouleh%2C%20falafel%2C%20olives%20and%20pita%20bread%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20overhead%20shot%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=5&orientation=squarish',
@@ -158,8 +146,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '13',
       name: 'French Onion Soup',
-      description:
-        'Rich beef broth, caramelized onions, toasted baguette, and melted Gruyère cheese.',
+      description: 'Rich beef broth, caramelized onions, toasted baguette, and melted Gruyère cheese.',
       price: 10.5,
       image:
         'https://readdy.ai/api/search-image?query=Mediterranean%20mezze%20platter%20with%20hummus%2C%20baba%20ganoush%2C%20tabbouleh%2C%20falafel%2C%20olives%20and%20pita%20bread%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20overhead%20shot%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=5&orientation=squarish',
@@ -181,8 +168,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '15',
       name: 'BBQ Pulled Pork Sandwich',
-      description:
-        'Slow-cooked pulled pork, tangy BBQ sauce, coleslaw, and pickles on a toasted bun.',
+      description: 'Slow-cooked pulled pork, tangy BBQ sauce, coleslaw, and pickles on a toasted bun.',
       price: 13.5,
       image:
         'https://readdy.ai/api/search-image?query=Mediterranean%20mezze%20platter%20with%20hummus%2C%20baba%20ganoush%2C%20tabbouleh%2C%20falafel%2C%20olives%20and%20pita%20bread%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20overhead%20shot%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=5&orientation=squarish',
@@ -226,8 +212,7 @@ async function getData(): Promise<Menu[]> {
     {
       id: '19',
       name: 'Shrimp Tacos',
-      description:
-        'Grilled shrimp, cabbage slaw, avocado, and chipotle mayo in soft corn tortillas.',
+      description: 'Grilled shrimp, cabbage slaw, avocado, and chipotle mayo in soft corn tortillas.',
       price: 16.0,
       image:
         'https://readdy.ai/api/search-image?query=Mediterranean%20mezze%20platter%20with%20hummus%2C%20baba%20ganoush%2C%20tabbouleh%2C%20falafel%2C%20olives%20and%20pita%20bread%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20overhead%20shot%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=5&orientation=squarish',
@@ -287,21 +272,13 @@ const MenuManagement = () => {
 
         {isTableView ? (
           <Hint label="Switch to Card View" align="end">
-            <Button
-              variant={'outline'}
-              size={'icon'}
-              onClick={() => toggleMenuDisplayOptionState()}
-            >
+            <Button variant={'outline'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
               <Tablet className="size-5" strokeWidth={2.5} />
             </Button>
           </Hint>
         ) : (
           <Hint label="Switch to Table View">
-            <Button
-              variant={'secondary'}
-              size={'icon'}
-              onClick={() => toggleMenuDisplayOptionState()}
-            >
+            <Button variant={'secondary'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
               <Laptop className="size-5" strokeWidth={2.5} />
             </Button>
           </Hint>

@@ -17,22 +17,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
-import {
-  createAdditionalFieldSchema,
-  createAreaSchema,
-  createQRSchema,
-  createTableSchema,
-} from '@/utils/schemas';
+import { createAdditionalFieldSchema, createAreaSchema, createQRSchema, createTableSchema } from '@/utils/schemas';
 
 interface MobileCreateDialogProps {
   children: React.ReactNode;
@@ -168,9 +155,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                       >
                         <Button type="button" variant="default">
                           <Plus className="size-5 md:mr-[6px]" />
-                          <p className="hidden md:block">
-                            {t('module.qrManagement.addAreaField.create')}
-                          </p>
+                          <p className="hidden md:block">{t('module.qrManagement.addAreaField.create')}</p>
                         </Button>
                       </CustomAddItemDialog>
                     </div>
@@ -208,9 +193,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                       >
                         <Button type="button" variant="default">
                           <Plus className="size-5 md:mr-[6px]" />
-                          <p className="hidden sm:block">
-                            {t('module.qrManagement.addTableField.create')}
-                          </p>
+                          <p className="hidden sm:block">{t('module.qrManagement.addTableField.create')}</p>
                         </Button>
                       </CustomAddItemDialog>
                     </div>
@@ -240,9 +223,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                     </Hint>
                     <Label
                       className="cursor-pointer group-hover:bg-destructive group-hover:text-destructive-foreground rounded-md"
-                      onClick={() =>
-                        setAdditionalInfo((prev) => prev.filter((_, i) => i !== index))
-                      }
+                      onClick={() => setAdditionalInfo((prev) => prev.filter((_, i) => i !== index))}
                     >
                       <X className="size-5" />
                     </Label>
@@ -276,9 +257,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                 {submitButtonText ? submitButtonText : t('module.qrManagement.create')}
               </Button>
             </DialogFooter>
-            <div className="flex items-center justify-end space-x-2">
-              {/* Reset and Submit buttons */}
-            </div>
+            <div className="flex items-center justify-end space-x-2">{/* Reset and Submit buttons */}</div>
           </form>
         </Form>
       </DialogContent>

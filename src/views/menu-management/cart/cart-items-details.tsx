@@ -87,9 +87,7 @@ const CartItemsDetails: React.FC = () => {
   const updateQuantity = (id: string, newQuantity: number) => {
     if (newQuantity < 1) return;
 
-    setCartItems((prevItems) =>
-      prevItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
-    );
+    setCartItems((prevItems) => prevItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item)));
   };
 
   const removeItem = (id: string) => {
@@ -103,9 +101,7 @@ const CartItemsDetails: React.FC = () => {
 
   const EmptyCartView = () => (
     <div className="flex flex-col items-center justify-center h-[500px] px-6">
-      <h3 className="text-xl font-semibold text-primary mb-2">
-        {t('module.menuManagement.cart.emptyCart')}
-      </h3>
+      <h3 className="text-xl font-semibold text-primary mb-2">{t('module.menuManagement.cart.emptyCart')}</h3>
       <p className="text-muted-foreground text-sm text-center mb-8">
         {t('module.menuManagement.cart.emptyCartDescription')}
       </p>
@@ -164,20 +160,14 @@ const CartItemsDetails: React.FC = () => {
                     {item.options && item.options.length > 0 && (
                       <div className="flex flex-wrap gap-1 my-2">
                         {item.options.map((opt) => (
-                          <Badge
-                            key={opt}
-                            variant="outline"
-                            className="text-xs text-muted-foreground"
-                          >
+                          <Badge key={opt} variant="outline" className="text-xs text-muted-foreground">
                             {opt}
                           </Badge>
                         ))}
                       </div>
                     )}
 
-                    {item.notes && (
-                      <p className="text-xs text-muted-foreground mt-1 italic">"{item.notes}"</p>
-                    )}
+                    {item.notes && <p className="text-xs text-muted-foreground mt-1 italic">"{item.notes}"</p>}
 
                     <div className="flex justify-between items-center mt-3">
                       <div className="flex items-center gap-2">
@@ -200,9 +190,7 @@ const CartItemsDetails: React.FC = () => {
                         </Button>
                       </div>
                       <div className="text-right text-primary">
-                        <span className="font-medium">
-                          ${(item.price * item.quantity).toFixed(2)}
-                        </span>
+                        <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
@@ -235,9 +223,7 @@ const CartItemsDetails: React.FC = () => {
               </div>
               <Separator className="my-2" />
               <div className="flex justify-between">
-                <span className="text-gray-800 font-semibold">
-                  {t('module.menuManagement.cart.total')}
-                </span>
+                <span className="text-gray-800 font-semibold">{t('module.menuManagement.cart.total')}</span>
                 <span className="text-gray-800 font-semibold">${total.toFixed(2)}</span>
               </div>
             </div>

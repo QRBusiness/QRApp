@@ -6,15 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { loginSchema } from '@/utils/schemas';
 
@@ -39,9 +31,7 @@ const Login = () => {
   return (
     <Card className="w-full h-full max-w-md mx-auto mt-20 px-2 md:px-6">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold mb-4">
-          {t('module.authentication.title')}
-        </CardTitle>
+        <CardTitle className="text-2xl font-bold mb-4">{t('module.authentication.title')}</CardTitle>
         <CardDescription>{t('module.authentication.subtitle')}</CardDescription>
       </CardHeader>
 
@@ -90,9 +80,7 @@ const Login = () => {
                       type="password"
                     />
                   </FormControl>
-                  <FormDescription>
-                    {t('module.authentication.passwordDescription')}
-                  </FormDescription>
+                  <FormDescription>{t('module.authentication.passwordDescription')}</FormDescription>
                   <FormMessage defaultValue={t('module.authentication.passwordError')} />
                 </FormItem>
               )}

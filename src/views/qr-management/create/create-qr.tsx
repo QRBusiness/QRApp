@@ -9,29 +9,10 @@ import CustomSelect from '@/components/common/custom-select';
 import { Hint } from '@/components/common/hint';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  createAdditionalFieldSchema,
-  createAreaSchema,
-  createQRSchema,
-  createTableSchema,
-} from '@/utils/schemas';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { createAdditionalFieldSchema, createAreaSchema, createQRSchema, createTableSchema } from '@/utils/schemas';
 
 const areaOptionsDefault = [
   { value: 'area1', label: 'Area 1' },
@@ -120,12 +101,8 @@ const CreateQR = () => {
       <Card className="flex flex-col lg:col-span-4 items-start justify-between w-full p-4 space-y-8 rounded border shadow-md flex-1 mr-4 h-full">
         {/* Title and Description */}
         <div className="flex flex-col items-start justify-start space-y-2">
-          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-            {t('module.qrManagement.table.title')}
-          </h4>
-          <p className="text-muted-foreground text-sm">
-            {t('module.qrManagement.table.description')}
-          </p>
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">{t('module.qrManagement.table.title')}</h4>
+          <p className="text-muted-foreground text-sm">{t('module.qrManagement.table.description')}</p>
         </div>
         <div className="flex flex-col flex-1 lg:flex-row items-start justify-start space-y-4 lg:space-y-0 lg:space-x-4 w-full h-full">
           <Form {...form}>
@@ -158,9 +135,7 @@ const CreateQR = () => {
                         >
                           <Button type="button" variant="default">
                             <Plus className="size-5 md:mr-[6px]" />
-                            <p className="hidden md:block">
-                              {t('module.qrManagement.addAreaField.create')}
-                            </p>
+                            <p className="hidden md:block">{t('module.qrManagement.addAreaField.create')}</p>
                           </Button>
                         </CustomAddItemDialog>
                       </div>
@@ -198,9 +173,7 @@ const CreateQR = () => {
                         >
                           <Button type="button" variant="default">
                             <Plus className="size-5 md:mr-[6px]" />
-                            <p className="hidden sm:block">
-                              {t('module.qrManagement.addTableField.create')}
-                            </p>
+                            <p className="hidden sm:block">{t('module.qrManagement.addTableField.create')}</p>
                           </Button>
                         </CustomAddItemDialog>
                       </div>
@@ -231,9 +204,7 @@ const CreateQR = () => {
                       </Hint>
                       <Label
                         className="cursor-pointer group-hover:bg-destructive group-hover:text-destructive-foreground rounded-md"
-                        onClick={() =>
-                          setAdditionalInfo((prev) => prev.filter((_, i) => i !== index))
-                        }
+                        onClick={() => setAdditionalInfo((prev) => prev.filter((_, i) => i !== index))}
                       >
                         <X className="size-5" />
                       </Label>
@@ -265,9 +236,7 @@ const CreateQR = () => {
                     variant="outline"
                     className="hover:bg-destructive hover:text-destructive-foreground min-w-[120px]"
                     disabled={!form.formState.isDirty}
-                    onClick={() =>
-                      form.reset({ area: areaOptions[0].value, table: tableOptions[0].value })
-                    }
+                    onClick={() => form.reset({ area: areaOptions[0].value, table: tableOptions[0].value })}
                   >
                     <CircleX className="size-5 mr-[6px]" />
                     {t('module.qrManagement.reset')}
@@ -286,12 +255,8 @@ const CreateQR = () => {
       {/* Right pane wrapper */}
       <Card className="p-6 h-full w-full flex flex-col lg:col-span-2">
         <div className="flex flex-col items-start justify-start mb-4 space-y-2">
-          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-            {t('module.qrManagement.preview.title')}
-          </h4>
-          <p className="text-sm text-muted-foreground">
-            {t('module.qrManagement.preview.description')}
-          </p>
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">{t('module.qrManagement.preview.title')}</h4>
+          <p className="text-sm text-muted-foreground">{t('module.qrManagement.preview.description')}</p>
         </div>
         {/* QR Code Preview */}
         <div className="flex-1 flex flex-col items-center justify-center mb-6">
@@ -305,9 +270,7 @@ const CreateQR = () => {
             ) : (
               <div className="text-center p-4 flex flex-col items-center justify-center">
                 <QrCode className="size-16 mb-2 text-muted-foreground" />
-                <p className="text-muted-foreground text-sm">
-                  {t('module.qrManagement.preview.position')}
-                </p>
+                <p className="text-muted-foreground text-sm">{t('module.qrManagement.preview.position')}</p>
               </div>
             )}
           </div>
@@ -335,11 +298,7 @@ const CreateQR = () => {
             <Download className="mr-2" /> {t('module.qrManagement.preview.downloadButton')}
           </Button>
 
-          <Button
-            variant="outline"
-            className="w-full  whitespace-nowrap cursor-pointer"
-            disabled={!qrGenerated}
-          >
+          <Button variant="outline" className="w-full  whitespace-nowrap cursor-pointer" disabled={!qrGenerated}>
             <Printer className="mr-2" /> {t('module.qrManagement.preview.printButton')}
           </Button>
         </div>

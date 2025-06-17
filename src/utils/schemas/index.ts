@@ -50,9 +50,7 @@ export const createMenuCategorySchema = z.object({
 });
 
 export const createMenuSubCategorySchema = z.object({
-  name: z
-    .string()
-    .min(1, { message: 'module.menuManagement.createMenuSubCategoryField.nameError' }),
+  name: z.string().min(1, { message: 'module.menuManagement.createMenuSubCategoryField.nameError' }),
   description: z.string().min(1, {
     message: 'module.menuManagement.createMenuSubCategoryField.fieldDescriptionError',
   }),
@@ -68,9 +66,7 @@ export const createMenuItemSizeSchema = z.object({
 
 export const createMenuItemOptionSchema = z.object({
   name: z.string().min(1, { message: 'module.menuManagement.createMenuItemOptionField.nameError' }),
-  price: z
-    .number()
-    .min(0, { message: 'module.menuManagement.createMenuItemOptionField.priceError' }),
+  price: z.number().min(0, { message: 'module.menuManagement.createMenuItemOptionField.priceError' }),
 });
 
 export const createMenuItemSchema = z.object({
@@ -84,8 +80,6 @@ export const createMenuItemSchema = z.object({
   subCategoryName: z.string().min(1, {
     message: 'module.menuManagement.createMenuField.subCategoryNameError',
   }),
-  sizes: z
-    .array(createMenuItemSizeSchema)
-    .min(1, { message: 'module.menuManagement.createMenuField.sizeError' }),
+  sizes: z.array(createMenuItemSizeSchema).min(1, { message: 'module.menuManagement.createMenuField.sizeError' }),
   options: z.array(createMenuItemOptionSchema).optional(),
 });

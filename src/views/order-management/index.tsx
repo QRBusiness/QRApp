@@ -1,7 +1,9 @@
+import CardOrders from './card/card-orders';
+
 const OrderManager = () => {
   return (
-    <div>
-      <h1>Order Management</h1>
+    <div className="p-4 w-full mx-auto">
+      <CardOrders />
     </div>
   );
 };

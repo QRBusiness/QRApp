@@ -23,14 +23,7 @@ interface PopUpQRCodeProps {
   onCancel?: () => void;
 }
 
-const PopUpQRCode: React.FC<PopUpQRCodeProps> = ({
-  children,
-  open,
-  openChange,
-  title,
-  description,
-  url,
-}) => {
+const PopUpQRCode: React.FC<PopUpQRCodeProps> = ({ children, open, openChange, title, description, url }) => {
   const { t } = useTranslation();
   return (
     <Dialog open={open} onOpenChange={openChange}>
@@ -48,19 +41,14 @@ const PopUpQRCode: React.FC<PopUpQRCodeProps> = ({
             {/* Replace with img here */}
             <div className="text-center p-4 flex flex-col items-center justify-center">
               <QrCode className="size-16 mb-2 text-muted-foreground" />
-              <p className="text-muted-foreground text-sm">
-                {t('module.qrManagement.preview.position')}
-              </p>
+              <p className="text-muted-foreground text-sm">{t('module.qrManagement.preview.position')}</p>
             </div>
           </div>
         </div>
         {/* Download Format */}
         {/* Action Buttons */}
         <DialogFooter className="grid grid-cols-2 gap-2">
-          <Button
-            className="w-full  whitespace-nowrap cursor-pointer col-span-2 md:col-span-1"
-            disabled={false}
-          >
+          <Button className="w-full  whitespace-nowrap cursor-pointer col-span-2 md:col-span-1" disabled={false}>
             <Download className="mr-2" /> {t('module.qrManagement.preview.downloadButton')}
           </Button>
           <Button

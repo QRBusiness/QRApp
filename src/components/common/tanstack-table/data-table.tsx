@@ -8,14 +8,7 @@ import {
 } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import { DataTablePagination } from '@/components/common/tanstack-table/pagination';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Hint } from '../hint';
 
 interface DataTableProps<TData, TValue> {
@@ -80,9 +73,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                       );
                     }
                     return (
-                      <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
+                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                     );
                   })}
                 </TableRow>
