@@ -1,14 +1,18 @@
-import { DASHBOARD, FORGOT_PASSWORD } from '@/constains';
+import { DASHBOARD, FORGOT_PASSWORD, OWNER } from '@/constains';
+import { loginService } from '@/services/loginService';
+import { getCurrentUser } from '@/services/userService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
+import { setUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { loginSchema } from '@/utils/schemas';
+import { saveToLocalStorage } from '@/libs/utils';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -21,11 +25,34 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     console.log(values);
-    // IF FAILED TO LOGIN, SHOW ERROR MESSAGE
+    // setUserState({ role: OWNER_ROLE });
+    const { access_token, refresh_token } = await loginService({
+      username: values.phone,
+      password: values.password,
+    });
+    saveToLocalStorage('access_token', access_token);
+    saveToLocalStorage('refresh_token', refresh_token);
+    const user = await getCurrentUser();
+    setUserState({
+      _id: user._id,
+      name: user.name,
+      phone: user.phone,
+      address: user.address,
+      image_url: user.image_url,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+      role: user.role,
+      permissions: user.permissions,
+      business: {
+        _id: user.business?._id,
+      },
+      group: [],
+    });
+
     // IF SUCCESSFUL, NAVIGATE TO DASHBOARD OR QR MANAGEMENT
-    navigate(DASHBOARD);
+    navigate(`${OWNER}/${user.business?._id}/${DASHBOARD}`);
   };
 
   return (

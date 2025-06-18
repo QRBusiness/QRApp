@@ -1,15 +1,24 @@
-import { SIDEBAR_COOKIE_NAME } from '@/constains';
+import { LOGIN, SIDEBAR_COOKIE_NAME } from '@/constains';
 import Cookies from 'js-cookie';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import Headers from '@/components/common/headers';
 import SidebarApp from '@/components/common/sidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import MobileBottomBar from './mobile-bottom-bar';
+import { useUserState } from './states/userState';
 import { useViewState } from './states/viewState';
 
-const RootApp = () => {
+interface RootAppProps {
+  role: string;
+}
+
+const RootApp = ({ role }: RootAppProps) => {
   const cookie = Cookies.get(SIDEBAR_COOKIE_NAME);
   const { isMobile } = useViewState();
+  const { role: currentRole } = useUserState();
+  if (role !== currentRole && currentRole !== 'BusinessOwner') {
+    return <Navigate to={LOGIN} replace={true} />;
+  }
 
   if (isMobile) {
     return (

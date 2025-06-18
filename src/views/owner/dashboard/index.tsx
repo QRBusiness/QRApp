@@ -1,6 +1,9 @@
 import { Hint } from '@/components/common/hint';
+import { useUserState } from '@/components/common/states/userState';
 
 const Dashboard = () => {
+  const user = useUserState();
+  console.log({ user });
   return (
     <div>
       <Hint label="This is a hint">
