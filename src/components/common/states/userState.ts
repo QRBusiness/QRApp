@@ -1,4 +1,6 @@
+import { USER_SESSION } from '@/constains';
 import { proxy, useSnapshot } from 'valtio';
+import { loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 
 interface userPros {
   _id: string;
@@ -15,7 +17,8 @@ interface userPros {
   };
   group: any[];
 }
-const userState: userPros = proxy({
+
+const defaultUserState: userPros = {
   _id: '',
   name: '',
   phone: '',
@@ -29,7 +32,9 @@ const userState: userPros = proxy({
     _id: '',
   },
   group: [],
-});
+};
+const oldUserState = loadFromLocalStorage(USER_SESSION, defaultUserState);
+const userState: userPros = proxy(oldUserState);
 
 export default userState;
 
@@ -38,5 +43,10 @@ export const useUserState = () => {
 };
 
 export const setUserState = (newState: Partial<userPros>) => {
+  // Ensure newState is an object and not null or undefined
+  if (typeof newState !== 'object' || newState === null) {
+    throw new Error('Invalid state object provided');
+  }
+  saveToLocalStorage(USER_SESSION, newState);
   Object.assign(userState, newState);
 };

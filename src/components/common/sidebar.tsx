@@ -1,17 +1,5 @@
 import React from 'react';
-import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, QR_MANAGEMENT, STAFF_MANAGEMENT } from '@/constains';
-import {
-  ChartNoAxesCombined,
-  ChevronLeft,
-  CircleHelp,
-  HandPlatter,
-  LogOut,
-  QrCode,
-  Settings,
-  User,
-  UserCog,
-  UtensilsCrossed,
-} from 'lucide-react';
+import { ChevronLeft, CircleHelp, LogOut, Settings, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -28,49 +16,26 @@ import {
 import { cn } from '@/libs/utils';
 import { Button } from '../ui/button';
 import { CustomDropdownMenu } from './custom-dropdown-menu';
-
-const sidebarItems = [
-  {
-    title: 'module.sidebar.dashboard',
-    path_url: DASHBOARD,
-    icon: <ChartNoAxesCombined />,
-  },
-  {
-    title: 'module.sidebar.qr-management',
-    path_url: QR_MANAGEMENT,
-    icon: <QrCode />,
-  },
-  {
-    title: 'module.sidebar.menu-management',
-    path_url: MENU_MANAGEMENT,
-    icon: <UtensilsCrossed />,
-  },
-  {
-    title: 'module.sidebar.order-management',
-    path_url: ORDER_MANAGEMENT,
-    icon: <HandPlatter />,
-  },
-  {
-    title: 'module.sidebar.staff-management',
-    path_url: STAFF_MANAGEMENT,
-    icon: <UserCog />,
-  },
-];
+import type { SidebarItem } from './mobile-bottom-bar';
 
 const systemItems = [
   {
     title: 'module.sidebar.settings',
-    path_url: '/',
+    path_url: '#',
     icon: <Settings />,
   },
   {
     title: 'module.sidebar.help',
-    path_url: '/',
+    path_url: '#',
     icon: <CircleHelp />,
   },
 ];
 
-const SidebarApp = () => {
+interface SidebarProps {
+  items: SidebarItem[];
+}
+
+const SidebarApp = ({ items }: SidebarProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
@@ -106,7 +71,7 @@ const SidebarApp = () => {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="w-full space-y-2">
-              {sidebarItems.map((item) => (
+              {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Button

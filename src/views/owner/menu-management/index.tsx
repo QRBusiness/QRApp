@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { OWNER_ROLE } from '@/constains';
 import { Laptop, Plus, Tablet } from 'lucide-react';
 import { Hint } from '@/components/common/hint';
 import { toggleMenuDisplayOptionState, useMenuDisplayOptionState } from '@/components/common/states/menuStates';
+import { useUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import CreateNewMenuDialog from './dialog/create-new-menu-dialog';
 import MobileMenuView from './mobile-card/mobile-view';
@@ -238,6 +240,8 @@ const MenuManagement = () => {
   const { isTable: isTableView } = useMenuDisplayOptionState();
   const [openCreateNewMenuDialog, setOpenCreateNewMenuDialog] = useState(false);
   const [data, setData] = useState<Menu[]>([]);
+  const user = useUserState();
+  const isShowAction = user?.role === OWNER_ROLE;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -253,37 +257,39 @@ const MenuManagement = () => {
   }, []);
   return (
     <div className="container mx-auto pb-10 space-y-4">
-      <div className="flex items-center space-x-2 justify-self-end mr-4 md:mr-0">
-        <CreateNewMenuDialog
-          open={openCreateNewMenuDialog}
-          onOpenChange={setOpenCreateNewMenuDialog}
-          onSubmit={() => {
-            // Handle submit
-          }}
-          onCancel={() => {
-            // Handle cancel
-          }}
-        >
-          <Button variant="default" className="rounded-full md:rounded w-9 h-9 md:w-auto">
-            <Plus className="md:mr-2 h-4 w-4" />
-            <p className="text-sm hidden md:block">Add New Menu Item</p>
-          </Button>
-        </CreateNewMenuDialog>
+      {isShowAction && (
+        <div className="flex items-center space-x-2 justify-self-end mr-4 md:mr-0">
+          <CreateNewMenuDialog
+            open={openCreateNewMenuDialog}
+            onOpenChange={setOpenCreateNewMenuDialog}
+            onSubmit={() => {
+              // Handle submit
+            }}
+            onCancel={() => {
+              // Handle cancel
+            }}
+          >
+            <Button variant="default" className="rounded-full md:rounded w-9 h-9 md:w-auto">
+              <Plus className="md:mr-2 h-4 w-4" />
+              <p className="text-sm hidden md:block">Add New Menu Item</p>
+            </Button>
+          </CreateNewMenuDialog>
 
-        {isTableView ? (
-          <Hint label="Switch to Card View" align="end">
-            <Button variant={'outline'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
-              <Tablet className="size-5" strokeWidth={2.5} />
-            </Button>
-          </Hint>
-        ) : (
-          <Hint label="Switch to Table View">
-            <Button variant={'secondary'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
-              <Laptop className="size-5" strokeWidth={2.5} />
-            </Button>
-          </Hint>
-        )}
-      </div>
+          {isTableView ? (
+            <Hint label="Switch to Card View" align="end">
+              <Button variant={'outline'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
+                <Tablet className="size-5" strokeWidth={2.5} />
+              </Button>
+            </Hint>
+          ) : (
+            <Hint label="Switch to Table View">
+              <Button variant={'secondary'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
+                <Laptop className="size-5" strokeWidth={2.5} />
+              </Button>
+            </Hint>
+          )}
+        </div>
+      )}
       {isTableView ? <MenuTable data={data} /> : <MobileMenuView items={data} />}
     </div>
   );

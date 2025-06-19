@@ -20,8 +20,8 @@ export const OWNER = '/owner';
 export const ADMIN = '/admin';
 
 // Role
-export const ADMIN_ROLE = 'ADMIN_ROLE';
-export const OWNER_ROLE = 'OWNER_ROLE';
+export const ADMIN_ROLE = 'Admin';
+export const OWNER_ROLE = 'BusinessOwner';
 // Sidebar
 export const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 export const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -29,3 +29,8 @@ export const SIDEBAR_WIDTH = '16rem';
 export const SIDEBAR_WIDTH_MOBILE = '48rem';
 export const SIDEBAR_WIDTH_ICON = '3rem';
 export const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
+
+// Local Storage Constants
+export const ACCESS_TOKEN = 'access_token';
+export const REFRESH_TOKEN = 'refresh_token';
+export const USER_SESSION = 'user_session';

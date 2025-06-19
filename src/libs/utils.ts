@@ -18,7 +18,7 @@ export const saveToLocalStorage = (key: string, value: any) => {
 export const loadFromLocalStorage = (key: string, defaultValue: any) => {
   try {
     const serializedValue = localStorage.getItem(key);
-    if (serializedValue === null) {
+    if (serializedValue === null || serializedValue === undefined) {
       return defaultValue;
     }
     return JSON.parse(serializedValue);

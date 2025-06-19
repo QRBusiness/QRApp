@@ -1,38 +1,46 @@
-import apiClient, { type SuccessResponse } from '@/services';
+import apiClient, { type ApiResponse } from '@/services';
+import { toast } from 'sonner';
 
 export interface UserProfile {
-  _id: string;
-  name: string;
-  phone: string;
-  address: string;
-  image_url: string;
-  created_at: string;
-  updated_at: string;
-  role: string;
-  permissions: any[];
-  business: {
+  data: {
     _id: string;
     name: string;
+    phone: string;
     address: string;
-    contact: string;
+    image_url: string;
     created_at: string;
     updated_at: string;
-    tax_code: string;
-    business_type: {
+    role: string;
+    permissions: any[];
+    business: {
       _id: string;
       name: string;
-      description: string;
+      address: string;
+      contact: string;
       created_at: string;
       updated_at: string;
+      tax_code: string;
+      business_type: {
+        _id: string;
+        name: string;
+        description: string;
+        created_at: string;
+        updated_at: string;
+      };
     };
   };
 }
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<UserProfile> => {
   try {
-    const response = await apiClient.get<SuccessResponse<UserProfile>>('/me');
-    return response.data.data;
+    const response: ApiResponse<UserProfile> = await apiClient.get('/me');
+    if (response.status !== 200) {
+      toast(response.error, {
+        description: response.errorMessage || 'Failed to fetch user profile',
+      });
+    }
+    return response.data as UserProfile;
   } catch (error) {
-    throw new Error('Failed to fetch user profile');
+    throw new Error('Internal server error');
   }
 };

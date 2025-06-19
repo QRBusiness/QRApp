@@ -1,38 +1,18 @@
-import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, PROFILE, QR_MANAGEMENT } from '@/constains';
-import { ChartNoAxesCombined, HandPlatter, QrCode, User, UtensilsCrossed } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/libs/utils';
 import { Button } from '../ui/button';
 
-const sidebarItems = [
-  {
-    title: 'module.mobileSidebar.dashboard',
-    path_url: DASHBOARD,
-    icon: <ChartNoAxesCombined />,
-  },
-  {
-    title: 'module.mobileSidebar.qr-management',
-    path_url: QR_MANAGEMENT,
-    icon: <QrCode />,
-  },
-  {
-    title: 'module.mobileSidebar.menu-management',
-    path_url: MENU_MANAGEMENT,
-    icon: <UtensilsCrossed />,
-  },
-  {
-    title: 'module.mobileSidebar.order-management',
-    path_url: ORDER_MANAGEMENT,
-    icon: <HandPlatter />,
-  },
-  {
-    title: 'module.mobileSidebar.profile',
-    path_url: PROFILE,
-    icon: <User />,
-  },
-];
-const MobileBottomBar = () => {
+export interface SidebarItem {
+  title: string;
+  path_url: string;
+  icon: React.ReactNode;
+}
+export interface MobileBottomBarProps {
+  items?: SidebarItem[];
+}
+
+const MobileBottomBar = ({ items }: MobileBottomBarProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const params = useLocation();
@@ -42,7 +22,7 @@ const MobileBottomBar = () => {
   // Hide the bottom bar on larger screens
   return (
     <div className="grid grid-cols-5 h-14 fixed bottom-0 left-0 right-0 w-full bg-white border-t z-50">
-      {sidebarItems.map((item) => (
+      {items?.map((item) => (
         <Button
           key={item.title}
           variant="ghost"

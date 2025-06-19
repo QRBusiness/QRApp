@@ -3,13 +3,12 @@ import axios from 'axios';
 import { loadFromLocalStorage } from '@/libs/utils';
 
 export type SuccessResponse<T> = {
-  buniness: any;
-  status: number;
   data: T;
 };
 
 export type ErrorResponse = {
   status: number;
+  error: string;
   errorMessage: string;
 };
 
@@ -32,7 +31,6 @@ apiClient.interceptors.request.use(
     // You can modify the request config here
     // For example, add an authorization token
     const token = loadFromLocalStorage('access_token', null);
-    console.log('Token:', token);
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -50,14 +48,25 @@ apiClient.interceptors.response.use(
     // Handle successful response status codes
     return response;
   },
-  (error) => {
-    // Handle response errors
-    if (error.response) {
-      // You can customize the error handling here
-      return Promise.reject(new Error(error.response.data.message || 'An error occurred'));
-    }
-    // Handle other errors (e.g., network errors)
-    return Promise.reject(error);
+
+  async function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    const { response } = error;
+    // if (response.status === 401 || response.status === 403) {
+    //   if (window.location.pathname !== '/auth') {
+    //     // Redirect to the login page if the user is not authenticated
+    //     window.location.href = '/login';
+    //   }
+    // }
+
+    console.error('API Error:', response);
+    const error_response: ErrorResponse = {
+      status: response.status,
+      error: response.data.error || 'An error occurred',
+      errorMessage: response.data.message,
+    };
+    return error_response;
   }
 );
 

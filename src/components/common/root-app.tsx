@@ -1,12 +1,15 @@
-import { LOGIN, SIDEBAR_COOKIE_NAME } from '@/constains';
+import { useMemo } from 'react';
+import { ADMIN_ROLE, LOGIN, SIDEBAR_COOKIE_NAME, STAFF_MANAGEMENT } from '@/constains';
+import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, PROFILE, QR_MANAGEMENT } from '@/constains';
 import Cookies from 'js-cookie';
+import { ChartNoAxesCombined, HandPlatter, QrCode, User, UserCog, UtensilsCrossed } from 'lucide-react';
 import { Navigate, Outlet } from 'react-router-dom';
 import Headers from '@/components/common/headers';
+import MobileBottomBar, { type SidebarItem } from '@/components/common/mobile-bottom-bar';
 import SidebarApp from '@/components/common/sidebar';
+import { useUserState } from '@/components/common/states/userState';
+import { useViewState } from '@/components/common/states/viewState';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import MobileBottomBar from './mobile-bottom-bar';
-import { useUserState } from './states/userState';
-import { useViewState } from './states/viewState';
 
 interface RootAppProps {
   role: string;
@@ -16,15 +19,76 @@ const RootApp = ({ role }: RootAppProps) => {
   const cookie = Cookies.get(SIDEBAR_COOKIE_NAME);
   const { isMobile } = useViewState();
   const { role: currentRole } = useUserState();
-  if (role !== currentRole && currentRole !== 'BusinessOwner') {
+  if (role !== currentRole && currentRole !== ADMIN_ROLE) {
     return <Navigate to={LOGIN} replace={true} />;
   }
+
+  const mobileSidebarItems: SidebarItem[] = useMemo(
+    () => [
+      {
+        title: 'module.mobileSidebar.dashboard',
+        path_url: DASHBOARD,
+        icon: <ChartNoAxesCombined />,
+      },
+      {
+        title: 'module.mobileSidebar.qr-management',
+        path_url: QR_MANAGEMENT,
+        icon: <QrCode />,
+      },
+      {
+        title: 'module.mobileSidebar.menu-management',
+        path_url: MENU_MANAGEMENT,
+        icon: <UtensilsCrossed />,
+      },
+      {
+        title: 'module.mobileSidebar.order-management',
+        path_url: ORDER_MANAGEMENT,
+        icon: <HandPlatter />,
+      },
+      {
+        title: 'module.mobileSidebar.profile',
+        path_url: PROFILE,
+        icon: <User />,
+      },
+    ],
+    []
+  );
+  const sidebarItems: SidebarItem[] = useMemo(
+    () => [
+      {
+        title: 'module.sidebar.dashboard',
+        path_url: DASHBOARD,
+        icon: <ChartNoAxesCombined />,
+      },
+      {
+        title: 'module.sidebar.qr-management',
+        path_url: QR_MANAGEMENT,
+        icon: <QrCode />,
+      },
+      {
+        title: 'module.sidebar.menu-management',
+        path_url: MENU_MANAGEMENT,
+        icon: <UtensilsCrossed />,
+      },
+      {
+        title: 'module.sidebar.order-management',
+        path_url: ORDER_MANAGEMENT,
+        icon: <HandPlatter />,
+      },
+      {
+        title: 'module.sidebar.staff-management',
+        path_url: STAFF_MANAGEMENT,
+        icon: <UserCog />,
+      },
+    ],
+    []
+  );
 
   if (isMobile) {
     return (
       <SidebarProvider defaultOpen={cookie === 'true'}>
         {/* Mobile Bottom Bar */}
-        <MobileBottomBar />
+        <MobileBottomBar items={mobileSidebarItems} />
         <div className="w-full h-full flex flex-col items-center justify-center p-0 py-4">
           <Headers />
           <Outlet />
@@ -35,7 +99,7 @@ const RootApp = ({ role }: RootAppProps) => {
   return (
     <SidebarProvider defaultOpen={cookie === 'true'}>
       {/* Desktop Sidebar Trigger */}
-      <SidebarApp />
+      <SidebarApp items={sidebarItems} />
       <SidebarTrigger />
       <main className="w-full h-full flex flex-col items-center justify-center p-0 md:px-4">
         <Headers />

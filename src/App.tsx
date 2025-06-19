@@ -19,10 +19,12 @@ import {
   STAFF_MANAGEMENT,
   UNAUTHORIZED,
 } from '@/constains';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Loading from '@/components/common/loading';
 import { useResizeListener } from '@/components/common/states/viewState';
+import { Toaster } from '@/components/ui/sonner';
 import BranchManagement from '@/views/admin/branch';
 import BusinessOwnerManagement from '@/views/admin/busines-owner-mgmt';
 import BusinessManagement from '@/views/admin/business';
@@ -39,17 +41,19 @@ const QRManagement = React.lazy(() => import('@/views/owner/qr-management'));
 const StaffManagement = React.lazy(() => import('@/views/owner/staff-management'));
 const OrderDetails = React.lazy(() => import('@/views/owner/order-management/details'));
 const LandingPage = React.lazy(() => import('@/views/user/landing-page'));
+const ProtectedRoute = React.lazy(() => import('@/views/authenticate/protected-router'));
 
 function App() {
   const { t } = useTranslation();
   useResizeListener();
+  const queryClient = new QueryClient();
   const routers = useMemo(
     () =>
       createBrowserRouter([
         // Unauthenticated routes
         {
           path: '*',
-          element: <Navigate to={'/'} replace />,
+          element: <ProtectedRoute />,
         },
         {
           path: LANDING_PAGE,
@@ -149,11 +153,14 @@ function App() {
 
   return (
     <>
-      <title>{t('module.app.name')}</title>
-      <meta name="description" content={t('module.app.description')} />
-      <Suspense fallback={<Loading />}>
-        <RouterProvider router={routers} />
-      </Suspense>
+      <QueryClientProvider client={queryClient}>
+        <title>{t('module.app.name')}</title>
+        <meta name="description" content={t('module.app.description')} />
+        <Toaster duration={3000} position="bottom-right" />
+        <Suspense fallback={<Loading />}>
+          <RouterProvider router={routers} />
+        </Suspense>
+      </QueryClientProvider>
     </>
   );
 }

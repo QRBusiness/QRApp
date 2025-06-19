@@ -17,7 +17,7 @@ import { useViewState } from './states/viewState';
 const AppBreadcrumb = () => {
   const location = useLocation();
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
+  const { id, businessId } = useParams<{ id: string; businessId: string }>();
   const pathnames = location.pathname.split('/').filter((x) => x);
   const { isMobile } = useViewState();
 
@@ -59,7 +59,13 @@ const AppBreadcrumb = () => {
                 <SlashIcon />
               </BreadcrumbSeparator>
               <BreadcrumbItem key={index}>
-                <BreadcrumbLink href={href}>{value !== id ? t(`module.sidebar.${value}`) : id}</BreadcrumbLink>
+                <BreadcrumbLink href={href}>
+                  {value !== id && value !== businessId
+                    ? t(`module.sidebar.${value}`)
+                    : value === id
+                      ? id
+                      : t(`module.sidebar.businessId`)}
+                </BreadcrumbLink>
               </BreadcrumbItem>
             </React.Fragment>
           );

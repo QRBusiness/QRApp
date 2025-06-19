@@ -38,6 +38,10 @@
     },
     "sidebar": {
       "home": "Home",
+      "owner": "Owner Side",
+      "admin": "Admin Side",
+      "unauthorized": "Guest Side",
+      "businessId": "Business ID",
       "dashboard": "Dashboard",
       "qr-management": "QR Management",
       "menu-management": "Menu Management",
@@ -45,7 +49,6 @@
       "order-details": "Order Details",
       "staff-management": "Staff Management",
       "cart": "Your Cart Orders",
-
       "settings": "Settings",
       "help": "Help",
       "logout": "Logout",
