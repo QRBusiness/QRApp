@@ -1,5 +1,6 @@
 import React from 'react';
-import { ChevronLeft, CircleHelp, LogOut, Settings, User } from 'lucide-react';
+import { ADMIN_ROLE } from '@/constains';
+import { ChevronLeft, CircleHelp, LogOut, Settings, User, UserCog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -17,6 +18,7 @@ import { cn } from '@/libs/utils';
 import { Button } from '../ui/button';
 import { CustomDropdownMenu } from './custom-dropdown-menu';
 import type { SidebarItem } from './mobile-bottom-bar';
+import { useUserState } from './states/userState';
 
 const systemItems = [
   {
@@ -38,12 +40,23 @@ interface SidebarProps {
 const SidebarApp = ({ items }: SidebarProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
   const params = useLocation();
+  const location = useLocation();
+  const user = useUserState();
+  const [open, setOpen] = React.useState(false);
+  let accentItems: { label: string; icon: React.ReactNode; onClick: () => void }[] = [];
 
-  const username = 'Username'; // Replace with actual username logic if needed
+  if (user.role === ADMIN_ROLE && location.pathname.split('/')[1] !== 'admin') {
+    accentItems.push({
+      label: t('module.sidebar.admin'),
+      icon: <UserCog />,
+      onClick: () => {
+        navigate('/admin');
+      },
+    });
+  }
 
-  const accentItems = [
+  const defaultItems = [
     {
       label: t('module.sidebar.account'),
       icon: <User />,
@@ -55,6 +68,14 @@ const SidebarApp = ({ items }: SidebarProps) => {
       onClick: () => {},
     },
   ];
+
+  defaultItems.map((item) => {
+    accentItems.push({
+      label: item.label,
+      icon: item.icon,
+      onClick: item.onClick,
+    });
+  });
 
   return (
     <Sidebar side="left" variant="sidebar" collapsible="offcanvas">
@@ -116,13 +137,13 @@ const SidebarApp = ({ items }: SidebarProps) => {
                   <CustomDropdownMenu
                     open={open}
                     onOpenChange={() => setOpen(!open)}
-                    label={t('module.sidebar.greeting', { name: username })}
+                    label={t('module.sidebar.greeting', { name: user.name || 'User' })}
                     items={accentItems}
                   >
                     <Button variant={'ghost'} className="w-full justify-between px-4 cursor-pointer">
                       <div className="flex items-center gap-2">
                         <User />
-                        <span>{username}</span>
+                        <span>{user.name || 'User'}</span>
                       </div>
                       <ChevronLeft className={cn('transition-all duration-300 ease-in-out', open ? 'rotate-90' : '')} />
                     </Button>

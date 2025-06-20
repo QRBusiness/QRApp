@@ -15,6 +15,7 @@ export const PROFILE = 'profile';
 export const BUSINESS = 'business';
 export const BRANCH = 'branch';
 export const BUSINESS_OWNER_MANAGEMENT = 'business-owner-management';
+export const BUSINESS_TYPE = 'business-type';
 
 export const OWNER = '/owner';
 export const ADMIN = '/admin';

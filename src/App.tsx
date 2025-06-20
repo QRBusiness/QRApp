@@ -6,6 +6,7 @@ import {
   BRANCH,
   BUSINESS,
   BUSINESS_OWNER_MANAGEMENT,
+  BUSINESS_TYPE,
   CART,
   DASHBOARD,
   FORGOT_PASSWORD,
@@ -25,9 +26,6 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Loading from '@/components/common/loading';
 import { useResizeListener } from '@/components/common/states/viewState';
 import { Toaster } from '@/components/ui/sonner';
-import BranchManagement from '@/views/admin/branch';
-import BusinessOwnerManagement from '@/views/admin/busines-owner-mgmt';
-import BusinessManagement from '@/views/admin/business';
 
 const RootApp = React.lazy(() => import('@/components/common/root-app'));
 const GuestRouter = React.lazy(() => import('@/components/common/guest-router'));
@@ -42,6 +40,13 @@ const StaffManagement = React.lazy(() => import('@/views/owner/staff-management'
 const OrderDetails = React.lazy(() => import('@/views/owner/order-management/details'));
 const LandingPage = React.lazy(() => import('@/views/user/landing-page'));
 const ProtectedRoute = React.lazy(() => import('@/views/authenticate/protected-router'));
+const BusinessOwnerManagement = React.lazy(() => import('@/views/admin/busines-owner-mgmt'));
+const CreateNewBusinessOwner = React.lazy(
+  () => import('@/views/admin/busines-owner-mgmt/create/create-new-business-owner')
+);
+const BranchManagement = React.lazy(() => import('@/views/admin/branch'));
+const BusinessManagement = React.lazy(() => import('@/views/admin/business'));
+const BusinessTypeManagement = React.lazy(() => import('@/views/admin/business-type'));
 
 function App() {
   const { t } = useTranslation();
@@ -130,12 +135,16 @@ function App() {
         },
         // Admin routes
         {
-          path: `${ADMIN}/:businessId`,
+          path: ADMIN,
           element: <RootApp role={ADMIN_ROLE} />,
           children: [
             {
               path: BRANCH,
               element: <BranchManagement />,
+            },
+            {
+              path: BUSINESS_TYPE,
+              element: <BusinessTypeManagement />,
             },
             {
               path: BUSINESS,
@@ -144,6 +153,14 @@ function App() {
             {
               path: BUSINESS_OWNER_MANAGEMENT,
               element: <BusinessOwnerManagement />,
+            },
+            {
+              path: `${BUSINESS_OWNER_MANAGEMENT}/create`,
+              element: <CreateNewBusinessOwner />,
+            },
+            {
+              index: true,
+              element: <Navigate to={BRANCH} replace />,
             },
           ],
         },

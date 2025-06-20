@@ -68,18 +68,18 @@ const Login = () => {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('module.authentication.phone')}</FormLabel>
+                    <FormLabel>{t('module.authentication.username')}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={t('module.authentication.phonePlaceholder')}
+                        placeholder={t('module.authentication.usernamePlaceholder')}
                         {...field}
                         className="w-full"
                         type="text"
                         maxLength={15}
                       />
                     </FormControl>
-                    <FormDescription>{t('module.authentication.phoneDescription')}</FormDescription>
-                    <FormMessage defaultValue={t('module.authentication.phoneError')} />
+                    <FormDescription>{t('module.authentication.usernameDescription')}</FormDescription>
+                    <FormMessage defaultValue={t('module.authentication.usernameError')} />
                   </FormItem>
                 )}
               />

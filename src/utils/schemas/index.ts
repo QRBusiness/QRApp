@@ -18,8 +18,8 @@ import { z } from 'zod';
 // });
 
 export const loginSchema = z.object({
-  username: z.string().min(3, { message: 'module.authentication.phoneErrorLength' }),
-  password: z.string().min(3, { message: 'module.authentication.passwordError' }),
+  username: z.string().min(5, { message: 'module.authentication.usernameError' }),
+  password: z.string().min(5, { message: 'module.authentication.passwordError' }),
 });
 
 export const createQRSchema = z.object({
@@ -87,4 +87,56 @@ export const createMenuItemSchema = z.object({
   }),
   sizes: z.array(createMenuItemSizeSchema).min(1, { message: 'module.menuManagement.createMenuField.sizeError' }),
   options: z.array(createMenuItemOptionSchema).optional(),
+});
+
+export const createBusinessTypeSchema = z.object({
+  name: z.string().min(1, { message: 'module.businessTypeManagement.createBusinessTypeField.nameError' }),
+});
+
+export const createBusinessOwnerSchema = z.object({
+  name: z.string().min(1, { message: 'module.businessOwnerManagement.createBusinessOwnerField.nameError' }),
+  address: z.string().min(1, { message: 'module.businessOwnerManagement.createBusinessOwnerField.addressError' }),
+  phone: z
+    .string()
+    .min(10, { message: 'module.businessOwnerManagement.createBusinessOwnerField.phoneError' })
+    .max(11, { message: 'module.businessOwnerManagement.createBusinessOwnerField.phoneError' })
+    .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
+      message: 'module.businessOwnerManagement.createBusinessOwnerField.phoneFormatError',
+    }),
+});
+
+export const createAccoutSchema = z
+  .object({
+    username: z.string().min(1, { message: 'module.accountManagement.createAccountField.nameError' }),
+    password: z
+      .string()
+      .min(5, { message: 'module.accountManagement.createAccountField.passwordError' })
+      .max(32, { message: 'module.accountManagement.createAccountField.passwordError' })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,32}$/, {
+        message: 'module.accountManagement.createAccountField.passwordComplexityError',
+      }),
+    confirmPassword: z.string().min(1, {
+      message: 'module.accountManagement.createAccountField.confirmPasswordError',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'module.accountManagement.createAccountField.passwordMismatchError',
+  });
+
+export const createBusinessSchema = z.object({
+  name: z.string().min(1, { message: 'module.businessManagement.createBusinessField.nameError' }),
+  address: z.string().min(1, { message: 'module.businessManagement.createBusinessField.addressError' }),
+  contact: z
+    .string()
+    .min(10, { message: 'module.businessManagement.createBusinessField.contactError' })
+    .max(11, { message: 'module.businessManagement.createBusinessField.contactError' })
+    .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
+      message: 'module.businessManagement.createBusinessField.contactFormatError',
+    }),
+  businessType: z.string().min(1, {
+    message: 'module.businessManagement.createBusinessField.businessTypeError',
+  }),
+  businessTaxCode: z.string().min(1, {
+    message: 'module.businessManagement.createBusinessField.businessTaxCodeError',
+  }),
 });

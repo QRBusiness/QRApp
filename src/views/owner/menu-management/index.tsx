@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { OWNER_ROLE } from '@/constains';
+import { ADMIN_ROLE, OWNER_ROLE } from '@/constains';
 import { Laptop, Plus, Tablet } from 'lucide-react';
 import { Hint } from '@/components/common/hint';
 import { toggleMenuDisplayOptionState, useMenuDisplayOptionState } from '@/components/common/states/menuStates';
@@ -241,7 +241,7 @@ const MenuManagement = () => {
   const [openCreateNewMenuDialog, setOpenCreateNewMenuDialog] = useState(false);
   const [data, setData] = useState<Menu[]>([]);
   const user = useUserState();
-  const isShowAction = user?.role === OWNER_ROLE;
+  const isShowAction = user?.role === OWNER_ROLE || user?.role === ADMIN_ROLE;
 
   useEffect(() => {
     const fetchData = async () => {

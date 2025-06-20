@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
+import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -43,3 +44,4 @@ export const clearLocalStorage = () => {
     console.error('Error clearing localStorage', error);
   }
 };
+export const formattedDate = (date: string) => format(new Date(date), 'MMM dd, yyyy • h:mm a');

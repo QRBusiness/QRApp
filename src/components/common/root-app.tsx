@@ -1,9 +1,27 @@
 import { useMemo } from 'react';
-import { ADMIN_ROLE, LOGIN, SIDEBAR_COOKIE_NAME, STAFF_MANAGEMENT } from '@/constains';
+import {
+  ADMIN_ROLE,
+  BRANCH,
+  BUSINESS,
+  BUSINESS_OWNER_MANAGEMENT,
+  BUSINESS_TYPE,
+  LOGIN,
+  SIDEBAR_COOKIE_NAME,
+  STAFF_MANAGEMENT,
+} from '@/constains';
 import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, PROFILE, QR_MANAGEMENT } from '@/constains';
 import Cookies from 'js-cookie';
-import { ChartNoAxesCombined, HandPlatter, QrCode, User, UserCog, UtensilsCrossed } from 'lucide-react';
-import { Navigate, Outlet } from 'react-router-dom';
+import {
+  Building2,
+  ChartNoAxesCombined,
+  Contact,
+  HandPlatter,
+  QrCode,
+  User,
+  UserCog,
+  UtensilsCrossed,
+} from 'lucide-react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import Headers from '@/components/common/headers';
 import MobileBottomBar, { type SidebarItem } from '@/components/common/mobile-bottom-bar';
 import SidebarApp from '@/components/common/sidebar';
@@ -17,6 +35,7 @@ interface RootAppProps {
 
 const RootApp = ({ role }: RootAppProps) => {
   const cookie = Cookies.get(SIDEBAR_COOKIE_NAME);
+  const location = useLocation();
   const { isMobile } = useViewState();
   const { role: currentRole } = useUserState();
   if (role !== currentRole && currentRole !== ADMIN_ROLE) {
@@ -53,8 +72,32 @@ const RootApp = ({ role }: RootAppProps) => {
     ],
     []
   );
-  const sidebarItems: SidebarItem[] = useMemo(
-    () => [
+  const sidebarItems: SidebarItem[] = useMemo(() => {
+    if (role === ADMIN_ROLE) {
+      return [
+        {
+          title: 'module.sidebar.business-type',
+          path_url: BUSINESS_TYPE,
+          icon: <Building2 />,
+        },
+        {
+          title: 'module.sidebar.business',
+          path_url: BUSINESS,
+          icon: <Building2 />,
+        },
+        {
+          title: 'module.sidebar.branch',
+          path_url: BRANCH,
+          icon: <Building2 />,
+        },
+        {
+          title: 'module.sidebar.business-owner-management',
+          path_url: BUSINESS_OWNER_MANAGEMENT,
+          icon: <Contact />,
+        },
+      ];
+    }
+    return [
       {
         title: 'module.sidebar.dashboard',
         path_url: DASHBOARD,
@@ -80,9 +123,8 @@ const RootApp = ({ role }: RootAppProps) => {
         path_url: STAFF_MANAGEMENT,
         icon: <UserCog />,
       },
-    ],
-    []
-  );
+    ];
+  }, [location.pathname, role]);
 
   if (isMobile) {
     return (
