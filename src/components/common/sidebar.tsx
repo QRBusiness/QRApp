@@ -99,7 +99,7 @@ const SidebarApp = ({ items }: SidebarProps) => {
                       variant={'ghost'}
                       className={cn(
                         'w-full justify-start px-4 cursor-pointer',
-                        params.pathname.includes(item.path_url) ? 'text-primary' : ''
+                        params.pathname.split('/').includes(item.path_url.replace(/^\//, '')) ? 'text-primary' : ''
                       )}
                       onClick={() => navigate(item.path_url)}
                     >

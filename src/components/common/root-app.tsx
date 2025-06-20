@@ -86,11 +86,6 @@ const RootApp = ({ role }: RootAppProps) => {
           icon: <Building2 />,
         },
         {
-          title: 'module.sidebar.branch',
-          path_url: BRANCH,
-          icon: <Building2 />,
-        },
-        {
           title: 'module.sidebar.business-owner-management',
           path_url: BUSINESS_OWNER_MANAGEMENT,
           icon: <Contact />,
@@ -122,6 +117,11 @@ const RootApp = ({ role }: RootAppProps) => {
         title: 'module.sidebar.staff-management',
         path_url: STAFF_MANAGEMENT,
         icon: <UserCog />,
+      },
+      {
+        title: 'module.sidebar.branch',
+        path_url: BRANCH,
+        icon: <Building2 />,
       },
     ];
   }, [location.pathname, role]);

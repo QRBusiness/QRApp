@@ -44,7 +44,7 @@ const BusinessOwnerManagement = React.lazy(() => import('@/views/admin/busines-o
 const CreateNewBusinessOwner = React.lazy(
   () => import('@/views/admin/busines-owner-mgmt/create/create-new-business-owner')
 );
-const BranchManagement = React.lazy(() => import('@/views/admin/branch'));
+const BranchManagement = React.lazy(() => import('@/views/owner/branch'));
 const BusinessManagement = React.lazy(() => import('@/views/admin/business'));
 const BusinessTypeManagement = React.lazy(() => import('@/views/admin/business-type'));
 
@@ -131,6 +131,10 @@ function App() {
               path: STAFF_MANAGEMENT,
               element: <StaffManagement />,
             },
+            {
+              path: BRANCH,
+              element: <BranchManagement />,
+            },
           ],
         },
         // Admin routes
@@ -138,10 +142,6 @@ function App() {
           path: ADMIN,
           element: <RootApp role={ADMIN_ROLE} />,
           children: [
-            {
-              path: BRANCH,
-              element: <BranchManagement />,
-            },
             {
               path: BUSINESS_TYPE,
               element: <BusinessTypeManagement />,
@@ -160,7 +160,7 @@ function App() {
             },
             {
               index: true,
-              element: <Navigate to={BRANCH} replace />,
+              element: <Navigate to={BUSINESS} replace />,
             },
           ],
         },

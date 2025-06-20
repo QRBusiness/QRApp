@@ -62,7 +62,8 @@
       "help": "Help",
       "logout": "Logout",
       "account": "Account Management",
-      "greeting": "Hi, {{name}} !"
+      "greeting": "Hi, {{name}} !",
+      "create": "Create New"
     },
     "mobileSidebar": {
       "home": "Home",
@@ -287,6 +288,69 @@
         "orderDetails": "Order Details",
         "itemQuantity": "x{{quantity}}",
         "totalAmount": "Total Amount: "
+      }
+    },
+    "createBusinessOwnerField": {
+      "step1": {
+        "username.label": "Username",
+        "username.description": "* Enter your username.",
+        "username.placeholder": "Enter your username",
+        "username.error": "Username must be at least 5 characters long.",
+
+        "password.label": "Password",
+        "password.description": "* Enter your password.",
+        "password.placeholder": "Enter your password",
+        "password.error": " Password must be at least 6 characters long and must contain at least one uppercase letter, one lowercase letter, and one number.",
+
+        "confirmPassword.label": "Confirm Password",
+        "confirmPassword.description": "* Re-enter your password.",
+        "confirmPassword.placeholder": "Re-enter your password",
+        "confirmPassword.error": "Passwords do not match."
+      },
+
+      "step2": {
+        "name.label": "Full Name",
+        "name.description": "* Enter your full name.",
+        "name.placeholder": "Enter your full name",
+        "name.error": "Name cannot be empty.",
+
+        "phone.label": "Phone Number",
+        "phone.description": "* Enter your phone number.",
+        "phone.placeholder": "Enter your phone number",
+        "phone.error": "Phone number must be at least 10 characters long and can only contain numbers.",
+        "phone.errorFormat": "Please enter a valid phone number.",
+
+        "address.label": "Personal Address",
+        "address.description": "* Enter your personal address.",
+        "address.placeholder": "Enter your personal address",
+        "address.error": "Personal address must be a valid address.",
+        "address.errorFormat": "Please enter a valid address."
+      },
+      "step3": {
+        "name.label": "Business Name",
+        "name.description": "* Enter your business name.",
+        "name.placeholder": "Enter your business name",
+        "name.error": "Business name cannot be empty.",
+
+        "address.label": "Business Address",
+        "address.description": "* Enter your business address.",
+        "address.placeholder": "Enter your business address",
+        "address.error": "Business address cannot be empty.",
+
+        "contact.label": "Business Contact Number",
+        "contact.description": "* Enter your business contact number.",
+        "contact.placeholder": "Enter your business contact number",
+        "contact.error": "Business contact number must be at least 10 characters long and can only contain numbers.",
+
+        "businessType.label": "Business Type",
+        "businessType.description": "* Select your business type.",
+        "businessType.error": "Business type must be selected.",
+        "businessType.placeholder": "Select your business type",
+
+        "businessTaxCode.label": "Business Tax Code",
+        "businessTaxCode.description": "* Enter your business tax code.",
+        "businessTaxCode.placeholder": "Enter your business tax code",
+        "businessTaxCode.error": "Business tax code must be at least 10 characters long and can only contain numbers."
       }
     }
   }

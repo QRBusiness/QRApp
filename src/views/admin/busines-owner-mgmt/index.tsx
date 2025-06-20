@@ -12,7 +12,7 @@ const BusinessOwnerManagement = () => {
       id: '1',
       name: 'John Doe',
       address: '123 Main St',
-      phone: '123-456-7890',
+      contact: '123-456-7890',
       role: 'Owner',
       permissions: [],
       username: 'johndoe',
@@ -23,7 +23,7 @@ const BusinessOwnerManagement = () => {
       id: '2',
       name: 'Jane Smith',
       address: '456 Oak Ave',
-      phone: '987-654-3210',
+      contact: '987-654-3210',
       role: 'Manager',
       permissions: [],
       username: 'janesmith',
@@ -34,7 +34,7 @@ const BusinessOwnerManagement = () => {
       id: '3',
       name: 'Alice Johnson',
       address: '789 Pine Rd',
-      phone: '555-123-4567',
+      contact: '555-123-4567',
       role: 'Owner',
       permissions: [],
       username: 'alicej',
@@ -45,7 +45,7 @@ const BusinessOwnerManagement = () => {
       id: '4',
       name: 'Bob Williams',
       address: '321 Maple St',
-      phone: '444-555-6666',
+      contact: '444-555-6666',
       role: 'Admin',
       permissions: [],
       username: 'bobw',
@@ -56,7 +56,7 @@ const BusinessOwnerManagement = () => {
       id: '5',
       name: 'Carol Lee',
       address: '654 Cedar Ave',
-      phone: '222-333-4444',
+      contact: '222-333-4444',
       role: 'Manager',
       permissions: [],
       username: 'caroll',
@@ -69,7 +69,7 @@ const BusinessOwnerManagement = () => {
       <div className="self-end">
         <Button variant="default" onClick={() => navigate(`../${BUSINESS_OWNER_MANAGEMENT}/create`)}>
           <CirclePlus className="mr-2 size-4 md:size-5" />
-          Add Business Owner
+          Add New Business Owner
         </Button>
       </div>
       <BusinessOwnerTable data={data} />

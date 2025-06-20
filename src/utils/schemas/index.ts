@@ -90,53 +90,52 @@ export const createMenuItemSchema = z.object({
 });
 
 export const createBusinessTypeSchema = z.object({
-  name: z.string().min(1, { message: 'module.businessTypeManagement.createBusinessTypeField.nameError' }),
+  name: z.string().min(5, { message: 'module.businessTypeManagement.createBusinessTypeField.nameError' }),
+  description: z.string().min(5, {
+    message: 'module.businessTypeManagement.createBusinessTypeField.descriptionError',
+  }),
 });
 
 export const createBusinessOwnerSchema = z.object({
-  name: z.string().min(1, { message: 'module.businessOwnerManagement.createBusinessOwnerField.nameError' }),
-  address: z.string().min(1, { message: 'module.businessOwnerManagement.createBusinessOwnerField.addressError' }),
+  name: z.string().min(1, { message: 'module.createBusinessOwnerField.step2.name.error' }),
+  address: z.string().min(1, { message: 'module.createBusinessOwnerField.step2.address.error' }),
   phone: z
     .string()
-    .min(10, { message: 'module.businessOwnerManagement.createBusinessOwnerField.phoneError' })
-    .max(11, { message: 'module.businessOwnerManagement.createBusinessOwnerField.phoneError' })
+    .min(10, { message: 'module.createBusinessOwnerField.step2.phone.error' })
+    .max(11, { message: 'module.createBusinessOwnerField.step2.phone.error' })
     .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
-      message: 'module.businessOwnerManagement.createBusinessOwnerField.phoneFormatError',
+      message: 'module.createBusinessOwnerField.step2.phone.formatError',
     }),
 });
 
-export const createAccoutSchema = z
-  .object({
-    username: z.string().min(1, { message: 'module.accountManagement.createAccountField.nameError' }),
-    password: z
-      .string()
-      .min(5, { message: 'module.accountManagement.createAccountField.passwordError' })
-      .max(32, { message: 'module.accountManagement.createAccountField.passwordError' })
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,32}$/, {
-        message: 'module.accountManagement.createAccountField.passwordComplexityError',
-      }),
-    confirmPassword: z.string().min(1, {
-      message: 'module.accountManagement.createAccountField.confirmPasswordError',
+export const createAccoutSchema = z.object({
+  username: z.string().min(5, { message: 'module.createBusinessOwnerField.step1.username.error' }),
+  password: z
+    .string()
+    .min(5, { message: 'module.createBusinessOwnerField.step1.password.error' })
+    .max(32, { message: 'module.createBusinessOwnerField.step1.password.error' })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,32}$/, {
+      message: 'module.createBusinessOwnerField.step1.password.error',
     }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'module.accountManagement.createAccountField.passwordMismatchError',
-  });
+  confirmPassword: z.string().min(5, {
+    message: 'module.createBusinessOwnerField.step1.confirmPassword.error',
+  }),
+});
 
 export const createBusinessSchema = z.object({
-  name: z.string().min(1, { message: 'module.businessManagement.createBusinessField.nameError' }),
-  address: z.string().min(1, { message: 'module.businessManagement.createBusinessField.addressError' }),
+  name: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.name.error' }),
+  address: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.address.error' }),
   contact: z
     .string()
-    .min(10, { message: 'module.businessManagement.createBusinessField.contactError' })
-    .max(11, { message: 'module.businessManagement.createBusinessField.contactError' })
+    .min(10, { message: 'module.createBusinessOwnerField.step3.contact.error' })
+    .max(11, { message: 'module.createBusinessOwnerField.step3.contact.error' })
     .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
-      message: 'module.businessManagement.createBusinessField.contactFormatError',
+      message: 'module.createBusinessOwnerField.step3.contact.formatError',
     }),
   businessType: z.string().min(1, {
-    message: 'module.businessManagement.createBusinessField.businessTypeError',
+    message: 'module.createBusinessOwnerField.step3.businessType.error',
   }),
   businessTaxCode: z.string().min(1, {
-    message: 'module.businessManagement.createBusinessField.businessTaxCodeError',
+    message: 'module.createBusinessOwnerField.step3.businessTaxCode.error',
   }),
 });

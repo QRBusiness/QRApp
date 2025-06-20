@@ -4,19 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
 
-export type BusinessOwner = {
+export type BusinessType = {
   id: string;
   name: string;
-  address: string;
-  contact: string;
-  role: string;
-  permissions: any[];
-  username: string;
+  description: string;
   created_at: string;
   updated_at: string;
 };
 
-export const columns: ColumnDef<BusinessOwner>[] = [
+export const columns: ColumnDef<BusinessType>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
@@ -29,24 +25,11 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     },
   },
   {
-    accessorKey: 'address',
-    header: 'Address',
-  },
-  {
-    accessorKey: 'contact',
-    header: 'Contact Number',
-  },
-  {
-    accessorKey: 'role',
-    header: 'Role',
-  },
-  {
-    accessorKey: 'permissions',
-    header: 'Permissions',
-  },
-  {
-    accessorKey: 'username',
-    header: 'Username',
+    accessorKey: 'description',
+    header: 'Description',
+    cell: ({ row }) => {
+      return <p className="text-sm">{row.getValue('description') || 'No description'}</p>;
+    },
   },
   {
     accessorKey: 'created_at',

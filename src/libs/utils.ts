@@ -45,3 +45,22 @@ export const clearLocalStorage = () => {
   }
 };
 export const formattedDate = (date: string) => format(new Date(date), 'MMM dd, yyyy • h:mm a');
+
+export const getTypeOfField = (fieldName: string): string => {
+  switch (fieldName) {
+    case 'email':
+      return 'email';
+    case 'phone':
+      return 'tel';
+    case 'contact':
+      return 'tel';
+    case 'password':
+      return 'password';
+    case 'confirmPassword':
+      return 'password';
+    case 'number':
+      return 'number';
+    default:
+      return 'text';
+  }
+};
