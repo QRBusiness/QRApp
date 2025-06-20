@@ -22,7 +22,7 @@ interface CreateNewBusinessTypeProps {
   children: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit?: () => void;
+  onSubmit?: (data: z.infer<typeof createBusinessTypeSchema>) => void;
   onCancel?: () => void;
 }
 
@@ -49,8 +49,7 @@ const CreateNewBusinessType = ({ children, open, onOpenChange, onSubmit, onCance
   };
 
   const onSubmitForm = (data: z.infer<typeof createBusinessTypeSchema>) => {
-    onSubmit && onSubmit();
-    console.log('Business type submitted:', data);
+    onSubmit && onSubmit(data);
     onOpenChange(false);
   };
 
@@ -59,8 +58,8 @@ const CreateNewBusinessType = ({ children, open, onOpenChange, onSubmit, onCance
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-5xl overflow-y-scroll max-h-9/10">
         <DialogHeader>
-          <DialogTitle>{t('module.menuManagement.createTitle')}</DialogTitle>
-          <DialogDescription>{t('module.menuManagement.createDescription')}</DialogDescription>
+          <DialogTitle>{t('module.businessType.createTitle')}</DialogTitle>
+          <DialogDescription>{t('module.businessType.createDescription')}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
@@ -70,13 +69,13 @@ const CreateNewBusinessType = ({ children, open, onOpenChange, onSubmit, onCance
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.menuManagement.createMenuField.name')}
+                    {t('module.businessType.createMenuField.name')}
                     <p className="text-red-700">*</p>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.menuManagement.createMenuField.nameDescription')}</FormDescription>
+                  <FormDescription>{t('module.businessType.createMenuField.nameDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -87,13 +86,13 @@ const CreateNewBusinessType = ({ children, open, onOpenChange, onSubmit, onCance
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.menuManagement.createMenuField.description')}
+                    {t('module.businessType.createMenuField.description')}
                     <p className="text-red-700">*</p>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.menuManagement.createMenuField.descriptionDescription')}</FormDescription>
+                  <FormDescription>{t('module.businessType.createMenuField.descriptionDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -102,12 +101,12 @@ const CreateNewBusinessType = ({ children, open, onOpenChange, onSubmit, onCance
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onCancelHandler}>
                 <CircleX className="size-5" />
-                {t('module.menuManagement.action.cancel')}
+                {t('module.businessType.action.cancel')}
               </Button>
 
               <Button type="submit" className="min-w-[120px]" disabled={!form.formState.isDirty}>
                 <Building2 className="size-5 mr-[6px]" />
-                {t('module.menuManagement.action.add')}
+                {t('module.businessType.action.add')}
               </Button>
             </DialogFooter>
           </form>

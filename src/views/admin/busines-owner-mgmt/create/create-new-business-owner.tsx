@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useCreateBusiness } from '@/services/admin/business-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +37,7 @@ const CreateNewBusinessOwner = () => {
     },
   ];
   const [formData, setFormData] = useState<Record<string, any>>({});
+  const { createBusiness } = useCreateBusiness();
 
   const currentSchema = steps[step].schema as ZodObject<any>;
 
@@ -46,14 +48,30 @@ const CreateNewBusinessOwner = () => {
 
   const { handleSubmit, control, reset } = form;
 
-  const onSubmit = (data: any) => {
-    const newFormData = { ...formData, ...data };
+  const onSubmit = async (data: any) => {
+    // Gắn prefix step vào key, ví dụ: 1_name, 2_email
+
+    const newFormData = {
+      ...formData,
+      ...Object.fromEntries(Object.entries(data).map(([key, value]) => [`${step + 1}_${key}`, value])),
+    };
     setFormData(newFormData);
 
     if (step < totalSteps - 1) {
       setStep(step + 1);
     } else {
-      console.log('Full form data:', newFormData);
+      await createBusiness({
+        username: newFormData['1_username'],
+        password: newFormData['1_password'],
+        owner_name: newFormData['2_name'],
+        owner_address: newFormData['2_address'],
+        owner_contact: newFormData['2_phone'],
+        business_name: newFormData['3_name'],
+        business_address: newFormData['3_address'],
+        business_contact: newFormData['3_contact'],
+        business_type: newFormData['3_businessType'],
+        business_tax_code: newFormData['3_businessTaxCode'],
+      });
       toast.success('Form successfully submitted');
       setStep(0);
       setFormData({});

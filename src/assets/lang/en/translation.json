@@ -352,6 +352,20 @@
         "businessTaxCode.placeholder": "Enter your business tax code",
         "businessTaxCode.error": "Business tax code must be at least 10 characters long and can only contain numbers."
       }
+    },
+    "businessType": {
+      "createTitle": "Create New Business Type",
+      "createDescription": "Fill in the details to create a new business type.",
+      "createMenuField": {
+        "name": "Business Type Name",
+        "nameDescription": "Enter the name of the business type.",
+        "description": "Business Type Description",
+        "descriptionDescription": "Enter a brief description of the business type."
+      },
+      "action": {
+        "cancel": "Cancel",
+        "add": "Add Business Type"
+      }
     }
   }
 }

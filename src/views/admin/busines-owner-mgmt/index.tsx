@@ -1,4 +1,6 @@
-import { BUSINESS_OWNER_MANAGEMENT } from '@/constains';
+import React from 'react';
+import { BUSINESS_OWNER_MANAGEMENT, OWNER_ROLE } from '@/constains';
+import { useBusinessOwners } from '@/services/admin/business-owner-service';
 import { CirclePlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,72 +9,41 @@ import BusinessOwnerTable from './table/page';
 
 const BusinessOwnerManagement = () => {
   const navigate = useNavigate();
-  const data: BusinessOwner[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-      address: '123 Main St',
-      contact: '123-456-7890',
-      role: 'Owner',
-      permissions: [],
-      username: 'johndoe',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      address: '456 Oak Ave',
-      contact: '987-654-3210',
-      role: 'Manager',
-      permissions: [],
-      username: 'janesmith',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '3',
-      name: 'Alice Johnson',
-      address: '789 Pine Rd',
-      contact: '555-123-4567',
-      role: 'Owner',
-      permissions: [],
-      username: 'alicej',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '4',
-      name: 'Bob Williams',
-      address: '321 Maple St',
-      contact: '444-555-6666',
-      role: 'Admin',
-      permissions: [],
-      username: 'bobw',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '5',
-      name: 'Carol Lee',
-      address: '654 Cedar Ave',
-      contact: '222-333-4444',
-      role: 'Manager',
-      permissions: [],
-      username: 'caroll',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ];
+  const [data, setData] = React.useState<BusinessOwner[]>([]);
+  const { businessOwners, isLoading } = useBusinessOwners({ page: 1, limit: 50 });
+
+  React.useEffect(() => {
+    if (businessOwners.length > 0) {
+      setData(
+        businessOwners.map((owner) => ({
+          id: owner._id,
+          name: owner.name,
+          username: owner.username,
+          email: owner.email,
+          phone: owner.phone,
+          address: owner.address,
+          role: owner.role,
+          available: owner.available,
+          created_at: owner.created_at,
+          updated_at: owner.updated_at,
+        }))
+      );
+    }
+  }, [businessOwners]);
+
   return (
     <div className="container mx-auto pb-10 flex flex-col space-y-4">
       <div className="self-end">
-        <Button variant="default" onClick={() => navigate(`../${BUSINESS_OWNER_MANAGEMENT}/create`)}>
+        <Button
+          variant="default"
+          onClick={() => navigate(`../${BUSINESS_OWNER_MANAGEMENT}/create`)}
+          disabled={isLoading}
+        >
           <CirclePlus className="mr-2 size-4 md:size-5" />
           Add New Business Owner
         </Button>
       </div>
-      <BusinessOwnerTable data={data} />
+      <BusinessOwnerTable data={data.filter((owner) => owner.role === OWNER_ROLE)} />
     </div>
   );
 };

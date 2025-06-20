@@ -1,0 +1,146 @@
+import apiClient, { type ApiResponse } from '@/services';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'sonner';
+
+interface BusinessInputProps {
+  page: number;
+  limit: number;
+}
+interface BusinessResponse {
+  data: BusinessProps[];
+}
+
+interface BusinessType {
+  _id: string;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  description: string;
+}
+
+interface BusinessProps {
+  _id: string;
+  name: string;
+  address: string;
+  contact: string;
+  tax_code: string;
+  available: boolean;
+  created_at: string;
+  updated_at: string;
+  business_type: BusinessType;
+}
+
+const getBusiness = async ({ page = 1, limit = 50 }: BusinessInputProps): Promise<BusinessProps[]> => {
+  try {
+    const response: ApiResponse<BusinessResponse> = await apiClient.get('/business', {
+      params: { page, limit },
+    });
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to fetch business services',
+      });
+      return [];
+    }
+    return response.data ? response.data.data : [];
+  } catch (error) {
+    toast.error('Internal server error', {
+      description: 'An unexpected error occurred while fetching business services.',
+    });
+    throw new Error('Internal server error');
+  }
+};
+
+export const useBusiness = ({ page = 1, limit = 50 }: BusinessInputProps) => {
+  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<BusinessProps[]>({
+    queryKey: ['businessQuery', { page, limit }],
+    queryFn: () => getBusiness({ page, limit }),
+  });
+
+  if (error) {
+    toast.error('Failed to load business services', {
+      description: error.message || 'An error occurred while fetching business services.',
+    });
+  }
+
+  return {
+    business: data || [],
+    isLoading,
+    isError: !!error,
+    isFetching,
+    isSuccess,
+    refetch,
+  };
+};
+
+interface CreateBusinessInput {
+  username: string;
+  password: string;
+  owner_name: string;
+  owner_address: string;
+  owner_contact: string;
+  business_name: string;
+  business_address: string;
+  business_contact: string;
+  business_type: string;
+  business_tax_code: string;
+}
+
+const createBusiness = async ({
+  username,
+  password,
+  owner_name,
+  owner_address,
+  owner_contact,
+  business_name,
+  business_address,
+  business_contact,
+  business_type,
+  business_tax_code,
+}: CreateBusinessInput): Promise<BusinessProps> => {
+  try {
+    const response: ApiResponse<BusinessProps> = await apiClient.post('/business', {
+      username,
+      password,
+      owner_name,
+      owner_address,
+      owner_contact,
+      business_name,
+      business_address,
+      business_contact,
+      business_type,
+      business_tax_code,
+    });
+    if (response.status !== 201 && response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to create business',
+      });
+      throw new Error(response.errorMessage || 'Failed to create business');
+    }
+    toast.success('Business created successfully');
+    return response.data;
+  } catch (error) {
+    toast.error('Internal server error', {
+      description: 'An unexpected error occurred while creating the business.',
+    });
+    throw new Error('Internal server error');
+  }
+};
+
+export const useCreateBusiness = () => {
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: createBusiness,
+    onError: (error: Error) => {
+      toast.error('Failed to create business', {
+        description: error.message || 'An error occurred while creating the business.',
+      });
+    },
+  });
+
+  return {
+    createBusiness: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
+  };
+};

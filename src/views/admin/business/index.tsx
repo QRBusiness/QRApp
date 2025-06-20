@@ -1,4 +1,6 @@
+import React from 'react';
 import { BUSINESS_OWNER_MANAGEMENT } from '@/constains';
+import { useBusiness } from '@/services/admin/business-service';
 import { CirclePlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,53 +9,27 @@ import BusinessTable from './table/page';
 
 const BusinessManagement = () => {
   const navigate = useNavigate();
-  const data: BusinessType[] = [
-    {
-      id: '1',
-      name: 'ABC Retailers',
-      businessType: 'Retail',
-      address: '123 Main St',
-      contact: '123-456-7890',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      name: 'XYZ Services',
-      businessType: 'Services',
-      address: '456 Market Ave',
-      contact: '987-654-3210',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '3',
-      name: 'Fresh Foods',
-      businessType: 'Food & Beverage',
-      address: '789 Food Ct',
-      contact: '555-123-4567',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '4',
-      name: 'Tech Solutions',
-      businessType: 'IT',
-      address: '321 Silicon Blvd',
-      contact: '222-333-4444',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '5',
-      name: 'Green Gardens',
-      businessType: 'Agriculture',
-      address: '654 Greenway Dr',
-      contact: '888-777-6666',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ];
+  const [data, setData] = React.useState<BusinessType[]>([]);
+  const { business: businesses } = useBusiness({ page: 1, limit: 50 });
+
+  React.useEffect(() => {
+    if (businesses.length > 0) {
+      setData(
+        businesses.map((business) => ({
+          id: business._id,
+          name: business.name,
+          created_at: business.created_at,
+          updated_at: business.updated_at,
+          business_type: business.business_type.name,
+          address: business.address,
+          contact: business.contact,
+          tax_code: business.tax_code,
+          available: business.available,
+        }))
+      );
+    }
+  }, [businesses]);
+
   return (
     <div className="container mx-auto pb-10 flex flex-col space-y-4">
       <div className="self-end">

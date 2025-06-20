@@ -1,39 +1,51 @@
 import React from 'react';
+import { useBusinessTypes, useCreateBusinessType } from '@/services/admin/business-type-service';
 import { CirclePlus } from 'lucide-react';
+import type z from 'zod';
 import { Button } from '@/components/ui/button';
+import type { createBusinessTypeSchema } from '@/utils/schemas';
 import CreateNewBusinessType from './dialog/create-new-business-type';
+import type { BusinessType } from './table/columns';
 import BusinessTypeTable from './table/page';
 
 const BusinessTypeManagement = () => {
-  const dummyData = [
-    {
-      id: '1',
-      name: 'Restaurant',
-      description: 'A place where meals are served to customers.',
-      created_at: '2023-01-01T12:00:00Z',
-      updated_at: '2023-01-02T12:00:00Z',
-    },
-    {
-      id: '2',
-      name: 'Cafe',
-      description: 'A small restaurant selling light meals and drinks.',
-      created_at: '2023-01-03T12:00:00Z',
-      updated_at: '2023-01-04T12:00:00Z',
-    },
-  ];
+  const [data, setData] = React.useState<BusinessType[]>([]);
   const [open, setOpen] = React.useState(false);
+  const { businessTypes, refetch: refetchBusinessTypes } = useBusinessTypes({ page: 1, limit: 50 });
+  const { createBusinessType } = useCreateBusinessType();
+
+  const onSubmit = async (formData: z.infer<typeof createBusinessTypeSchema>) => {
+    await createBusinessType(formData);
+    refetchBusinessTypes();
+  };
+
+  // Update data state when businessTypes changes
+  // This ensures that the table reflects the latest data from the API
+  React.useEffect(() => {
+    if (businessTypes.length > 0) {
+      setData(
+        businessTypes.map((type) => ({
+          id: type._id,
+          name: type.name,
+          description: type.description,
+          created_at: type.created_at,
+          updated_at: type.updated_at,
+        }))
+      );
+    }
+  }, [businessTypes]);
 
   return (
     <div className="container mx-auto pb-10 flex flex-col space-y-4">
       <div className="self-end">
-        <CreateNewBusinessType open={open} onOpenChange={setOpen}>
+        <CreateNewBusinessType open={open} onOpenChange={setOpen} onSubmit={onSubmit}>
           <Button variant="default">
             <CirclePlus className="mr-2 size-4 md:size-5" />
             Add Business Type
           </Button>
         </CreateNewBusinessType>
       </div>
-      <BusinessTypeTable data={dummyData} />
+      <BusinessTypeTable data={data} />
     </div>
   );
 };

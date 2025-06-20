@@ -1,6 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
 
@@ -8,9 +9,10 @@ export type BusinessOwner = {
   id: string;
   name: string;
   address: string;
-  contact: string;
+  phone: string;
   role: string;
-  permissions: any[];
+  image_url?: string;
+  available: boolean;
   username: string;
   created_at: string;
   updated_at: string;
@@ -33,7 +35,7 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     header: 'Address',
   },
   {
-    accessorKey: 'contact',
+    accessorKey: 'phone',
     header: 'Contact Number',
   },
   {
@@ -41,12 +43,31 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     header: 'Role',
   },
   {
-    accessorKey: 'permissions',
-    header: 'Permissions',
-  },
-  {
     accessorKey: 'username',
     header: 'Username',
+  },
+  {
+    accessorKey: 'available',
+    header: 'Available',
+    cell: ({ row }) => {
+      return (
+        <Badge variant={row.getValue('available') ? 'outline' : 'destructive'}>
+          {row.getValue('available') ? 'Yes' : 'No'}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: 'image_url',
+    header: 'Image',
+    cell: ({ row }) => {
+      const imageUrl = row.getValue('image_url') as string | undefined;
+      return imageUrl ? (
+        <img src={imageUrl} alt="Business Owner" className="w-10 h-10 rounded-full" />
+      ) : (
+        <span className="text-sm text-gray-500">No Image</span>
+      );
+    },
   },
   {
     accessorKey: 'created_at',

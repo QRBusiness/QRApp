@@ -1,15 +1,18 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
 
 export type BusinessType = {
   id: string;
   name: string;
-  businessType: string;
+  business_type: string;
   address: string;
   contact: string;
+  tax_code: string;
+  available: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -27,7 +30,7 @@ export const columns: ColumnDef<BusinessType>[] = [
     },
   },
   {
-    accessorKey: 'businessType',
+    accessorKey: 'business_type',
     header: 'Business Type',
   },
   {
@@ -37,6 +40,21 @@ export const columns: ColumnDef<BusinessType>[] = [
   {
     accessorKey: 'contact',
     header: 'Contact Number',
+  },
+  {
+    accessorKey: 'tax_code',
+    header: 'Tax Code',
+  },
+  {
+    accessorKey: 'available',
+    header: 'Available',
+    cell: ({ row }) => {
+      return (
+        <Badge variant={row.getValue('available') ? 'outline' : 'destructive'}>
+          {row.getValue('available') ? 'Yes' : 'No'}{' '}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: 'created_at',
