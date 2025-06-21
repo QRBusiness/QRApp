@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { Edit, Eye, Trash } from 'lucide-react';
+import { CircleCheck, CircleX, Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,13 @@ export const columns: ColumnDef<BusinessOwner>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
+    cell: ({ row }) => {
+      return <span className="text-sm text-muted-foreground">{row.index + 1}</span>;
+    },
+    // enableSorting: false,
+    // enableHiding: false,
+    // enableColumnFilter: false,
+    // enableResizing: false,
   },
   {
     accessorKey: 'name',
@@ -33,6 +40,14 @@ export const columns: ColumnDef<BusinessOwner>[] = [
   {
     accessorKey: 'address',
     header: 'Address',
+    cell: ({ row }) => {
+      return <span className="text-sm">{row.getValue('address') || 'No Address'}</span>;
+    },
+    maxSize: 150,
+    size: 100,
+    meta: {
+      className: 'max-w-[200px] truncate',
+    },
   },
   {
     accessorKey: 'phone',
@@ -45,17 +60,23 @@ export const columns: ColumnDef<BusinessOwner>[] = [
   {
     accessorKey: 'username',
     header: 'Username',
+    cell: ({ row }) => {
+      return <span className="text-base font-medium text-foreground">{row.getValue('username') || 'No Username'}</span>;
+    },
   },
   {
     accessorKey: 'available',
     header: 'Available',
-    cell: ({ row }) => {
-      return (
-        <Badge variant={row.getValue('available') ? 'outline' : 'destructive'}>
-          {row.getValue('available') ? 'Yes' : 'No'}
-        </Badge>
-      );
-    },
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-foreground px-2 py-1 text-sm">
+        {row.original.available === true ? (
+          <CircleCheck className="fill-status-active " />
+        ) : (
+          <CircleX className="fill-status-inactive " />
+        )}
+        {row.original.available ? 'Available' : 'Unavailable'}
+      </Badge>
+    ),
   },
   {
     accessorKey: 'image_url',
@@ -75,6 +96,7 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     cell: ({ row }) => {
       return formattedDate(row.getValue('created_at'));
     },
+    enableHiding: true,
   },
   {
     accessorKey: 'updated_at',
@@ -82,6 +104,7 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     cell: ({ row }) => {
       return formattedDate(row.getValue('updated_at'));
     },
+    enableHiding: true,
   },
   {
     accessorKey: 'actions',

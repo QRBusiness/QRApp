@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { Edit, Eye, Trash } from 'lucide-react';
+import { CircleCheck, CircleX, Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,12 +21,15 @@ export const columns: ColumnDef<BusinessType>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
+    cell: ({ row }) => {
+      return <span className="text-sm text-muted-foreground">{row.index + 1}</span>;
+    },
   },
   {
     accessorKey: 'name',
     header: 'Business Name',
     cell: ({ row }) => {
-      return <p className="font-medium">{row.getValue('name') || 'Unknown'}</p>;
+      return <p className="font-medium text-foreground text-sm">{row.getValue('name') || 'Unknown'}</p>;
     },
   },
   {
@@ -48,13 +51,16 @@ export const columns: ColumnDef<BusinessType>[] = [
   {
     accessorKey: 'available',
     header: 'Available',
-    cell: ({ row }) => {
-      return (
-        <Badge variant={row.getValue('available') ? 'outline' : 'destructive'}>
-          {row.getValue('available') ? 'Yes' : 'No'}{' '}
-        </Badge>
-      );
-    },
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-foreground px-2 py-1 text-sm">
+        {row.original.available === true ? (
+          <CircleCheck className="fill-status-active " />
+        ) : (
+          <CircleX className="fill-status-inactive " />
+        )}
+        {row.original.available ? 'Available' : 'Unavailable'}
+      </Badge>
+    ),
   },
   {
     accessorKey: 'created_at',

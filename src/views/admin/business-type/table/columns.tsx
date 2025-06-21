@@ -1,6 +1,9 @@
+import React from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Edit, Eye, Trash } from 'lucide-react';
+import { Copy, Edit, Eye, EyeOff, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+import { Hint } from '@/components/common/hint';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
 
@@ -16,12 +19,42 @@ export const columns: ColumnDef<BusinessType>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
+    cell: ({ row }) => {
+      return <span className="text-sm text-muted-foreground">{row.index + 1}</span>;
+    },
+  },
+  {
+    accessorKey: 'id',
+    header: 'Real ID',
+    cell: ({ row }) => {
+      const id = row.getValue('id') as string;
+      const [isHidden, setIsHidden] = React.useState(true);
+      const copyHandler = (id: string) => {
+        navigator.clipboard.writeText(id);
+        toast.success('ID copied to clipboard');
+      };
+      return (
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">{isHidden ? '* * * * * * *' : id}</span>
+          <Hint label="Toggle ID Visibility">
+            {isHidden ? (
+              <EyeOff className="cursor-pointer" onClick={() => setIsHidden(false)} />
+            ) : (
+              <Eye className="cursor-pointer" onClick={() => setIsHidden(true)} />
+            )}
+          </Hint>
+          <Hint label="Copy ID">
+            <Copy className="cursor-pointer" onClick={() => copyHandler(id)} />
+          </Hint>
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Business Name',
     cell: ({ row }) => {
-      return <p className="font-medium">{row.getValue('name') || 'Unknown'}</p>;
+      return <p className="font-medium text-foreground text-sm">{row.getValue('name') || 'Unknown'}</p>;
     },
   },
   {
@@ -60,7 +93,7 @@ export const columns: ColumnDef<BusinessType>[] = [
             <Edit className="mr-2" />
             {t('module.common.edit')}
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="destructive" size="sm">
             <Trash className="mr-2" />
             {t('module.common.delete')}
           </Button>

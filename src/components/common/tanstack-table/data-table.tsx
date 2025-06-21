@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   type ColumnDef,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -8,8 +9,23 @@ import {
 } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import { DataTablePagination } from '@/components/common/tanstack-table/pagination';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { cn } from '@/libs/utils';
 import { Hint } from '../hint';
+
+// Extend the ColumnMeta type to include className
+declare module '@tanstack/react-table' {
+  interface ColumnMeta<TData extends unknown = unknown, TValue = unknown> {
+    className?: string;
+  }
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -17,17 +33,49 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+    created_at: false,
+    updated_at: false,
+  });
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    state: {
+      columnVisibility,
+    },
   });
 
   const { t } = useTranslation();
 
   return (
     <React.Fragment>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" className="ml-auto">
+            Columns
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {table
+            .getAllColumns()
+            .filter((column) => column.getCanHide())
+            .map((column) => {
+              return (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              );
+            })}
+        </DropdownMenuContent>
+      </DropdownMenu>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -56,14 +104,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => {
                     // Check if this cell is in the "description" column
-                    const isDescriptionColumn = cell.column.id === 'description';
+                    const isDescriptionColumn = cell.column.id === 'description' || cell.column.id === 'address';
 
                     // If it is, truncate the content
                     if (isDescriptionColumn) {
                       return (
                         <Hint label={cell.getValue() as string} key={cell.id} align="start">
                           <TableCell
-                            className="max-w-[300px] truncate"
+                            className={cn('max-w-[200px] truncate', cell.column.columnDef.meta?.className || '')}
                             key={cell.id}
                             title={cell.getValue() as string} // Show full text on hover
                           >
@@ -72,8 +120,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                         </Hint>
                       );
                     }
+
                     return (
-                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                      <TableCell
+                        className={cn('max-w-[200px] truncate', cell.column.columnDef.meta?.className || '')}
+                        key={cell.id}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
                     );
                   })}
                 </TableRow>
