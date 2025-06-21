@@ -355,16 +355,21 @@
     },
     "businessType": {
       "createTitle": "Create New Business Type",
+      "editTitle": "Edit Business Type",
       "createDescription": "Fill in the details to create a new business type.",
-      "createMenuField": {
+      "editDescription": "Update the details of the business type.",
+      "createField": {
         "name": "Business Type Name",
         "nameDescription": "Enter the name of the business type.",
+        "nameError": "Business type name is required.",
         "description": "Business Type Description",
-        "descriptionDescription": "Enter a brief description of the business type."
+        "descriptionDescription": "Enter a brief description of the business type.",
+        "descriptionError": "Business type description is required."
       },
       "action": {
         "cancel": "Cancel",
-        "add": "Add Business Type"
+        "create": "Create Business Type",
+        "edit": "Edit Business Type"
       }
     }
   }

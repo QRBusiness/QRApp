@@ -52,11 +52,11 @@ export const columns: ColumnDef<BusinessType>[] = [
     accessorKey: 'available',
     header: 'Available',
     cell: ({ row }) => (
-      <Badge variant="outline" className="text-foreground px-2 py-1 text-sm">
+      <Badge variant="outline" className="text-foreground px-2 py-1 text-sm rounded-2xl">
         {row.original.available === true ? (
-          <CircleCheck className="fill-status-active " />
+          <CircleCheck className="fill-status-active mr-1" />
         ) : (
-          <CircleX className="fill-status-inactive " />
+          <CircleX className="fill-status-inactive mr-1" />
         )}
         {row.original.available ? 'Available' : 'Unavailable'}
       </Badge>

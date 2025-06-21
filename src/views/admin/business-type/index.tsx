@@ -11,12 +11,12 @@ import BusinessTypeTable from './table/page';
 const BusinessTypeManagement = () => {
   const [data, setData] = React.useState<BusinessType[]>([]);
   const [open, setOpen] = React.useState(false);
-  const { businessTypes, refetch: refetchBusinessTypes } = useBusinessTypes({ page: 1, limit: 50 });
+  const { businessTypes } = useBusinessTypes({ page: 1, limit: 50 });
   const { createBusinessType } = useCreateBusinessType();
 
   const onSubmit = async (formData: z.infer<typeof createBusinessTypeSchema>) => {
     await createBusinessType(formData);
-    refetchBusinessTypes();
+    // refetchBusinessTypes();
   };
 
   // Update data state when businessTypes changes

@@ -1,5 +1,5 @@
 import apiClient, { type ApiResponse } from '@/services';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { createBusinessTypeSchema } from '@/utils/schemas';
@@ -82,7 +82,6 @@ const createBusinessType = async ({
       });
       throw new Error('Failed to create business type');
     }
-    toast.success('Business type created successfully');
     return response.data.data;
   } catch (error) {
     toast.error('Internal server error', {
@@ -93,8 +92,16 @@ const createBusinessType = async ({
 };
 
 export const useCreateBusinessType = () => {
+  const queryClient = useQueryClient();
   const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
     mutationFn: createBusinessType,
+    onSuccess: () => {
+      toast.success('Business type created successfully');
+      queryClient.invalidateQueries({
+        queryKey: ['businessTypesQuery'],
+        refetchType: 'active',
+      });
+    },
     onError: (error: Error) => {
       toast.error('Failed to create business type', {
         description: error.message || 'An error occurred while creating the business type.',
@@ -104,6 +111,101 @@ export const useCreateBusinessType = () => {
 
   return {
     createBusinessType: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
+  };
+};
+
+const updateBusinessType = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: z.infer<typeof createBusinessTypeSchema>;
+}): Promise<BusinessType> => {
+  try {
+    const response: ApiResponse<createBusinessTypeResponse> = await apiClient.put(`/business-type/${id}`, data);
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to update business type',
+      });
+      throw new Error('Failed to update business type');
+    }
+    return response.data.data;
+  } catch (error) {
+    toast.error('Internal server error', {
+      description: 'An unexpected error occurred while updating the business type.',
+    });
+    throw new Error('Internal server error');
+  }
+};
+
+export const useUpdateBusinessType = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: updateBusinessType,
+    onSuccess: () => {
+      toast.success('Business type updated successfully');
+      queryClient.invalidateQueries({
+        queryKey: ['businessTypesQuery'],
+        refetchType: 'active',
+      });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to update business type', {
+        description: error.message || 'An error occurred while updating the business type.',
+      });
+    },
+  });
+
+  return {
+    updateBusinessType: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
+  };
+};
+
+const deleteBusinessType = async (id: string): Promise<void> => {
+  try {
+    const response: ApiResponse<void> = await apiClient.delete(`/business-type/${id}`);
+    if (response.status !== 200 && response.status !== 204) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to delete business type',
+      });
+      throw new Error('Failed to delete business type');
+    }
+  } catch (error) {
+    toast.error('Internal server error', {
+      description: 'An unexpected error occurred while deleting the business type.',
+    });
+    throw new Error('Internal server error');
+  }
+};
+
+export const useDeleteBusinessType = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: deleteBusinessType,
+    onSuccess: () => {
+      toast.success('Business type deleted successfully');
+      queryClient.invalidateQueries({
+        queryKey: ['businessTypesQuery'],
+        refetchType: 'active',
+      });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to delete business type', {
+        description: error.message || 'An error occurred while deleting the business type.',
+      });
+    },
+  });
+
+  return {
+    deleteBusinessType: mutateAsync,
     data,
     isPending,
     isError,

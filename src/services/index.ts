@@ -1,6 +1,7 @@
 // Config axios instance
 import axios from 'axios';
 import { loadFromLocalStorage } from '@/libs/utils';
+import { useRefreshTokenService } from './loginService';
 
 export type SuccessResponse<T> = {
   data: T;
@@ -52,13 +53,13 @@ apiClient.interceptors.response.use(
   async function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    const { response } = error;
-    // if (response.status === 401 || response.status === 403) {
-    //   if (window.location.pathname !== '/auth') {
-    //     // Redirect to the login page if the user is not authenticated
-    //     window.location.href = '/login';
-    //   }
-    // }
+    const { response, config } = error;
+    if (response.status === 401 || response.status === 403) {
+      if (window.location.pathname !== '/login') {
+        await useRefreshTokenService();
+        return apiClient.request(config);
+      }
+    }
 
     console.error('API Error:', response);
     const error_response: ErrorResponse = {

@@ -19,6 +19,8 @@ import { Input } from '@/components/ui/input';
 import { createBusinessTypeSchema } from '@/utils/schemas';
 
 interface CreateNewBusinessTypeProps {
+  create?: boolean;
+  initialData?: z.infer<typeof createBusinessTypeSchema>;
   children: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -26,22 +28,28 @@ interface CreateNewBusinessTypeProps {
   onCancel?: () => void;
 }
 
-const CreateNewBusinessType = ({ children, open, onOpenChange, onSubmit, onCancel }: CreateNewBusinessTypeProps) => {
+const CreateNewBusinessType = ({
+  create = true,
+  initialData = { name: '', description: '' },
+  children,
+  open,
+  onOpenChange,
+  onSubmit,
+  onCancel,
+}: CreateNewBusinessTypeProps) => {
   const { t } = useTranslation();
 
   const form = useForm<z.infer<typeof createBusinessTypeSchema>>({
     resolver: zodResolver(createBusinessTypeSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-    },
+    defaultValues: initialData,
   });
 
+  // Reset form values whenever dialog opens or initialData changes
   useEffect(() => {
-    if (!open) {
-      form.reset();
+    if (open) {
+      form.reset(initialData);
     }
-  }, [open]);
+  }, [open, initialData, form]);
 
   const onCancelHandler = () => {
     onCancel && onCancel();
@@ -58,24 +66,32 @@ const CreateNewBusinessType = ({ children, open, onOpenChange, onSubmit, onCance
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-5xl overflow-y-scroll max-h-9/10">
         <DialogHeader>
-          <DialogTitle>{t('module.businessType.createTitle')}</DialogTitle>
-          <DialogDescription>{t('module.businessType.createDescription')}</DialogDescription>
+          <DialogTitle>
+            {create ? t('module.businessType.createTitle') : t('module.businessType.editTitle')}{' '}
+          </DialogTitle>
+          <DialogDescription>
+            {create ? t('module.businessType.createDescription') : t('module.businessType.editDescription')}
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
+          <form
+            onSubmit={form.handleSubmit(onSubmitForm)}
+            className="space-y-6 w-full"
+            key={open ? JSON.stringify(initialData) : 'closed'}
+          >
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.businessType.createMenuField.name')}
+                    {t('module.businessType.createField.name')}
                     <p className="text-red-700">*</p>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.businessType.createMenuField.nameDescription')}</FormDescription>
+                  <FormDescription>{t('module.businessType.createField.nameDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -86,27 +102,27 @@ const CreateNewBusinessType = ({ children, open, onOpenChange, onSubmit, onCance
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.businessType.createMenuField.description')}
+                    {t('module.businessType.createField.description')}
                     <p className="text-red-700">*</p>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.businessType.createMenuField.descriptionDescription')}</FormDescription>
+                  <FormDescription>{t('module.businessType.createField.descriptionDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             {/* Button action */}
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={onCancelHandler}>
+              <Button type="button" variant="destructive" onClick={onCancelHandler}>
                 <CircleX className="size-5" />
                 {t('module.businessType.action.cancel')}
               </Button>
 
               <Button type="submit" className="min-w-[120px]" disabled={!form.formState.isDirty}>
                 <Building2 className="size-5 mr-[6px]" />
-                {t('module.businessType.action.add')}
+                {create ? t('module.businessType.action.create') : t('module.businessType.action.edit')}
               </Button>
             </DialogFooter>
           </form>
