@@ -1,7 +1,7 @@
 // Config axios instance
 import axios from 'axios';
 import { loadFromLocalStorage } from '@/libs/utils';
-import { useRefreshTokenService } from './loginService';
+import { useRefreshTokenService } from './authService';
 
 export type SuccessResponse<T> = {
   data: T;

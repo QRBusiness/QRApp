@@ -1,9 +1,14 @@
+import React from 'react';
+import { useToggleAvailableBusiness } from '@/services/admin/business-service';
 import type { ColumnDef } from '@tanstack/react-table';
-import { CircleCheck, CircleX, Edit, Eye, Trash } from 'lucide-react';
+import { CircleCheck, CircleX, Edit, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
+import EditBusinessDialog from '../dialog/edit-business-dialog';
+import ReadOnlyBusinessDialog from '../dialog/read-only-business-dialog';
 
 export type BusinessType = {
   id: string;
@@ -79,22 +84,52 @@ export const columns: ColumnDef<BusinessType>[] = [
   {
     accessorKey: 'actions',
     header: 'Actions',
-    cell: () => {
+    cell: ({ row }) => {
       const { t } = useTranslation();
+      const [openEditDialog, setOpenEditDialog] = React.useState(false);
+      const [openViewDialog, setOpenViewDialog] = React.useState(false);
+      const { toggleAvailableBusiness } = useToggleAvailableBusiness();
       return (
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Eye className="mr-2" />
-            {t('module.common.view')}
-          </Button>
-          <Button variant="outline" size="sm">
-            <Edit className="mr-2" />
-            {t('module.common.edit')}
-          </Button>
-          <Button variant="outline" size="sm">
-            <Trash className="mr-2" />
-            {t('module.common.delete')}
-          </Button>
+          <ReadOnlyBusinessDialog data={row.original} isOpen={openViewDialog} onClose={setOpenViewDialog}>
+            <Button variant="outline" size="sm">
+              <Eye className="mr-2" />
+              {t('module.common.view')}
+            </Button>
+          </ReadOnlyBusinessDialog>
+          <EditBusinessDialog
+            open={openEditDialog}
+            onOpenChange={setOpenEditDialog}
+            initialData={{
+              ...row.original,
+              businessTaxCode: row.original.tax_code,
+              businessType: row.original.business_type,
+            }}
+          >
+            <Button variant="outline" size="sm">
+              <Edit className="mr-2" />
+              {t('module.common.edit')}
+            </Button>
+          </EditBusinessDialog>
+          <CustomAlertDialog
+            title="Are you sure?"
+            description={`Are you sure to ${row.original.available ? 'disable' : 'enable'} this business?`}
+            onSubmit={() => toggleAvailableBusiness(row.original.id)}
+            variant={row.original.available ? 'destructive' : 'default'}
+            buttonSubmitLabel={row.original.available ? 'Disable' : 'Enable'}
+          >
+            {row.original.available ? (
+              <Button variant="destructive" size="sm">
+                <CircleX className="mr-2" />
+                {t('module.common.disable')}
+              </Button>
+            ) : (
+              <Button variant="outline" size="sm">
+                <CircleCheck className="mr-2" />
+                {t('module.common.enable')}
+              </Button>
+            )}
+          </CustomAlertDialog>
         </div>
       );
     },

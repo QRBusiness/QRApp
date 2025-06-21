@@ -1,5 +1,5 @@
 import apiClient, { type ApiResponse } from '@/services';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 interface BusinessOwnerInputProps {
@@ -63,5 +63,51 @@ export const useBusinessOwners = ({ page = 1, limit = 50 }: BusinessOwnerInputPr
     isFetching,
     isSuccess,
     refetch,
+  };
+};
+
+const toggleAvailabilityBusinessOwner = async (id: string): Promise<BusinessOwner> => {
+  try {
+    const response: ApiResponse<BusinessOwner> = await apiClient.put(`/users/active/${id}`);
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to toggle business owner availability',
+      });
+      throw new Error(response.errorMessage || 'Failed to toggle business owner availability');
+    }
+    return response.data;
+  } catch (error) {
+    toast.error('Internal server error', {
+      description: 'An unexpected error occurred while toggling business owner availability.',
+    });
+    throw new Error('Internal server error');
+  }
+};
+
+export const useToggleAvailabilityBusinessOwner = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: toggleAvailabilityBusinessOwner,
+    onSuccess: (data: BusinessOwner) => {
+      toast.success('Business owner availability toggled successfully', {
+        description: `Business owner ${data.name} has been updated.`,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['businessOwnersQuery'],
+      });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to update business owner availability', {
+        description: error.message || 'An error occurred while updating the business owner availability.',
+      });
+    },
+  });
+
+  return {
+    toggleAvailabilityBusinessOwner: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
   };
 };

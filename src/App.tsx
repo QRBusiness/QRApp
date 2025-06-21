@@ -160,7 +160,7 @@ function App() {
             },
             {
               index: true,
-              element: <Navigate to={BUSINESS} replace />,
+              element: <Navigate to={BUSINESS_TYPE} replace />,
             },
           ],
         },

@@ -49,7 +49,7 @@ const CreateNewBusinessType = ({
     if (open) {
       form.reset(initialData);
     }
-  }, [open, initialData, form]);
+  }, [open, form]);
 
   const onCancelHandler = () => {
     onCancel && onCancel();

@@ -16,7 +16,9 @@
       "create": "Create",
       "update": "Update",
       "search": "Search",
-      "noDataFound": "No data found.",
+      "enable": "Enable",
+      "disable": "Disable",
+
       "backToHome": "Back to Home"
     },
     "authentication": {
@@ -327,6 +329,10 @@
         "address.errorFormat": "Please enter a valid address."
       },
       "step3": {
+        "title": "Edit Business",
+        "description": "Update the details of your business.",
+        "button.cancel": "Cancel",
+        "button.save": "Save Changes",
         "name.label": "Business Name",
         "name.description": "* Enter your business name.",
         "name.placeholder": "Enter your business name",
@@ -370,6 +376,29 @@
         "cancel": "Cancel",
         "create": "Create Business Type",
         "edit": "Edit Business Type"
+      }
+    },
+    "businessOwner": {
+      "editField": {
+        "title": "Edit Business Owner",
+        "description": "Update the details of the business owner.",
+        "name.label": "Business Owner Name",
+        "name.description": "Enter the name of the business owner.",
+        "name.error": "Business owner name is required.",
+        "address.label": "Business Owner Address",
+        "address.description": "Enter the address of the business owner.",
+        "address.error": "Business owner address is required.",
+        "phone.label": "Business Owner Phone",
+        "phone.description": "Enter the phone number of the business owner.",
+        "phone.error": "Business owner phone number is required.",
+        "phone.formatError": "Please enter a valid phone number.",
+        "username.label": "Business Owner Username",
+        "username.description": "Enter the username of the business owner.",
+        "username.error": "Business owner username is required.",
+        "available.label": "Available",
+        "available.description": "Is the business owner available?",
+        "button.cancel": "Cancel",
+        "button.save": "Save Changes"
       }
     }
   }

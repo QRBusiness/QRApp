@@ -18,8 +18,8 @@ import { z } from 'zod';
 // });
 
 export const loginSchema = z.object({
-  username: z.string().min(5, { message: 'module.authentication.usernameError' }),
-  password: z.string().min(5, { message: 'module.authentication.passwordError' }),
+  username: z.string().min(1, { message: 'module.authentication.usernameError' }),
+  password: z.string().min(1, { message: 'module.authentication.passwordError' }),
 });
 
 export const createQRSchema = z.object({
@@ -135,7 +135,20 @@ export const createBusinessSchema = z.object({
   businessType: z.string().min(1, {
     message: 'module.createBusinessOwnerField.step3.businessType.error',
   }),
-  businessTaxCode: z.string().min(1, {
-    message: 'module.createBusinessOwnerField.step3.businessTaxCode.error',
-  }),
+  businessTaxCode: z.string().optional(),
+});
+
+export const editUserSchema = z.object({
+  name: z.string().min(1, { message: 'module.businessOwner.editField.name.error' }),
+  phone: z
+    .string()
+    .min(10, { message: 'module.businessOwner.editField.phone.error' })
+    .max(11, { message: 'module.businessOwner.editField.phone.error' })
+    .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
+      message: 'module.businessOwner.editField.phone.formatError',
+    }),
+  address: z.string().min(1, { message: 'module.businessOwner.editField.address.error' }),
+  role: z.string().min(1, { message: 'module.businessOwner.editField.role.error' }),
+  available: z.boolean(),
+  username: z.string().min(5, { message: 'module.businessOwner.editField.username.error' }),
 });

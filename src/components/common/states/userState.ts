@@ -18,7 +18,7 @@ interface userPros {
   group: any[];
 }
 
-const defaultUserState: userPros = {
+export const defaultUserState: userPros = {
   _id: '',
   name: '',
   phone: '',

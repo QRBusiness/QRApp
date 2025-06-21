@@ -1,5 +1,5 @@
 import apiClient, { type ApiResponse } from '@/services';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 interface BusinessInputProps {
@@ -116,7 +116,6 @@ const createBusiness = async ({
       });
       throw new Error(response.errorMessage || 'Failed to create business');
     }
-    toast.success('Business created successfully');
     return response.data;
   } catch (error) {
     toast.error('Internal server error', {
@@ -129,6 +128,11 @@ const createBusiness = async ({
 export const useCreateBusiness = () => {
   const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
     mutationFn: createBusiness,
+    onSuccess: (data: BusinessProps) => {
+      toast.success('Business created successfully', {
+        description: `Business ${data.name} has been created.`,
+      });
+    },
     onError: (error: Error) => {
       toast.error('Failed to create business', {
         description: error.message || 'An error occurred while creating the business.',
@@ -138,6 +142,52 @@ export const useCreateBusiness = () => {
 
   return {
     createBusiness: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
+  };
+};
+
+const toggleAvailableBusiness = async (id: string): Promise<BusinessProps> => {
+  try {
+    const response: ApiResponse<BusinessProps> = await apiClient.put(`/business/active/${id}`);
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to toggling enable/disable business',
+      });
+      throw new Error(response.errorMessage || 'Failed to toggling enable/disable business');
+    }
+    return response.data;
+  } catch (error) {
+    toast.error('Internal server error', {
+      description: 'An unexpected error occurred while toggling enable/disable the business.',
+    });
+    throw new Error('Internal server error');
+  }
+};
+
+export const useToggleAvailableBusiness = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: toggleAvailableBusiness,
+    onSuccess: (data: BusinessProps) => {
+      toast.success('Business status updated successfully', {
+        description: `Business ${data.name} has been updated.`,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['businessQuery'],
+      });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to update business status', {
+        description: error.message || 'An error occurred while updating the business status.',
+      });
+    },
+  });
+
+  return {
+    toggleAvailableBusiness: mutateAsync,
     data,
     isPending,
     isError,

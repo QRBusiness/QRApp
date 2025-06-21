@@ -12,14 +12,16 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
 import { formattedDate } from '@/libs/utils';
-import type { BusinessType } from '../table/columns';
+import type { BusinessOwner } from '../table/columns';
 
 interface ReadOnlyDialogProps {
   isOpen: boolean;
   onClose: (open: boolean) => void;
   children?: React.ReactNode;
-  data: BusinessType;
+  data: BusinessOwner;
 }
 
 const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, children, data }) => {
@@ -31,10 +33,11 @@ const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, childr
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Eye className="size-5" />
-            {'Business Type Details'}
+            {'Business Owner Details'}
           </DialogTitle>
           <DialogDescription>{'You are viewing the details of this business type.'}</DialogDescription>
         </DialogHeader>
+        <Separator />
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -48,17 +51,28 @@ const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, childr
               </Hint>
             </div>
           </div>
+          {
+            <div className="flex items-center justify-between">
+              <Label>Available:</Label>
+              <Switch checked={data.available} disabled />
+            </div>
+          }
           <div className="flex items-center justify-between">
             <Label>Name:</Label> {data.name}
           </div>
           <div className="flex items-center justify-between">
-            <Label>Description:</Label> {data.description}
+            <Label>Address:</Label> {data.address}
           </div>
           <div className="flex items-center justify-between">
-            <Label>Created At:</Label> <p>{formattedDate(data.created_at)}</p>
+            <Label>Contact:</Label> {data.phone}
           </div>
           <div className="flex items-center justify-between">
-            <Label>Last Updated At:</Label> {formattedDate(data.updated_at)}
+            <Label>Created At:</Label>
+            <p>{formattedDate(data.created_at)}</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Last Updated At:</Label>
+            <p>{formattedDate(data.updated_at)}</p>
           </div>
         </div>
         <DialogFooter>

@@ -1,5 +1,15 @@
-import { ACCESS_TOKEN, ADMIN_ROLE, DASHBOARD, FORGOT_PASSWORD, OWNER, OWNER_ROLE, REFRESH_TOKEN } from '@/constains';
-import { loginService } from '@/services/loginService';
+import {
+  ACCESS_TOKEN,
+  ADMIN,
+  ADMIN_ROLE,
+  BUSINESS_TYPE,
+  DASHBOARD,
+  FORGOT_PASSWORD,
+  OWNER,
+  OWNER_ROLE,
+  REFRESH_TOKEN,
+} from '@/constains';
+import { loginService } from '@/services/authService';
 import { getCurrentUser } from '@/services/userService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -46,8 +56,10 @@ const Login = () => {
       group: [],
     });
     // IF SUCCESSFUL, NAVIGATE TO DASHBOARD OR QR MANAGEMENT
-    if (user.data.role === OWNER_ROLE || user.data.role === ADMIN_ROLE) {
+    if (user.data.role === OWNER_ROLE) {
       navigate(`${OWNER}/${user.data.business?._id || '1'}/${DASHBOARD}`);
+    } else if (user.data.role === ADMIN_ROLE) {
+      navigate(`${ADMIN}/${BUSINESS_TYPE}`);
     }
     form.reset();
   };

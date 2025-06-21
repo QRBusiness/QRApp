@@ -20,6 +20,7 @@ interface CustomAlertDialogProps {
   onSubmit?: () => void;
   buttonSubmitLabel?: string;
   onCancel?: () => void;
+  variant?: 'default' | 'destructive';
 }
 
 export const CustomAlertDialog = ({
@@ -28,6 +29,7 @@ export const CustomAlertDialog = ({
   description,
   onSubmit,
   buttonSubmitLabel,
+  variant = 'destructive',
 }: CustomAlertDialogProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
@@ -52,7 +54,11 @@ export const CustomAlertDialog = ({
             {t('module.qrManagement.alertDialog.cancelButton')}
           </AlertDialogCancel>
           <AlertDialogAction
-            className=" bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+            className={`${
+              variant === 'destructive'
+                ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
+                : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+            }`}
             onClick={handleSubmit}
           >
             <Trash className="text-xs md:text-xs mr-2" />

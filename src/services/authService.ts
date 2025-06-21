@@ -24,9 +24,9 @@ export const loginService = async (data: z.infer<typeof loginSchema>): Promise<l
   }
 };
 
-export const logoutService = async (): Promise<void> => {
+export const logoutService = async ({ refresh_token }: { refresh_token: string }): Promise<void> => {
   try {
-    const response: ApiResponse<void> = await apiClient.post('/sign-out');
+    const response: ApiResponse<void> = await apiClient.post('/sign-out', { refresh_token });
     if (response.status !== 200) {
       toast.error(response.error, { description: response.errorMessage || 'An error occurred while logging out' });
     }

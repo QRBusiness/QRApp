@@ -1,5 +1,6 @@
 import React from 'react';
-import { ADMIN_ROLE } from '@/constains';
+import { ACCESS_TOKEN, ADMIN_ROLE, REFRESH_TOKEN, USER_SESSION } from '@/constains';
+import { logoutService } from '@/services/authService';
 import { ChevronLeft, CircleHelp, LogOut, Settings, User, UserCog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,11 +15,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { cn } from '@/libs/utils';
+import { cn, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 import { Button } from '../ui/button';
 import { CustomDropdownMenu } from './custom-dropdown-menu';
 import type { SidebarItem } from './mobile-bottom-bar';
-import { useUserState } from './states/userState';
+import { defaultUserState, useUserState } from './states/userState';
 
 const systemItems = [
   {
@@ -56,6 +57,15 @@ const SidebarApp = ({ items }: SidebarProps) => {
     });
   }
 
+  const handleLogout = async () => {
+    const refresh_token = loadFromLocalStorage(REFRESH_TOKEN, 'REFRESH_TOKEN');
+    await logoutService({ refresh_token: refresh_token });
+    navigate('/login');
+    saveToLocalStorage(USER_SESSION, defaultUserState);
+    saveToLocalStorage(REFRESH_TOKEN, null);
+    saveToLocalStorage(ACCESS_TOKEN, null);
+  };
+
   const defaultItems = [
     {
       label: t('module.sidebar.account'),
@@ -65,7 +75,7 @@ const SidebarApp = ({ items }: SidebarProps) => {
     {
       label: t('module.sidebar.logout'),
       icon: <LogOut />,
-      onClick: () => {},
+      onClick: async () => await handleLogout(),
     },
   ];
 
