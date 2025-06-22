@@ -129,7 +129,7 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
                             <CustomSelect
                               options={fieldItem.options || []}
                               onFieldChange={field.onChange}
-                              value={fieldItem.options?.[0]?.value || ''}
+                              value={field.value || ''}
                             />
                           </div>
                         </FormControl>
