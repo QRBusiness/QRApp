@@ -1,4 +1,5 @@
 // Config axios instance
+import { ACCESS_TOKEN } from '@/constains';
 import axios from 'axios';
 import { loadFromLocalStorage } from '@/libs/utils';
 import { useRefreshTokenService } from './authService';
@@ -57,7 +58,14 @@ apiClient.interceptors.response.use(
     if (response.status === 401 || response.status === 403) {
       if (window.location.pathname !== '/login') {
         await useRefreshTokenService();
-        return apiClient.request(config);
+        const access_token = loadFromLocalStorage(ACCESS_TOKEN, null);
+        return apiClient.request({
+          ...config,
+          headers: {
+            ...config.headers,
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
       }
     }
 

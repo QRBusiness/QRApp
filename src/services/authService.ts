@@ -1,9 +1,9 @@
-import { REFRESH_TOKEN } from '@/constains';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constains';
 import apiClient, { type ApiResponse } from '@/services';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { loginSchema } from '@/utils/schemas';
-import { loadFromLocalStorage } from '@/libs/utils';
+import { loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 
 export interface loginResponse {
   data: {
@@ -47,6 +47,8 @@ export const useRefreshTokenService = async (): Promise<loginResponse> => {
       });
       throw new Error(response.errorMessage || 'An error occurred while using refresh token');
     }
+    saveToLocalStorage(REFRESH_TOKEN, response.data.data.refresh_token);
+    saveToLocalStorage(ACCESS_TOKEN, response.data.data.access_token);
     return response.data;
   } catch (error) {
     throw new Error('Internal server error');

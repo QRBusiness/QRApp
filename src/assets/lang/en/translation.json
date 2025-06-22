@@ -400,6 +400,38 @@
         "button.cancel": "Cancel",
         "button.save": "Save Changes"
       }
+    },
+    "branchManagement": {
+      "createField": {
+        "create": {
+          "title": "Create New Branch",
+          "description": "Fill in the details to create a new branch."
+        },
+        "edit": {
+          "title": "Edit Branch",
+          "description": "Update the details of the branch."
+        },
+        "name": {
+          "label": "Branch Name",
+          "description": "Enter the name of the branch.",
+          "error": "Branch name is required."
+        },
+        "address": {
+          "label": "Branch Address",
+          "description": "Enter the address of the branch.",
+          "error": "Branch address is required."
+        },
+        "contact": {
+          "label": "Branch Contact Number",
+          "description": "Enter the contact number of the branch.",
+          "error": "Branch contact number is required."
+        }
+      },
+      "action": {
+        "cancel": "Cancel",
+        "create": "Create Branch",
+        "edit": "Edit Branch"
+      }
     }
   }
 }

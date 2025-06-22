@@ -152,3 +152,15 @@ export const editUserSchema = z.object({
   available: z.boolean(),
   username: z.string().min(5, { message: 'module.businessOwner.editField.username.error' }),
 });
+
+export const createBranchSchema = z.object({
+  name: z.string().min(5, { message: 'module.branchManagement.createField.name.error' }),
+  address: z.string().min(5, { message: 'module.branchManagement.createField.address.error' }),
+  contact: z
+    .string()
+    .min(10, { message: 'module.branchManagement.createField.contact.error' })
+    .max(11, { message: 'module.branchManagement.createField.contact.error' })
+    .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
+      message: 'module.branchManagement.createField.contact.formatError',
+    }),
+});

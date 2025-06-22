@@ -1,36 +1,49 @@
+import React, { useEffect } from 'react';
+import { useBranches, useCreateBranch } from '@/services/owner/branchService';
 import { CirclePlus } from 'lucide-react';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
+import type { createBranchSchema } from '@/utils/schemas';
+import CreateNewBranch from './dialog/create-branch-dialog';
 import BranchTypeTable from './table';
 import type { BranchType } from './table/columns';
 
 const BranchManagement = () => {
-  const dummyData: BranchType[] = [
-    {
-      id: '1',
-      name: 'Restaurant',
-      address: '123 Main St',
-      contact: '555-1234',
-      created_at: '2023-01-01T12:00:00Z',
-      updated_at: '2023-01-02T12:00:00Z',
-    },
-    {
-      id: '2',
-      name: 'Cafe',
-      address: '456 Elm St',
-      contact: '555-5678',
-      created_at: '2023-01-03T12:00:00Z',
-      updated_at: '2023-01-04T12:00:00Z',
-    },
-  ];
+  const [data, setData] = React.useState<BranchType[]>([]);
+  const { branches } = useBranches({ page: 1, limit: 50 });
+  const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
+  const { createBranch } = useCreateBranch();
+
+  useEffect(() => {
+    if (branches.length !== 0) {
+      setData(
+        branches.map((branch) => ({
+          id: branch._id,
+          name: branch.name,
+          address: branch.address,
+          contact: branch.contact,
+          created_at: branch.created_at,
+          updated_at: branch.updated_at,
+        }))
+      );
+    }
+  }, [branches]);
+
+  const handleCreateBranch = async (formData: z.infer<typeof createBranchSchema>) => {
+    await createBranch(formData);
+  };
+
   return (
     <div className="container mx-auto pb-10 flex flex-col space-y-4">
       <div className="self-end">
-        <Button variant="default">
-          <CirclePlus className="mr-2 size-4 md:size-5" />
-          Add New Branch
-        </Button>
+        <CreateNewBranch open={openCreateDialog} onOpenChange={setOpenCreateDialog} onSubmit={handleCreateBranch}>
+          <Button variant="default">
+            <CirclePlus className="mr-2 size-4 md:size-5" />
+            Add New Branch
+          </Button>
+        </CreateNewBranch>
       </div>
-      <BranchTypeTable data={dummyData} />
+      <BranchTypeTable data={data} />
     </div>
   );
 };
