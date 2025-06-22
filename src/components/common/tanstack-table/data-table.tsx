@@ -7,6 +7,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { Columns3 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { DataTablePagination } from '@/components/common/tanstack-table/pagination';
 import { Button } from '@/components/ui/button';
@@ -51,11 +52,11 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const { t } = useTranslation();
 
   return (
-    <React.Fragment>
+    <div className="flex flex-col space-y-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="ml-auto">
-            Columns
+          <Button variant="outline" className="ml-auto space-x-2">
+            <Columns3 /> {t('module.common.table.visibleColumns')}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -143,6 +144,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         </Table>
       </div>
       <DataTablePagination table={table} />
-    </React.Fragment>
+    </div>
   );
 }

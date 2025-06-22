@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useAreas, useCreateArea } from '@/services/owner/area-service';
+import { useBranches } from '@/services/owner/branchService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleX, Download, Info, Plus, Printer, QrCode, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -14,25 +16,40 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createAdditionalFieldSchema, createAreaSchema, createQRSchema, createTableSchema } from '@/utils/schemas';
 
-const areaOptionsDefault = [
-  { value: 'area1', label: 'Area 1' },
-  { value: 'area2', label: 'Area 2' },
-  { value: 'area3', label: 'Area 3' },
-];
-
-const tableOptionsDefault = [
-  { value: 'table1', label: 'Table 1' },
-  { value: 'table2', label: 'Table 2' },
-  { value: 'table3', label: 'Table 3' },
-];
-
 const CreateQR = () => {
   const { t } = useTranslation();
   const [additionalInfo, setAdditionalInfo] = React.useState<any[]>([]);
-  const [areaOptions, setAreaOptions] = React.useState(areaOptionsDefault);
-  const [tableOptions, setTableOptions] = React.useState(tableOptionsDefault);
+  const [branchOptions, setBranchOptions] = React.useState<{ value: string; label: string }[]>([]);
+  const [areaOptions, setAreaOptions] = React.useState<{ value: string; label: string }[]>([]);
+  const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([]);
   const [qrGenerated, setQrGenerated] = useState(false);
   const [downloadFormat, setDownloadFormat] = useState('PNG');
+
+  const { branches } = useBranches({ page: 1, limit: 50 });
+  const { areas } = useAreas({ page: 1, limit: 50 });
+  const { createArea } = useCreateArea();
+
+  React.useEffect(() => {
+    if (branches.length > 0) {
+      setBranchOptions(
+        branches.map((branch) => ({
+          value: branch._id,
+          label: branch.name,
+        }))
+      );
+    }
+  }, [branches]);
+
+  React.useEffect(() => {
+    if (areas && areas.length > 0) {
+      setAreaOptions(
+        areas.map((area) => ({
+          value: area._id,
+          label: area.name,
+        }))
+      );
+    }
+  }, [areas]);
 
   const additionalFields: FieldProps[] = [
     {
@@ -58,6 +75,18 @@ const CreateQR = () => {
       label: t('module.qrManagement.addAreaField.fieldDescription'),
       description: t('module.qrManagement.addAreaField.fieldDescriptionDescription'),
     },
+    {
+      name: 'image_url',
+      label: t('module.qrManagement.addAreaField.fieldImageUrl'),
+      description: t('module.qrManagement.addAreaField.fieldImageUrlDescription'),
+    },
+    {
+      name: 'branch',
+      label: t('module.qrManagement.addAreaField.fieldBranchId'),
+      description: t('module.qrManagement.addAreaField.fieldBranchIdDescription'),
+      type: 'select',
+      options: branchOptions,
+    },
   ];
 
   const addTableFields: FieldProps[] = [
@@ -81,13 +110,18 @@ const CreateQR = () => {
       label: t('module.qrManagement.addTableField.fieldDescription'),
       description: t('module.qrManagement.addTableField.fieldDescriptionDescription'),
     },
+    {
+      name: 'qr_code',
+      label: t('module.qrManagement.addTableField.fieldQrCode'),
+      description: t('module.qrManagement.addTableField.fieldQrCodeDescription'),
+    },
   ];
 
   const form = useForm<z.infer<typeof createQRSchema>>({
     resolver: zodResolver(createQRSchema),
-    defaultValues: {
-      area: areaOptions[0].value,
-      table: tableOptions[0].value,
+    values: {
+      area: '',
+      table: '',
     },
   });
 
@@ -95,10 +129,19 @@ const CreateQR = () => {
     console.log('Form submitted with values:', values);
   };
 
+  const handleCreateArea = async (values: z.infer<typeof createAreaSchema>) => {
+    await createArea({
+      name: values.name,
+      description: values.description,
+      image_url: values.image_url,
+      branch: values.branch,
+    });
+  };
+
   return (
-    <div className="container mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-6 gap-4 ">
+    <div className="container mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-6 gap-4">
       {/* Left pane wrapper */}
-      <Card className="flex flex-col lg:col-span-4 items-start justify-between w-full p-4 space-y-8 rounded border shadow-md flex-1 mr-4 h-full">
+      <Card className="flex flex-col lg:col-span-4 items-start justify-between w-full p-4 space-y-4 rounded border shadow-md flex-1 mr-4 h-full">
         {/* Title and Description */}
         <div className="flex flex-col items-start justify-start space-y-2">
           <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">{t('module.qrManagement.table.title')}</h4>
@@ -121,16 +164,14 @@ const CreateQR = () => {
                         <CustomSelect
                           options={areaOptions}
                           onFieldChange={field.onChange}
-                          value={field.value}
-                          defaultValue={field.value}
+                          value={field.value || ''}
+                          placeholder={t('module.area.placeholder')}
                         />
                         <CustomAddItemDialog
                           title={t('module.qrManagement.addAreaField.title')}
                           description={t('module.qrManagement.addAreaField.description')}
                           schema={createAreaSchema}
-                          onSubmit={(values) => {
-                            console.log('Area created:', values);
-                          }}
+                          onSubmit={handleCreateArea}
                           fields={addAreaFields}
                         >
                           <Button type="button" variant="default">
@@ -161,6 +202,8 @@ const CreateQR = () => {
                           onFieldChange={field.onChange}
                           value={field.value}
                           defaultValue={field.value}
+                          placeholder={t('module.table.placeholder')}
+                          disabled={form.getValues('area') === ''}
                         />
                         <CustomAddItemDialog
                           title={t('module.qrManagement.addTableField.title')}

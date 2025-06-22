@@ -29,9 +29,9 @@ export const createQRSchema = z.object({
 
 export const createAreaSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldNameError' }),
-  description: z.string().min(1, {
-    message: 'module.qrManagement.addAreaField.fieldDescriptionError',
-  }),
+  description: z.string(),
+  image_url: z.string(),
+  branch: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldBranchIdError' }),
 });
 
 export const createTableSchema = z.object({
@@ -40,6 +40,7 @@ export const createTableSchema = z.object({
   description: z.string().min(1, {
     message: 'module.qrManagement.addTableField.fieldDescriptionError',
   }),
+  qr_code: z.string(),
 });
 
 export const createAdditionalFieldSchema = z.object({

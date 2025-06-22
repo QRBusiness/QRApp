@@ -27,7 +27,7 @@ interface MobileCreateDialogProps {
   onOpenChange?: (open: boolean) => void;
   title: string;
   description?: string;
-  onSubmit?: () => void;
+  onSubmit?: (values: any) => void;
   onCancel?: () => void;
   submitButtonText?: string;
   cancelButtonText?: string;
@@ -113,8 +113,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
   });
 
   const onSubmitForm = (values: z.infer<typeof createQRSchema>) => {
-    console.log('Form submitted with values:', values);
-    onSubmit && onSubmit();
+    onSubmit && onSubmit(values);
   };
 
   return (

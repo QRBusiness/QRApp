@@ -33,7 +33,7 @@ interface CustomAddItemDialogProps {
   fields: FieldProps[];
   schema: z.ZodTypeAny;
   onClose?: () => void;
-  onSubmit?: (values: object) => void;
+  onSubmit?: (values: any) => void;
 }
 
 const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
@@ -60,8 +60,9 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
   const [open, setOpen] = React.useState(false);
 
   const handleSubmit = (values: z.infer<typeof schema>) => {
+    console.log('Submitted values:', values);
     if (onSubmit) {
-      onSubmit({ ...values });
+      onSubmit(values);
     }
     setOpen(false);
     form.reset();
@@ -128,8 +129,7 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
                             <CustomSelect
                               options={fieldItem.options || []}
                               onFieldChange={field.onChange}
-                              value={field.value}
-                              defaultValue={field.value}
+                              value={fieldItem.options?.[0]?.value || ''}
                             />
                           </div>
                         </FormControl>

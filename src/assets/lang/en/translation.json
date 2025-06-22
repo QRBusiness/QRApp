@@ -18,8 +18,8 @@
       "search": "Search",
       "enable": "Enable",
       "disable": "Disable",
-
-      "backToHome": "Back to Home"
+      "backToHome": "Back to Home",
+      "table.visibleColumns": "Visible Columns"
     },
     "authentication": {
       "title": "WELCOME BACK!",
@@ -83,11 +83,13 @@
     "area": {
       "title": "Select Area",
       "description": "Select your area.",
+      "placeholder": "Select area",
       "create": "Create Area"
     },
     "table": {
       "title": "Select Table",
       "description": "Select your table number.",
+      "placeholder": "Select table",
       "create": "Create Table"
     },
     "qrManagement": {
@@ -132,7 +134,16 @@
         "fieldDescription": "Area Description",
         "fieldDescriptionError": "Area description cannot be empty.",
         "fieldDescriptionDescription": "* Enter area description",
-        "fieldDescriptionPlaceholder": "Enter area description"
+        "fieldDescriptionPlaceholder": "Enter area description",
+
+        "fieldImageUrl": "Area Image URL",
+        "fieldImageUrlDescription": "* Enter the image URL for the area",
+        "fieldImageUrlPlaceholder": "Enter image URL",
+
+        "fieldBranchId": "Branch ID",
+        "fieldBranchIdDescription": "* Select the branch for this area",
+        "fieldBranchIdPlaceholder": "Select branch",
+        "fieldBranchIdError": "Branch ID cannot be empty."
       },
       "addTableField": {
         "title": "Add Table",
@@ -153,7 +164,11 @@
         "fieldDescription": "Table Description",
         "fieldDescriptionError": "Table description cannot be empty.",
         "fieldDescriptionDescription": "* Enter table description",
-        "fieldDescriptionPlaceholder": "Enter table description"
+        "fieldDescriptionPlaceholder": "Enter table description",
+
+        "fieldQrCode": "QR Code",
+        "fieldQrCodeDescription": "* Enter QR Code",
+        "fieldQrCodePlaceholder": "Enter QR Code"
       },
       "table": {
         "title": "QR Codes Create",

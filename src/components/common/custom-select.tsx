@@ -8,19 +8,27 @@ interface CustomSelectProps {
   defaultValue?: string;
   placeholder?: string;
   onFieldChange?: (value: string) => void;
+  disabled?: boolean;
 }
 
-const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, defaultValue, placeholder, onFieldChange }) => {
+const CustomSelect: React.FC<CustomSelectProps> = ({
+  options,
+  value,
+  defaultValue,
+  placeholder,
+  onFieldChange,
+  disabled = false,
+}) => {
   return (
     <Select onValueChange={onFieldChange} defaultValue={defaultValue} value={value}>
       <FormControl>
-        <SelectTrigger className="flex-1 min-w-[156px]">
+        <SelectTrigger className="flex-1 w-full min-w-[156px]" disabled={disabled}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
       </FormControl>
       <SelectContent>
         {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
+          <SelectItem key={option.value} value={option.value} disabled={disabled}>
             {option.label}
           </SelectItem>
         ))}

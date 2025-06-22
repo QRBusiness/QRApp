@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCreateBusiness } from '@/services/admin/business-service';
+import { useBusinessTypes } from '@/services/admin/business-type-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import type { ZodObject } from 'zod';
+import CustomSelect from '@/components/common/custom-select';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -38,6 +39,18 @@ const CreateNewBusinessOwner = () => {
   ];
   const [formData, setFormData] = useState<Record<string, any>>({});
   const { createBusiness } = useCreateBusiness();
+  const { businessTypes } = useBusinessTypes({ page: 1, limit: 50 });
+  const [businessTypeOptions, setBusinessTypeOptions] = useState<{ label: string; value: string }[]>([]);
+
+  useEffect(() => {
+    if (businessTypes && businessTypes.length > 0) {
+      const options = businessTypes.map((type) => ({
+        label: type.name,
+        value: type._id,
+      }));
+      setBusinessTypeOptions(options);
+    }
+  }, [businessTypes]);
 
   const currentSchema = steps[step].schema as ZodObject<any>;
 
@@ -72,7 +85,6 @@ const CreateNewBusinessOwner = () => {
         business_type: newFormData['3_businessType'],
         business_tax_code: newFormData['3_businessTaxCode'],
       });
-      toast.success('Form successfully submitted');
       setStep(0);
       setFormData({});
       reset(); // reset react-hook-form fields
@@ -120,15 +132,28 @@ const CreateNewBusinessOwner = () => {
                     <FormItem>
                       <FormLabel>
                         {t(`module.createBusinessOwnerField.${steps[step].key}.${fieldName}.label`)}
+                        <p className="text-red-700">*</p>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder={t(`module.createBusinessOwnerField.${steps[step].key}.${fieldName}.placeholder`)}
-                          type={getTypeOfField(fieldName)}
-                          value={field.value ?? ''}
-                          autoComplete="off"
-                        />
+                        {step == 2 && fieldName === 'businessType' ? (
+                          <CustomSelect
+                            options={businessTypeOptions}
+                            onFieldChange={field.onChange}
+                            value={field.value ?? ''}
+                            // value={field.value ?? businessTypeOptions[0]?.value}
+                            // defaultValue={businessTypeOptions[0]?.value}
+                          />
+                        ) : (
+                          <Input
+                            {...field}
+                            placeholder={t(
+                              `module.createBusinessOwnerField.${steps[step].key}.${fieldName}.placeholder`
+                            )}
+                            type={getTypeOfField(fieldName)}
+                            value={field.value ?? ''}
+                            autoComplete="off"
+                          />
+                        )}
                       </FormControl>
                       <FormDescription>
                         {t(`module.createBusinessOwnerField.${steps[step].key}.${fieldName}.description`)}
