@@ -32,7 +32,7 @@ apiClient.interceptors.request.use(
   (config) => {
     // You can modify the request config here
     // For example, add an authorization token
-    const token = loadFromLocalStorage('access_token', null);
+    const token = loadFromLocalStorage(ACCESS_TOKEN, null);
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -55,27 +55,36 @@ apiClient.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     const { response, config } = error;
-    if (response.status === 401 || response.status === 403) {
+    if ((response.status === 401 || response.status === 403) && !config._retry) {
       if (window.location.pathname !== '/login') {
-        await useRefreshTokenService();
-        const access_token = loadFromLocalStorage(ACCESS_TOKEN, null);
-        return apiClient.request({
-          ...config,
-          headers: {
-            ...config.headers,
-            Authorization: `Bearer ${access_token}`,
-          },
-        });
+        config._retry = true;
+        try {
+          await useRefreshTokenService();
+          const access_token = loadFromLocalStorage(ACCESS_TOKEN, null);
+          return apiClient.request({
+            ...config,
+            headers: {
+              ...config.headers,
+              Authorization: `Bearer ${access_token}`,
+            },
+          });
+        } catch (refreshError) {
+          // Nếu refresh token thất bại, chuyển hướng đến /login
+          window.location.href = '/login';
+          return Promise.reject(refreshError);
+        }
       }
+    } else if ((response.status === 401 || response.status === 403) && config._retry) {
+      // Nếu đã retry mà vẫn thất bại, chuyển hướng đến /login
+      // window.location.href = '/login';
+      return Promise.reject(error);
     }
 
-    console.error('API Error:', response);
-    const error_response: ErrorResponse = {
-      status: response.status,
-      error: response.data.error || 'An error occurred',
-      errorMessage: response.data.message,
-    };
-    return error_response;
+    return Promise.reject({
+      status: response?.status,
+      error: response?.data?.error || 'An error occurred',
+      errorMessage: response?.data?.message,
+    });
   }
 );
 
