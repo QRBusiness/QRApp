@@ -1,6 +1,7 @@
 import React from 'react';
 import { useBusinessTypes, useCreateBusinessType } from '@/services/admin/business-type-service';
 import { CirclePlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import type { createBusinessTypeSchema } from '@/utils/schemas';
@@ -9,6 +10,7 @@ import type { BusinessType } from './table/columns';
 import BusinessTypeTable from './table/page';
 
 const BusinessTypeManagement = () => {
+  const { t } = useTranslation();
   const [data, setData] = React.useState<BusinessType[]>([]);
   const [open, setOpen] = React.useState(false);
   const { businessTypes } = useBusinessTypes({ page: 1, limit: 50 });
@@ -41,7 +43,7 @@ const BusinessTypeManagement = () => {
         <CreateNewBusinessType open={open} onOpenChange={setOpen} onSubmit={onSubmit}>
           <Button variant="default">
             <CirclePlus className="mr-2 size-4 md:size-5" />
-            Add Business Type
+            {t('module.businessType.button.create')}
           </Button>
         </CreateNewBusinessType>
       </div>

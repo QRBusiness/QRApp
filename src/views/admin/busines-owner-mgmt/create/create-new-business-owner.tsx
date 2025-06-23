@@ -63,7 +63,6 @@ const CreateNewBusinessOwner = () => {
 
   const onSubmit = async (data: any) => {
     // Gắn prefix step vào key, ví dụ: 1_name, 2_email
-
     const newFormData = {
       ...formData,
       ...Object.fromEntries(Object.entries(data).map(([key, value]) => [`${step + 1}_${key}`, value])),
@@ -168,9 +167,11 @@ const CreateNewBusinessOwner = () => {
 
               <div className="flex justify-between">
                 <Button type="button" onClick={handleBack} disabled={step === 0}>
-                  Back
+                  {t('module.common.back')}
                 </Button>
-                <Button type="submit">{step === totalSteps - 1 ? 'Submit' : 'Next'}</Button>
+                <Button type="submit">
+                  {step === totalSteps - 1 ? t('module.common.submit') : t('module.common.next')}
+                </Button>
               </div>
             </form>
           </Form>

@@ -98,13 +98,13 @@ export const columns: ColumnDef<BranchType>[] = [
             </Button>
           </CreateNewBranch>
           <CustomAlertDialog
-            title="Are you sure?"
-            description="Are you sure to delete this branch? This action cannot be undone."
+            title={t('module.qrManagement.alertDialog.title')}
+            description={t('module.qrManagement.alertDialog.description')}
             onSubmit={() => deleteBranch(row.original.id)}
           >
             <Button variant="destructive" size="sm">
               <Trash className="mr-2" />
-              {t('module.common.delete')}
+              {t('module.qrManagement.alertDialog.confirmButton')}
             </Button>
           </CustomAlertDialog>
         </div>

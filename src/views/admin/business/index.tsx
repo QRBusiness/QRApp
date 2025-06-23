@@ -2,6 +2,7 @@ import React from 'react';
 import { BUSINESS_OWNER_MANAGEMENT } from '@/constains';
 import { useBusiness } from '@/services/admin/business-service';
 import { CirclePlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import type { BusinessType } from './table/columns';
@@ -9,6 +10,7 @@ import BusinessTable from './table/page';
 
 const BusinessManagement = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [data, setData] = React.useState<BusinessType[]>([]);
   const { business: businesses } = useBusiness({ page: 1, limit: 50 });
 
@@ -35,7 +37,7 @@ const BusinessManagement = () => {
       <div className="self-end">
         <Button variant="default" onClick={() => navigate(`../${BUSINESS_OWNER_MANAGEMENT}/create`)}>
           <CirclePlus className="mr-2 size-4 md:size-5" />
-          Add new Business
+          {t('module.business.createNew')}
         </Button>
       </div>
       <BusinessTable data={data} />

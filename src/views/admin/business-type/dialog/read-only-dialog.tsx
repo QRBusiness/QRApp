@@ -1,5 +1,6 @@
 import React from 'react';
-import { Copy, Eye } from 'lucide-react';
+import { Copy, Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Hint } from '@/components/common/hint';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,6 +24,7 @@ interface ReadOnlyDialogProps {
 }
 
 const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, children, data }) => {
+  const { t } = useTranslation();
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -30,18 +32,18 @@ const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, childr
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Eye className="size-5" />
-            {'Business Type Details'}
+            <Info className="size-5" />
+            {t('module.businessType.viewTitle')}
           </DialogTitle>
-          <DialogDescription>{'You are viewing the details of this business type.'}</DialogDescription>
+          <DialogDescription>{t('module.businessType.viewDescription')}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label>ID:</Label>{' '}
+            <Label>{t('module.common.readOnlyDialog.id')}:</Label>{' '}
             <div className="flex gap-2 items-center">
               {data.id}
-              <Hint label="Copy ID" side="right">
+              <Hint label={t('module.common.readOnlyDialog.copyId')} side="right">
                 <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(data.id)}>
                   <Copy className="size-4" />
                 </Button>
@@ -49,20 +51,20 @@ const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, childr
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <Label>Name:</Label> {data.name}
+            <Label>{t('module.common.readOnlyDialog.name')}:</Label> {data.name}
           </div>
           <div className="flex items-center justify-between">
-            <Label>Description:</Label> {data.description}
+            <Label>{t('module.common.readOnlyDialog.description')}:</Label> {data.description}
           </div>
           <div className="flex items-center justify-between">
-            <Label>Created At:</Label> <p>{formattedDate(data.created_at)}</p>
+            <Label>{t('module.common.readOnlyDialog.createdAt')}:</Label> <p>{formattedDate(data.created_at)}</p>
           </div>
           <div className="flex items-center justify-between">
-            <Label>Last Updated At:</Label> {formattedDate(data.updated_at)}
+            <Label>{t('module.common.readOnlyDialog.updatedAt')}:</Label> {formattedDate(data.updated_at)}
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={() => onClose(false)}>Close</Button>
+          <Button onClick={() => onClose(false)}>{t('module.common.readOnlyDialog.button')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

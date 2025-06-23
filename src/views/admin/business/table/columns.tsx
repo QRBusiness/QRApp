@@ -112,8 +112,11 @@ export const columns: ColumnDef<BusinessType>[] = [
             </Button>
           </EditBusinessDialog>
           <CustomAlertDialog
-            title="Are you sure?"
-            description={`Are you sure to ${row.original.available ? 'disable' : 'enable'} this business?`}
+            title={t('module.common.confirmAction')}
+            description={t('module.common.confirmActionDescription', {
+              status: row.original.available ? 'disabled' : 'enabled',
+              name: row.original.name,
+            })}
             onSubmit={() => toggleAvailableBusiness(row.original.id)}
             variant={row.original.available ? 'destructive' : 'default'}
             buttonSubmitLabel={row.original.available ? 'Disable' : 'Enable'}

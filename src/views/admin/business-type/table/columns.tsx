@@ -119,8 +119,8 @@ export const columns: ColumnDef<BusinessType>[] = [
             </Button>
           </CreateNewBusinessType>
           <CustomAlertDialog
-            title="Are you sure?"
-            description="Are you sure to delete this business type? This process can not be undone."
+            title={t('module.qrManagement.alertDialog.title')}
+            description={t('module.qrManagement.alertDialog.description')}
             onSubmit={() => deleteBusinessType(row.row.original.id)}
           >
             <Button variant="destructive" size="sm">

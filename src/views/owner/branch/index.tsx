@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useBranches, useCreateBranch } from '@/services/owner/branchService';
 import { CirclePlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import type { createBranchSchema } from '@/utils/schemas';
@@ -9,6 +10,7 @@ import BranchTypeTable from './table';
 import type { BranchType } from './table/columns';
 
 const BranchManagement = () => {
+  const { t } = useTranslation();
   const [data, setData] = React.useState<BranchType[]>([]);
   const { branches } = useBranches({ page: 1, limit: 50 });
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
@@ -39,7 +41,7 @@ const BranchManagement = () => {
         <CreateNewBranch open={openCreateDialog} onOpenChange={setOpenCreateDialog} onSubmit={handleCreateBranch}>
           <Button variant="default">
             <CirclePlus className="mr-2 size-4 md:size-5" />
-            Add New Branch
+            {t('module.branchManagement.createNew')}
           </Button>
         </CreateNewBranch>
       </div>

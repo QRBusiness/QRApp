@@ -14,12 +14,36 @@
       "delete": "Delete",
       "view": "View",
       "create": "Create",
+      "back": "Back",
+      "next": "Next",
+      "submit": "Submit",
       "update": "Update",
       "search": "Search",
       "enable": "Enable",
       "disable": "Disable",
       "backToHome": "Back to Home",
-      "table.visibleColumns": "Visible Columns"
+      "table.visibleColumns": "Visible Columns",
+      "confirmAction": "Are you sure?",
+      "confirmActionDescription": "Do you really want to {{status}} this {{name}}?.",
+      "readOnlyDialog": {
+        "button": "Close",
+        "id": "ID",
+        "name": "Name",
+        "description": "Description",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "status": "Status",
+        "available": "Available",
+        "unavailable": "Unavailable",
+        "actions": "Actions",
+        "copyId": "Copy ID",
+        "address": "Address",
+        "contact": "Contact",
+        "phone": "Phone",
+        "email": "Email",
+        "businessType": "Business Type",
+        "businessTaxCode": "Business Tax Code"
+      }
     },
     "authentication": {
       "title": "WELCOME BACK!",
@@ -376,9 +400,16 @@
     },
     "businessType": {
       "createTitle": "Create New Business Type",
-      "editTitle": "Edit Business Type",
       "createDescription": "Fill in the details to create a new business type.",
+      "editTitle": "Edit Business Type",
       "editDescription": "Update the details of the business type.",
+      "viewTitle": "Business Type Details",
+      "viewDescription": "Below are the detailed information and attributes of this business type.",
+      "button": {
+        "cancel": "Cancel",
+        "create": "Create Business Type",
+        "edit": "Edit Business Type"
+      },
       "createField": {
         "name": "Business Type Name",
         "nameDescription": "Enter the name of the business type.",
@@ -393,7 +424,15 @@
         "edit": "Edit Business Type"
       }
     },
+    "business": {
+      "viewTitle": "Business Details",
+      "viewDescription": "Below are the detailed information and attributes of this business.",
+      "createNew": "Create New Business"
+    },
     "businessOwner": {
+      "viewTitle": "Business Owner Details",
+      "viewDescription": "Below are the detailed information and attributes of this business owner.",
+      "createNew": "Create New Business Owner",
       "editField": {
         "title": "Edit Business Owner",
         "description": "Update the details of the business owner.",
@@ -417,6 +456,9 @@
       }
     },
     "branchManagement": {
+      "viewTitle": "Branch Details",
+      "viewDescription": "Below are the detailed information and attributes of this branch.",
+      "createNew": "Create New Branch",
       "createField": {
         "create": {
           "title": "Create New Branch",
