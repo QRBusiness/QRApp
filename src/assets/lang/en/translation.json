@@ -104,15 +104,16 @@
       "account": "Account Management",
       "profile": "Profile"
     },
+
     "area": {
       "title": "Select Area",
-      "description": "Select your area.",
+      "description": "* Select your area.",
       "placeholder": "Select area",
       "create": "Create Area"
     },
     "table": {
       "title": "Select Table",
-      "description": "Select your table number.",
+      "description": "* Select your table number.",
       "placeholder": "Select table",
       "create": "Create Table"
     },
@@ -459,6 +460,9 @@
       "viewTitle": "Branch Details",
       "viewDescription": "Below are the detailed information and attributes of this branch.",
       "createNew": "Create New Branch",
+      "title": "Select branch",
+      "description": "* Select your branch.",
+      "placeholder": "Select branch",
       "createField": {
         "create": {
           "title": "Create New Branch",

@@ -22,12 +22,13 @@ interface TableResponseData {
 interface TableInputProps {
   page: number;
   limit: number;
-  area_id?: string;
+  area?: string;
+  enable?: boolean;
 }
 
-const getTables = async ({ page = 1, limit = 50, area_id }: TableInputProps): Promise<TableResponse[]> => {
-  const response: ApiResponse<TableResponseData> = await apiClient.get('/tables', {
-    params: { page, limit, area_id },
+export const getTables = async ({ page = 1, limit = 50, area }: TableInputProps): Promise<TableResponse[]> => {
+  const response: ApiResponse<TableResponseData> = await apiClient.get('/services', {
+    params: { page, limit, area },
   });
   if (response.status !== 200 && response.status !== 201) {
     toast.error(response.error, {
@@ -38,10 +39,10 @@ const getTables = async ({ page = 1, limit = 50, area_id }: TableInputProps): Pr
   return response.data ? response.data.data : [];
 };
 
-export const useTables = ({ page = 1, limit = 50, area_id }: TableInputProps) => {
+export const useTables = ({ page = 1, limit = 50, area }: TableInputProps) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<TableResponse[]>({
-    queryKey: ['tablesQuery', { page, limit, area_id }],
-    queryFn: () => getTables({ page, limit, area_id }),
+    queryKey: ['tablesQuery', { page, limit, area }],
+    queryFn: () => getTables({ page, limit, area }),
   });
 
   if (error) {
@@ -60,7 +61,7 @@ export const useTables = ({ page = 1, limit = 50, area_id }: TableInputProps) =>
 };
 
 const createTable = async (tableData: z.infer<typeof createTableSchema>) => {
-  const response: ApiResponse<TableResponse> = await apiClient.post('/tables', tableData);
+  const response: ApiResponse<TableResponse> = await apiClient.post('/services', tableData);
   if (response.status !== 200 && response.status !== 201) {
     toast.error(response.error, {
       description: response.errorMessage || 'Failed to create table',

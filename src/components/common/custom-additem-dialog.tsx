@@ -24,6 +24,7 @@ export interface FieldProps {
   placeholder?: string;
   description?: string;
   type?: 'input' | 'select' | 'textarea';
+  isRequired?: boolean;
 }
 
 interface CustomAddItemDialogProps {
@@ -60,7 +61,6 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
   const [open, setOpen] = React.useState(false);
 
   const handleSubmit = (values: z.infer<typeof schema>) => {
-    console.log('Submitted values:', values);
     if (onSubmit) {
       onSubmit(values);
     }
@@ -73,6 +73,22 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
     form.reset();
     onClose && onClose();
   };
+
+  // Add event listener to close dialog on Escape key press and Enter key press
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        handleClose();
+      } else if (event.key === 'Enter' && open) {
+        form.handleSubmit(handleSubmit)();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [form, handleClose, handleSubmit, open]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -97,7 +113,7 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          {fieldItem.label} <span className="text-red-700">*</span>
+                          {fieldItem.label} {fieldItem.isRequired && <span className="text-red-700">*</span>}
                         </FormLabel>
                         <FormControl>
                           <input
@@ -122,7 +138,7 @@ const CustomAddItemDialog: React.FC<CustomAddItemDialogProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          {fieldItem.label} <span className="text-red-700">*</span>
+                          {fieldItem.label} {fieldItem.isRequired && <span className="text-red-700">*</span>}
                         </FormLabel>
                         <FormControl>
                           <div className="flex items-center justify-start space-x-2">

@@ -23,24 +23,23 @@ export const loginSchema = z.object({
 });
 
 export const createQRSchema = z.object({
+  branch: z.string().min(1, { message: 'module.qrManagement.branchError' }),
   area: z.string().min(1, { message: 'module.qrManagement.areaError' }),
   table: z.string().min(1, { message: 'module.qrManagement.tableError' }),
 });
 
 export const createAreaSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldNameError' }),
-  description: z.string(),
-  image_url: z.string(),
+  description: z.string().optional(),
+  image_url: z.string().optional(),
   branch: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldBranchIdError' }),
 });
 
 export const createTableSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldNameError' }),
-  areaId: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldAreaIdError' }),
-  description: z.string().min(1, {
-    message: 'module.qrManagement.addTableField.fieldDescriptionError',
-  }),
-  qr_code: z.string(),
+  area: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldAreaIdError' }),
+  description: z.string().optional(),
+  qr_code: z.string().optional(),
 });
 
 export const createAdditionalFieldSchema = z.object({

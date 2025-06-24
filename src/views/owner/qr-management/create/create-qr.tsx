@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
+import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constains';
 import { useAreas, useCreateArea } from '@/services/owner/area-service';
 import { useBranches } from '@/services/owner/branchService';
+import { getTables, useCreateTable } from '@/services/owner/tableService';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { CircleX, Download, Info, Plus, Printer, QrCode, X } from 'lucide-react';
+import QRCode from 'qrcode';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import CustomAddItemDialog, { type FieldProps } from '@/components/common/custom-additem-dialog';
 import CustomSelect from '@/components/common/custom-select';
 import { Hint } from '@/components/common/hint';
+import { useUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -16,18 +22,28 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createAdditionalFieldSchema, createAreaSchema, createQRSchema, createTableSchema } from '@/utils/schemas';
 
+interface QRProps {
+  link: string;
+  area: string;
+  table: string;
+}
+
 const CreateQR = () => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const { business } = useUserState();
   const [additionalInfo, setAdditionalInfo] = React.useState<any[]>([]);
   const [branchOptions, setBranchOptions] = React.useState<{ value: string; label: string }[]>([]);
   const [areaOptions, setAreaOptions] = React.useState<{ value: string; label: string }[]>([]);
   const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([]);
   const [qrGenerated, setQrGenerated] = useState(false);
+  const [qrCodeImage, setQrCodeImage] = useState<QRProps>({ link: '', area: '', table: '' });
   const [downloadFormat, setDownloadFormat] = useState('PNG');
 
   const { branches } = useBranches({ page: 1, limit: 50 });
   const { areas } = useAreas({ page: 1, limit: 50 });
   const { createArea } = useCreateArea();
+  const { createTable } = useCreateTable();
 
   React.useEffect(() => {
     if (branches.length > 0) {
@@ -56,11 +72,13 @@ const CreateQR = () => {
       name: 'name',
       label: t('module.qrManagement.additionalField.fieldName'),
       description: t('module.qrManagement.additionalField.fieldNameDescription'),
+      isRequired: true,
     },
     {
       name: 'value',
       label: t('module.qrManagement.additionalField.fieldValue'),
       description: t('module.qrManagement.additionalField.fieldValueDescription'),
+      isRequired: true,
     },
   ];
 
@@ -69,16 +87,19 @@ const CreateQR = () => {
       name: 'name',
       label: t('module.qrManagement.addAreaField.fieldName'),
       description: t('module.qrManagement.addAreaField.fieldNameDescription'),
+      isRequired: true,
     },
     {
       name: 'description',
       label: t('module.qrManagement.addAreaField.fieldDescription'),
       description: t('module.qrManagement.addAreaField.fieldDescriptionDescription'),
+      isRequired: false,
     },
     {
       name: 'image_url',
       label: t('module.qrManagement.addAreaField.fieldImageUrl'),
       description: t('module.qrManagement.addAreaField.fieldImageUrlDescription'),
+      isRequired: false,
     },
     {
       name: 'branch',
@@ -86,6 +107,7 @@ const CreateQR = () => {
       description: t('module.qrManagement.addAreaField.fieldBranchIdDescription'),
       type: 'select',
       options: branchOptions,
+      isRequired: true,
     },
   ];
 
@@ -94,9 +116,10 @@ const CreateQR = () => {
       name: 'name',
       label: t('module.qrManagement.addTableField.fieldName'),
       description: t('module.qrManagement.addTableField.fieldNameDescription'),
+      isRequired: true,
     },
     {
-      name: 'areaId',
+      name: 'area',
       label: t('module.qrManagement.addTableField.fieldAreaId'),
       description: t('module.qrManagement.addTableField.fieldAreaIdDescription'),
       type: 'select',
@@ -104,30 +127,24 @@ const CreateQR = () => {
         value: area.value,
         label: area.label,
       })),
+      isRequired: true,
     },
     {
       name: 'description',
       label: t('module.qrManagement.addTableField.fieldDescription'),
       description: t('module.qrManagement.addTableField.fieldDescriptionDescription'),
-    },
-    {
-      name: 'qr_code',
-      label: t('module.qrManagement.addTableField.fieldQrCode'),
-      description: t('module.qrManagement.addTableField.fieldQrCodeDescription'),
+      isRequired: false,
     },
   ];
 
   const form = useForm<z.infer<typeof createQRSchema>>({
     resolver: zodResolver(createQRSchema),
     values: {
+      branch: '',
       area: '',
       table: '',
     },
   });
-
-  const onSubmit = (values: z.infer<typeof createQRSchema>) => {
-    console.log('Form submitted with values:', values);
-  };
 
   const handleCreateArea = async (values: z.infer<typeof createAreaSchema>) => {
     await createArea({
@@ -136,6 +153,108 @@ const CreateQR = () => {
       image_url: values.image_url,
       branch: values.branch,
     });
+  };
+
+  const handleCreateTable = async (values: z.infer<typeof createTableSchema>) => {
+    await createTable({
+      name: values.name,
+      area: values.area,
+      description: values.description,
+    });
+  };
+
+  const handleAreaChange = async (area: string) => {
+    form.setValue('area', area);
+    form.setValue('table', '');
+
+    const tables = await queryClient.fetchQuery({
+      queryKey: ['tablesQuery', area],
+      queryFn: () => getTables({ page: 1, limit: 50, area }),
+    });
+
+    const tableOptions = tables.map((table: any) => ({
+      value: table._id,
+      label: table.name,
+    }));
+    setTableOptions(tableOptions);
+  };
+
+  const onSubmit = (values: z.infer<typeof createQRSchema>) => {
+    const location = window.location.origin;
+    const navigateURL = `${location}/${UNAUTHORIZED}/${business._id}/${MENU_MANAGEMENT}?area=${values.area}&table=${values.table}`;
+    QRCode.toDataURL(navigateURL, { errorCorrectionLevel: 'H' })
+      .then((url) => {
+        setQrCodeImage({ link: url, area: values.area, table: values.table });
+      })
+      .catch((err) => {
+        toast.error(t('module.qrManagement.qrGenerationError'), {
+          description: err.message || t('module.qrManagement.qrGenerationErrorDescription'),
+        });
+      });
+    setQrGenerated(true);
+    toast.success(t('module.qrManagement.qrGeneratedSuccess'), {
+      description: t('module.qrManagement.qrGeneratedSuccessDescription'),
+    });
+    onCancel();
+  };
+
+  const onCancel = () => {
+    form.reset({
+      branch: '',
+      area: '',
+      table: '',
+    });
+    setAdditionalInfo([]);
+  };
+
+  const handleDownLoadQR = () => {
+    if (!qrCodeImage) {
+      toast.error(t('module.qrManagement.qrDownloadError'), {
+        description: t('module.qrManagement.qrDownloadErrorDescription'),
+      });
+      return;
+    }
+    const areaName = areaOptions.find((area) => area.value === qrCodeImage.area)?.label || 'unknown-area';
+    const tableName = tableOptions.find((table) => table.value === qrCodeImage.table)?.label || 'unknown-table';
+    const fileName = `qr-code-${areaName}-${tableName}`;
+
+    if (downloadFormat === 'PNG') {
+      const link = document.createElement('a');
+      link.href = qrCodeImage.link;
+      link.download = `${fileName}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else if (downloadFormat === 'SVG') {
+      const navigateURL = `${location}/${UNAUTHORIZED}/${business._id}/${MENU_MANAGEMENT}?area=${qrCodeImage.area}&table=${qrCodeImage.table}`;
+      QRCode.toString(navigateURL, {
+        errorCorrectionLevel: 'H',
+        type: 'svg',
+      })
+        .then((svgString) => {
+          // Tạo blob SVG
+          const blob = new Blob([svgString], { type: 'image/svg+xml' });
+          const url = URL.createObjectURL(blob);
+
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `${fileName}.svg`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          URL.revokeObjectURL(url);
+
+          toast.success(t('module.qrManagement.qrDownloadSuccess'), {
+            description: t('module.qrManagement.qrDownloadSuccessDescription'),
+          });
+        })
+        .catch((err) => {
+          toast.error(t('module.qrManagement.qrDownloadError'), {
+            description: err.message || t('module.qrManagement.qrDownloadErrorDescription'),
+          });
+        });
+    }
   };
 
   return (
@@ -149,7 +268,31 @@ const CreateQR = () => {
         </div>
         <div className="flex flex-col flex-1 lg:flex-row items-start justify-start space-y-4 lg:space-y-0 lg:space-x-4 w-full h-full">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+              <FormField
+                control={form.control}
+                name="branch"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t('module.branchManagement.title')}
+                      <p className="text-red-700">*</p>
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex items-center justify-start space-x-2">
+                        <CustomSelect
+                          options={branchOptions}
+                          onFieldChange={field.onChange}
+                          value={field.value || ''}
+                          placeholder={t('module.branchManagement.placeholder')}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormDescription>{t('module.branchManagement.description')}</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="area"
@@ -163,7 +306,10 @@ const CreateQR = () => {
                       <div className="flex items-center justify-start space-x-2">
                         <CustomSelect
                           options={areaOptions}
-                          onFieldChange={field.onChange}
+                          onFieldChange={(props) => {
+                            field.onChange(props);
+                            handleAreaChange(props);
+                          }}
                           value={field.value || ''}
                           placeholder={t('module.area.placeholder')}
                         />
@@ -209,9 +355,7 @@ const CreateQR = () => {
                           title={t('module.qrManagement.addTableField.title')}
                           description={t('module.qrManagement.addTableField.description')}
                           schema={createTableSchema}
-                          onSubmit={(values) => {
-                            console.log('Table created:', values);
-                          }}
+                          onSubmit={handleCreateTable}
                           fields={addTableFields}
                         >
                           <Button type="button" variant="default">
@@ -233,11 +377,11 @@ const CreateQR = () => {
                 <p className="text-sm text-muted-foreground">
                   {t('module.qrManagement.table.additionalFieldsDescription')}
                 </p>
-                <div className="grid grid-cols-5 gap-2 w-full">
+                <div className="grid grid-cols-3 gap-2 w-full">
                   {additionalInfo.map((info, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between space-x-2 px-3 py-2 shadow-md group flex-1 border rounded-md group"
+                      className="flex items-center justify-between space-x-2 px-3 py-2 shadow-md group flex-1 border rounded-md group win-w-fit"
                     >
                       <Hint label={info.value} sideOffset={10}>
                         <Label className="flex items-center cursor-pointer capitalize">
@@ -279,7 +423,7 @@ const CreateQR = () => {
                     variant="outline"
                     className="hover:bg-destructive hover:text-destructive-foreground min-w-[120px]"
                     disabled={!form.formState.isDirty}
-                    onClick={() => form.reset({ area: areaOptions[0].value, table: tableOptions[0].value })}
+                    onClick={onCancel}
                   >
                     <CircleX className="size-5 mr-[6px]" />
                     {t('module.qrManagement.reset')}
@@ -308,7 +452,7 @@ const CreateQR = () => {
           >
             {qrGenerated ? (
               <div className="w-56 h-56 p-2">
-                <img src="" alt="Generated QR Code" className="w-full h-full object-contain" />
+                <img src={qrCodeImage.link || ''} alt="Generated QR Code" className="w-full h-full object-contain" />
               </div>
             ) : (
               <div className="text-center p-4 flex flex-col items-center justify-center">
@@ -331,13 +475,16 @@ const CreateQR = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="PNG">PNG</SelectItem>
-                <SelectItem value="PDF">PDF</SelectItem>
                 <SelectItem value="SVG">SVG</SelectItem>
               </SelectContent>
             </Select>
           </div>
           {/* Action Buttons */}
-          <Button className="w-full  whitespace-nowrap cursor-pointer" disabled={!qrGenerated}>
+          <Button
+            className="w-full  whitespace-nowrap cursor-pointer"
+            disabled={!qrGenerated}
+            onClick={handleDownLoadQR}
+          >
             <Download className="mr-2" /> {t('module.qrManagement.preview.downloadButton')}
           </Button>
 

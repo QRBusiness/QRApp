@@ -30,7 +30,7 @@ interface AreaInputProps {
   limit: number;
 }
 
-const getAreas = async ({ page = 1, limit = 50 }: AreaInputProps): Promise<AreaResponse[]> => {
+export const getAreas = async ({ page = 1, limit = 50 }: AreaInputProps): Promise<AreaResponse[]> => {
   const response: ApiResponse<AreaResponseData> = await apiClient.get(`/areas`, {
     params: { page, limit },
   });
