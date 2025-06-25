@@ -1,4 +1,4 @@
-import apiClient, { type ApiResponse } from '@/services';
+import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -27,16 +27,23 @@ interface TableInputProps {
 }
 
 export const getTables = async ({ page = 1, limit = 50, area }: TableInputProps): Promise<TableResponse[]> => {
-  const response: ApiResponse<TableResponseData> = await apiClient.get('/services', {
-    params: { page, limit, area },
-  });
-  if (response.status !== 200 && response.status !== 201) {
-    toast.error(response.error, {
-      description: response.errorMessage || 'Failed to fetch tables',
+  try {
+    const response: ApiResponse<TableResponseData> = await apiClient.get('/services', {
+      params: { page, limit, area },
     });
-    return [];
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to fetch tables',
+      });
+      return [];
+    }
+    return response.data ? response.data.data : [];
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while fetching tables.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
   }
-  return response.data ? response.data.data : [];
 };
 
 export const useTables = ({ page = 1, limit = 50, area }: TableInputProps) => {
@@ -61,15 +68,22 @@ export const useTables = ({ page = 1, limit = 50, area }: TableInputProps) => {
 };
 
 const createTable = async (tableData: z.infer<typeof createTableSchema>) => {
-  const response: ApiResponse<TableResponse> = await apiClient.post('/services', tableData);
-  if (response.status !== 200 && response.status !== 201) {
-    toast.error(response.error, {
-      description: response.errorMessage || 'Failed to create table',
+  try {
+    const response: ApiResponse<TableResponse> = await apiClient.post('/services', tableData);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to create table',
+      });
+      return null;
+    }
+    toast.success('Table created successfully');
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while creating the table.',
     });
-    return null;
+    throw new Error(error.errorMessage || 'Internal server error');
   }
-  toast.success('Table created successfully');
-  return response.data;
 };
 
 export const useCreateTable = () => {
@@ -78,11 +92,6 @@ export const useCreateTable = () => {
     mutationFn: createTable,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tablesQuery'] });
-    },
-    onError: (error) => {
-      toast.error('Failed to create table', {
-        description: error.message || 'An error occurred while creating the table.',
-      });
     },
   });
   return {

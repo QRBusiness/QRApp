@@ -1,4 +1,4 @@
-import apiClient, { type ApiResponse } from '@/services';
+import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -31,16 +31,23 @@ interface AreaInputProps {
 }
 
 export const getAreas = async ({ page = 1, limit = 50 }: AreaInputProps): Promise<AreaResponse[]> => {
-  const response: ApiResponse<AreaResponseData> = await apiClient.get(`/areas`, {
-    params: { page, limit },
-  });
-  if (response.status !== 200 && response.status !== 201) {
-    toast.error(response.error, {
-      description: response.errorMessage || 'Failed to fetch areas',
+  try {
+    const response: ApiResponse<AreaResponseData> = await apiClient.get(`/areas`, {
+      params: { page, limit },
     });
-    return [];
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to fetch areas',
+      });
+      return [];
+    }
+    return response.data ? response.data.data : [];
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while fetching areas.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
   }
-  return response.data ? response.data.data : [];
 };
 
 export const useAreas = ({ page = 1, limit = 50 }: AreaInputProps) => {
@@ -49,31 +56,34 @@ export const useAreas = ({ page = 1, limit = 50 }: AreaInputProps) => {
     queryFn: () => getAreas({ page, limit }),
   });
 
-  if (error) {
-    toast.error('Failed to load areas', {
-      description: error.message || 'An error occurred while fetching areas.',
-    });
-  }
-
   return {
     areas: data || [],
     isLoading,
     isFetching,
     isSuccess,
     refetch,
+    error,
   };
 };
 
 const createArea = async (areaData: z.infer<typeof createAreaSchema>) => {
-  const response: ApiResponse<AreaResponse> = await apiClient.post('/areas', areaData);
-  if (response.status !== 201 && response.status !== 200) {
-    toast.error(response.error, {
-      description: response.errorMessage || 'Failed to create area',
+  try {
+    const response: ApiResponse<AreaResponse> = await apiClient.post('/areas', areaData);
+    if (response.status !== 201 && response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to create area',
+      });
+      return null;
+    }
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while creating the area.',
     });
-    return null;
+    throw new Error(error.errorMessage || 'Internal server error');
   }
-  return response.data;
 };
+
 export const useCreateArea = () => {
   const queryClient = useQueryClient();
 
@@ -84,9 +94,6 @@ export const useCreateArea = () => {
         toast.success('Area created successfully');
         queryClient.invalidateQueries({ queryKey: ['areasQuery'] });
       }
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to create area');
     },
   });
   return {

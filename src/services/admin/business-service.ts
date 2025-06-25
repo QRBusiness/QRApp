@@ -1,4 +1,4 @@
-import apiClient, { type ApiResponse } from '@/services';
+import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -44,11 +44,12 @@ const getBusiness = async ({ page = 1, limit = 50 }: BusinessInputProps): Promis
       return [];
     }
     return response.data ? response.data.data : [];
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while fetching business services.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error, {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while fetching business services.',
     });
-    throw new Error('Internal server error');
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
   }
 };
 
@@ -57,12 +58,6 @@ export const useBusiness = ({ page = 1, limit = 50 }: BusinessInputProps) => {
     queryKey: ['businessQuery'],
     queryFn: () => getBusiness({ page, limit }),
   });
-
-  if (error) {
-    toast.error('Failed to load business services', {
-      description: error.message || 'An error occurred while fetching business services.',
-    });
-  }
 
   return {
     business: data || [],
@@ -119,11 +114,11 @@ const createBusiness = async ({
       throw new Error(response.errorMessage || 'Failed to create business');
     }
     return response.data;
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while creating the business.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description: (error as ErrorResponse).errorMessage || 'An unexpected error occurred while creating the business.',
     });
-    throw new Error('Internal server error');
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
   }
 };
 
@@ -133,11 +128,6 @@ export const useCreateBusiness = () => {
     onSuccess: (data: BusinessProps) => {
       toast.success('Business created successfully', {
         description: `Business ${data.name} has been created.`,
-      });
-    },
-    onError: (error: Error) => {
-      toast.error('Failed to create business', {
-        description: error.message || 'An error occurred while creating the business.',
       });
     },
   });
@@ -161,9 +151,11 @@ const toggleAvailableBusiness = async (id: string): Promise<BusinessProps> => {
       throw new Error(response.errorMessage || 'Failed to toggling enable/disable business');
     }
     return response.data;
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while toggling enable/disable the business.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error, {
+      description:
+        (error as ErrorResponse).errorMessage ||
+        'An unexpected error occurred while toggling enable/disable the business.',
     });
     throw new Error('Internal server error');
   }
@@ -179,11 +171,6 @@ export const useToggleAvailableBusiness = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ['businessQuery'],
-      });
-    },
-    onError: (error: Error) => {
-      toast.error('Failed to update business status', {
-        description: error.message || 'An error occurred while updating the business status.',
       });
     },
   });
@@ -209,6 +196,7 @@ const updateBusiness = async (
       business_type: businessType,
       tax_code: businessTaxCode,
     });
+    debugger;
     if (response.status !== 200) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to update business',
@@ -216,11 +204,13 @@ const updateBusiness = async (
       throw new Error(response.errorMessage || 'Failed to update business');
     }
     return response.data;
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while updating the business.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error, {
+      description: (error as ErrorResponse).errorMessage || 'An unexpected error occurred while updating the business.',
     });
-    throw new Error('Internal server error');
+    throw new Error(
+      (error as ErrorResponse).errorMessage || 'An unexpected error occurred while updating the business.'
+    );
   }
 };
 
@@ -234,11 +224,6 @@ export const useUpdateBusiness = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ['businessQuery'],
-      });
-    },
-    onError: (error: Error) => {
-      toast.error('Failed to update business', {
-        description: error.message || 'An error occurred while updating the business.',
       });
     },
   });

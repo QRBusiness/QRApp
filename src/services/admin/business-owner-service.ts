@@ -1,4 +1,4 @@
-import apiClient, { type ApiResponse } from '@/services';
+import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type z from 'zod';
@@ -38,11 +38,12 @@ const getBusinessOwners = async ({ page = 1, limit = 50 }: BusinessOwnerInputPro
       return [];
     }
     return response.data ? response.data.data : [];
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while fetching business owners.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while fetching business owners.',
     });
-    throw new Error('Internal server error');
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
   }
 };
 
@@ -51,12 +52,6 @@ export const useBusinessOwners = ({ page = 1, limit = 50 }: BusinessOwnerInputPr
     queryKey: ['businessOwnersQuery', { page, limit }],
     queryFn: () => getBusinessOwners({ page, limit }),
   });
-
-  if (error) {
-    toast.error('Failed to load business owners', {
-      description: error.message || 'An error occurred while fetching business owners.',
-    });
-  }
 
   return {
     businessOwners: data || [],
@@ -78,11 +73,13 @@ const toggleAvailabilityBusinessOwner = async (id: string): Promise<BusinessOwne
       throw new Error(response.errorMessage || 'Failed to toggle business owner availability');
     }
     return response.data;
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while toggling business owner availability.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description:
+        (error as ErrorResponse).errorMessage ||
+        'An unexpected error occurred while toggling business owner availability.',
     });
-    throw new Error('Internal server error');
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
   }
 };
 
@@ -96,11 +93,6 @@ export const useToggleAvailabilityBusinessOwner = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ['businessOwnersQuery'],
-      });
-    },
-    onError: (error: Error) => {
-      toast.error('Failed to update business owner availability', {
-        description: error.message || 'An error occurred while updating the business owner availability.',
       });
     },
   });
@@ -124,11 +116,12 @@ const updateBusinessOwner = async (id: string, data: z.infer<typeof editUserSche
       throw new Error(response.errorMessage || 'Failed to update business owner');
     }
     return response.data;
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while updating the business owner.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while updating the business owner.',
     });
-    throw new Error('Internal server error');
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
   }
 };
 
@@ -142,11 +135,6 @@ export const useUpdateBusinessOwner = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ['businessOwnersQuery'],
-      });
-    },
-    onError: (error: Error) => {
-      toast.error('Failed to update business owner', {
-        description: error.message || 'An error occurred while updating the business owner.',
       });
     },
   });

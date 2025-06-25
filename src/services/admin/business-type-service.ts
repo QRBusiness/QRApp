@@ -1,4 +1,4 @@
-import apiClient, { type ApiResponse } from '@/services';
+import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -33,11 +33,12 @@ const getBusinessTypes = async ({ page = 1, limit = 50 }: BusinessTypeInputProps
       return [];
     }
     return response.data ? response.data.data : [];
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while fetching business types.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error, {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while fetching business types.',
     });
-    throw new Error('Internal server error');
+    throw new Error(error.errorMessage || 'Internal server error');
   }
 };
 
@@ -46,12 +47,6 @@ export const useBusinessTypes = ({ page = 1, limit = 50 }: BusinessTypeInputProp
     queryKey: ['businessTypesQuery', { page, limit }],
     queryFn: () => getBusinessTypes({ page, limit }),
   });
-
-  if (error) {
-    toast.error('Failed to load business types', {
-      description: error.message || 'An error occurred while fetching business types.',
-    });
-  }
 
   return {
     businessTypes: data || [],
@@ -83,11 +78,12 @@ const createBusinessType = async ({
       throw new Error('Failed to create business type');
     }
     return response.data.data;
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while creating the business type.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while creating the business type.',
     });
-    throw new Error('Internal server error');
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
   }
 };
 
@@ -100,11 +96,6 @@ export const useCreateBusinessType = () => {
       queryClient.invalidateQueries({
         queryKey: ['businessTypesQuery'],
         refetchType: 'active',
-      });
-    },
-    onError: (error: Error) => {
-      toast.error('Failed to create business type', {
-        description: error.message || 'An error occurred while creating the business type.',
       });
     },
   });
@@ -134,11 +125,12 @@ const updateBusinessType = async ({
       throw new Error('Failed to update business type');
     }
     return response.data.data;
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while updating the business type.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while updating the business type.',
     });
-    throw new Error('Internal server error');
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
   }
 };
 
@@ -151,11 +143,6 @@ export const useUpdateBusinessType = () => {
       queryClient.invalidateQueries({
         queryKey: ['businessTypesQuery'],
         refetchType: 'active',
-      });
-    },
-    onError: (error: Error) => {
-      toast.error('Failed to update business type', {
-        description: error.message || 'An error occurred while updating the business type.',
       });
     },
   });
@@ -178,11 +165,12 @@ const deleteBusinessType = async (id: string): Promise<void> => {
       });
       throw new Error('Failed to delete business type');
     }
-  } catch (error) {
-    toast.error('Internal server error', {
-      description: 'An unexpected error occurred while deleting the business type.',
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while deleting the business type.',
     });
-    throw new Error('Internal server error');
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
   }
 };
 
@@ -195,11 +183,6 @@ export const useDeleteBusinessType = () => {
       queryClient.invalidateQueries({
         queryKey: ['businessTypesQuery'],
         refetchType: 'active',
-      });
-    },
-    onError: (error: Error) => {
-      toast.error('Failed to delete business type', {
-        description: error.message || 'An error occurred while deleting the business type.',
       });
     },
   });
