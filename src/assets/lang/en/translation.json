@@ -6,6 +6,7 @@
     },
     "common": {
       "loading": "Please wait, Loading...",
+      "submitting": "Submitting...",
       "error": "An error occurred. Please try again later.",
       "success": "Operation completed successfully.",
       "cancel": "Cancel",

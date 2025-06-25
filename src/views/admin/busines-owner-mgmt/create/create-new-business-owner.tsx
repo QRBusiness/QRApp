@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useCreateBusiness } from '@/services/admin/business-service';
 import { useBusinessTypes } from '@/services/admin/business-type-service';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2Icon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { ZodObject } from 'zod';
@@ -17,6 +18,7 @@ const CreateNewBusinessOwner = () => {
   const totalSteps = 3;
   const { t } = useTranslation();
   const [step, setStep] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const steps: { key: string; title: string; description: string; schema: ZodObject<any> }[] = [
     {
       key: 'step1',
@@ -72,6 +74,8 @@ const CreateNewBusinessOwner = () => {
     if (step < totalSteps - 1) {
       setStep(step + 1);
     } else {
+      setIsLoading(true);
+      // Gọi API tạo tài khoản doanh nghiệp
       await createBusiness({
         username: newFormData['1_username'],
         password: newFormData['1_password'],
@@ -84,6 +88,8 @@ const CreateNewBusinessOwner = () => {
         business_type: newFormData['3_businessType'],
         business_tax_code: newFormData['3_businessTaxCode'],
       });
+      setIsLoading(false);
+      // Reset step and form data after successful submission
       setStep(0);
       setFormData({});
       reset(); // reset react-hook-form fields
@@ -131,7 +137,7 @@ const CreateNewBusinessOwner = () => {
                     <FormItem>
                       <FormLabel>
                         {t(`module.createBusinessOwnerField.${steps[step].key}.${fieldName}.label`)}
-                        <p className="text-red-700">*</p>
+                        {!currentSchema.shape[fieldName].isOptional() && <p className="text-red-700">*</p>}
                       </FormLabel>
                       <FormControl>
                         {step == 2 && fieldName === 'businessType' ? (
@@ -169,8 +175,17 @@ const CreateNewBusinessOwner = () => {
                 <Button type="button" onClick={handleBack} disabled={step === 0}>
                   {t('module.common.back')}
                 </Button>
-                <Button type="submit">
-                  {step === totalSteps - 1 ? t('module.common.submit') : t('module.common.next')}
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2Icon className="animate-spin text-white" strokeWidth={1.5} />
+                      {t('module.common.submitting')}
+                    </>
+                  ) : step === totalSteps - 1 ? (
+                    t('module.common.submit')
+                  ) : (
+                    t('module.common.next')
+                  )}
                 </Button>
               </div>
             </form>

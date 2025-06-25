@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useUpdateBusinessOwner } from '@/services/admin/business-owner-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleCheck, CircleX, UserRoundPen } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -26,6 +27,7 @@ interface EditBusinessOwnerDialogProps {
   onSubmit?: () => void;
   onCancel?: () => void;
   initialData?: z.infer<typeof editUserSchema>;
+  id: string;
 }
 
 const EditBusinessOwnerDialog = ({
@@ -35,9 +37,11 @@ const EditBusinessOwnerDialog = ({
   onSubmit,
   onCancel,
   initialData,
+  id,
 }: EditBusinessOwnerDialogProps) => {
   const { t } = useTranslation();
 
+  const { updateBusinessOwner } = useUpdateBusinessOwner();
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
     defaultValues: initialData,
@@ -54,9 +58,9 @@ const EditBusinessOwnerDialog = ({
     onOpenChange(false);
   };
 
-  const onSubmitForm = (data: z.infer<typeof editUserSchema>) => {
+  const onSubmitForm = async (data: z.infer<typeof editUserSchema>) => {
     onSubmit && onSubmit();
-    console.log('Menu item submitted:', data);
+    await updateBusinessOwner({ id, data });
     onOpenChange(false);
   };
 

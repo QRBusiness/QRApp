@@ -1,6 +1,8 @@
 import apiClient, { type ApiResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import type z from 'zod';
+import type { editUserSchema } from '@/utils/schemas';
 
 interface BusinessOwnerInputProps {
   page: number;
@@ -105,6 +107,52 @@ export const useToggleAvailabilityBusinessOwner = () => {
 
   return {
     toggleAvailabilityBusinessOwner: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
+  };
+};
+
+const updateBusinessOwner = async (id: string, data: z.infer<typeof editUserSchema>): Promise<BusinessOwner> => {
+  try {
+    const response: ApiResponse<BusinessOwner> = await apiClient.put(`/users/${id}`, data);
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to update business owner',
+      });
+      throw new Error(response.errorMessage || 'Failed to update business owner');
+    }
+    return response.data;
+  } catch (error) {
+    toast.error('Internal server error', {
+      description: 'An unexpected error occurred while updating the business owner.',
+    });
+    throw new Error('Internal server error');
+  }
+};
+
+export const useUpdateBusinessOwner = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: z.infer<typeof editUserSchema> }) => updateBusinessOwner(id, data),
+    onSuccess: (data: BusinessOwner) => {
+      toast.success('Business owner updated successfully', {
+        description: `Business owner ${data.name} has been updated.`,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['businessOwnersQuery'],
+      });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to update business owner', {
+        description: error.message || 'An error occurred while updating the business owner.',
+      });
+    },
+  });
+
+  return {
+    updateBusinessOwner: mutateAsync,
     data,
     isPending,
     isError,

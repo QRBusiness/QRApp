@@ -103,7 +103,7 @@ const CreateNewBusinessType = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.businessType.createField.description')}
-                    <p className="text-red-700">*</p>
+                    {!createBusinessTypeSchema.shape.description.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />

@@ -30,10 +30,6 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     cell: ({ row }) => {
       return <span className="text-sm text-muted-foreground">{row.index + 1}</span>;
     },
-    // enableSorting: false,
-    // enableHiding: false,
-    // enableColumnFilter: false,
-    // enableResizing: false,
   },
   {
     accessorKey: 'name',
@@ -41,6 +37,22 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     cell: ({ row }) => {
       return <p className="font-medium">{row.getValue('name') || 'Unknown'}</p>;
     },
+  },
+  {
+    accessorKey: 'username',
+    header: 'Username',
+    cell: ({ row }) => {
+      return <span className="text-base font-medium text-foreground">{row.getValue('username') || 'No Username'}</span>;
+    },
+  },
+  {
+    accessorKey: 'role',
+    header: 'Role',
+  },
+
+  {
+    accessorKey: 'phone',
+    header: 'Contact',
   },
   {
     accessorKey: 'address',
@@ -52,21 +64,6 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     size: 100,
     meta: {
       className: 'max-w-[200px] truncate',
-    },
-  },
-  {
-    accessorKey: 'phone',
-    header: 'Contact',
-  },
-  {
-    accessorKey: 'role',
-    header: 'Role',
-  },
-  {
-    accessorKey: 'username',
-    header: 'Username',
-    cell: ({ row }) => {
-      return <span className="text-base font-medium text-foreground">{row.getValue('username') || 'No Username'}</span>;
     },
   },
   {
@@ -127,7 +124,12 @@ export const columns: ColumnDef<BusinessOwner>[] = [
               {t('module.common.view')}
             </Button>
           </ReadOnlyDialog>
-          <EditBusinessOwnerDialog open={openEditDialog} onOpenChange={setOpenEditDialog} initialData={row.original}>
+          <EditBusinessOwnerDialog
+            open={openEditDialog}
+            onOpenChange={setOpenEditDialog}
+            initialData={row.original}
+            id={row.original.id as string}
+          >
             <Button variant="outline" size="sm" onClick={() => setOpenEditDialog(true)}>
               <Edit className="mr-2" />
               {t('module.common.edit')}

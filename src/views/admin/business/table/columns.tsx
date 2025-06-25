@@ -1,5 +1,6 @@
 import React from 'react';
 import { useToggleAvailableBusiness } from '@/services/admin/business-service';
+import { useBusinessTypes } from '@/services/admin/business-type-service';
 import type { ColumnDef } from '@tanstack/react-table';
 import { CircleCheck, CircleX, Edit, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -89,6 +90,8 @@ export const columns: ColumnDef<BusinessType>[] = [
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
       const [openViewDialog, setOpenViewDialog] = React.useState(false);
       const { toggleAvailableBusiness } = useToggleAvailableBusiness();
+      const { businessTypes } = useBusinessTypes({ page: 1, limit: 50 });
+      const businessTypeId = businessTypes.find((type) => type.name === row.original.business_type)?._id;
       return (
         <div className="flex gap-2">
           <ReadOnlyBusinessDialog data={row.original} isOpen={openViewDialog} onClose={setOpenViewDialog}>
@@ -103,8 +106,9 @@ export const columns: ColumnDef<BusinessType>[] = [
             initialData={{
               ...row.original,
               businessTaxCode: row.original.tax_code,
-              businessType: row.original.business_type,
+              businessType: businessTypeId || '',
             }}
+            id={row.original.id as string}
           >
             <Button variant="outline" size="sm">
               <Edit className="mr-2" />

@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useUpdateBusiness } from '@/services/admin/business-service';
+import { useBusinessTypes } from '@/services/admin/business-type-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleCheck, CircleX, UserRoundPen } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import CustomSelect from '@/components/common/custom-select';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -25,6 +28,7 @@ interface EditBusinessDialogProps {
   onSubmit?: () => void;
   onCancel?: () => void;
   initialData?: z.infer<typeof createBusinessSchema>;
+  id: string;
 }
 
 const EditBusinessDialog = ({
@@ -34,13 +38,29 @@ const EditBusinessDialog = ({
   onSubmit,
   onCancel,
   initialData,
+  id,
 }: EditBusinessDialogProps) => {
   const { t } = useTranslation();
 
+  const { businessTypes } = useBusinessTypes({ page: 1, limit: 50 });
+  const { updateBusiness } = useUpdateBusiness();
+
   const form = useForm<z.infer<typeof createBusinessSchema>>({
     resolver: zodResolver(createBusinessSchema),
-    defaultValues: initialData,
+    values: initialData,
   });
+
+  const [businessTypeOptions, setBusinessTypeOptions] = useState<{ label: string; value: string }[]>([]);
+
+  useEffect(() => {
+    if (businessTypes && businessTypes.length > 0) {
+      const options = businessTypes.map((type) => ({
+        label: type.name,
+        value: type._id,
+      }));
+      setBusinessTypeOptions(options);
+    }
+  }, [businessTypes]);
 
   useEffect(() => {
     if (!open) {
@@ -55,7 +75,7 @@ const EditBusinessDialog = ({
 
   const onSubmitForm = (data: z.infer<typeof createBusinessSchema>) => {
     onSubmit && onSubmit();
-    console.log('Business submitted:', data);
+    updateBusiness({ data, id: id as string });
     onOpenChange(false);
   };
 
@@ -78,10 +98,10 @@ const EditBusinessDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.createBusinessOwnerField.step3.name.label')}
-                    <p className="text-red-700">*</p>
+                    {!createBusinessSchema.shape.name.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.createBusinessOwnerField.step3.name.description')}</FormDescription>
                   <FormMessage />
@@ -95,10 +115,10 @@ const EditBusinessDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.createBusinessOwnerField.step3.address.label')}
-                    <p className="text-red-700">*</p>
+                    {!createBusinessSchema.shape.address.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.createBusinessOwnerField.step3.address.description')}</FormDescription>
                   <FormMessage />
@@ -112,10 +132,10 @@ const EditBusinessDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.createBusinessOwnerField.step3.contact.label')}
-                    <p className="text-red-700">*</p>
+                    {!createBusinessSchema.shape.contact.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.createBusinessOwnerField.step3.contact.description')}</FormDescription>
                   <FormMessage />
@@ -129,10 +149,15 @@ const EditBusinessDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.createBusinessOwnerField.step3.businessType.label')}
-                    <p className="text-red-700">*</p>
+                    {!createBusinessSchema.shape.businessType.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <CustomSelect
+                      options={businessTypeOptions}
+                      onFieldChange={field.onChange}
+                      value={field.value ?? ''}
+                      disabled={true}
+                    />
                   </FormControl>
                   <FormDescription>
                     {t('module.createBusinessOwnerField.step3.businessType.description')}
@@ -148,10 +173,10 @@ const EditBusinessDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.createBusinessOwnerField.step3.businessTaxCode.label')}
-                    <p className="text-red-700">*</p>
+                    {!createBusinessSchema.shape.businessTaxCode.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>
                     {t('module.createBusinessOwnerField.step3.businessTaxCode.description')}

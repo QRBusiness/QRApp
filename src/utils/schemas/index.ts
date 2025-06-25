@@ -91,9 +91,7 @@ export const createMenuItemSchema = z.object({
 
 export const createBusinessTypeSchema = z.object({
   name: z.string().min(1, { message: 'module.businessType.createField.nameError' }),
-  description: z.string().min(1, {
-    message: 'module.businessType.createField.descriptionError',
-  }),
+  description: z.string().optional(),
 });
 
 export const createBusinessOwnerSchema = z.object({
