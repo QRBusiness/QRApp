@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useBranches, useCreateBranch } from '@/services/owner/branchService';
+import { useBranches, useCreateBranch } from '@/services/owner/branch-service';
 import { CirclePlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';

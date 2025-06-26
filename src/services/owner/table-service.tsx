@@ -48,7 +48,7 @@ export const getTables = async ({ page = 1, limit = 50, area }: TableInputProps)
 
 export const useTables = ({ page = 1, limit = 50, area }: TableInputProps) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<TableResponse[]>({
-    queryKey: ['tablesQuery', { page, limit, area }],
+    queryKey: ['tablesQuery'],
     queryFn: () => getTables({ page, limit, area }),
   });
 

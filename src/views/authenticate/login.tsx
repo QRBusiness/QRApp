@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   ACCESS_TOKEN,
   ADMIN,
@@ -10,12 +11,13 @@ import {
   REFRESH_TOKEN,
 } from '@/constains';
 import { loginService } from '@/services/authService';
-import { getCurrentUser } from '@/services/userService';
+import { type UserProfile, getCurrentUser } from '@/services/userService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
+import { LoadingIcon } from '@/components/common/loading';
 import { setUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,6 +28,7 @@ import { saveToLocalStorage } from '@/libs/utils';
 
 const Login = () => {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -36,32 +39,40 @@ const Login = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-    const response = await loginService(values);
-    saveToLocalStorage(ACCESS_TOKEN, response.data.access_token);
-    saveToLocalStorage(REFRESH_TOKEN, response.data.refresh_token);
-    const user = await getCurrentUser();
-    setUserState({
-      _id: user.data._id,
-      name: user.data.name,
-      phone: user.data.phone,
-      address: user.data.address,
-      image_url: user.data.image_url,
-      created_at: user.data.created_at,
-      updated_at: user.data.updated_at,
-      role: user.data.role,
-      permissions: user.data.permissions,
-      business: {
-        _id: user.data.business?._id || '1',
-      },
-      group: [],
-    });
-    // IF SUCCESSFUL, NAVIGATE TO DASHBOARD OR QR MANAGEMENT
-    if (user.data.role === OWNER_ROLE) {
-      navigate(`${OWNER}/${user.data.business?._id || '1'}/${DASHBOARD}`);
-    } else if (user.data.role === ADMIN_ROLE) {
-      navigate(`${ADMIN}/${BUSINESS_TYPE}`);
+    let user: UserProfile | null = null;
+    try {
+      setIsLoading(true);
+      const response = await loginService(values);
+      saveToLocalStorage(ACCESS_TOKEN, response.data.access_token);
+      saveToLocalStorage(REFRESH_TOKEN, response.data.refresh_token);
+      user = await getCurrentUser();
+      setUserState({
+        _id: user.data._id,
+        name: user.data.name,
+        phone: user.data.phone,
+        address: user.data.address,
+        image_url: user.data.image_url,
+        created_at: user.data.created_at,
+        updated_at: user.data.updated_at,
+        role: user.data.role,
+        permissions: user.data.permissions,
+        business: {
+          _id: user.data.business?._id || '1',
+        },
+        group: [],
+      });
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setIsLoading(false);
+      if (user?.data?.role === OWNER_ROLE) {
+        navigate(`${OWNER}/${user?.data?.business?._id || '1'}/${DASHBOARD}`);
+      } else if (user?.data?.role === ADMIN_ROLE) {
+        navigate(`${ADMIN}/${BUSINESS_TYPE}`);
+      }
+      form.reset();
+      // IF SUCCESSFUL, NAVIGATE TO DASHBOARD OR QR MANAGEMENT
     }
-    form.reset();
   };
 
   return (
@@ -123,7 +134,7 @@ const Login = () => {
                 )}
               />
               <Button type="submit" className="w-full">
-                {t('module.authentication.loginButton')}
+                {isLoading ? <LoadingIcon /> : t('module.authentication.loginButton')}
               </Button>
             </form>
           </Form>

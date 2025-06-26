@@ -214,8 +214,7 @@
           "delete": "Delete",
           "view": "View",
           "downloadShortKey": "Download",
-          "download": "Download",
-          "print": "Print QR Code"
+          "download": "Download"
         },
         "pagination": {
           "rowPerPage": "Rows Per Page",

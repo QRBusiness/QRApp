@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   type ColumnDef,
   type VisibilityState,
@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-table';
 import { Columns3 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Hint } from '@/components/common/hint';
 import { DataTablePagination } from '@/components/common/tanstack-table/pagination';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,8 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { cn } from '@/libs/utils';
-import { Hint } from '../hint';
+import { cn, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 
 // Extend the ColumnMeta type to include className
 declare module '@tanstack/react-table' {
@@ -31,13 +31,22 @@ declare module '@tanstack/react-table' {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  table_key: string; // Add key prop to DataTableProps
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+export function DataTable<TData, TValue>({ columns, data, table_key }: DataTableProps<TData, TValue>) {
+  // Initialize column visibility states
+  const visibilityMemo = loadFromLocalStorage(table_key + '_visibility', {
     created_at: false,
     updated_at: false,
-  });
+  }) as VisibilityState;
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(visibilityMemo);
+
+  // Save column visibility to local storage whenever it changes
+  useEffect(() => {
+    saveToLocalStorage(table_key + '_visibility', columnVisibility);
+  }, [columnVisibility, table_key]);
+
   const table = useReactTable({
     data,
     columns,

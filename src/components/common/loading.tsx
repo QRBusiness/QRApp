@@ -13,4 +13,13 @@ const Loading = () => {
   );
 };
 
+export const LoadingIcon = () => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <Loader2Icon className="animate-spin text-white" strokeWidth={1.5} />
+      {t('module.common.submitting')}
+    </>
+  );
+};
 export default Loading;

@@ -1,11 +1,9 @@
 import React from 'react';
 import { useDeleteBusinessType, useUpdateBusinessType } from '@/services/admin/business-type-service';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Copy, Edit, Eye, EyeOff, Trash } from 'lucide-react';
+import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
-import { Hint } from '@/components/common/hint';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
 import CreateNewBusinessType from '../dialog/create-new-business-type';
@@ -25,33 +23,6 @@ export const columns: ColumnDef<BusinessType>[] = [
     header: 'ID',
     cell: ({ row }) => {
       return <span className="text-sm text-muted-foreground">{row.index + 1}</span>;
-    },
-  },
-  {
-    accessorKey: 'id',
-    header: 'Original ID',
-    cell: ({ row }) => {
-      const id = row.getValue('id') as string;
-      const [isHidden, setIsHidden] = React.useState(true);
-      const copyHandler = (id: string) => {
-        navigator.clipboard.writeText(id);
-        toast.success('ID copied to clipboard');
-      };
-      return (
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">{isHidden ? '* * * * * * *' : id}</span>
-          <Hint label="Toggle ID Visibility">
-            {isHidden ? (
-              <EyeOff className="cursor-pointer size-5" onClick={() => setIsHidden(false)} />
-            ) : (
-              <Eye className="cursor-pointer size-5" onClick={() => setIsHidden(true)} />
-            )}
-          </Hint>
-          <Hint label="Copy ID">
-            <Copy className="cursor-pointer size-5" onClick={() => copyHandler(id)} />
-          </Hint>
-        </div>
-      );
     },
   },
   {
@@ -93,7 +64,7 @@ export const columns: ColumnDef<BusinessType>[] = [
       const { updateBusinessType } = useUpdateBusinessType();
       const { deleteBusinessType } = useDeleteBusinessType();
 
-      const onSubmit = (data: { name: string; description: string }) => {
+      const onSubmit = (data: { name: string; description?: string }) => {
         updateBusinessType({ id: row.row.original.id, data });
         setIsUpdateOpen(false);
       };

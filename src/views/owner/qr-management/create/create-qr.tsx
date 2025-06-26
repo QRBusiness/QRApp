@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constains';
 import { useAreas, useCreateArea } from '@/services/owner/area-service';
-import { useBranches } from '@/services/owner/branchService';
-import { getTables, useCreateTable } from '@/services/owner/tableService';
+import { useBranches } from '@/services/owner/branch-service';
+import { getTables, useCreateTable } from '@/services/owner/table-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { CircleX, Download, Info, Plus, Printer, QrCode, X } from 'lucide-react';
+import { CircleX, Download, Info, Plus, QrCode, X } from 'lucide-react';
 import QRCode from 'qrcode';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -22,12 +22,6 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createAdditionalFieldSchema, createAreaSchema, createQRSchema, createTableSchema } from '@/utils/schemas';
 
-interface QRProps {
-  link: string;
-  area: string;
-  table: string;
-}
-
 const CreateQR = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -37,9 +31,12 @@ const CreateQR = () => {
   const [areaOptions, setAreaOptions] = React.useState<{ value: string; label: string }[]>([]);
   const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([]);
   const [qrGenerated, setQrGenerated] = useState(false);
-  const [qrCodeImage, setQrCodeImage] = useState<QRProps>({ link: '', area: '', table: '' });
-  const [downloadFormat, setDownloadFormat] = useState('PNG');
+  const [qrCodeImage, setQrCodeImage] = useState<string>('');
+  const [downloadFormat, setDownloadFormat] = useState('png');
+  const [qrTitle, setQrTitle] = useState('');
+  const [qrDescription, setQrDescription] = React.useState<{ value: string; name: string }[]>([]);
 
+  const canvasRef = React.useRef<HTMLDivElement>(null);
   const { branches } = useBranches({ page: 1, limit: 50 });
   const { areas } = useAreas({ page: 1, limit: 50 });
   const { createArea } = useCreateArea();
@@ -160,6 +157,12 @@ const CreateQR = () => {
       name: values.name,
       area: values.area,
       description: values.description,
+    }).then(() => {
+      form.reset({
+        branch: form.getValues('branch'),
+        area: '',
+        table: '',
+      });
     });
   };
 
@@ -168,7 +171,7 @@ const CreateQR = () => {
     form.setValue('table', '');
 
     const tables = await queryClient.fetchQuery({
-      queryKey: ['tablesQuery', area],
+      queryKey: ['tablesQuery'],
       queryFn: () => getTables({ page: 1, limit: 50, area }),
     });
 
@@ -182,9 +185,13 @@ const CreateQR = () => {
   const onSubmit = (values: z.infer<typeof createQRSchema>) => {
     const location = window.location.origin;
     const navigateURL = `${location}/${UNAUTHORIZED}/${business._id}/${MENU_MANAGEMENT}?area=${values.area}&table=${values.table}`;
+    const areaName = areas.find((area) => area._id === values.area)?.name || 'unknown-area';
+    const tableName = tableOptions.find((table) => table.value === values.table)?.label || 'unknown-table';
+    setQrTitle(`${areaName} - ${tableName}`);
+    setQrDescription(additionalInfo);
     QRCode.toDataURL(navigateURL, { errorCorrectionLevel: 'H' })
       .then((url) => {
-        setQrCodeImage({ link: url, area: values.area, table: values.table });
+        setQrCodeImage(url);
       })
       .catch((err) => {
         toast.error(t('module.qrManagement.qrGenerationError'), {
@@ -195,7 +202,7 @@ const CreateQR = () => {
     toast.success(t('module.qrManagement.qrGeneratedSuccess'), {
       description: t('module.qrManagement.qrGeneratedSuccessDescription'),
     });
-    onCancel();
+    // onCancel();
   };
 
   const onCancel = () => {
@@ -207,60 +214,22 @@ const CreateQR = () => {
     setAdditionalInfo([]);
   };
 
-  const handleDownLoadQR = () => {
-    if (!qrCodeImage) {
-      toast.error(t('module.qrManagement.qrDownloadError'), {
-        description: t('module.qrManagement.qrDownloadErrorDescription'),
-      });
-      return;
-    }
-    const areaName = areaOptions.find((area) => area.value === qrCodeImage.area)?.label || 'unknown-area';
-    const tableName = tableOptions.find((table) => table.value === qrCodeImage.table)?.label || 'unknown-table';
-    const fileName = `qr-code-${areaName}-${tableName}`;
+  const handleDownload = async (type: string) => {
+    if (!canvasRef.current) return;
+    // const canvas = await html2canvas(canvasRef.current);
 
-    if (downloadFormat === 'PNG') {
-      const link = document.createElement('a');
-      link.href = qrCodeImage.link;
-      link.download = `${fileName}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else if (downloadFormat === 'SVG') {
-      const navigateURL = `${location}/${UNAUTHORIZED}/${business._id}/${MENU_MANAGEMENT}?area=${qrCodeImage.area}&table=${qrCodeImage.table}`;
-      QRCode.toString(navigateURL, {
-        errorCorrectionLevel: 'H',
-        type: 'svg',
-      })
-        .then((svgString) => {
-          // Tạo blob SVG
-          const blob = new Blob([svgString], { type: 'image/svg+xml' });
-          const url = URL.createObjectURL(blob);
-
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `${fileName}.svg`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          URL.revokeObjectURL(url);
-
-          toast.success(t('module.qrManagement.qrDownloadSuccess'), {
-            description: t('module.qrManagement.qrDownloadSuccessDescription'),
-          });
-        })
-        .catch((err) => {
-          toast.error(t('module.qrManagement.qrDownloadError'), {
-            description: err.message || t('module.qrManagement.qrDownloadErrorDescription'),
-          });
-        });
-    }
+    const link = document.createElement('a');
+    link.download = `downloaded-image.${type}`;
+    // link.href = canvas.toDataURL(`image/${type}`, 1.0); // 1.0 = chất lượng cao
+    link.href = qrCodeImage;
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
-    <div className="container mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-6 gap-4">
+    <div className="container mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-5 gap-4">
       {/* Left pane wrapper */}
-      <Card className="flex flex-col lg:col-span-4 items-start justify-between w-full p-4 space-y-4 rounded border shadow-md flex-1 mr-4 h-full">
+      <Card className="flex flex-col lg:col-span-3 items-start justify-between w-full p-4 space-y-4 rounded border shadow-md flex-1 mr-4 h-full">
         {/* Title and Description */}
         <div className="flex flex-col items-start justify-start space-y-2">
           <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">{t('module.qrManagement.table.title')}</h4>
@@ -448,11 +417,20 @@ const CreateQR = () => {
         {/* QR Code Preview */}
         <div className="flex-1 flex flex-col items-center justify-center mb-6">
           <div
-            className={`w-64 h-64 flex items-center justify-center border-2 ${qrGenerated ? 'border' : 'border-dashed border'} rounded-lg mb-4`}
+            ref={canvasRef}
+            className={`w-72 min-h-72 h-fit flex items-center justify-center border-2 p-2 rounded-lg mb-4 ${qrGenerated ? 'border' : 'border-dashed border bg-white text-black'}`}
           >
             {qrGenerated ? (
-              <div className="w-56 h-56 p-2">
-                <img src={qrCodeImage.link || ''} alt="Generated QR Code" className="w-full h-full object-contain" />
+              <div className="w-full h-full flex flex-col items-center justify-between text-center">
+                <Label className="text-xl uppercase pb-2">{qrTitle}</Label>
+                <div className="flex-1 h-[80%] w-[80%] relative">
+                  <img src={qrCodeImage || ''} alt="Generated QR Code" className="w-full h-full object-contain" />
+                </div>
+                {qrDescription.map((field, index) => (
+                  <div key={index} className="mt-2 text-sm font-medium text-muted-foreground">
+                    <span className="capitalize">{field.name}:</span> {field.value}
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="text-center p-4 flex flex-col items-center justify-center">
@@ -474,8 +452,8 @@ const CreateQR = () => {
                 <SelectValue placeholder="Format" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="PNG">PNG</SelectItem>
-                <SelectItem value="SVG">SVG</SelectItem>
+                <SelectItem value="png">PNG</SelectItem>
+                <SelectItem value="jpeg">JPEG</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -483,13 +461,9 @@ const CreateQR = () => {
           <Button
             className="w-full  whitespace-nowrap cursor-pointer"
             disabled={!qrGenerated}
-            onClick={handleDownLoadQR}
+            onClick={() => handleDownload(downloadFormat)}
           >
             <Download className="mr-2" /> {t('module.qrManagement.preview.downloadButton')}
-          </Button>
-
-          <Button variant="outline" className="w-full  whitespace-nowrap cursor-pointer" disabled={!qrGenerated}>
-            <Printer className="mr-2" /> {t('module.qrManagement.preview.printButton')}
           </Button>
         </div>
       </Card>

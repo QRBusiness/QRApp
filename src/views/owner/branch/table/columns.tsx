@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDeleteBranch, useUpdateBranch } from '@/services/owner/branchService';
+import { useDeleteBranch, useUpdateBranch } from '@/services/owner/branch-service';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';

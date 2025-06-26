@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { QR_MANAGEMENT_TABLE } from '@/constains';
 import { DataTable } from '@/components/common/tanstack-table/data-table';
 import { type QRTable, columns } from './columns';
 
@@ -57,7 +58,7 @@ export default function QRTable() {
 
   return (
     <div className="container mx-auto py-4">
-      <DataTable columns={columns} data={data} />
+      <DataTable table_key={QR_MANAGEMENT_TABLE} columns={columns} data={data} />
     </div>
   );
 }
