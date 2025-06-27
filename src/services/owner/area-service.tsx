@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { createAreaSchema } from '@/utils/schemas';
 
 export interface AreaResponse {
+  data: AreaResponse | null;
   _id: string;
   name: string;
   description: string;
@@ -28,11 +29,12 @@ interface AreaResponseData {
 interface AreaInputProps {
   page: number;
   limit: number;
+  branch?: string;
 }
 
-export const getAreas = async ({ page = 1, limit = 50 }: AreaInputProps): Promise<AreaResponse[]> => {
+export const getAreas = async ({ page = 1, limit = 50, branch }: AreaInputProps): Promise<AreaResponse[]> => {
   try {
-    const response: ApiResponse<AreaResponseData> = await apiClient.get(`/areas`, {
+    const response: ApiResponse<AreaResponseData> = await apiClient.get(`/areas?branch=${branch}`, {
       params: { page, limit },
     });
     if (response.status !== 200 && response.status !== 201) {
@@ -50,10 +52,10 @@ export const getAreas = async ({ page = 1, limit = 50 }: AreaInputProps): Promis
   }
 };
 
-export const useAreas = ({ page = 1, limit = 50 }: AreaInputProps) => {
+export const useAreas = ({ page = 1, limit = 50, branch }: AreaInputProps) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<AreaResponse[]>({
-    queryKey: ['areasQuery', { page, limit }],
-    queryFn: () => getAreas({ page, limit }),
+    queryKey: ['areasQuery', { page, limit, branch }],
+    queryFn: () => getAreas({ page, limit, branch }),
   });
 
   return {
@@ -75,7 +77,7 @@ const createArea = async (areaData: z.infer<typeof createAreaSchema>) => {
       });
       return null;
     }
-    return response.data;
+    return response.data.data;
   } catch (error: ErrorResponse | any) {
     toast.error(error.message || 'Internal server error', {
       description: error.errorMessage || 'An unexpected error occurred while creating the area.',

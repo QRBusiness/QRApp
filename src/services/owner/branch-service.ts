@@ -58,16 +58,20 @@ export const useBranches = ({ page = 1, limit = 50 }: BranchInputProps) => {
   };
 };
 
+interface CreateBranchProps {
+  data: BranchResponse;
+}
+
 const createBranch = async (branchData: z.infer<typeof createBranchSchema>) => {
   try {
-    const response: ApiResponse<BranchResponse> = await apiClient.post('/branches', branchData);
+    const response: ApiResponse<CreateBranchProps> = await apiClient.post('/branches', branchData);
     if (response.status !== 201 && response.status !== 200) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to create branch',
       });
       throw new Error(response.errorMessage || 'Failed to create branch');
     }
-    return response.data;
+    return response.data.data;
   } catch (error: ErrorResponse | any) {
     toast.error((error as ErrorResponse).error || 'Internal server error', {
       description: (error as ErrorResponse).errorMessage || 'An unexpected error occurred while creating the branch.',

@@ -162,3 +162,9 @@ export const createBranchSchema = z.object({
       message: 'module.branchManagement.createField.contact.formatError',
     }),
 });
+
+export const updateTableSchema = z.object({
+  name: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldNameError' }),
+  // qr_code: z.instanceof(File).optional(), // chấp nhận null
+  qr_code: z.string().optional(), // Assuming qr_code is a string URL or path
+});

@@ -2,10 +2,13 @@ import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { createTableSchema } from '@/utils/schemas';
+import { createTableSchema, updateTableSchema } from '@/utils/schemas';
 import type { AreaResponse } from './area-service';
 
 interface TableResponse {
+  available: boolean;
+  status: any;
+  branch: any;
   _id: string;
   name: string;
   description: string;
@@ -23,13 +26,13 @@ interface TableInputProps {
   page: number;
   limit: number;
   area?: string;
-  enable?: boolean;
+  branch?: string;
 }
 
-export const getTables = async ({ page = 1, limit = 50, area }: TableInputProps): Promise<TableResponse[]> => {
+export const getTables = async ({ page = 1, limit = 50, area, branch }: TableInputProps): Promise<TableResponse[]> => {
   try {
     const response: ApiResponse<TableResponseData> = await apiClient.get('/services', {
-      params: { page, limit, area },
+      params: { page, limit, area, branch },
     });
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
@@ -46,10 +49,10 @@ export const getTables = async ({ page = 1, limit = 50, area }: TableInputProps)
   }
 };
 
-export const useTables = ({ page = 1, limit = 50, area }: TableInputProps) => {
+export const useTables = ({ page = 1, limit = 50, area, branch }: TableInputProps) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<TableResponse[]>({
-    queryKey: ['tablesQuery'],
-    queryFn: () => getTables({ page, limit, area }),
+    queryKey: ['tablesQuery', { page, limit, area, branch }],
+    queryFn: () => getTables({ page, limit, area, branch }),
   });
 
   if (error) {
@@ -67,9 +70,13 @@ export const useTables = ({ page = 1, limit = 50, area }: TableInputProps) => {
   };
 };
 
+interface createTableResponse {
+  data: TableResponse;
+}
+
 const createTable = async (tableData: z.infer<typeof createTableSchema>) => {
   try {
-    const response: ApiResponse<TableResponse> = await apiClient.post('/services', tableData);
+    const response: ApiResponse<createTableResponse> = await apiClient.post('/services', tableData);
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to create table',
@@ -77,7 +84,7 @@ const createTable = async (tableData: z.infer<typeof createTableSchema>) => {
       return null;
     }
     toast.success('Table created successfully');
-    return response.data;
+    return response.data.data;
   } catch (error: ErrorResponse | any) {
     toast.error(error.message || 'Internal server error', {
       description: error.errorMessage || 'An unexpected error occurred while creating the table.',
@@ -94,8 +101,81 @@ export const useCreateTable = () => {
       queryClient.invalidateQueries({ queryKey: ['tablesQuery'] });
     },
   });
+
   return {
     createTable: mutateAsync,
+    isError,
+    isPending,
+    isSuccess,
+    data,
+  };
+};
+
+const updateTable = async (tableId: string, tableData: z.infer<typeof updateTableSchema>) => {
+  try {
+    const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, tableData);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to update table',
+      });
+      return null;
+    }
+    toast.success('Table updated successfully');
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while updating the table.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useUpdateTable = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isError, isPending, isSuccess, data } = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: z.infer<typeof updateTableSchema> }) => updateTable(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tablesQuery'] });
+    },
+  });
+  return {
+    updateTable: mutateAsync,
+    isError,
+    isPending,
+    isSuccess,
+    data,
+  };
+};
+
+const deleteTable = async (tableId: string) => {
+  try {
+    const response: ApiResponse<{ message: string }> = await apiClient.delete(`/services/${tableId}`);
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to delete table',
+      });
+      return null;
+    }
+    toast.success('Table deleted successfully');
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while deleting the table.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useDeleteTable = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isError, isPending, isSuccess, data } = useMutation({
+    mutationFn: deleteTable,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tablesQuery'] });
+    },
+  });
+  return {
+    deleteTable: mutateAsync,
     isError,
     isPending,
     isSuccess,

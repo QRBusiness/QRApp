@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constains';
-import { useAreas, useCreateArea } from '@/services/owner/area-service';
+import { getAreas, useCreateArea } from '@/services/owner/area-service';
 import { useBranches } from '@/services/owner/branch-service';
 import { getTables, useCreateTable } from '@/services/owner/table-service';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -38,9 +38,9 @@ const CreateQR = () => {
 
   const canvasRef = React.useRef<HTMLDivElement>(null);
   const { branches } = useBranches({ page: 1, limit: 50 });
-  const { areas } = useAreas({ page: 1, limit: 50 });
-  const { createArea } = useCreateArea();
-  const { createTable } = useCreateTable();
+  const { createArea, data: createdArea } = useCreateArea();
+  const { createTable, data: createdTable } = useCreateTable();
+  // const { updateTable } = useUpdateTable();
 
   React.useEffect(() => {
     if (branches.length > 0) {
@@ -52,17 +52,6 @@ const CreateQR = () => {
       );
     }
   }, [branches]);
-
-  React.useEffect(() => {
-    if (areas && areas.length > 0) {
-      setAreaOptions(
-        areas.map((area) => ({
-          value: area._id,
-          label: area.name,
-        }))
-      );
-    }
-  }, [areas]);
 
   const additionalFields: FieldProps[] = [
     {
@@ -157,13 +146,44 @@ const CreateQR = () => {
       name: values.name,
       area: values.area,
       description: values.description,
-    }).then(() => {
-      form.reset({
-        branch: form.getValues('branch'),
-        area: '',
-        table: '',
-      });
     });
+  };
+
+  React.useEffect(() => {
+    if (createdArea && createdArea.branch._id === form.getValues('branch')) {
+      const newArea = {
+        value: createdArea._id,
+        label: createdArea.name,
+      };
+      setAreaOptions((prev) => [...prev, newArea]);
+    }
+  }, [createdArea]);
+
+  React.useEffect(() => {
+    if (createdTable && createdTable.area._id === form.getValues('area')) {
+      const newTable = {
+        value: createdTable._id,
+        label: createdTable.name,
+      };
+      setTableOptions((prev) => [...prev, newTable]);
+    }
+  }, [createdTable]);
+
+  const handleBranchChange = async (branch: string) => {
+    form.setValue('branch', branch);
+    form.setValue('area', '');
+    form.setValue('table', '');
+
+    const areas = await queryClient.fetchQuery({
+      queryKey: ['areasQuery'],
+      queryFn: () => getAreas({ page: 1, limit: 50, branch }),
+    });
+
+    const areaOptions = areas.map((area: any) => ({
+      value: area._id,
+      label: area.name,
+    }));
+    setAreaOptions(areaOptions);
   };
 
   const handleAreaChange = async (area: string) => {
@@ -185,23 +205,30 @@ const CreateQR = () => {
   const onSubmit = (values: z.infer<typeof createQRSchema>) => {
     const location = window.location.origin;
     const navigateURL = `${location}/${UNAUTHORIZED}/${business._id}/${MENU_MANAGEMENT}?area=${values.area}&table=${values.table}`;
-    const areaName = areas.find((area) => area._id === values.area)?.name || 'unknown-area';
+    const areaName = areaOptions.find((area) => area.value === values.area)?.label || 'unknown-area';
     const tableName = tableOptions.find((table) => table.value === values.table)?.label || 'unknown-table';
     setQrTitle(`${areaName} - ${tableName}`);
     setQrDescription(additionalInfo);
     QRCode.toDataURL(navigateURL, { errorCorrectionLevel: 'H' })
       .then((url) => {
         setQrCodeImage(url);
+        setQrGenerated(true);
+        toast.success(t('module.qrManagement.qrGeneratedSuccess'), {
+          description: t('module.qrManagement.qrGeneratedSuccessDescription'),
+        });
+        // updateTable({
+        //   id: values.table,
+        //   data: {
+        //     name: tableName,
+        //     qr_code: url,
+        //   },
+        // });
       })
       .catch((err) => {
         toast.error(t('module.qrManagement.qrGenerationError'), {
           description: err.message || t('module.qrManagement.qrGenerationErrorDescription'),
         });
       });
-    setQrGenerated(true);
-    toast.success(t('module.qrManagement.qrGeneratedSuccess'), {
-      description: t('module.qrManagement.qrGeneratedSuccessDescription'),
-    });
     // onCancel();
   };
 
@@ -251,7 +278,10 @@ const CreateQR = () => {
                       <div className="flex items-center justify-start space-x-2">
                         <CustomSelect
                           options={branchOptions}
-                          onFieldChange={field.onChange}
+                          onFieldChange={(props) => {
+                            field.onChange(props);
+                            handleBranchChange(props);
+                          }}
                           value={field.value || ''}
                           placeholder={t('module.branchManagement.placeholder')}
                         />

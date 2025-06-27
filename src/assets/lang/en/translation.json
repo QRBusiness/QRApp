@@ -128,6 +128,14 @@
       "editSession": "Edit QR Code",
       "cancel": "Cancel",
       "reset": "Reset Form",
+      "qrGeneratedSuccess": "QR Code generated successfully.",
+      "qrGeneratedSuccessDescription": "You can now download or print the QR code.",
+      "qrGenerationError": "QR Code generation failed.",
+      "qrGenerationErrorDescription": "An error occurred while generating the QR code. Please try again.",
+      "qrDownloadError": "QR Code download failed.",
+      "qrDownloadErrorDescription": "An error occurred while downloading the QR code. Please try again.",
+      "qrDownloadSuccess": "QR Code downloaded successfully.",
+      "qrDownloadSuccessDescription": "The QR code has been downloaded to your device.",
       "additionalField": {
         "title": "Additional Fields",
         "description": "Add any additional fields you need embedded in the QR code.",
@@ -233,6 +241,32 @@
         "downloadFormat": "Download Format",
         "downloadButton": "Download QR Code",
         "printButton": "Print QR Code"
+      },
+      "edit": {
+        "title": "Edit QR Code",
+        "description": "Update the details of the QR code.",
+        "button": {
+          "cancel": "Cancel",
+          "save": "Save Changes"
+        },
+        "fieldName": {
+          "label": "QR Code Name",
+          "description": "* Enter the name of the QR code.",
+          "placeholder": "Enter QR code name",
+          "error": "QR code name cannot be empty."
+        },
+        "fieldDescription": {
+          "label": "QR Code Description",
+          "description": "* Enter a description for the QR code.",
+          "placeholder": "Enter QR code description",
+          "error": "QR code description cannot be empty."
+        },
+        "fieldQrCode": {
+          "label": "QR Code",
+          "description": "* Enter the QR code.",
+          "placeholder": "Enter QR code",
+          "error": "QR code cannot be empty."
+        }
       },
       "alertDialog": {
         "title": "Are you sure?",

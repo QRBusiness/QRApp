@@ -1,114 +1,135 @@
 import React from 'react';
+import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constains';
+import { useDeleteTable } from '@/services/owner/table-service';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Download, Edit, Eye, Trash } from 'lucide-react';
+import { CircleCheck, CircleX, Download, Edit, Eye, Trash } from 'lucide-react';
+import QRCode from 'qrcode';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { useUserState } from '@/components/common/states/userState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import MobileCreateDialog from '../create/mobile-create-dialog';
+import { formattedDate } from '@/libs/utils';
 import PopUpQRCode from '../details/pop-up-qr-code';
+import EditTableDialog from '../edit/edit-table-dialog';
 
 export type QRTable = {
-  id: string;
-  table: string;
+  _id: string;
+  name: string;
+  qr_code: string;
   area: string;
-  status: 'ordering' | 'staff call' | 'paid' | 'cancelled';
+  branch: string;
   available: boolean;
-  createdAt: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export const columns: ColumnDef<QRTable>[] = [
   {
-    accessorKey: 'id',
-    header: 'module.qrManagement.table.id',
+    accessorKey: '_id',
+    header: 'ID',
+    cell: ({ row }) => {
+      return <span className="text-sm text-muted-foreground">{row.index + 1}</span>;
+    },
   },
   {
-    accessorKey: 'table',
+    accessorKey: 'name',
     header: 'module.qrManagement.table.table',
     cell: ({ row }) => {
-      const tableName = row.getValue('table') as string;
-      return <span className="text-sm text-black font-medium">{tableName}</span>;
+      return <span className="font-medium">{row.getValue('name')}</span>;
     },
   },
   {
     accessorKey: 'area',
     header: 'module.qrManagement.table.area',
-    cell: ({ row }) => {
-      const area = row.getValue('area');
-      return (
-        <span className="text-sm text-black font-medium">
-          {typeof area === 'string' && area.trim() !== '' ? area : 'No area assigned'}
-        </span>
-      );
-    },
-  },
-  {
-    accessorKey: 'status',
-    header: 'module.qrManagement.table.status',
-    cell: ({ row }) => {
-      const status = row.getValue('status') as QRTable['status'];
-      return (
-        <Badge variant={'outline'} className={`font-medium`}>
-          {status.charAt(0).toUpperCase() + status.slice(1)}
-        </Badge>
-      );
-    },
   },
   {
     accessorKey: 'available',
-    header: 'module.qrManagement.table.available',
-    cell: ({ row }) => {
-      const isAvailable = row.getValue('available');
-      return (
-        <Badge className="font-medium" variant={isAvailable ? 'default' : 'destructive'}>
-          {isAvailable ? 'Yes' : 'No'}
-        </Badge>
-      );
-    },
+    header: 'Available',
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-foreground px-2 py-1 text-sm rounded-2xl">
+        {row.original.available === true ? (
+          <CircleCheck className="fill-status-active mr-1" />
+        ) : (
+          <CircleX className="fill-status-inactive mr-1" />
+        )}
+        {row.original.available ? 'Available' : 'Unavailable'}
+      </Badge>
+    ),
   },
   {
-    accessorKey: 'createdAt',
-    header: 'module.qrManagement.table.createdAt',
+    accessorKey: 'branch',
+    header: 'Branch',
+  },
+  {
+    accessorKey: 'created_at',
+    header: 'Created At',
     cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'));
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
+      return formattedDate(row.getValue('created_at'));
     },
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'updated_at',
+    header: 'Updated At',
+    cell: ({ row }) => {
+      return formattedDate(row.getValue('updated_at'));
+    },
+    enableHiding: true,
   },
   {
     id: 'actions',
     header: 'module.qrManagement.table.actions',
-    cell: () => {
+    cell: ({ row }) => {
       const [open, setOpen] = React.useState(false);
       const { t } = useTranslation();
-      const handleDownload = async (image_url: string) => {
-        const response = await fetch(image_url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'my-image.png';
-        a.click();
-        URL.revokeObjectURL(url);
+      const user = useUserState();
+
+      const { deleteTable } = useDeleteTable();
+      const [qrCode, setQrCodeImage] = React.useState<string | null>(null);
+      const location = window.location.origin;
+
+      const navigateURL = `${location}/${UNAUTHORIZED}/${user.business._id}/${MENU_MANAGEMENT}?area=${row.getValue('area')}&table=${row.getValue('_id')}`;
+
+      QRCode.toDataURL(navigateURL, { errorCorrectionLevel: 'H' })
+        .then((url) => {
+          setQrCodeImage(url);
+        })
+        .catch((err) => {
+          console.error('QR Code generation failed:', err);
+          toast.error(t('module.qrManagement.qrGenerationError'), {
+            description: t('module.qrManagement.qrGenerationErrorDescription'),
+          });
+        });
+
+      const handleDownload = (url: string) => {
+        if (!url) {
+          toast.error(t('module.qrManagement.qrDownloadError'), {
+            description: t('module.qrManagement.qrDownloadErrorDescription'),
+          });
+          return;
+        }
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `qr-code-${row.getValue('area')}-${row.getValue('name')}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success(t('module.qrManagement.qrDownloadSuccess'), {
+          description: t('module.qrManagement.qrDownloadSuccessDescription'),
+        });
       };
+
       return (
         <div className="flex items-center gap-2">
           {/* Add action buttons here, e.g., Edit, Delete */}
           <PopUpQRCode
             title={t('module.qrManagement.preview.title')}
             description={t('module.qrManagement.preview.description')}
-            url="https://example.com/qr-code"
+            url={qrCode || ''}
+            onDownload={() => handleDownload(qrCode || '')}
           >
             <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
               <Eye className="mr-2" />
@@ -118,28 +139,33 @@ export const columns: ColumnDef<QRTable>[] = [
           <Button
             variant={'outline'}
             className="hover:bg-primary hover:text-primary-foreground"
-            onClick={() => handleDownload('https://example.com/qr-code')}
+            onClick={() => handleDownload(qrCode || '')}
           >
             <Download className="mr-2" />
             {t('module.qrManagement.table.actionButton.download')}
           </Button>
-          <MobileCreateDialog
+          <EditTableDialog
+            initialValues={{
+              name: row.getValue('name'),
+              qr_code: row.getValue('qr_code'),
+            }}
+            id={row.original._id}
             open={open}
             onOpenChange={setOpen}
-            title="Edit QR Code"
-            description="Edit in the details to edit the QR code."
+            title={t('module.qrManagement.edit.title')}
+            description={t('module.qrManagement.edit.description')}
             onSubmit={() => setOpen(false)}
             onCancel={() => setOpen(false)}
-            submitButtonText={t('module.qrManagement.editSession')}
           >
             <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
               <Edit className="mr-2" />
               {t('module.qrManagement.table.actionButton.edit')}
             </Button>
-          </MobileCreateDialog>
+          </EditTableDialog>
           <CustomAlertDialog
             title={t('module.qrManagement.alertDialog.title')}
             description={t('module.qrManagement.alertDialog.description')}
+            onSubmit={async () => await deleteTable(row.original._id)}
           >
             <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground">
               <Trash className="mr-2" />

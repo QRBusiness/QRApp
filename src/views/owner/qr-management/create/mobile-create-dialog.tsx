@@ -1,5 +1,9 @@
 import React from 'react';
+import { getAreas, useCreateArea } from '@/services/owner/area-service';
+import { useBranches } from '@/services/owner/branch-service';
+import { getTables, useCreateTable } from '@/services/owner/table-service';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { CircleX, Info, Plus, QrCode, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -49,17 +53,41 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
   cancelIcon,
 }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [additionalInfo, setAdditionalInfo] = React.useState<any[]>([]);
-  const areaOptionsDefault = [
-    { value: 'area1', label: 'Area 1' },
-    { value: 'area2', label: 'Area 2' },
-    { value: 'area3', label: 'Area 3' },
-  ];
+  const [branchOptions, setBranchOptions] = React.useState<{ value: string; label: string }[]>([]);
+  const [areaOptions, setAreaOptions] = React.useState<{ value: string; label: string }[]>([]);
+  const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([]);
 
-  const tableOptionsDefault = [
-    { value: 'table1', label: 'Table 1' },
-    { value: 'table2', label: 'Table 2' },
-    { value: 'table3', label: 'Table 3' },
+  const { branches } = useBranches({ page: 1, limit: 50 });
+  const { createArea, data: createdArea } = useCreateArea();
+  const { createTable, data: createdTable } = useCreateTable();
+  // const { updateTable } = useUpdateTable();
+
+  React.useEffect(() => {
+    if (branches.length > 0) {
+      setBranchOptions(
+        branches.map((branch) => ({
+          value: branch._id,
+          label: branch.name,
+        }))
+      );
+    }
+  }, [branches]);
+
+  const additionalFields: FieldProps[] = [
+    {
+      name: 'name',
+      label: t('module.qrManagement.additionalField.fieldName'),
+      description: t('module.qrManagement.additionalField.fieldNameDescription'),
+      isRequired: true,
+    },
+    {
+      name: 'value',
+      label: t('module.qrManagement.additionalField.fieldValue'),
+      description: t('module.qrManagement.additionalField.fieldValueDescription'),
+      isRequired: true,
+    },
   ];
 
   const addAreaFields: FieldProps[] = [
@@ -67,53 +95,151 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
       name: 'name',
       label: t('module.qrManagement.addAreaField.fieldName'),
       description: t('module.qrManagement.addAreaField.fieldNameDescription'),
+      isRequired: true,
     },
     {
       name: 'description',
       label: t('module.qrManagement.addAreaField.fieldDescription'),
       description: t('module.qrManagement.addAreaField.fieldDescriptionDescription'),
+      isRequired: false,
+    },
+    {
+      name: 'image_url',
+      label: t('module.qrManagement.addAreaField.fieldImageUrl'),
+      description: t('module.qrManagement.addAreaField.fieldImageUrlDescription'),
+      isRequired: false,
+    },
+    {
+      name: 'branch',
+      label: t('module.qrManagement.addAreaField.fieldBranchId'),
+      description: t('module.qrManagement.addAreaField.fieldBranchIdDescription'),
+      type: 'select',
+      options: branchOptions,
+      isRequired: true,
     },
   ];
+
   const addTableFields: FieldProps[] = [
     {
       name: 'name',
       label: t('module.qrManagement.addTableField.fieldName'),
       description: t('module.qrManagement.addTableField.fieldNameDescription'),
+      isRequired: true,
     },
     {
-      name: 'areaId',
+      name: 'area',
       label: t('module.qrManagement.addTableField.fieldAreaId'),
       description: t('module.qrManagement.addTableField.fieldAreaIdDescription'),
+      type: 'select',
+      options: areaOptions.map((area) => ({
+        value: area.value,
+        label: area.label,
+      })),
+      isRequired: true,
     },
     {
       name: 'description',
       label: t('module.qrManagement.addTableField.fieldDescription'),
       description: t('module.qrManagement.addTableField.fieldDescriptionDescription'),
-    },
-  ];
-  const additionalFields: FieldProps[] = [
-    {
-      name: 'name',
-      label: t('module.qrManagement.additionalField.fieldName'),
-      description: t('module.qrManagement.additionalField.fieldNameDescription'),
-    },
-    {
-      name: 'value',
-      label: t('module.qrManagement.additionalField.fieldValue'),
-      description: t('module.qrManagement.additionalField.fieldValueDescription'),
+      isRequired: false,
     },
   ];
 
   const form = useForm<z.infer<typeof createQRSchema>>({
     resolver: zodResolver(createQRSchema),
-    defaultValues: {
-      area: areaOptionsDefault[0].value,
-      table: tableOptionsDefault[0].value,
+    values: {
+      branch: '',
+      area: '',
+      table: '',
     },
   });
 
+  const handleCreateArea = async (values: z.infer<typeof createAreaSchema>) => {
+    await createArea({
+      name: values.name,
+      description: values.description,
+      image_url: values.image_url,
+      branch: values.branch,
+    });
+  };
+
+  const handleCreateTable = async (values: z.infer<typeof createTableSchema>) => {
+    await createTable({
+      name: values.name,
+      area: values.area,
+      description: values.description,
+    });
+  };
+
+  React.useEffect(() => {
+    if (createdArea && createdArea.branch._id === form.getValues('branch')) {
+      const newArea = {
+        value: createdArea._id,
+        label: createdArea.name,
+      };
+      setAreaOptions((prev) => [...prev, newArea]);
+    }
+  }, [createdArea]);
+
+  React.useEffect(() => {
+    if (createdTable && createdTable.area._id === form.getValues('area')) {
+      const newTable = {
+        value: createdTable._id,
+        label: createdTable.name,
+      };
+      setTableOptions((prev) => [...prev, newTable]);
+    }
+  }, [createdTable]);
+
+  const handleBranchChange = async (branch: string) => {
+    form.setValue('branch', branch);
+    form.setValue('area', '');
+    form.setValue('table', '');
+
+    const areas = await queryClient.fetchQuery({
+      queryKey: ['areasQuery'],
+      queryFn: () => getAreas({ page: 1, limit: 50, branch }),
+    });
+
+    const areaOptions = areas.map((area: any) => ({
+      value: area._id,
+      label: area.name,
+    }));
+    setAreaOptions(areaOptions);
+  };
+
+  const handleAreaChange = async (area: string) => {
+    form.setValue('area', area);
+    form.setValue('table', '');
+
+    const tables = await queryClient.fetchQuery({
+      queryKey: ['tablesQuery'],
+      queryFn: () => getTables({ page: 1, limit: 50, area }),
+    });
+
+    const tableOptions = tables.map((table: any) => ({
+      value: table._id,
+      label: table.name,
+    }));
+    setTableOptions(tableOptions);
+  };
+
   const onSubmitForm = (values: z.infer<typeof createQRSchema>) => {
-    onSubmit && onSubmit(values);
+    onSubmit &&
+      onSubmit({
+        ...values,
+        additionalInfo,
+      });
+  };
+
+  const onCancelForm = () => {
+    onCancel && onCancel();
+    form.reset({
+      branch: '',
+      area: '',
+      table: '',
+    });
+    setAdditionalInfo([]);
   };
 
   return (
@@ -125,7 +251,36 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
           <DialogDescription>{t(description ?? '')}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-8 w-full">
+          <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
+            {/* Branch Field */}
+            <FormField
+              control={form.control}
+              name="branch"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('module.branchManagement.title')}
+                    <p className="text-red-700">*</p>
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-start space-x-2">
+                      <CustomSelect
+                        options={branchOptions}
+                        onFieldChange={(props) => {
+                          field.onChange(props);
+                          handleBranchChange(props);
+                        }}
+                        value={field.value || ''}
+                        placeholder={t('module.branchManagement.placeholder')}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormDescription>{t('module.branchManagement.description')}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Area   */}
             <FormField
               control={form.control}
               name="area"
@@ -138,8 +293,11 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                   <FormControl>
                     <div className="flex items-center justify-start space-x-2">
                       <CustomSelect
-                        options={areaOptionsDefault}
-                        onFieldChange={field.onChange}
+                        options={areaOptions}
+                        onFieldChange={(props) => {
+                          field.onChange(props);
+                          handleAreaChange(props);
+                        }}
                         value={field.value}
                         defaultValue={field.value}
                       />
@@ -147,9 +305,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                         title={t('module.qrManagement.addAreaField.title')}
                         description={t('module.qrManagement.addAreaField.description')}
                         schema={createAreaSchema}
-                        onSubmit={(values) => {
-                          console.log('Area created:', values);
-                        }}
+                        onSubmit={(values) => handleCreateArea(values)}
                         fields={addAreaFields}
                       >
                         <Button type="button" variant="default">
@@ -164,6 +320,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                 </FormItem>
               )}
             />
+            {/* Table Field */}
             <FormField
               control={form.control}
               name="table"
@@ -176,7 +333,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                   <FormControl>
                     <div className="flex items-center justify-start space-x-2">
                       <CustomSelect
-                        options={tableOptionsDefault}
+                        options={tableOptions}
                         onFieldChange={field.onChange}
                         value={field.value}
                         defaultValue={field.value}
@@ -185,9 +342,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                         title={t('module.qrManagement.addTableField.title')}
                         description={t('module.qrManagement.addTableField.description')}
                         schema={createTableSchema}
-                        onSubmit={(values) => {
-                          console.log('Table created:', values);
-                        }}
+                        onSubmit={(values) => handleCreateTable(values)}
                         fields={addTableFields}
                       >
                         <Button type="button" variant="default">
@@ -246,7 +401,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
             </div>
             {/* Button action */}
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={onCancel}>
+              <Button type="button" variant="outline" onClick={onCancelForm}>
                 {cancelIcon ? cancelIcon : <CircleX className="size-5 mr-[6px]" />}
                 {cancelButtonText ? cancelButtonText : t('module.qrManagement.cancel')}
               </Button>
