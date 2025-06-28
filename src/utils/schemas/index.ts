@@ -168,3 +168,24 @@ export const updateTableSchema = z.object({
   // qr_code: z.instanceof(File).optional(), // chấp nhận null
   qr_code: z.string().optional(), // Assuming qr_code is a string URL or path
 });
+
+export const createUserSchema = z.object({
+  name: z.string().min(1, { message: 'module.staffManagement.create.name.error' }),
+  username: z.string().min(5, { message: 'module.staffManagement.create.username.error' }),
+  password: z
+    .string()
+    .min(6, { message: 'module.staffManagement.create.password.error' })
+    .max(32, { message: 'module.staffManagement.create.password.error' })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,32}$/, {
+      message: 'module.staffManagement.create.password.error',
+    }),
+  phone: z
+    .string()
+    .min(10, { message: 'module.staffManagement.create.phone.error' })
+    .max(11, { message: 'module.staffManagement.create.phone.error' })
+    .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
+      message: 'module.staffManagement.create.phone.formatError',
+    }),
+  address: z.string().min(1, { message: 'module.staffManagement.create.address.error' }),
+  branch: z.string().min(1, { message: 'module.staffManagement.create.branch.error' }),
+});

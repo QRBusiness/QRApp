@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import EditBusinessOwnerDialog from '@/views/admin/busines-owner-mgmt/edit/edit-business-owner-dialog';
 import { formattedDate } from '@/libs/utils';
-import EditBusinessOwnerDialog from '../edit/edit-business-owner-dialog';
-import ReadOnlyDialog from '../view/read-only-business-owner-dialog';
+import ReadOnlyStaffDialog from '../dialog/read-only-staff-dialog';
 
-export type BusinessOwner = {
+export type UserProps = {
   id: string;
   name: string;
   address: string;
@@ -23,7 +23,7 @@ export type BusinessOwner = {
   updated_at: string;
 };
 
-export const columns: ColumnDef<BusinessOwner>[] = [
+export const columns: ColumnDef<UserProps>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
@@ -116,21 +116,31 @@ export const columns: ColumnDef<BusinessOwner>[] = [
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
       const [openReadOnlyDialog, setOpenReadOnlyDialog] = React.useState(false);
       const { toggleAvailabilityUser } = useToggleAvailabilityUser();
+      const initialData = {
+        name: row.original.name,
+        phone: row.original.phone,
+        address: row.original.address,
+        username: row.original.username,
+        role: row.original.role,
+        available: row.original.available,
+      };
+
       return (
         <div className="flex gap-2">
-          <ReadOnlyDialog isOpen={openReadOnlyDialog} onClose={setOpenReadOnlyDialog} data={row.original}>
+          <ReadOnlyStaffDialog isOpen={openReadOnlyDialog} onClose={setOpenReadOnlyDialog} data={row.original}>
             <Button variant="outline" size="sm" onClick={() => setOpenReadOnlyDialog(true)}>
               <Eye className="mr-2" />
               {t('module.common.view')}
             </Button>
-          </ReadOnlyDialog>
+          </ReadOnlyStaffDialog>
           <EditBusinessOwnerDialog
+            isUser={true}
+            id={row.original.id}
+            initialData={initialData}
             open={openEditDialog}
             onOpenChange={setOpenEditDialog}
-            initialData={row.original}
-            id={row.original.id as string}
           >
-            <Button variant="outline" size="sm" onClick={() => setOpenEditDialog(true)}>
+            <Button variant="outline" size="sm">
               <Edit className="mr-2" />
               {t('module.common.edit')}
             </Button>

@@ -2,18 +2,18 @@ import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type z from 'zod';
-import type { editUserSchema } from '@/utils/schemas';
+import type { createUserSchema, editUserSchema } from '@/utils/schemas';
 
 interface BusinessOwnerInputProps {
   page: number;
   limit: number;
 }
 
-interface BusinessOwnerResponse {
-  data: BusinessOwner[];
+interface UserResponse {
+  data: User[];
 }
 
-interface BusinessOwner {
+interface User {
   _id: string;
   name: string;
   username: string;
@@ -26,14 +26,14 @@ interface BusinessOwner {
   updated_at: string;
 }
 
-const getBusinessOwners = async ({ page = 1, limit = 50 }: BusinessOwnerInputProps): Promise<BusinessOwner[]> => {
+const getUsers = async ({ page = 1, limit = 50 }: BusinessOwnerInputProps): Promise<User[]> => {
   try {
-    const response: ApiResponse<BusinessOwnerResponse> = await apiClient.get('/users', {
+    const response: ApiResponse<UserResponse> = await apiClient.get('/users', {
       params: { page, limit },
     });
     if (response.status !== 200) {
       toast.error(response.error, {
-        description: response.errorMessage || 'Failed to fetch business owners',
+        description: response.errorMessage || 'Failed to fetch users',
       });
       return [];
     }
@@ -47,14 +47,14 @@ const getBusinessOwners = async ({ page = 1, limit = 50 }: BusinessOwnerInputPro
   }
 };
 
-export const useBusinessOwners = ({ page = 1, limit = 50 }: BusinessOwnerInputProps) => {
-  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<BusinessOwner[]>({
-    queryKey: ['businessOwnersQuery', { page, limit }],
-    queryFn: () => getBusinessOwners({ page, limit }),
+export const useUsers = ({ page = 1, limit = 50 }: BusinessOwnerInputProps) => {
+  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<User[]>({
+    queryKey: ['usersQuery', { page, limit }],
+    queryFn: () => getUsers({ page, limit }),
   });
 
   return {
-    businessOwners: data || [],
+    users: data || [],
     isLoading,
     isError: !!error,
     isFetching,
@@ -63,14 +63,14 @@ export const useBusinessOwners = ({ page = 1, limit = 50 }: BusinessOwnerInputPr
   };
 };
 
-const toggleAvailabilityBusinessOwner = async (id: string): Promise<BusinessOwner> => {
+const toggleAvailabilityUser = async (id: string): Promise<User> => {
   try {
-    const response: ApiResponse<BusinessOwner> = await apiClient.put(`/users/active/${id}`);
+    const response: ApiResponse<User> = await apiClient.put(`/users/active/${id}`);
     if (response.status !== 200) {
       toast.error(response.error, {
-        description: response.errorMessage || 'Failed to toggle business owner availability',
+        description: response.errorMessage || 'Failed to toggle user availability',
       });
-      throw new Error(response.errorMessage || 'Failed to toggle business owner availability');
+      throw new Error(response.errorMessage || 'Failed to toggle user availability');
     }
     return response.data;
   } catch (error: ErrorResponse | any) {
@@ -83,22 +83,22 @@ const toggleAvailabilityBusinessOwner = async (id: string): Promise<BusinessOwne
   }
 };
 
-export const useToggleAvailabilityBusinessOwner = () => {
+export const useToggleAvailabilityUser = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
-    mutationFn: toggleAvailabilityBusinessOwner,
-    onSuccess: (data: BusinessOwner) => {
-      toast.success('Business owner availability toggled successfully', {
-        description: `Business owner ${data.name} has been updated.`,
+    mutationFn: toggleAvailabilityUser,
+    onSuccess: (data: User) => {
+      toast.success('User availability toggled successfully', {
+        description: `User ${data.name} has been updated.`,
       });
       queryClient.invalidateQueries({
-        queryKey: ['businessOwnersQuery'],
+        queryKey: ['usersQuery'],
       });
     },
   });
 
   return {
-    toggleAvailabilityBusinessOwner: mutateAsync,
+    toggleAvailabilityUser: mutateAsync,
     data,
     isPending,
     isError,
@@ -106,14 +106,14 @@ export const useToggleAvailabilityBusinessOwner = () => {
   };
 };
 
-const updateBusinessOwner = async (id: string, data: z.infer<typeof editUserSchema>): Promise<BusinessOwner> => {
+const updateUser = async (id: string, data: z.infer<typeof editUserSchema>): Promise<User> => {
   try {
-    const response: ApiResponse<BusinessOwner> = await apiClient.put(`/users/${id}`, data);
+    const response: ApiResponse<User> = await apiClient.put(`/users/${id}`, data);
     if (response.status !== 200) {
       toast.error(response.error, {
-        description: response.errorMessage || 'Failed to update business owner',
+        description: response.errorMessage || 'Failed to update user',
       });
-      throw new Error(response.errorMessage || 'Failed to update business owner');
+      throw new Error(response.errorMessage || 'Failed to update user');
     }
     return response.data;
   } catch (error: ErrorResponse | any) {
@@ -125,22 +125,104 @@ const updateBusinessOwner = async (id: string, data: z.infer<typeof editUserSche
   }
 };
 
-export const useUpdateBusinessOwner = () => {
+export const useUpdateUser = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: z.infer<typeof editUserSchema> }) => updateBusinessOwner(id, data),
-    onSuccess: (data: BusinessOwner) => {
-      toast.success('Business owner updated successfully', {
-        description: `Business owner ${data.name} has been updated.`,
+    mutationFn: ({ id, data }: { id: string; data: z.infer<typeof editUserSchema> }) => updateUser(id, data),
+    onSuccess: (data: User) => {
+      toast.success('User updated successfully', {
+        description: `User ${data.name} has been updated.`,
       });
       queryClient.invalidateQueries({
-        queryKey: ['businessOwnersQuery'],
+        queryKey: ['usersQuery'],
       });
     },
   });
 
   return {
-    updateBusinessOwner: mutateAsync,
+    updateUser: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
+  };
+};
+
+const createUser = async (data: z.infer<typeof createUserSchema>): Promise<User> => {
+  try {
+    const response: ApiResponse<User> = await apiClient.post('/users', data);
+    if (response.status !== 201 && response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to create user',
+      });
+      throw new Error(response.errorMessage || 'Failed to create user');
+    }
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while creating the business owner.',
+    });
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
+  }
+};
+
+export const useCreateUser = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: createUser,
+    onSuccess: (data: User) => {
+      toast.success('User created successfully', {
+        description: `User ${data.name} has been created.`,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['usersQuery'],
+      });
+    },
+  });
+
+  return {
+    createUser: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
+  };
+};
+
+export const deleteUser = async (id: string): Promise<void> => {
+  try {
+    const response: ApiResponse<void> = await apiClient.delete(`/users/${id}`);
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to delete user',
+      });
+      throw new Error(response.errorMessage || 'Failed to delete user');
+    }
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error || 'Internal server error', {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while deleting the business owner.',
+    });
+    throw new Error((error as ErrorResponse).errorMessage || 'Internal server error');
+  }
+};
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      toast.success('User deleted successfully', {
+        description: 'The user has been deleted.',
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['usersQuery'],
+      });
+    },
+  });
+
+  return {
+    deleteUser: mutateAsync,
     data,
     isPending,
     isError,

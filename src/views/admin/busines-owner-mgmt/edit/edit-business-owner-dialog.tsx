@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useUpdateBusinessOwner } from '@/services/admin/business-owner-service';
+import { useUpdateUser } from '@/services/admin/business-owner-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleCheck, CircleX, UserRoundPen } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -21,6 +21,7 @@ import { Switch } from '@/components/ui/switch';
 import { editUserSchema } from '@/utils/schemas';
 
 interface EditBusinessOwnerDialogProps {
+  isUser?: boolean;
   children: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -31,6 +32,7 @@ interface EditBusinessOwnerDialogProps {
 }
 
 const EditBusinessOwnerDialog = ({
+  isUser = false,
   children,
   open,
   onOpenChange,
@@ -41,7 +43,7 @@ const EditBusinessOwnerDialog = ({
 }: EditBusinessOwnerDialogProps) => {
   const { t } = useTranslation();
 
-  const { updateBusinessOwner } = useUpdateBusinessOwner();
+  const { updateUser } = useUpdateUser();
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
     defaultValues: initialData,
@@ -60,7 +62,7 @@ const EditBusinessOwnerDialog = ({
 
   const onSubmitForm = async (data: z.infer<typeof editUserSchema>) => {
     onSubmit && onSubmit();
-    await updateBusinessOwner({ id, data });
+    await updateUser({ id, data });
     onOpenChange(false);
   };
 
@@ -70,9 +72,12 @@ const EditBusinessOwnerDialog = ({
       <DialogContent className="sm:max-w-5xl overflow-y-scroll max-h-9/10">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <UserRoundPen /> {t('module.businessOwner.editField.title')}
+            <UserRoundPen />{' '}
+            {isUser ? t('module.staffManagement.edit.title') : t('module.businessOwner.editField.title')}
           </DialogTitle>
-          <DialogDescription>{t('module.businessOwner.editField.description')}</DialogDescription>
+          <DialogDescription>
+            {isUser ? t('module.staffManagement.edit.description') : t('module.businessOwner.editField.description')}
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
@@ -85,9 +90,17 @@ const EditBusinessOwnerDialog = ({
                     <FormControl>
                       <Switch checked={field.value} onCheckedChange={field.onChange} className="w-10 h-6" />
                     </FormControl>
-                    <FormLabel>{t('module.businessOwner.editField.available.label')}</FormLabel>
+                    <FormLabel>
+                      {isUser
+                        ? t('module.staffManagement.create.available.label')
+                        : t('module.businessOwner.editField.available.label')}
+                    </FormLabel>
                   </div>
-                  <FormDescription>{t('module.businessOwner.editField.available.description')}</FormDescription>
+                  <FormDescription>
+                    {isUser
+                      ? t('module.staffManagement.create.available.description')
+                      : t('module.businessOwner.editField.available.description')}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -98,13 +111,19 @@ const EditBusinessOwnerDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.businessOwner.editField.name.label')}
+                    {isUser
+                      ? t('module.staffManagement.create.name.label')
+                      : t('module.businessOwner.editField.name.label')}
                     <p className="text-red-700">*</p>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.businessOwner.editField.name.description')}</FormDescription>
+                  <FormDescription>
+                    {isUser
+                      ? t('module.staffManagement.create.name.description')
+                      : t('module.businessOwner.editField.name.description')}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -115,13 +134,19 @@ const EditBusinessOwnerDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.businessOwner.editField.address.label')}
+                    {isUser
+                      ? t('module.staffManagement.create.address.label')
+                      : t('module.businessOwner.editField.address.label')}
                     <p className="text-red-700">*</p>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.businessOwner.editField.address.description')}</FormDescription>
+                  <FormDescription>
+                    {isUser
+                      ? t('module.staffManagement.create.address.description')
+                      : t('module.businessOwner.editField.address.description')}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -132,13 +157,19 @@ const EditBusinessOwnerDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.businessOwner.editField.phone.label')}
+                    {isUser
+                      ? t('module.staffManagement.create.phone.label')
+                      : t('module.businessOwner.editField.phone.label')}
                     <p className="text-red-700">*</p>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.businessOwner.editField.phone.description')}</FormDescription>
+                  <FormDescription>
+                    {isUser
+                      ? t('module.staffManagement.create.phone.description')
+                      : t('module.businessOwner.editField.phone.description')}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -149,13 +180,19 @@ const EditBusinessOwnerDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.businessOwner.editField.username.label')}
+                    {isUser
+                      ? t('module.staffManagement.create.username.label')
+                      : t('module.businessOwner.editField.username.label')}
                     <p className="text-red-700">*</p>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} disabled={true} />
                   </FormControl>
-                  <FormDescription>{t('module.businessOwner.editField.username.description')}</FormDescription>
+                  <FormDescription>
+                    {isUser
+                      ? t('module.staffManagement.create.username.description')
+                      : t('module.businessOwner.editField.username.description')}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

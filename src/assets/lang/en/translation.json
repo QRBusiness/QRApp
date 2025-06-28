@@ -527,6 +527,51 @@
         "create": "Create Branch",
         "edit": "Edit Branch"
       }
+    },
+    "staffManagement": {
+      "viewTitle": "User Details",
+      "viewDescription": "Below are the detailed information and attributes of this user.",
+      "createNew": "Create New User",
+      "button": {
+        "create": "Create New User",
+        "cancel": "Cancel",
+        "edit": "Save Changes"
+      },
+      "create": {
+        "title": "Create New User",
+        "description": "Fill in the details to create a new user.",
+        "name.label": "Name",
+        "name.description": "Enter the name of the user.",
+        "name.error": "Name is required.",
+        "address.label": "Address",
+        "address.description": "Enter the address of the user.",
+        "address.error": "Address is required.",
+        "phone.label": "Phone",
+        "phone.description": "Enter the phone number of the user.",
+        "phone.error": "Phone number is required.",
+        "phone.formatError": "Please enter a valid phone number.",
+        "username.label": "Username",
+        "username.description": "Enter the username of the user.",
+        "username.error": "Username is required.",
+        "password.label": "Password",
+        "password.description": "Enter the password for the user.",
+        "password.error": "Password is required.",
+        "confirmPassword.label": "Confirm Password",
+        "confirmPassword.description": "Re-enter the password for confirmation.",
+        "confirmPassword.error": "Passwords do not match.",
+        "branch.label": "Branch",
+        "branch.description": "Select the branch for this staff member.",
+        "branch.error": "Branch must be selected.",
+        "branch.placeholder": "Select branch",
+        "available": {
+          "label": "Available",
+          "description": "Is the staff member available?"
+        }
+      },
+      "edit": {
+        "title": "Edit Staff Member",
+        "description": "Update the details of the staff member."
+      }
     }
   }
 }
