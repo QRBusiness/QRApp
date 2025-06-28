@@ -70,7 +70,6 @@ const CreateNewUser = ({
   };
 
   const onSubmitForm = async (data: z.infer<typeof createUserSchema>) => {
-    console.log('Form submitted with data:', data);
     onSubmit && onSubmit(data);
     onOpenChange(false);
   };

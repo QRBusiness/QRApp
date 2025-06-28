@@ -10,6 +10,7 @@ import {
   CART,
   DASHBOARD,
   FORGOT_PASSWORD,
+  GROUP,
   LANDING_PAGE,
   LOGIN,
   MENU_MANAGEMENT,
@@ -47,6 +48,7 @@ const CreateNewBusinessOwner = React.lazy(
 const BranchManagement = React.lazy(() => import('@/views/owner/branch'));
 const BusinessManagement = React.lazy(() => import('@/views/admin/business'));
 const BusinessTypeManagement = React.lazy(() => import('@/views/admin/business-type'));
+const GroupConfig = React.lazy(() => import('@/views/owner/staff-management/group'));
 
 function App() {
   const { t } = useTranslation();
@@ -130,6 +132,10 @@ function App() {
             {
               path: STAFF_MANAGEMENT,
               element: <StaffManagement />,
+            },
+            {
+              path: `${STAFF_MANAGEMENT}/${GROUP}/:id`,
+              element: <GroupConfig />,
             },
             {
               path: BRANCH,

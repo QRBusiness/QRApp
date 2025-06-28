@@ -1,4 +1,4 @@
-import { useRefreshTokenService } from '@/services/authService';
+import { useRefreshTokenService } from '@/services/auth-service';
 import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {

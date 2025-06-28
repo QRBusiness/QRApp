@@ -1,6 +1,6 @@
 import React from 'react';
-import { ACCESS_TOKEN, ADMIN_ROLE, REFRESH_TOKEN, USER_SESSION } from '@/constains';
-import { logoutService } from '@/services/authService';
+import { ACCESS_TOKEN, ADMIN_ROLE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constains';
+import { logoutService } from '@/services/auth-service';
 import { ChevronLeft, CircleHelp, LogOut, Settings, User, UserCog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -62,6 +62,7 @@ const SidebarApp = ({ items }: SidebarProps) => {
     await logoutService({ refresh_token: refresh_token });
     navigate('/login');
     saveToLocalStorage(USER_SESSION, defaultUserState);
+    saveToLocalStorage(USER_PERMISSIONS, []);
     saveToLocalStorage(REFRESH_TOKEN, null);
     saveToLocalStorage(ACCESS_TOKEN, null);
   };

@@ -11,6 +11,7 @@ export const MENU_MANAGEMENT = 'menu-management';
 export const ORDER_MANAGEMENT = 'order-management';
 export const UNAUTHORIZED = 'unauthorized';
 export const PROFILE = 'profile';
+export const GROUP = 'group';
 
 export const BUSINESS = 'business';
 export const BRANCH = 'branch';
@@ -35,6 +36,7 @@ export const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 export const ACCESS_TOKEN = 'access_token';
 export const REFRESH_TOKEN = 'refresh_token';
 export const USER_SESSION = 'user_session';
+export const USER_PERMISSIONS = 'user_permissions';
 export const BUSINESS_OWNER_TABLE = 'BUSINESS_OWNER_TABLE';
 export const BUSINESS_TABLE = 'BUSINESS_TABLE';
 export const BRANCH_TABLE = 'BRANCH_TABLE';

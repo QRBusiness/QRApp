@@ -189,3 +189,8 @@ export const createUserSchema = z.object({
   address: z.string().min(1, { message: 'module.staffManagement.create.address.error' }),
   branch: z.string().min(1, { message: 'module.staffManagement.create.branch.error' }),
 });
+
+export const createGroupSchema = z.object({
+  name: z.string().min(1, { message: 'module.staffManagement.createGroup.name.error' }),
+  description: z.string().optional(),
+});

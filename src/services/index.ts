@@ -2,7 +2,7 @@
 import { ACCESS_TOKEN } from '@/constains';
 import axios from 'axios';
 import { loadFromLocalStorage } from '@/libs/utils';
-import { useRefreshTokenService } from './authService';
+import { useRefreshTokenService } from './auth-service';
 
 export type SuccessResponse<T> = {
   data: T;

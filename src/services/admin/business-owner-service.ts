@@ -13,7 +13,7 @@ interface UserResponse {
   data: User[];
 }
 
-interface User {
+export interface User {
   _id: string;
   name: string;
   username: string;

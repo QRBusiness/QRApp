@@ -12,6 +12,7 @@
       "cancel": "Cancel",
       "save": "Save",
       "edit": "Edit",
+      "more": "More",
       "delete": "Delete",
       "view": "View",
       "create": "Create",
@@ -76,6 +77,7 @@
       "businessId": "Business ID",
       "dashboard": "Dashboard",
       "branch": "Branch Management",
+      "group": "Group",
       "business-owner-management": "Business Owner Management",
       "business": "Business Management",
       "business-type": "Business Type Management",
@@ -571,6 +573,29 @@
       "edit": {
         "title": "Edit Staff Member",
         "description": "Update the details of the staff member."
+      }
+    },
+    "groupManagement": {
+      "create": {
+        "title": "Create New Group",
+        "description": "Fill in the details to create a new group.",
+        "name.label": "Group Name",
+        "name.description": "Enter the name of the group.",
+        "name.error": "Group name is required.",
+        "description.label": "Group Description",
+        "description.description": "Enter a brief description of the group.",
+        "description.error": "Group description is required."
+      },
+      "edit": {
+        "title": "Edit Group",
+        "description": "Update the details of the group."
+      },
+      "viewTitle": "Group Details",
+      "viewDescription": "Below are the detailed information and attributes of this group.",
+      "button": {
+        "cancel": "Cancel",
+        "create": "Create Group",
+        "edit": "Edit Group"
       }
     }
   }

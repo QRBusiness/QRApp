@@ -10,15 +10,15 @@ import {
   OWNER_ROLE,
   REFRESH_TOKEN,
 } from '@/constains';
-import { loginService } from '@/services/authService';
-import { type UserProfile, getCurrentUser } from '@/services/userService';
+import { loginService } from '@/services/auth-service';
+import { type UserProfile, getCurrentUser, getUserPermissions } from '@/services/user-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { LoadingIcon } from '@/components/common/loading';
-import { setUserState } from '@/components/common/states/userState';
+import { setUserPermissions, setUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -55,12 +55,12 @@ const Login = () => {
         created_at: user.data.created_at,
         updated_at: user.data.updated_at,
         role: user.data.role,
-        permissions: user.data.permissions,
         business: {
           _id: user.data.business?._id || '1',
         },
-        group: [],
       });
+      const permissions = await getUserPermissions();
+      setUserPermissions(permissions);
     } catch (error) {
       console.error('Login failed:', error);
     } finally {
