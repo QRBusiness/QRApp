@@ -1,3 +1,4 @@
+import type { OptionsProps } from '@/services/owner/product-services';
 import { Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,9 +10,9 @@ export interface MenuItem {
   name: string;
   category: string;
   subcategory: string;
-  price: number;
   image: string;
-  available: boolean; // Optional field to indicate if the item is available
+  options: OptionsProps[];
+  variants: OptionsProps[];
   description: string; // Optional description for the menu item
   onAddToCart?: (id: string | number) => void; // Callback for adding to cart
   onRemoveFromCart?: (id: string | number) => void; // Callback for removing from cart
@@ -23,12 +24,14 @@ const MenuCardItem: React.FC<MenuItem> = ({
   name,
   category,
   subcategory,
-  price,
-  available = true,
   description,
+  variants = [],
+  options = [],
   onAddToCart = () => {},
   onRemoveFromCart = () => {},
 }) => {
+  const price = variants[0]?.price || 0; // Placeholder for price, can be replaced with actual price logic
+  const available = true; // Placeholder for availability, can be replaced with actual availability logic
   return (
     <Card className="flex overflow-hidden border shadow-sm p-2 relative" key={id}>
       <div className="flex flex-row gap-2 items-start">
@@ -49,17 +52,17 @@ const MenuCardItem: React.FC<MenuItem> = ({
             </div>
           </div>
           <div className="flex flex-col items-end justify-between ml-1">
-            <span className="font-medium text-primary">${price.toFixed(2)}</span>
+            <span className="font-medium text-primary">{price.toLocaleString('vi-VN')}</span>
           </div>
           <AddToCartDialog
             item={{
               id,
               name,
               category,
+              variants,
+              options,
               subcategory,
-              price,
               image,
-              available,
               description,
               onAddToCart,
               onRemoveFromCart,

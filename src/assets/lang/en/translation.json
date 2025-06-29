@@ -44,7 +44,10 @@
         "phone": "Phone",
         "email": "Email",
         "businessType": "Business Type",
-        "businessTaxCode": "Business Tax Code"
+        "businessTaxCode": "Business Tax Code",
+        "category": "Category",
+        "subcategory": "Subcategory",
+        "price": "Default Price"
       }
     },
     "authentication": {
@@ -281,20 +284,23 @@
       "title": "Menu Management",
       "createTitle": "Create New Menu Item",
       "createDescription": "Create a new menu item for your restaurant.",
+      "editTitle": "Edit Menu Item",
+      "editDescription": "Edit the details of the menu item.",
+      "viewTitle": "View Menu Item",
+      "viewDescription": "View the details of the menu item.",
       "createMenuField": {
         "name": "Menu Item Name",
-        "nameDescription": "Enter the name of the menu item.",
+        "nameDescription": "* Enter the name of the menu item.",
         "description": "Description",
-        "descriptionDescription": "Enter a description for the menu item.",
+        "descriptionDescription": "* Enter a description for the menu item.",
         "categoryName": "Category",
-        "categoryNameDescription": "Select a category for the menu item.",
+        "categoryNameDescription": "* Select a category for the menu item.",
         "subCategoryName": "Subcategory",
-        "subCategoryNameDescription": "Select a subcategory for the menu item.",
+        "subCategoryNameDescription": "* Select a subcategory for the menu item.",
         "nameError": "Menu item name cannot be empty.",
         "descriptionError": "Description cannot be empty.",
-        "categoryNameError": "Category must be selected.",
-        "subCategoryNameError": "Subcategory must be selected.",
-        "sizeError": "At least one size must be added."
+        "categoryError": "Category must be selected.",
+        "subcategoryError": "Subcategory must be selected."
       },
       "sizeField": {
         "label": "Size Fields",
@@ -314,12 +320,15 @@
       },
       "action": {
         "cancel": "Cancel",
-        "add": "Add New Menu Item"
+        "add": "Add New Menu Item",
+        "save": "Save Changes"
       },
-      "createMenuItemSizeField": {
-        "name": "Size Name",
-        "nameError": "Size name cannot be empty.",
+      "createMenuItemVariantField": {
+        "name": "Variant Name",
+        "nameDescription": "Enter the name of the variant.",
+        "nameError": "Variant name cannot be empty.",
         "price": "Price",
+        "priceDescription": "Enter the price for this variant.",
         "priceError": "Price must be a non-negative number."
       },
       "createMenuItemOptionField": {
@@ -596,6 +605,58 @@
         "cancel": "Cancel",
         "create": "Create Group",
         "edit": "Edit Group"
+      }
+    },
+    "categoriesMgmt": {
+      "viewTitle": "Category Details",
+      "viewDescription": "Below are the detailed information and attributes of this category.",
+      "create": {
+        "title": "Create New Category",
+        "description": "Fill in the details to create a new category.",
+        "name.label": "Category Name",
+        "name.description": "* Enter the name of the category.",
+        "name.placeholder": "Enter category name",
+        "name.error": "Category name is required.",
+        "description.label": "Category Description",
+        "description.description": "* Enter a brief description of the category.",
+        "description.placeholder": "Enter category description",
+        "description.error": "Category description is required."
+      },
+      "edit": {
+        "title": "Edit Category",
+        "description": "Update the details of the category."
+      },
+      "button": {
+        "cancel": "Cancel",
+        "create": "Create Category",
+        "edit": "Edit Category",
+        "add": "Add New Category"
+      },
+      "subCategories": {
+        "title": "Subcategories",
+        "description": "Manage subcategories under this category.",
+        "button": {
+          "add": "Add New Subcategory",
+          "cancel": "Cancel",
+          "edit": "Edit Subcategory",
+          "create": "Create Subcategory"
+        },
+        "create": {
+          "title": "Create New Subcategory",
+          "description": "Fill in the details to create a new subcategory.",
+          "category.label": "Category",
+          "category.description": "* Select the category for this subcategory.",
+          "category.placeholder": "Select category",
+          "category.error": "Category must be selected.",
+          "name.label": "Subcategory Name",
+          "name.description": "* Enter the name of the subcategory.",
+          "name.placeholder": "Enter subcategory name",
+          "name.error": "Subcategory name is required.",
+          "description.label": "Subcategory Description",
+          "description.description": "* Enter a brief description of the subcategory.",
+          "description.placeholder": "Enter subcategory description",
+          "description.error": "Subcategory description is required."
+        }
       }
     }
   }

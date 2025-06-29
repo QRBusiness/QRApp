@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useCategories, useSubcategories } from '@/services/owner/categories-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CirclePlus, CircleX, UtensilsCrossed } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -18,44 +19,60 @@ import {
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createMenuItemSchema } from '@/utils/schemas';
+import { createProductSchema } from '@/utils/schemas';
 
 interface CreateNewMenuDialogProps {
+  isCreate?: boolean;
   children: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit?: () => void;
+  onSubmit?: (data: z.infer<typeof createProductSchema>) => void;
   onCancel?: () => void;
+  initialValues?: z.infer<typeof createProductSchema>;
 }
 
-const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel }: CreateNewMenuDialogProps) => {
+const CreateNewMenuDialog = ({
+  isCreate = true,
+  children,
+  open,
+  onOpenChange,
+  onSubmit,
+  onCancel,
+  initialValues = {
+    name: '',
+    description: '',
+    category: '',
+    sub_category: '',
+    variants: [{ type: 'S', price: 0 }],
+    options: [],
+  },
+}: CreateNewMenuDialogProps) => {
   const { t } = useTranslation();
-  const categories = [
-    { value: 'starters', label: 'Starters' },
-    { value: 'main_dishes', label: 'Main Dishes' },
-    { value: 'desserts', label: 'Desserts' },
-    { value: 'beverages', label: 'Beverages' },
-    { value: 'sides', label: 'Sides' },
-  ];
+  const [subCategories, setSubCategories] = React.useState<{ label: string; value: string }[]>([]);
+  const { categories } = useCategories();
 
-  const subCategories = [
-    { value: 'salads', label: 'Salads' },
-    { value: 'soups', label: 'Soups' },
-    { value: 'grilled', label: 'Grilled' },
-    { value: 'pasta', label: 'Pasta' },
-    { value: 'cakes', label: 'Cakes' },
-  ];
-  const form = useForm<z.infer<typeof createMenuItemSchema>>({
-    resolver: zodResolver(createMenuItemSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-      categoryName: '',
-      subCategoryName: '',
-      sizes: [{ name: 'S', price: 0 }],
-      options: [],
-    },
+  const categoriesOptions = categories.map((category) => ({
+    label: category.name,
+    value: category._id,
+  }));
+
+  const form = useForm<z.infer<typeof createProductSchema>>({
+    resolver: zodResolver(createProductSchema),
+    values: initialValues,
   });
+
+  const { subcategories, refetch } = useSubcategories(form.getValues('category') || initialValues.category);
+
+  useEffect(() => {
+    if (subcategories && subcategories.length > 0) {
+      setSubCategories(
+        subcategories.map((subcategory) => ({
+          label: subcategory.name,
+          value: subcategory._id,
+        }))
+      );
+    }
+  }, [subcategories]);
 
   const {
     fields: sizeFields,
@@ -63,7 +80,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
     remove: removeSize,
   } = useFieldArray({
     control: form.control,
-    name: 'sizes',
+    name: 'variants',
   });
 
   const {
@@ -86,19 +103,29 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
     onOpenChange(false);
   };
 
-  const onSubmitForm = (data: z.infer<typeof createMenuItemSchema>) => {
-    onSubmit && onSubmit();
-    console.log('Menu item submitted:', data);
+  const onSubmitForm = async (data: z.infer<typeof createProductSchema>) => {
+    onSubmit && onSubmit(data);
     onOpenChange(false);
   };
 
+  const handleCategoryChange = async (value: string) => {
+    const selectedCategory = categories.find((category) => category._id === value);
+    if (selectedCategory) {
+      refetch();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange} key={initialValues.name}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-5xl overflow-y-scroll max-h-9/10">
         <DialogHeader>
-          <DialogTitle>{t('module.menuManagement.createTitle')}</DialogTitle>
-          <DialogDescription>{t('module.menuManagement.createDescription')}</DialogDescription>
+          <DialogTitle>
+            {isCreate ? t('module.menuManagement.createTitle') : t('module.menuManagement.editTitle')}
+          </DialogTitle>
+          <DialogDescription>
+            {isCreate ? t('module.menuManagement.createDescription') : t('module.menuManagement.editDescription')}
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
@@ -138,7 +165,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
             />
             <FormField
               control={form.control}
-              name="categoryName"
+              name="category"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
@@ -148,8 +175,12 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
                   <FormControl>
                     <div className="flex items-center justify-start space-x-2">
                       <CustomSelect
-                        options={categories}
-                        onFieldChange={field.onChange}
+                        disabled={isCreate ? false : true}
+                        options={categoriesOptions}
+                        onFieldChange={(props) => {
+                          field.onChange(props);
+                          handleCategoryChange(props);
+                        }}
                         value={field.value}
                         defaultValue={field.value}
                       />
@@ -164,7 +195,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
             />
             <FormField
               control={form.control}
-              name="subCategoryName"
+              name="sub_category"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
@@ -174,6 +205,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
                   <FormControl>
                     <div className="flex items-center justify-start space-x-2">
                       <CustomSelect
+                        disabled={isCreate ? false : true}
                         options={subCategories} // Replace with your subcategories options
                         onFieldChange={field.onChange}
                         value={field.value}
@@ -197,7 +229,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
                   <div key={field.id} className="grid grid-cols-5 gap-2 mb-2 justify-end items-end">
                     <FormField
                       control={form.control}
-                      name={`sizes.${index}.name`}
+                      name={`variants.${index}.type`}
                       render={({ field }) => (
                         <FormItem className="col-span-2">
                           <FormLabel>{t('module.menuManagement.sizeField.name')}</FormLabel>
@@ -209,7 +241,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
                     />
                     <FormField
                       control={form.control}
-                      name={`sizes.${index}.price`}
+                      name={`variants.${index}.price`}
                       render={({ field }) => (
                         <FormItem className="col-span-2">
                           <FormLabel>Price</FormLabel>
@@ -233,7 +265,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
                   type="button"
                   variant="default"
                   className="w-full md:w-fit min-w-[150px] flex justify-start"
-                  onClick={() => appendSize({ name: '', price: 0 })}
+                  onClick={() => appendSize({ type: '', price: 0 })}
                 >
                   <CirclePlus className="size-5 mr-2" />
                   {t('module.menuManagement.sizeField.add')}
@@ -249,7 +281,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
                   <div key={field.id} className="grid grid-cols-5 gap-2 mb-2 justify-end items-end">
                     <FormField
                       control={form.control}
-                      name={`options.${index}.name`}
+                      name={`options.${index}.type`}
                       render={({ field }) => (
                         <FormItem className="col-span-2">
                           <FormLabel>{t('module.menuManagement.optionField.name')}</FormLabel>
@@ -285,7 +317,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
                   type="button"
                   variant="default"
                   className="w-full md:w-fit min-w-[150px] flex justify-start"
-                  onClick={() => appendOption({ name: '', price: 0 })}
+                  onClick={() => appendOption({ type: '', price: 0 })}
                 >
                   <CirclePlus className="size-5 mr-2" />
                   {t('module.menuManagement.optionField.add')}
@@ -301,7 +333,7 @@ const CreateNewMenuDialog = ({ children, open, onOpenChange, onSubmit, onCancel 
 
               <Button type="submit" className="min-w-[120px]" disabled={!form.formState.isDirty}>
                 <UtensilsCrossed className="size-5 mr-[6px]" />
-                {t('module.menuManagement.action.add')}
+                {isCreate ? t('module.menuManagement.action.add') : t('module.menuManagement.action.save')}
               </Button>
             </DialogFooter>
           </form>

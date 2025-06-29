@@ -4,7 +4,6 @@ import {
   useAddGroupPermission,
   useAddGroupUser,
   useGroupById,
-  useRemoveGroupPermission,
   useRemoveGroupUser,
 } from '@/services/owner/group-service';
 import { useParams } from 'react-router-dom';
@@ -19,7 +18,6 @@ const GroupConfig = () => {
   const { permissions } = useUserPermissions();
   const { users } = useUsers({ page: 1, limit: 50 });
   const { addGroupPermission } = useAddGroupPermission();
-  const { removeGroupPermission } = useRemoveGroupPermission();
   const { addGroupUser } = useAddGroupUser();
   const { removeGroupUser } = useRemoveGroupUser();
 
@@ -52,29 +50,13 @@ const GroupConfig = () => {
   }
 
   const onGroupPermissionSave = async (selectedGroups: { label: string; value: string }[]) => {
-    // Logic to handle saving the selected groups
-    console.log('Selected Groups:', selectedGroups);
-    const addPermissionIds = selectedGroups
-      .filter((group) => !currentPermission.some((current) => current.value === group.value))
-      .map((group) => group.value);
-
-    const deletePermissionIds = currentPermission
-      .filter((group) => !selectedGroups.some((selected) => selected.value === group.value))
-      .map((group) => group.value);
     await addGroupPermission({
       groupId: id,
-      permissions: addPermissionIds,
-    });
-
-    await removeGroupPermission({
-      groupId: id,
-      permissions: deletePermissionIds,
+      permissions: selectedGroups.map((group) => group.value),
     });
   };
 
   const onUserGroupSave = async (selectedGroups: { label: string; value: string }[]) => {
-    // Logic to handle saving the selected user groups
-    console.log('Selected User Groups:', selectedGroups);
     const deleteUserIds = currentUserGroups.filter(
       (group) => !selectedGroups.some((selected) => selected.value === group.value)
     );

@@ -3,28 +3,29 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/libs/utils';
 
 interface TabProps {
-  id: string;
-  name: string;
+  label: string;
   value: string;
 }
 
 interface HorizontalFilterScrollProps {
   orderStatuses?: TabProps[];
   className?: string;
+  onChange?: (value: string) => void;
 }
 
-const HorizontalFilterScroll = ({ orderStatuses, ...props }: HorizontalFilterScrollProps) => {
+const HorizontalFilterScroll = ({ orderStatuses, onChange, ...props }: HorizontalFilterScrollProps) => {
   return (
     <ScrollArea className={cn('w-full whitespace-nowrap', props.className)}>
-      <Tabs defaultValue="All" className="w-full">
+      <Tabs defaultValue="all" className="w-full">
         <TabsList className="flex space-x-1 p-1">
           {orderStatuses?.map((status) => (
             <TabsTrigger
-              key={status.id}
+              key={status.value}
               value={status.value}
               className="px-4 py-1.5 text-sm font-medium cursor-pointer"
+              onClick={() => onChange && onChange(status.value)}
             >
-              {status.name}
+              {status.label}
             </TabsTrigger>
           ))}
         </TabsList>

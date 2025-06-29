@@ -1,10 +1,11 @@
 import React from 'react';
+import { useSubcategories } from '@/services/owner/categories-service';
 import { ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Hint } from '@/components/common/hint';
 import HorizontalFilterScroll from '@/components/common/horizontal-filter-scroll';
 import { Button } from '@/components/ui/button';
-import type { Menu } from '../table/columns';
+import type { Menu } from '../tables/columns';
 import MenuCardItem from './mobile-card-item';
 
 interface MobileMenuViewProps {
@@ -14,37 +15,48 @@ interface MobileMenuViewProps {
 const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = React.useState<Menu[]>([]);
-  const subCategories = ['All', ...Array.from(new Set(items.map((item) => item.subcategory)))];
+  const { subcategories } = useSubcategories();
+  const [currentFilterSubcategory, setCurrentFilterSubcategory] = React.useState<string>('all');
+
+  let categoryOptions = subcategories.map((subcategory) => ({
+    label: subcategory.name,
+    value: subcategory._id,
+  }));
+  categoryOptions = [{ label: 'All', value: 'all' }, ...categoryOptions];
+
   const addToCartHandler = (id: string | number) => {
-    const item = items.find((item) => item.id === id);
+    const item = items.find((item) => item._id === id);
     if (item) {
       setCartItems((prev) => [...prev, item]);
     }
   };
+
   return (
     <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
       <HorizontalFilterScroll
         className="col-span-1 md:col-span-2 lg:col-span-4 mb-4"
-        orderStatuses={subCategories.map((subcategory) => ({
-          id: subcategory,
-          name: subcategory,
-          value: subcategory,
+        orderStatuses={categoryOptions.map((category) => ({
+          label: category.label,
+          value: category.value,
         }))}
+        onChange={setCurrentFilterSubcategory}
       />
-      {items.map((item) => (
-        <MenuCardItem
-          key={item.id}
-          id={item.id}
-          image={item.image}
-          name={item.name}
-          category={item.category}
-          subcategory={item.subcategory}
-          price={item.price}
-          available={item.available}
-          description={item.description}
-          onAddToCart={addToCartHandler}
-        />
-      ))}
+      {items
+        .filter((item) => currentFilterSubcategory === 'all' || item.subcategory._id === currentFilterSubcategory)
+        .map((item) => (
+          <MenuCardItem
+            key={item._id}
+            id={item._id}
+            image={item.image}
+            name={item.name}
+            variants={item.variants}
+            options={item.options}
+            category={item.category.name || 'Category'}
+            subcategory={item.subcategory.name || 'Subcategory'}
+            description={item.description}
+            onAddToCart={addToCartHandler}
+          />
+        ))}
       <Hint label="View Cart Items" align="end">
         <Button
           variant="default"

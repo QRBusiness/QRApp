@@ -194,3 +194,37 @@ export const createGroupSchema = z.object({
   name: z.string().min(1, { message: 'module.staffManagement.createGroup.name.error' }),
   description: z.string().optional(),
 });
+
+export const createCategoriesSchema = z.object({
+  name: z.string().min(1, { message: 'module.categoriesMgmt.create.name.error' }),
+  description: z.string().optional(),
+});
+
+export const createSubCategoriesSchema = z.object({
+  category: z.string().min(1, { message: 'module.categoriesMgmt.create.category.error' }),
+  name: z.string().min(1, { message: 'module.categoriesMgmt.create.name.error' }),
+  description: z.string().optional(),
+});
+
+export const createProductSchema = z.object({
+  name: z.string().min(1, { message: 'module.menuManagement.createMenuField.nameError' }),
+  description: z.string().optional(),
+  category: z.string().min(1, { message: 'module.menuManagement.createMenuField.categoryError' }),
+  sub_category: z.string().min(1, { message: 'module.menuManagement.createMenuField.subcategoryError' }),
+  variants: z
+    .array(
+      z.object({
+        type: z.string().min(1, { message: 'module.productMgmt.create.variantName.error' }),
+        price: z.number().min(0, { message: 'module.productMgmt.create.variantPrice.error' }),
+      })
+    )
+    .optional(),
+  options: z.array(
+    z
+      .object({
+        type: z.string().min(1, { message: 'module.productMgmt.create.optionName.error' }),
+        price: z.number().min(0, { message: 'module.productMgmt.create.optionPrice.error' }),
+      })
+      .optional()
+  ),
+});

@@ -1,4 +1,5 @@
 import React from 'react';
+import { STAFF_SWITCH_SELECT } from '@/constants';
 import { useUsers } from '@/services/admin/business-owner-service';
 import { useCreateUser } from '@/services/admin/business-owner-service';
 import { type GroupResponse, useCreateGroup, useGroups } from '@/services/owner/group-service';
@@ -8,6 +9,7 @@ import type { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { createGroupSchema, createUserSchema } from '@/utils/schemas';
+import { loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 import CreateNewUser from './dialog/create-staff-dialog';
 import CreateNewGroup from './group/dialog/create-group-dialog';
 import type { GroupProps } from './group/tables/columns';
@@ -17,11 +19,13 @@ import StaffTable from './tables/page';
 
 const StaffManagement = () => {
   const { t } = useTranslation();
+
   const [staffData, setStaffData] = React.useState<UserProps[]>([]);
   const [groupData, setGroupData] = React.useState<GroupProps[]>([]);
   const [createUserDialog, setCreateUserDialog] = React.useState<boolean>(false);
   const [createGroupDialog, setCreateGroupDialog] = React.useState<boolean>(false);
-  const [selectedTab, setSelectedTab] = React.useState<string>('users');
+  const prevSelectedTab = loadFromLocalStorage(STAFF_SWITCH_SELECT, 'users');
+  const [selectedTab, setSelectedTab] = React.useState<string>(prevSelectedTab);
   const { groups } = useGroups();
   const { users } = useUsers({ page: 1, limit: 50 });
   const { createUser } = useCreateUser();
@@ -62,10 +66,15 @@ const StaffManagement = () => {
     }
   }, [groups]);
 
+  const handleTabChange = (value: string) => {
+    setSelectedTab(value);
+    saveToLocalStorage(STAFF_SWITCH_SELECT, value);
+  };
+
   return (
     <div className="container mx-auto pb-10 flex flex-col space-y-4">
       <div className="flex items-center justify-between">
-        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+        <Tabs value={selectedTab} onValueChange={handleTabChange}>
           <TabsList className="w-full">
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="groups">Groups</TabsTrigger>
