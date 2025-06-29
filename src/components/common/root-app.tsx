@@ -8,8 +8,8 @@ import {
   LOGIN,
   SIDEBAR_COOKIE_NAME,
   STAFF_MANAGEMENT,
-} from '@/constains';
-import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, PROFILE, QR_MANAGEMENT } from '@/constains';
+} from '@/constants';
+import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, PROFILE, QR_MANAGEMENT } from '@/constants';
 import Cookies from 'js-cookie';
 import {
   Building2,
@@ -30,7 +30,7 @@ import { useViewState } from '@/components/common/states/viewState';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 interface RootAppProps {
-  role: string;
+  role: string[];
 }
 
 const RootApp = ({ role }: RootAppProps) => {
@@ -38,7 +38,7 @@ const RootApp = ({ role }: RootAppProps) => {
   const location = useLocation();
   const { isMobile } = useViewState();
   const { role: currentRole } = useUserState();
-  if (role !== currentRole && currentRole !== ADMIN_ROLE) {
+  if (!role.includes(currentRole)) {
     return <Navigate to={LOGIN} replace={true} />;
   }
 
@@ -73,7 +73,7 @@ const RootApp = ({ role }: RootAppProps) => {
     []
   );
   const sidebarItems: SidebarItem[] = useMemo(() => {
-    if (role === ADMIN_ROLE) {
+    if (role.includes(ADMIN_ROLE)) {
       return [
         {
           title: 'module.sidebar.business-type',

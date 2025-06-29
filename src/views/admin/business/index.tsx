@@ -1,5 +1,5 @@
 import React from 'react';
-import { BUSINESS_OWNER_MANAGEMENT } from '@/constains';
+import { BUSINESS_OWNER_MANAGEMENT } from '@/constants';
 import { useBusiness } from '@/services/admin/business-service';
 import { CirclePlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';

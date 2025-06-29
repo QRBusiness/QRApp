@@ -1,4 +1,4 @@
-import { BUSINESS_TABLE } from '@/constains';
+import { BUSINESS_TABLE } from '@/constants';
 import { DataTable } from '@/components/common/tanstack-table/data-table';
 import { type BusinessType, columns } from './columns';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ACCESS_TOKEN, ADMIN_ROLE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constains';
+import { ACCESS_TOKEN, ADMIN_ROLE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constants';
 import { logoutService } from '@/services/auth-service';
 import { ChevronLeft, CircleHelp, LogOut, Settings, User, UserCog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';

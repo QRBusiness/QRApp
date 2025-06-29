@@ -1,4 +1,4 @@
-import { LOGIN } from '@/constains';
+import { LOGIN } from '@/constants';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useUserState } from '@/components/common/states/userState';
 

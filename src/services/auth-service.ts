@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constains';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants';
 import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { toast } from 'sonner';
 import { z } from 'zod';

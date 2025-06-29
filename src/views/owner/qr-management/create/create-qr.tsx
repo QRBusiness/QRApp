@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constains';
+import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constants';
 import { getAreas, useCreateArea } from '@/services/owner/area-service';
 import { useBranches } from '@/services/owner/branch-service';
 import { getTables, useCreateTable } from '@/services/owner/table-service';

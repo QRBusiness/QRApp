@@ -1,4 +1,4 @@
-import { USER_PERMISSIONS, USER_SESSION } from '@/constains';
+import { USER_PERMISSIONS, USER_SESSION } from '@/constants';
 import type { Permission } from '@/services/owner/group-service';
 import { proxy, useSnapshot } from 'valtio';
 import { loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';

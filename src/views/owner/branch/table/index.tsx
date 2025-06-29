@@ -1,4 +1,4 @@
-import { BRANCH_TABLE } from '@/constains';
+import { BRANCH_TABLE } from '@/constants';
 import { DataTable } from '@/components/common/tanstack-table/data-table';
 import { type BranchType, columns } from '../../../owner/branch/table/columns';
 

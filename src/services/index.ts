@@ -1,5 +1,5 @@
 // Config axios instance
-import { ACCESS_TOKEN } from '@/constains';
+import { ACCESS_TOKEN } from '@/constants';
 import axios from 'axios';
 import { loadFromLocalStorage } from '@/libs/utils';
 import { useRefreshTokenService } from './auth-service';

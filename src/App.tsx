@@ -19,8 +19,9 @@ import {
   OWNER_ROLE,
   QR_MANAGEMENT,
   STAFF_MANAGEMENT,
+  STAFF_ROLE,
   UNAUTHORIZED,
-} from '@/constains';
+} from '@/constants';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
@@ -103,7 +104,7 @@ function App() {
         // Owner routes
         {
           path: `${OWNER}/:businessId`,
-          element: <RootApp role={OWNER_ROLE} />,
+          element: <RootApp role={[OWNER_ROLE, STAFF_ROLE]} />,
           children: [
             {
               path: DASHBOARD,
@@ -146,7 +147,7 @@ function App() {
         // Admin routes
         {
           path: ADMIN,
-          element: <RootApp role={ADMIN_ROLE} />,
+          element: <RootApp role={[ADMIN_ROLE]} />,
           children: [
             {
               path: BUSINESS_TYPE,

@@ -1,4 +1,4 @@
-import { QR_MANAGEMENT_TABLE } from '@/constains';
+import { QR_MANAGEMENT_TABLE } from '@/constants';
 import { DataTable } from '@/components/common/tanstack-table/data-table';
 import { type QRTable, columns } from './columns';
 

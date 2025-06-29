@@ -1,4 +1,4 @@
-import { MENU_MANAGEMENT_TABLE } from '@/constains';
+import { MENU_MANAGEMENT_TABLE } from '@/constants';
 import { DataTable } from '@/components/common/tanstack-table/data-table';
 import { type Menu, columns } from './columns';
 

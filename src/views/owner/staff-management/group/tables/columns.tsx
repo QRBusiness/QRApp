@@ -1,5 +1,5 @@
 import React from 'react';
-import { GROUP } from '@/constains';
+import { GROUP } from '@/constants';
 import type { User } from '@/services/admin/business-owner-service';
 import { type Permission, useDeleteGroup, useUpdateGroup } from '@/services/owner/group-service';
 import type { ColumnDef } from '@tanstack/react-table';

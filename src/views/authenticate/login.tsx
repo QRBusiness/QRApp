@@ -9,7 +9,8 @@ import {
   OWNER,
   OWNER_ROLE,
   REFRESH_TOKEN,
-} from '@/constains';
+  STAFF_ROLE,
+} from '@/constants';
 import { loginService } from '@/services/auth-service';
 import { type UserProfile, getCurrentUser, getUserPermissions } from '@/services/user-service';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -65,7 +66,7 @@ const Login = () => {
       console.error('Login failed:', error);
     } finally {
       setIsLoading(false);
-      if (user?.data?.role === OWNER_ROLE) {
+      if (user?.data?.role === OWNER_ROLE || user?.data?.role === STAFF_ROLE) {
         navigate(`${OWNER}/${user?.data?.business?._id || '1'}/${DASHBOARD}`);
       } else if (user?.data?.role === ADMIN_ROLE) {
         navigate(`${ADMIN}/${BUSINESS_TYPE}`);

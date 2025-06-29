@@ -24,6 +24,7 @@ export const ADMIN = '/admin';
 // Role
 export const ADMIN_ROLE = 'Admin';
 export const OWNER_ROLE = 'BusinessOwner';
+export const STAFF_ROLE = 'Staff';
 // Sidebar
 export const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 export const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

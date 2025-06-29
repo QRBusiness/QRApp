@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ADMIN_ROLE, OWNER_ROLE } from '@/constains';
+import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
 import { Laptop, Plus, Tablet } from 'lucide-react';
 import { Hint } from '@/components/common/hint';
 import { toggleMenuDisplayOptionState, useMenuDisplayOptionState } from '@/components/common/states/menuStates';

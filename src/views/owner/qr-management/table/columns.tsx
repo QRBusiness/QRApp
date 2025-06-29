@@ -1,5 +1,5 @@
 import React from 'react';
-import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constains';
+import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constants';
 import { useDeleteTable } from '@/services/owner/table-service';
 import type { ColumnDef } from '@tanstack/react-table';
 import { CircleCheck, CircleX, Download, Edit, Eye, Trash } from 'lucide-react';
