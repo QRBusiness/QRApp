@@ -21,7 +21,7 @@ const MobileBottomBar = ({ items }: MobileBottomBarProps) => {
   if (window.innerWidth >= 768) return null; // Hide on larger screens
   // Hide the bottom bar on larger screens
   return (
-    <div className="grid grid-cols-5 h-14 fixed bottom-0 left-0 right-0 w-full bg-white border-t z-50">
+    <div className={`grid grid-cols-${items?.length} h-14 fixed bottom-0 left-0 right-0 w-full bg-white border-t z-50`}>
       {items?.map((item) => (
         <Button
           key={item.title}

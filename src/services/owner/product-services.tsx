@@ -154,3 +154,40 @@ export const useUpdateProduct = () => {
     data,
   };
 };
+
+const deleteProduct = async (id: string): Promise<void> => {
+  try {
+    const response: ApiResponse<{ data: ProductProps }> = await apiClient.delete(`/products/${id}`);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error deleting product', {
+        description: response.errorMessage || 'An error occurred while deleting the product.',
+      });
+      throw new Error(response.errorMessage || 'Error deleting product');
+    }
+    return;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error deleting product', {
+      description: error.errorMessage || 'An error occurred while deleting the product.',
+    });
+    throw new Error(error.errorMessage || 'Error deleting product');
+  }
+};
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending, error, isSuccess, data } = useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['productsQuery'] });
+      toast.success('Product deleted successfully');
+    },
+  });
+
+  return {
+    deleteProduct: mutateAsync,
+    isPending,
+    error,
+    isSuccess,
+    data,
+  };
+};

@@ -12,58 +12,33 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
-import type { MenuItem } from '../mobile-card/mobile-card-item';
+import type { Menu } from '../tables/columns';
+import { CustomVariantsSelect } from './custom-variants-select';
 
 interface AddToCartDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
-  item: MenuItem;
+  item: Menu;
 }
 
-const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => {
+const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open, onOpenChange }) => {
   const { t } = useTranslation();
-  const [open, setOpen] = React.useState(false);
   const [quantity, setQuantity] = React.useState(1);
   const [selectedPreferences, setSelectedPreferences] = React.useState<string[]>([]);
   const [specialInstructions, setSpecialInstructions] = React.useState('');
-  const sizes = [
-    {
-      id: 'size-small',
-      label: 'Size S',
-      value: 'small',
-      price: 0, // Optional price for size
-    },
-    {
-      id: 'size-medium',
-      label: 'Size M',
-      value: 'medium',
-      price: 5, // Optional price for size
-    },
-    {
-      id: 'size-large',
-      label: 'Size L',
-      value: 'large',
-      price: 10, // Optional price for size
-    },
-  ];
-  const [selectedSize, setSelectedSize] = React.useState(sizes[0].value);
 
-  const onSubmit = () => {
-    const selectedItem = {
-      ...item,
-      quantity,
-      size: selectedSize,
-      preferences: selectedPreferences,
-      specialInstructions,
-    };
-    if (item.onAddToCart) {
-      console.log('Adding to cart:', selectedItem);
-      item.onAddToCart(item.id);
-    }
-  };
+  const sizesOptions = item.variants.map((variant) => ({
+    value: variant.type,
+    label: `${variant.type} - ${variant.price.toLocaleString('vn-VN')} VND`,
+  }));
+
+  const [selectedSize, setSelectedSize] = React.useState(sizesOptions[0]?.value || '');
+
+  const onSubmit = () => {};
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-5xl">
         <DialogHeader>
@@ -76,13 +51,13 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => 
             <div>
               <DialogDescription className="text-sm text-muted-foreground">{item.description}</DialogDescription>
               <p className="text-lg font-semibold text-primary mt-2">
-                ${(item.variants[0]?.price * quantity).toFixed(2)}
+                {(item.variants[0]?.price * quantity).toLocaleString('vn-VN') + ' VND'}
               </p>
             </div>
           </div>
           {/* Quantity Selector */}
           <div className="flex flex-col md:flex-row md:w-full md:items-center items-start md:justify-start gap-4">
-            <div className="grid grid-cols-4 items-center gap-2">
+            <div className="flex flex-col items-center gap-2">
               <Label>{t('module.menuManagement.addToCartDialog.quantity')}</Label>
               <div className="flex items-center gap-2 col-span-3">
                 <Button
@@ -106,23 +81,14 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => 
             </div>
 
             {/* Size */}
-            <div className="grid grid-cols-4 items-start gap-2">
+            <div className="flex flex-col items-start justify-center gap-2">
               <Label>{t('module.menuManagement.addToCartDialog.sizes')}</Label>
-              <RadioGroup
-                defaultValue={sizes[0].value}
+              <CustomVariantsSelect
+                options={sizesOptions}
                 value={selectedSize}
-                onValueChange={setSelectedSize}
-                className="col-span-3 md:flex md:items-center md:space-x-4 space-y-2 md:space-y-0"
-              >
-                {sizes.map((size) => (
-                  <div key={size.id} className="flex items-center space-x-2">
-                    <RadioGroupItem value={size.value} id={size.id} />
-                    <Label htmlFor={size.id}>
-                      {size.label} - ${size.price}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
+                onChange={setSelectedSize}
+                selectLabel="Sizes"
+              />
             </div>
           </div>
           {/* Options */}
@@ -137,7 +103,7 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => 
               ].map((topping) => (
                 <div key={topping.label} className="flex items-center space-x-2">
                   <Checkbox
-                    id={`${item.id}-${topping.label}`}
+                    id={`${item._id}-${topping.label}`}
                     checked={selectedPreferences.includes(topping.label)}
                     onCheckedChange={(checked: any) => {
                       if (checked) {
@@ -147,7 +113,7 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => 
                       }
                     }}
                   />
-                  <Label htmlFor={`${item.id}-${topping.label}`}>
+                  <Label htmlFor={`${item._id}-${topping.label}`}>
                     {topping.label} - ${topping.price}
                   </Label>
                 </div>
@@ -165,7 +131,7 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item }) => 
           </div>
         </div>
         <div className="flex flex-col md:flex-row gap-3 justify-end">
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="outline">
             <CircleX className="size-5 mr-2" />
             {t('module.menuManagement.addToCartDialog.cancel')}
           </Button>

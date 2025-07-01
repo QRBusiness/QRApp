@@ -170,7 +170,7 @@ export const updateTableSchema = z.object({
 });
 
 export const createUserSchema = z.object({
-  name: z.string().min(1, { message: 'module.staffManagement.create.name.error' }),
+  name: z.string().min(1, { message: 'module.staffManagement.create.name.error' }).optional(),
   username: z.string().min(5, { message: 'module.staffManagement.create.username.error' }),
   password: z
     .string()
@@ -185,8 +185,9 @@ export const createUserSchema = z.object({
     .max(11, { message: 'module.staffManagement.create.phone.error' })
     .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
       message: 'module.staffManagement.create.phone.formatError',
-    }),
-  address: z.string().min(1, { message: 'module.staffManagement.create.address.error' }),
+    })
+    .optional(),
+  address: z.string().min(1, { message: 'module.staffManagement.create.address.error' }).optional(),
   branch: z.string().min(1, { message: 'module.staffManagement.create.branch.error' }),
 });
 
@@ -219,12 +220,12 @@ export const createProductSchema = z.object({
       })
     )
     .optional(),
-  options: z.array(
-    z
-      .object({
+  options: z
+    .array(
+      z.object({
         type: z.string().min(1, { message: 'module.productMgmt.create.optionName.error' }),
         price: z.number().min(0, { message: 'module.productMgmt.create.optionPrice.error' }),
       })
-      .optional()
-  ),
+    )
+    .optional(),
 });

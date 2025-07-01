@@ -47,7 +47,9 @@
         "businessTaxCode": "Business Tax Code",
         "category": "Category",
         "subcategory": "Subcategory",
-        "price": "Default Price"
+        "price": "Default Price",
+        "variants": "Variants",
+        "options": "Options"
       }
     },
     "authentication": {

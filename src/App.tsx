@@ -8,6 +8,7 @@ import {
   BUSINESS_OWNER_MANAGEMENT,
   BUSINESS_TYPE,
   CART,
+  CHECKOUT,
   DASHBOARD,
   FORGOT_PASSWORD,
   GROUP,
@@ -27,7 +28,8 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Loading from '@/components/common/loading';
 import { useResizeListener } from '@/components/common/states/viewState';
-import { Toaster } from '@/components/ui/sonner';
+import webSocketService from '@/config/socket';
+import CartItemsDetails from './views/owner/menu-management/cart/cart-items-details';
 
 const RootApp = React.lazy(() => import('@/components/common/root-app'));
 const GuestRouter = React.lazy(() => import('@/components/common/guest-router'));
@@ -35,7 +37,6 @@ const ForgotPassword = React.lazy(() => import('@/views/authenticate/forgot-pass
 const Login = React.lazy(() => import('@/views/authenticate/login'));
 const Dashboard = React.lazy(() => import('@/views/owner/dashboard'));
 const MenuManagement = React.lazy(() => import('@/views/owner/menu-management'));
-const CartItemsDetails = React.lazy(() => import('@/views/owner/menu-management/cart/cart-items-details'));
 const OrderManager = React.lazy(() => import('@/views/owner/order-management'));
 const QRManagement = React.lazy(() => import('@/views/owner/qr-management'));
 const StaffManagement = React.lazy(() => import('@/views/owner/staff-management'));
@@ -50,6 +51,13 @@ const BranchManagement = React.lazy(() => import('@/views/owner/branch'));
 const BusinessManagement = React.lazy(() => import('@/views/admin/business'));
 const BusinessTypeManagement = React.lazy(() => import('@/views/admin/business-type'));
 const GroupConfig = React.lazy(() => import('@/views/owner/staff-management/group'));
+const UserCheckoutPage = React.lazy(() => import('@/views/user/Checkout'));
+const UserCartPage = React.lazy(() => import('@/views/user/Cart'));
+const UserMenuPage = React.lazy(() => import('@/views/user/Menu'));
+
+const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
+
+webSocketService.connect(webSocketUrl);
 
 function App() {
   const { t } = useTranslation();
@@ -85,11 +93,11 @@ function App() {
             },
             {
               path: MENU_MANAGEMENT,
-              element: <MenuManagement />,
+              element: <UserMenuPage />,
             },
             {
               path: CART,
-              element: <CartItemsDetails />,
+              element: <UserCartPage />,
             },
             {
               path: ORDER_MANAGEMENT,
@@ -98,6 +106,10 @@ function App() {
             {
               path: `${ORDER_MANAGEMENT}/:id`,
               element: <OrderDetails />,
+            },
+            {
+              path: CHECKOUT,
+              element: <UserCheckoutPage />,
             },
           ],
         },
@@ -117,10 +129,6 @@ function App() {
             {
               path: MENU_MANAGEMENT,
               element: <MenuManagement />,
-            },
-            {
-              path: CART,
-              element: <CartItemsDetails />,
             },
             {
               path: ORDER_MANAGEMENT,
@@ -180,7 +188,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <title>{t('module.app.name')}</title>
         <meta name="description" content={t('module.app.description')} />
-        <Toaster duration={3000} position="bottom-right" />
+
         <Suspense fallback={<Loading />}>
           <RouterProvider router={routers} />
         </Suspense>

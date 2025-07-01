@@ -136,7 +136,7 @@ const CreateNewMenuDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.menuManagement.createMenuField.name')}
-                    <p className="text-red-700">*</p>
+                    {!createProductSchema.shape.name.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -153,7 +153,7 @@ const CreateNewMenuDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.menuManagement.createMenuField.description')}
-                    <p className="text-red-700">*</p>
+                    {!createProductSchema.shape.description.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -170,7 +170,7 @@ const CreateNewMenuDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.menuManagement.createMenuField.categoryName')}
-                    <p className="text-red-700">*</p>
+                    {!createProductSchema.shape.category.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <div className="flex items-center justify-start space-x-2">
@@ -200,7 +200,7 @@ const CreateNewMenuDialog = ({
                 <FormItem>
                   <FormLabel>
                     {t('module.menuManagement.createMenuField.subCategoryName')}
-                    <p className="text-red-700">*</p>
+                    {!createProductSchema.shape.sub_category.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <div className="flex items-center justify-start space-x-2">
@@ -222,9 +222,12 @@ const CreateNewMenuDialog = ({
             />
             {/* Size fields */}
             <div className="flex flex-col items-start gap-2">
-              <Label>{t('module.menuManagement.sizeField.label')}</Label>
+              <Label>
+                {t('module.menuManagement.sizeField.label')}
+                {!createProductSchema.shape.variants.isOptional() && <p className="text-red-700">*</p>}
+              </Label>
               <p className="text-sm text-muted-foreground">{t('module.menuManagement.sizeField.description')}</p>
-              <div className="flex flex-col justify-start">
+              <div className="flex flex-col justify-start min-w-3/4 flex-1">
                 {sizeFields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-5 gap-2 mb-2 justify-end items-end">
                     <FormField
@@ -274,9 +277,12 @@ const CreateNewMenuDialog = ({
             </div>
             {/* Option fields */}
             <div className="flex flex-col items-start gap-2">
-              <Label>{t('module.menuManagement.optionField.label')}</Label>
+              <Label>
+                {t('module.menuManagement.optionField.label')}
+                {!createProductSchema.shape.options.isOptional() && <p className="text-red-700">*</p>}
+              </Label>
               <p className="text-sm text-muted-foreground">{t('module.menuManagement.optionField.description')}</p>
-              <div className="flex flex-col justify-start">
+              <div className="flex flex-col justify-start flex-1 min-w-3/4">
                 {optionFields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-5 gap-2 mb-2 justify-end items-end">
                     <FormField

@@ -4,16 +4,18 @@ import {
   type OptionsProps,
   type Subcategories,
   type VariantProps,
+  useDeleteProduct,
   useUpdateProduct,
 } from '@/services/owner/product-services';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type z from 'zod';
+import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { Button } from '@/components/ui/button';
 import type { createProductSchema } from '@/utils/schemas';
 import { formattedDate } from '@/libs/utils';
-import CreateNewMenuDialog from '../dialog/create-new-menu-dialog';
+import CreateNewMenuDialog from '../../../user/Cart/create-new-menu-dialog';
 import ReadOnlyMenuItemDialog from '../dialog/read-only-menu-item-dialog';
 
 export type Menu = {
@@ -103,12 +105,13 @@ export const columns: ColumnDef<Menu>[] = [
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
 
       const { updateProduct } = useUpdateProduct();
+      const { deleteProduct } = useDeleteProduct();
+
       const handleEditSubmit = async (values: z.infer<typeof createProductSchema>) => {
         await updateProduct({ id: row.original._id, data: values });
         setOpenEditDialog(false);
       };
 
-      console.log('Row data:', row.original);
       return (
         <div className="flex items-center gap-2">
           <ReadOnlyMenuItemDialog isOpen={openViewDialog} onClose={setOpenViewDialog} data={row.original}>
@@ -140,10 +143,16 @@ export const columns: ColumnDef<Menu>[] = [
               {t('module.qrManagement.table.actionButton.edit')}
             </Button>
           </CreateNewMenuDialog>
-          <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground">
-            <Trash className="mr-2" />
-            {t('module.qrManagement.table.actionButton.delete')}
-          </Button>
+          <CustomAlertDialog
+            title={t('module.qrManagement.alertDialog.title')}
+            description={t('module.qrManagement.alertDialog.description')}
+            onSubmit={() => deleteProduct(row.original._id)}
+          >
+            <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground">
+              <Trash className="mr-2" />
+              {t('module.qrManagement.table.actionButton.delete')}
+            </Button>
+          </CustomAlertDialog>
         </div>
       ); // Placeholder for action buttons
     },

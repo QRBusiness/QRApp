@@ -1,20 +1,17 @@
 import React from 'react';
 import { useSubcategories } from '@/services/owner/categories-service';
+import { useProducts } from '@/services/owner/product-services';
 import { ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Hint } from '@/components/common/hint';
 import HorizontalFilterScroll from '@/components/common/horizontal-filter-scroll';
 import { Button } from '@/components/ui/button';
-import type { Menu } from '../tables/columns';
-import MenuCardItem from './mobile-card-item';
+import MenuCardItem from './components/MenuCartItem';
 
-interface MobileMenuViewProps {
-  items: Menu[];
-}
-
-const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
+const UserMenuPage: React.FC = () => {
   const navigate = useNavigate();
 
+  const { products: items } = useProducts();
   const { subcategories } = useSubcategories();
   const [currentFilterSubcategory, setCurrentFilterSubcategory] = React.useState<string>('all');
 
@@ -40,8 +37,8 @@ const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
           <MenuCardItem
             key={item._id}
             _id={item._id}
-            image={item.image}
             name={item.name}
+            image="https://readdy.ai/api/search-image?query=Gourmet%20avocado%20toast%20with%20poached%20egg%20on%20sourdough%20bread%2C%20topped%20with%20cherry%20tomatoes%20and%20microgreens%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20shallow%20depth%20of%20field%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=1&orientation=squarish"
             variants={item.variants}
             options={item.options}
             category={item.category}
@@ -69,4 +66,4 @@ const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
   );
 };
 
-export default MobileMenuView;
+export default UserMenuPage;
