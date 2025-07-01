@@ -1,12 +1,11 @@
 import React from 'react';
 import { Plus, ScanText } from 'lucide-react';
-import { useSearchParams } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import AddToCartDialog from '@/views/owner/menu-management/dialog/add-to-cart-dialog';
 import ReadOnlyMenuItemDialog from '@/views/owner/menu-management/dialog/read-only-menu-item-dialog';
 import type { Menu } from '@/views/owner/menu-management/tables/columns';
+import AddToCartDialog from '@/views/user/Cart/add-to-cart-dialog';
 
 const MenuCardItem: React.FC<Menu> = ({
   _id,
@@ -20,11 +19,6 @@ const MenuCardItem: React.FC<Menu> = ({
   created_at,
   updated_at,
 }) => {
-  const [searchParams] = useSearchParams();
-  const area = searchParams.get('area');
-  const table = searchParams.get('table');
-  console.log('area', area, 'table', table);
-
   const [viewDialogOpen, setViewDialogOpen] = React.useState(false);
   const [addToCartDialogOpen, setAddToCartDialogOpen] = React.useState(false);
 

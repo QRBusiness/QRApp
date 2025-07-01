@@ -1,9 +1,7 @@
+import CartItemsDetails from './cart-items-details';
+
 const UserCartPage: React.FC = () => {
-  return (
-    <div>
-      <h1>User Cart</h1>
-    </div>
-  );
+  return <CartItemsDetails />;
 };
 
 export default UserCartPage;

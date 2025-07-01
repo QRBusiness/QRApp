@@ -44,6 +44,35 @@ export const clearLocalStorage = () => {
     console.error('Error clearing localStorage', error);
   }
 };
+
+export const saveToSessionStorage = (key: string, value: any) => {
+  try {
+    const serializedValue = JSON.stringify(value);
+    sessionStorage.setItem(key, serializedValue);
+  } catch (error) {
+    console.error('Error saving to sessionStorage', error);
+  }
+};
+export const loadFromSessionStorage = (key: string, defaultValue: any) => {
+  try {
+    const serializedValue = sessionStorage.getItem(key);
+    if (serializedValue === null || serializedValue === undefined) {
+      return defaultValue;
+    }
+    return JSON.parse(serializedValue);
+  } catch (error) {
+    console.error('Error loading from sessionStorage', error);
+    return defaultValue;
+  }
+};
+export const removeFromSessionStorage = (key: string) => {
+  try {
+    sessionStorage.removeItem(key);
+  } catch (error) {
+    console.error('Error removing from sessionStorage', error);
+  }
+};
+
 export const formattedDate = (date: string) => format(new Date(date), 'MMM dd, yyyy • h:mm a');
 
 export const getTypeOfField = (fieldName: string): string => {

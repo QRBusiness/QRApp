@@ -29,7 +29,6 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Loading from '@/components/common/loading';
 import { useResizeListener } from '@/components/common/states/viewState';
 import webSocketService from '@/config/socket';
-import CartItemsDetails from './views/owner/menu-management/cart/cart-items-details';
 
 const RootApp = React.lazy(() => import('@/components/common/root-app'));
 const GuestRouter = React.lazy(() => import('@/components/common/guest-router'));

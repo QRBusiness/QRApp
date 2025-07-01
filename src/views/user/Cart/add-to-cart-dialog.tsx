@@ -1,6 +1,7 @@
 import React from 'react';
-import { CirclePlus, CircleX, Minus, Plus } from 'lucide-react';
+import { CirclePlus, CircleX, Info, Minus, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { addToCart } from '@/components/common/states/cartState';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -13,36 +14,74 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import type { Menu } from '../tables/columns';
-import { CustomVariantsSelect } from './custom-variants-select';
+import { CustomVariantsSelect } from '../../owner/menu-management/dialog/custom-variants-select';
+import type { Menu } from '../../owner/menu-management/tables/columns';
+
+export interface CartItemProps {
+  _id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  selectedSize: string;
+  selectedPreferences: string[];
+  specialInstructions: string;
+}
 
 interface AddToCartDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
   item: Menu;
+  onSubmit?: (cartItem: CartItemProps) => void;
 }
 
-const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open, onOpenChange }) => {
+const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open, onOpenChange, onSubmit }) => {
   const { t } = useTranslation();
   const [quantity, setQuantity] = React.useState(1);
   const [selectedPreferences, setSelectedPreferences] = React.useState<string[]>([]);
   const [specialInstructions, setSpecialInstructions] = React.useState('');
+  const [isNotesChecked, setIsNotesChecked] = React.useState(false);
 
   const sizesOptions = item.variants.map((variant) => ({
     value: variant.type,
     label: `${variant.type} - ${variant.price.toLocaleString('vn-VN')} VND`,
   }));
-
   const [selectedSize, setSelectedSize] = React.useState(sizesOptions[0]?.value || '');
 
-  const onSubmit = () => {};
+  const menuOptions = item.options.map((option) => ({
+    value: option.type,
+    label: option.type + ' - ' + option.price.toLocaleString('vn-VN') + ' VND',
+  }));
+
+  const onAddToCart = () => {
+    const variantIndex = item.variants.findIndex((variant) => variant.type === selectedSize);
+    const totalPreferencesPrice = selectedPreferences.reduce((total, pref) => {
+      const option = item.options.find((opt) => opt.type === pref);
+      return total + (option?.price || 0);
+    }, 0);
+
+    const cartItem = {
+      _id: item._id,
+      name: item.name,
+      quantity,
+      selectedSize,
+      selectedPreferences,
+      specialInstructions,
+      price: item.variants[variantIndex]?.price + totalPreferencesPrice || 0,
+    };
+    onSubmit && onSubmit(cartItem);
+    addToCart(cartItem);
+    onOpenChange(false);
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-5xl">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">{item.name}</DialogTitle>
+          <DialogTitle className="text-xl flex items-center gap-2">
+            <Info />
+            {item.name}
+          </DialogTitle>
         </DialogHeader>
         {/* Dialog Description */}
         <div className="grid gap-4 py-4">
@@ -56,8 +95,8 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
             </div>
           </div>
           {/* Quantity Selector */}
-          <div className="flex flex-col md:flex-row md:w-full md:items-center items-start md:justify-start gap-4">
-            <div className="flex flex-col items-center gap-2">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="flex flex-col items-start justify-between gap-2 col-span-3 md:col-span-1">
               <Label>{t('module.menuManagement.addToCartDialog.quantity')}</Label>
               <div className="flex items-center gap-2 col-span-3">
                 <Button
@@ -66,7 +105,7 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="rounded-full "
                 >
-                  <Minus className="size-5" />
+                  <Minus className="size-4" />
                 </Button>
                 <span className="w-8 text-center">{quantity}</span>
                 <Button
@@ -75,13 +114,13 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
                   onClick={() => setQuantity(quantity + 1)}
                   className="rounded-full "
                 >
-                  <Plus className="size-5" />
+                  <Plus className="size-4" />
                 </Button>
               </div>
             </div>
 
             {/* Size */}
-            <div className="flex flex-col items-start justify-center gap-2">
+            <div className="flex flex-col items-start justify-center gap-2 col-span-3 md:col-span-1">
               <Label>{t('module.menuManagement.addToCartDialog.sizes')}</Label>
               <CustomVariantsSelect
                 options={sizesOptions}
@@ -95,47 +134,51 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
           <div className="space-y-2">
             <Label>{t('module.menuManagement.addToCartDialog.additionalToppings')}</Label>
             <div className="space-y-2">
-              {[
-                { label: 'Cheese', price: 5 },
-                { label: 'Bacon', price: 6 },
-                { label: 'Mushrooms', price: 4 },
-                { label: 'Peppers', price: 3 },
-              ].map((topping) => (
-                <div key={topping.label} className="flex items-center space-x-2">
+              {menuOptions.map((option) => (
+                <div key={option.label} className="flex items-center space-x-2">
                   <Checkbox
-                    id={`${item._id}-${topping.label}`}
-                    checked={selectedPreferences.includes(topping.label)}
+                    id={`${item._id}-${option.value}`}
+                    checked={selectedPreferences.includes(option.value)}
                     onCheckedChange={(checked: any) => {
                       if (checked) {
-                        setSelectedPreferences([...selectedPreferences, topping.label]);
+                        setSelectedPreferences([...selectedPreferences, option.value]);
                       } else {
-                        setSelectedPreferences(selectedPreferences.filter((p) => p !== topping.label));
+                        setSelectedPreferences(selectedPreferences.filter((p) => p !== option.value));
                       }
                     }}
                   />
-                  <Label htmlFor={`${item._id}-${topping.label}`}>
-                    {topping.label} - ${topping.price}
-                  </Label>
+                  <Label htmlFor={`${item._id}-${option.value}`}>{option.label}</Label>
                 </div>
               ))}
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label>{t('module.menuManagement.addToCartDialog.notes')}</Label>
-            <Textarea
-              className="w-full p-2 border rounded-md h-20 resize-none"
-              placeholder={t('module.menuManagement.addToCartDialog.notesPlaceholder')}
-              value={specialInstructions}
-              onChange={(e) => setSpecialInstructions(e.target.value)}
-            />
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="special-instructions"
+                  checked={!!isNotesChecked}
+                  onCheckedChange={(checked: any) => {
+                    setIsNotesChecked(checked);
+                  }}
+                />
+                <Label>{t('module.menuManagement.addToCartDialog.notes')}</Label>
+              </div>
+              {isNotesChecked && (
+                <Textarea
+                  className="w-full p-2 border rounded-md h-20 resize-none"
+                  placeholder={t('module.menuManagement.addToCartDialog.notesPlaceholder')}
+                  value={specialInstructions}
+                  onChange={(e) => setSpecialInstructions(e.target.value)}
+                />
+              )}
+            </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-3 justify-end">
-          <Button variant="outline">
+        <div className="flex flex-row gap-3 justify-between items-center">
+          <Button variant="outline" className="flex-1" onClick={() => onOpenChange(false)}>
             <CircleX className="size-5 mr-2" />
             {t('module.menuManagement.addToCartDialog.cancel')}
           </Button>
-          <Button onClick={onSubmit}>
+          <Button onClick={onAddToCart} className="flex-1">
             <CirclePlus className="size-5 mr-2" />
             {t('module.menuManagement.addToCartDialog.addToCart')}
           </Button>

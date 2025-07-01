@@ -25,7 +25,7 @@ export function CustomVariantsSelect({
 }: CustomVariantsSelectProps) {
   return (
     <Select value={value} onValueChange={onChange} defaultValue={value}>
-      <SelectTrigger className="flex-1 w-full min-w-[156px]">
+      <SelectTrigger className="w-fit min-w-[156px]">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

@@ -36,10 +36,10 @@ export const SIDEBAR_WIDTH_ICON = '3rem';
 export const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
 // Local Storage Constants
-export const ACCESS_TOKEN = 'access_token';
-export const REFRESH_TOKEN = 'refresh_token';
-export const USER_SESSION = 'user_session';
-export const USER_PERMISSIONS = 'user_permissions';
+export const ACCESS_TOKEN = 'ACCESS_TOKEN';
+export const REFRESH_TOKEN = 'REFRESH_TOKEN';
+export const USER_SESSION = 'USER_SESSION';
+export const USER_PERMISSIONS = 'USER_PERMISSIONS';
 export const BUSINESS_OWNER_TABLE = 'BUSINESS_OWNER_TABLE';
 export const BUSINESS_TABLE = 'BUSINESS_TABLE';
 export const BRANCH_TABLE = 'BRANCH_TABLE';
@@ -49,3 +49,4 @@ export const MENU_MANAGEMENT_TABLE = 'MENU_MANAGEMENT_TABLE';
 export const STAFF_MANAGEMENT_TABLE = 'STAFF_MANAGEMENT_TABLE';
 export const STAFF_SWITCH_SELECT = 'STAFF_SWITCH_SELECT';
 export const MENU_SWITCH_SELECT = 'MENU_SWITCH_SELECT';
+export const USER_CART_STORAGE = 'USER_CART_STORAGE';
