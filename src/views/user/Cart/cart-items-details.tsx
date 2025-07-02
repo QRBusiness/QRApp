@@ -49,6 +49,11 @@ const CartItemsDetails: React.FC = () => {
     </div>
   );
 
+  const onCheckout = () => {
+    // Handle checkout logic here
+    console.log('Proceeding to checkout with total:', cartItems);
+  };
+
   return (
     <div className="relative flex flex-col min-h-screen p-4 border w-full max-w-5xl rounded-lg mx-auto">
       {/* Main Content */}
@@ -171,7 +176,7 @@ const CartItemsDetails: React.FC = () => {
                 {t('module.menuManagement.cart.continueShopping')}
               </Button>
 
-              <Button variant="default" className="col-span-2 md:col-span-1">
+              <Button variant="default" className="col-span-2 md:col-span-1" onClick={onCheckout}>
                 {t('module.menuManagement.cart.checkout', { total: total.toFixed(2) })}
               </Button>
             </div>

@@ -166,6 +166,11 @@
         "description": "Add area if not already created to embed in the QR code.",
         "create": "Add New Area",
         "reset": "Reset Form",
+        "edit": "Edit Area",
+        "edit.title": "Edit Area",
+        "edit.description": "Update the details of the area.",
+        "viewTitle": "Area Details",
+        "viewDescription": "Below are the detailed information and attributes of this area.",
 
         "fieldName": "Area Name",
         "fieldNameError": "Area name cannot be empty.",

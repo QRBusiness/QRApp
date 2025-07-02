@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import { useBranches } from '@/services/owner/branch-service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Building2, CircleX } from 'lucide-react';
+import { CircleX, Edit, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import CustomSelect from '@/components/common/custom-select';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -16,33 +18,39 @@ import {
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { createBranchSchema } from '@/utils/schemas';
+import { createAreaSchema } from '@/utils/schemas';
 
-interface CreateNewBranchProps {
+interface CreateNewAreaProps {
   create?: boolean;
-  initialData?: z.infer<typeof createBranchSchema>;
+  initialData?: z.infer<typeof createAreaSchema>;
   children: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit?: (data: z.infer<typeof createBranchSchema>) => void;
+  onSubmit?: (data: z.infer<typeof createAreaSchema>) => void;
   onCancel?: () => void;
 }
 
-const CreateNewBranch = ({
+const CreateNewArea = ({
   create = true,
-  initialData = { name: '', address: '', contact: '' },
+  initialData = { name: '', branch: '' },
   children,
   open,
   onOpenChange,
   onSubmit,
   onCancel,
-}: CreateNewBranchProps) => {
+}: CreateNewAreaProps) => {
   const { t } = useTranslation();
 
-  const form = useForm<z.infer<typeof createBranchSchema>>({
-    resolver: zodResolver(createBranchSchema),
+  const form = useForm<z.infer<typeof createAreaSchema>>({
+    resolver: zodResolver(createAreaSchema),
     defaultValues: initialData,
   });
+
+  const { branches } = useBranches({ page: 1, limit: 50 });
+  const branchOptions = branches.map((branch) => ({
+    value: branch._id,
+    label: branch.name,
+  }));
 
   // Reset form values whenever dialog opens or initialData changes
   useEffect(() => {
@@ -56,7 +64,7 @@ const CreateNewBranch = ({
     onOpenChange(false);
   };
 
-  const onSubmitForm = (data: z.infer<typeof createBranchSchema>) => {
+  const onSubmitForm = (data: z.infer<typeof createAreaSchema>) => {
     onSubmit && onSubmit(data);
     onOpenChange(false);
   };
@@ -68,13 +76,13 @@ const CreateNewBranch = ({
         <DialogHeader>
           <DialogTitle>
             {create
-              ? t('module.branchManagement.createField.create.title')
-              : t('module.branchManagement.createField.edit.title')}{' '}
+              ? t('module.qrManagement.addAreaField.title')
+              : t('module.qrManagement.addAreaField.edit.title')}{' '}
           </DialogTitle>
           <DialogDescription>
             {create
-              ? t('module.branchManagement.createField.create.description')
-              : t('module.branchManagement.createField.edit.description')}
+              ? t('module.qrManagement.addAreaField.description')
+              : t('module.qrManagement.addAreaField.edit.description')}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -89,47 +97,69 @@ const CreateNewBranch = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.branchManagement.createField.name.label')}
-                    {!createBranchSchema.shape.name.isOptional() && <p className="text-red-700">*</p>}
+                    {t('module.qrManagement.addAreaField.fieldName')}
+                    {!createAreaSchema.shape.name.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.branchManagement.createField.name.description')}</FormDescription>
+                  <FormDescription>{t('module.qrManagement.addAreaField.fieldNameDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="address"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.branchManagement.createField.address.label')}
-                    {!createBranchSchema.shape.address.isOptional() && <p className="text-red-700">*</p>}
+                    {t('module.qrManagement.addAreaField.fieldDescription')}
+                    {!createAreaSchema.shape.description.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.branchManagement.createField.address.description')}</FormDescription>
+                  <FormDescription>{t('module.qrManagement.addAreaField.fieldDescriptionDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="contact"
+              name="image_url"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.branchManagement.createField.contact.label')}
-                    {!createBranchSchema.shape.contact.isOptional() && <p className="text-red-700">*</p>}
+                    {t('module.qrManagement.addAreaField.fieldImageUrl')}
+                    {!createAreaSchema.shape.image_url.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>{t('module.branchManagement.createField.contact.description')}</FormDescription>
+                  <FormDescription>{t('module.qrManagement.addAreaField.fieldImageUrlDescription')}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="branch"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('module.qrManagement.addAreaField.fieldBranchId')}
+                    {!createAreaSchema.shape.branch.isOptional() && <p className="text-red-700">*</p>}
+                  </FormLabel>
+                  <FormControl>
+                    <CustomSelect
+                      options={branchOptions}
+                      {...field}
+                      onFieldChange={field.onChange}
+                      disabled={!create}
+                    />
+                  </FormControl>
+                  <FormDescription>{t('module.qrManagement.addAreaField.fieldBranchIdDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -138,12 +168,12 @@ const CreateNewBranch = ({
             <DialogFooter>
               <Button type="button" variant="destructive" onClick={onCancelHandler}>
                 <CircleX className="size-5" />
-                {t('module.branchManagement.action.cancel')}
+                {t('module.qrManagement.cancel')}
               </Button>
 
               <Button type="submit" className="min-w-[120px]" disabled={!form.formState.isDirty}>
-                <Building2 className="size-5 mr-[6px]" />
-                {create ? t('module.branchManagement.action.create') : t('module.branchManagement.action.edit')}
+                {create ? <Plus className="size-5 mr-[6px]" /> : <Edit className="size-5 mr-[6px]" />}
+                {create ? t('module.qrManagement.addAreaField.create') : t('module.qrManagement.addAreaField.edit')}
               </Button>
             </DialogFooter>
           </form>
@@ -153,4 +183,4 @@ const CreateNewBranch = ({
   );
 };
 
-export default CreateNewBranch;
+export default CreateNewArea;
