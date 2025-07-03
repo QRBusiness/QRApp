@@ -5,9 +5,11 @@ import {
   BUSINESS,
   BUSINESS_OWNER_MANAGEMENT,
   BUSINESS_TYPE,
+  CATEGORY_MANAGEMENT,
   LOGIN,
   SIDEBAR_COOKIE_NAME,
   STAFF_MANAGEMENT,
+  SUBCATEGORY_MANAGEMENT,
 } from '@/constants';
 import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, PROFILE, QR_MANAGEMENT } from '@/constants';
 import Cookies from 'js-cookie';
@@ -107,6 +109,18 @@ const RootApp = ({ role }: RootAppProps) => {
         title: 'module.sidebar.menu-management',
         path_url: MENU_MANAGEMENT,
         icon: <UtensilsCrossed />,
+        children: [
+          {
+            title: 'module.sidebar.menu-management.categories',
+            path_url: CATEGORY_MANAGEMENT,
+            icon: <UtensilsCrossed />,
+          },
+          {
+            title: 'module.sidebar.menu-management.subcategories',
+            path_url: SUBCATEGORY_MANAGEMENT,
+            icon: <UtensilsCrossed />,
+          },
+        ],
       },
       {
         title: 'module.sidebar.order-management',

@@ -88,6 +88,8 @@
       "business-type": "Business Type Management",
       "qr-management": "QR Management",
       "menu-management": "Menu Management",
+      "menu-management.categories": "Menu Categories",
+      "menu-management.subcategories": "Menu Subcategories",
       "order-management": "Order Management",
       "order-details": "Order Details",
       "staff-management": "Staff Management",

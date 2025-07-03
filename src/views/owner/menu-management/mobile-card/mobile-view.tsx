@@ -57,7 +57,7 @@ const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
           className="fixed bottom-17 md:bottom-4 right-4 flex items-center p-2 w-12 h-12 rounded-md cursor-pointer"
           onClick={() => navigate('../cart')}
         >
-          <div className="relative w-full h-full  flex items-center justify-center">
+          <div className="relative w-full h-full flex items-center justify-center">
             <ShoppingCart className="size-6" />
             <p className="absolute text-xs md:text-sm font-medium -top-4 -right-4 p-1 border bg-white border-primary text-black h-5 w-5 rounded-full flex items-center justify-center">
               {4}

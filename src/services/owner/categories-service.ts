@@ -6,7 +6,6 @@ import type { createCategoriesSchema, createSubCategoriesSchema } from '@/utils/
 
 export interface SubCategoryProps {
   _id: string;
-
   name: string;
   description: string;
   created_at: string;
@@ -160,7 +159,7 @@ const updateCategory = async ({
 
 export const useUpdateCategory = () => {
   const queryClient = useQueryClient();
-  return useMutation({
+  const { mutateAsync, isError, isSuccess, data } = useMutation({
     mutationFn: updateCategory,
     onSuccess: (data) => {
       if (data) {
@@ -169,6 +168,12 @@ export const useUpdateCategory = () => {
       }
     },
   });
+  return {
+    updateCategory: mutateAsync,
+    isError,
+    data,
+    isSuccess,
+  };
 };
 
 const addSubCategory = async (

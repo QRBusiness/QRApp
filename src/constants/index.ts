@@ -14,6 +14,9 @@ export const ORDER_MANAGEMENT = 'order-management';
 export const UNAUTHORIZED = 'unauthorized';
 export const PROFILE = 'profile';
 export const GROUP = 'group';
+export const AREA_MANAGEMENT = 'area';
+export const CATEGORY_MANAGEMENT = 'category';
+export const SUBCATEGORY_MANAGEMENT = 'subcategory';
 
 export const BUSINESS = 'business';
 export const BRANCH = 'branch';

@@ -7,6 +7,7 @@ export interface SidebarItem {
   title: string;
   path_url: string;
   icon: React.ReactNode;
+  children?: SidebarItem[];
 }
 export interface MobileBottomBarProps {
   items?: SidebarItem[];

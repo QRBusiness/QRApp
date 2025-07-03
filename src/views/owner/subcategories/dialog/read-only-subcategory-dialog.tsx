@@ -14,13 +14,13 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { formattedDate } from '@/libs/utils';
-import type { AreaProps } from '../tables/columns';
+import type { SubcategoryProps } from '../tables/columns';
 
 interface ReadOnlyDialogProps {
   isOpen: boolean;
   onClose: (open: boolean) => void;
   children?: React.ReactNode;
-  data: AreaProps;
+  data: SubcategoryProps;
 }
 
 const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, children, data }) => {
@@ -41,9 +41,9 @@ const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, childr
           <div className="flex items-center justify-between">
             <Label>{t('module.common.readOnlyDialog.id')}:</Label>
             <div className="flex gap-2 items-center">
-              {data.id}
+              {data._id}
               <Hint label={t('module.common.readOnlyDialog.copyId')} side="right">
-                <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(data.id)}>
+                <Button variant="outline" size="icon" onClick={() => navigator.clipboard.writeText(data._id)}>
                   <Copy className="size-4" />
                 </Button>
               </Hint>

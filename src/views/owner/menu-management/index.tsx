@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import React from 'react';
 import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
-import { useAddSubCategory, useCreateCategory } from '@/services/owner/categories-service';
 import { useCreateProduct, useProducts } from '@/services/owner/product-services';
 import { Laptop, Plus, Tablet } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -10,8 +9,6 @@ import { toggleMenuDisplayOptionState, useMenuDisplayOptionState } from '@/compo
 import { useUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import CreateNewMenuDialog from '../../user/Cart/create-new-menu-dialog';
-import CreateNewCategory from '../categories/dialog/create-categories-dialog';
-import CreateNewSubCategory from '../subcategories/dialog/create-subsategories-dialog';
 import MobileMenuView from './mobile-card/mobile-view';
 import type { Menu } from './tables/columns';
 import MenuTable from './tables/page';
@@ -22,11 +19,7 @@ const MenuManagement = () => {
   const user = useUserState();
   const { isTable: isTableView } = useMenuDisplayOptionState();
   const [openCreateNewMenuDialog, setOpenCreateNewMenuDialog] = useState(false);
-  const [openCreateCategoryDialog, setOpenCreateCategoryDialog] = useState(false);
-  const [openCreateSubCategoryDialog, setOpenCreateSubCategoryDialog] = useState(false);
 
-  const { createCategory } = useCreateCategory();
-  const { addSubCategory } = useAddSubCategory();
   const { createProduct } = useCreateProduct();
 
   const { products } = useProducts();
@@ -58,28 +51,6 @@ const MenuManagement = () => {
     <div className="container mx-auto pb-10 space-y-4">
       {isShowAction && (
         <div className="flex items-center space-x-2 justify-self-end mr-4 md:mr-0">
-          {/* Create Category Dialog */}
-          <CreateNewCategory
-            open={openCreateCategoryDialog}
-            onOpenChange={setOpenCreateCategoryDialog}
-            onSubmit={createCategory}
-          >
-            <Button variant="outline" className="rounded-full md:rounded w-9 h-9 md:w-auto">
-              <Plus className="size-4 md:size-5" />
-              <p className="text-sm hidden md:block"> {t('module.categoriesMgmt.button.add')}</p>
-            </Button>
-          </CreateNewCategory>
-          {/* Create Subcategory Dialog */}
-          <CreateNewSubCategory
-            open={openCreateSubCategoryDialog}
-            onOpenChange={setOpenCreateSubCategoryDialog}
-            onSubmit={addSubCategory}
-          >
-            <Button variant="outline" className="rounded-full md:rounded w-9 h-9 md:w-auto">
-              <Plus className="size-4 md:size-5" />
-              <p className="text-sm hidden md:block">{t('module.categoriesMgmt.subCategories.button.add')}</p>
-            </Button>
-          </CreateNewSubCategory>
           {/* Create new Menu Item Dialog */}
           <CreateNewMenuDialog
             open={openCreateNewMenuDialog}
@@ -91,7 +62,7 @@ const MenuManagement = () => {
           >
             <Button variant="default" className="rounded-full md:rounded w-9 h-9 md:w-auto">
               <Plus className="md:mr-2 h-4 w-4" />
-              <p className="text-sm hidden md:block">Add New Menu Item</p>
+              <p className="text-sm hidden md:block">{t('module.menuManagement.action.add')}</p>
             </Button>
           </CreateNewMenuDialog>
 

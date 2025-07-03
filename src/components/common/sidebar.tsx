@@ -1,9 +1,11 @@
 import React from 'react';
 import { ACCESS_TOKEN, ADMIN_ROLE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constants';
 import { logoutService } from '@/services/auth-service';
-import { ChevronLeft, CircleHelp, LogOut, Settings, User, UserCog } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CircleHelp, LogOut, Settings, User, UserCog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   Sidebar,
   SidebarContent,
@@ -14,9 +16,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { cn, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
-import { Button } from '../ui/button';
 import { CustomDropdownMenu } from './custom-dropdown-menu';
 import type { SidebarItem } from './mobile-bottom-bar';
 import { defaultUserState, useUserState } from './states/userState';
@@ -104,21 +108,53 @@ const SidebarApp = ({ items }: SidebarProps) => {
           <SidebarGroupContent>
             <SidebarMenu className="w-full space-y-2">
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Button
-                      variant={'ghost'}
-                      className={cn(
-                        'w-full justify-start px-4 cursor-pointer',
-                        params.pathname.split('/').includes(item.path_url.replace(/^\//, '')) ? 'text-primary' : ''
+                <Collapsible key={item.title} asChild defaultOpen={false} className="group/collapsible">
+                  <SidebarMenuItem key={item.title}>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton asChild>
+                        <Button
+                          variant={'ghost'}
+                          className={cn(
+                            'w-full justify-start px-4 cursor-pointer',
+                            params.pathname.split('/').includes(item.path_url.replace(/^\//, '')) ? 'text-primary' : ''
+                          )}
+                          onClick={() => navigate(item.path_url)}
+                        >
+                          {item.icon}
+                          <span>{t(item.title)}</span>
+                          {item.children && item.children.length > 0 && (
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          )}
+                        </Button>
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      {item.children && item.children.length > 0 && (
+                        <SidebarMenuSub>
+                          {item.children.map((subItem) => (
+                            <SidebarMenuSubItem key={subItem.title}>
+                              <SidebarMenuSubButton
+                                asChild
+                                className={cn(
+                                  'w-full justify-start px-4 cursor-pointer',
+                                  params.pathname.split('/').includes(subItem.path_url.replace(/^\//, ''))
+                                    ? 'text-primary'
+                                    : ''
+                                )}
+                                onClick={() => navigate(item.path_url + '/' + subItem.path_url)}
+                              >
+                                <Button variant={'ghost'}>
+                                  {subItem.icon}
+                                  <span>{t(subItem.title)}</span>
+                                </Button>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
                       )}
-                      onClick={() => navigate(item.path_url)}
-                    >
-                      {item.icon}
-                      <span>{t(item.title)}</span>
-                    </Button>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>

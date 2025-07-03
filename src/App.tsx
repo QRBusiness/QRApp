@@ -8,6 +8,7 @@ import {
   BUSINESS_OWNER_MANAGEMENT,
   BUSINESS_TYPE,
   CART,
+  CATEGORY_MANAGEMENT,
   CHECKOUT,
   DASHBOARD,
   FORGOT_PASSWORD,
@@ -21,6 +22,7 @@ import {
   QR_MANAGEMENT,
   STAFF_MANAGEMENT,
   STAFF_ROLE,
+  SUBCATEGORY_MANAGEMENT,
   UNAUTHORIZED,
 } from '@/constants';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -53,6 +55,8 @@ const GroupConfig = React.lazy(() => import('@/views/owner/staff-management/grou
 const UserCheckoutPage = React.lazy(() => import('@/views/user/Checkout'));
 const UserCartPage = React.lazy(() => import('@/views/user/Cart'));
 const UserMenuPage = React.lazy(() => import('@/views/user/Menu'));
+const SubcategoryPage = React.lazy(() => import('@/views/owner/subcategories'));
+const CategoryPage = React.lazy(() => import('@/views/owner/categories'));
 
 const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
 
@@ -128,6 +132,14 @@ function App() {
             {
               path: MENU_MANAGEMENT,
               element: <MenuManagement />,
+            },
+            {
+              path: `${MENU_MANAGEMENT}/${CATEGORY_MANAGEMENT}`,
+              element: <CategoryPage />,
+            },
+            {
+              path: `${MENU_MANAGEMENT}/${SUBCATEGORY_MANAGEMENT}`,
+              element: <SubcategoryPage />,
             },
             {
               path: ORDER_MANAGEMENT,
