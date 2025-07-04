@@ -7,9 +7,9 @@ interface CartItem {
   name: string;
   quantity: number;
   price: number;
-  selectedSize: string;
-  selectedPreferences: string[];
-  specialInstructions: string;
+  variant: string;
+  options: string[];
+  note: string;
 }
 
 const initialCart = {

@@ -1,13 +1,10 @@
 import React from 'react';
-import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constants';
 import { useDeleteTable } from '@/services/owner/table-service';
 import type { ColumnDef } from '@tanstack/react-table';
 import { CircleCheck, CircleX, Download, Edit, Eye, Trash } from 'lucide-react';
-import QRCode from 'qrcode';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
-import { useUserState } from '@/components/common/states/userState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
@@ -85,24 +82,7 @@ export const columns: ColumnDef<QRTable>[] = [
       const [open, setOpen] = React.useState(false);
       const { t } = useTranslation();
 
-      const user = useUserState();
-
       const { deleteTable } = useDeleteTable();
-      const [qrCode, setQrCodeImage] = React.useState<string | null>(null);
-      const location = window.location.origin;
-
-      const navigateURL = `${location}/${UNAUTHORIZED}/${user.business._id}/${MENU_MANAGEMENT}?area=${row.getValue('area')}&table=${row.getValue('_id')}`;
-
-      QRCode.toDataURL(navigateURL, { errorCorrectionLevel: 'H' })
-        .then((url) => {
-          setQrCodeImage(url);
-        })
-        .catch((err) => {
-          console.error('QR Code generation failed:', err);
-          toast.error(t('module.qrManagement.qrGenerationError'), {
-            description: t('module.qrManagement.qrGenerationErrorDescription'),
-          });
-        });
 
       const handleDownload = (url: string) => {
         if (!url) {
@@ -128,8 +108,8 @@ export const columns: ColumnDef<QRTable>[] = [
           <PopUpQRCode
             title={t('module.qrManagement.preview.title')}
             description={t('module.qrManagement.preview.description')}
-            url={qrCode || ''}
-            onDownload={() => handleDownload(qrCode || '')}
+            url={row.original.qr_code || ''}
+            onDownload={() => handleDownload(row.original.qr_code || '')}
           >
             <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
               <Eye className="mr-2" />
@@ -139,7 +119,7 @@ export const columns: ColumnDef<QRTable>[] = [
           <Button
             variant={'outline'}
             className="hover:bg-primary hover:text-primary-foreground"
-            onClick={() => handleDownload(qrCode || '')}
+            onClick={() => handleDownload(row.original.qr_code || '')}
           >
             <Download className="mr-2" />
             {t('module.qrManagement.table.actionButton.download')}

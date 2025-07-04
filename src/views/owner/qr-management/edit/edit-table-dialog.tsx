@@ -104,7 +104,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                     {updateTableSchema.shape.qr_code.isOptional() ? '' : <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    {/* <Input
+                    <Input
                       placeholder={t('module.qrManagement.placeholder')}
                       name={field.name}
                       ref={field.ref}
@@ -112,12 +112,6 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
                       onBlur={field.onBlur}
                       disabled={field.disabled}
                       onChange={(e) => field.onChange(e.target.files && e.target.files[0] ? e.target.files[0] : '')} // Assuming the QR code is a file input
-                    /> */}
-                    <Input
-                      placeholder={t('module.qrManagement.edit.fieldQrCode.placeholder')}
-                      {...field}
-                      value={field.value}
-                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                   <FormDescription>{t('module.qrManagement.edit.fieldQrCode.description')}</FormDescription>

@@ -1,16 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSubcategories } from '@/services/owner/categories-service';
 import { useProducts } from '@/services/owner/product-services';
 import { ShoppingCart } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Hint } from '@/components/common/hint';
 import HorizontalFilterScroll from '@/components/common/horizontal-filter-scroll';
+import { useCartTotalQuantity } from '@/components/common/states/cartState';
+import { useGuestState, useSetAreaAndTable, useSetGuestName } from '@/components/common/states/guestState';
 import { Button } from '@/components/ui/button';
 import MenuCardItem from './components/MenuCartItem';
+import UserInputModel from './components/UserInputModel';
 
 const UserMenuPage: React.FC = () => {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const area = searchParams.get('area')!;
+  const table = searchParams.get('table')!;
+  const { name } = useGuestState();
+  const [openUserInputModel, setOpenUserInputModel] = React.useState<boolean>(!name);
 
+  useEffect(() => {
+    // Set the guest state with area and table from search params
+    if (area && table) {
+      useSetAreaAndTable({
+        area: area,
+        table: table,
+      });
+    }
+  }, [area, table]);
+
+  const navigate = useNavigate();
+  const { totalQuantity } = useCartTotalQuantity();
   const { products: items } = useProducts();
   const { subcategories } = useSubcategories();
   const [currentFilterSubcategory, setCurrentFilterSubcategory] = React.useState<string>('all');
@@ -23,6 +42,11 @@ const UserMenuPage: React.FC = () => {
 
   return (
     <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
+      <UserInputModel
+        open={openUserInputModel}
+        onOpenChange={setOpenUserInputModel}
+        onSubmit={(values) => useSetGuestName(values.name)}
+      />
       <HorizontalFilterScroll
         className="col-span-1 md:col-span-2 lg:col-span-4 mb-4"
         orderStatuses={categoryOptions.map((category) => ({
@@ -57,7 +81,7 @@ const UserMenuPage: React.FC = () => {
           <div className="relative w-full h-full  flex items-center justify-center">
             <ShoppingCart className="size-6" />
             <p className="absolute text-xs md:text-sm font-medium -top-4 -right-4 p-1 border bg-white border-primary text-black h-5 w-5 rounded-full flex items-center justify-center">
-              {4}
+              {totalQuantity > 10 ? '10+' : totalQuantity}
             </p>
           </div>
         </Button>

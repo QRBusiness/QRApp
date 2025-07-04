@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useCreateOrderRequest } from '@/services/user/user-request-service';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { removeFromCart, updateCartItemQuantity, useCartItems } from '@/components/common/states/cartState';
+import { useGuestState } from '@/components/common/states/guestState';
 import { useViewState } from '@/components/common/states/viewState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,13 +14,15 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/libs/utils';
 
 const CartItemsDetails: React.FC = () => {
+  const { area, table } = useGuestState();
   const { items: cartItems } = useCartItems();
-
   const { isMobile } = useViewState();
   const { t } = useTranslation();
   const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
+
+  const { createOrderRequest } = useCreateOrderRequest();
 
   useEffect(() => {
     const newSubtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -45,13 +49,26 @@ const CartItemsDetails: React.FC = () => {
       <p className="text-muted-foreground text-sm text-center mb-8">
         {t('module.menuManagement.cart.emptyCartDescription')}
       </p>
-      <Button>{t('module.menuManagement.cart.continueShopping')}</Button>
+      <Button onClick={() => window.history.back()}>{t('module.menuManagement.cart.continueShopping')}</Button>
     </div>
   );
 
-  const onCheckout = () => {
-    // Handle checkout logic here
-    console.log('Proceeding to checkout with total:', cartItems);
+  const onCheckout = async () => {
+    await createOrderRequest({
+      type: 'Order',
+      reason: 'checkout',
+      service_unit: table,
+      area: area,
+      data: cartItems.map((item) => ({
+        _id: item._id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        variant: item.variant,
+        options: item.options ? [...item.options] : [],
+        note: item.note || '',
+      })),
+    });
   };
 
   return (
@@ -91,26 +108,24 @@ const CartItemsDetails: React.FC = () => {
                     <div className="flex flex-row items-center justify-between">
                       <div className="text-xs text-muted-foreground mb-1">
                         {t('module.menuManagement.cart.size')}:{' '}
-                        <span className="font-medium text-black">{item.selectedSize}</span>
+                        <span className="font-medium text-black">{item.variant}</span>
                       </div>
                       <div className="mt-1 mb-2">
                         <span className="text-black font-medium">{item.price.toLocaleString('vi-VN')} VND</span>
                       </div>
                     </div>
 
-                    {item.selectedPreferences && item.selectedPreferences.length > 0 && (
+                    {item.options && item.options.length > 0 && (
                       <div className="flex flex-wrap gap-1 my-2">
-                        {item.selectedPreferences.map((pref) => (
-                          <Badge key={pref} variant="outline" className="text-xs text-muted-foreground">
-                            {pref}
+                        {item.options.map((opt) => (
+                          <Badge key={opt} variant="outline" className="text-xs text-muted-foreground">
+                            {opt}
                           </Badge>
                         ))}
                       </div>
                     )}
 
-                    {item.specialInstructions && (
-                      <p className="text-xs text-muted-foreground mt-1 italic">"{item.specialInstructions}"</p>
-                    )}
+                    {item.note && <p className="text-xs text-muted-foreground mt-1 italic">"{item.note}"</p>}
 
                     <div className="flex justify-between items-center mt-3">
                       <div className="flex items-center gap-2">
@@ -157,22 +172,24 @@ const CartItemsDetails: React.FC = () => {
           <div className="px-4 py-3">
             <div className="space-y-2 mb-4">
               <div className="flex justify-between">
-                <span className="text-gray-600">{t('module.menuManagement.cart.subtotal')}</span>
+                <span className="text-muted-foreground">{t('module.menuManagement.cart.subtotal')}</span>
                 <span className="font-medium">{subtotal.toLocaleString('vi-VN')} VND</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">{t('module.menuManagement.cart.tax', { taxRate: '8.25' })}</span>
+                <span className="text-muted-foreground">
+                  {t('module.menuManagement.cart.tax', { taxRate: '8.25' })}
+                </span>
                 <span className="font-medium">{tax.toLocaleString('vi-VN')} VND</span>
               </div>
               <Separator className="my-2" />
               <div className="flex justify-between">
-                <span className="text-gray-800 font-semibold">{t('module.menuManagement.cart.total')}</span>
-                <span className="text-gray-800 font-semibold">{total.toLocaleString('vi-VN')} VND</span>
+                <span className="text-muted-foreground font-semibold">{t('module.menuManagement.cart.total')}</span>
+                <span className="text-muted-foreground font-semibold">{total.toLocaleString('vi-VN')} VND</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="col-span-2 md:col-span-1">
+              <Button variant="outline" className="col-span-2 md:col-span-1" onClick={() => window.history.back()}>
                 {t('module.menuManagement.cart.continueShopping')}
               </Button>
 

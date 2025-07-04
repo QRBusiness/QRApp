@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constants';
 import { getAreas, useCreateArea } from '@/services/owner/area-service';
 import { useBranches } from '@/services/owner/branch-service';
-import { getTables, useCreateTable } from '@/services/owner/table-service';
+import { getTables, useCreateTable, useUpdateTable } from '@/services/owner/table-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import * as htmlToImage from 'html-to-image';
 import { CircleX, Download, Info, Plus, QrCode, X } from 'lucide-react';
 import QRCode from 'qrcode';
 import { useForm } from 'react-hook-form';
@@ -40,7 +41,7 @@ const CreateQR = () => {
   const { branches } = useBranches({ page: 1, limit: 50 });
   const { createArea, data: createdArea } = useCreateArea();
   const { createTable, data: createdTable } = useCreateTable();
-  // const { updateTable } = useUpdateTable();
+  const { updateTable } = useUpdateTable();
 
   React.useEffect(() => {
     if (branches.length > 0) {
@@ -205,6 +206,7 @@ const CreateQR = () => {
   const onSubmit = (values: z.infer<typeof createQRSchema>) => {
     const location = window.location.origin;
     const navigateURL = `${location}/${UNAUTHORIZED}/${business._id}/${MENU_MANAGEMENT}?area=${values.area}&table=${values.table}`;
+    console.log('Navigate URL:', navigateURL);
     const areaName = areaOptions.find((area) => area.value === values.area)?.label || 'unknown-area';
     const tableName = tableOptions.find((table) => table.value === values.table)?.label || 'unknown-table';
     setQrTitle(`${areaName} - ${tableName}`);
@@ -216,19 +218,29 @@ const CreateQR = () => {
         toast.success(t('module.qrManagement.qrGeneratedSuccess'), {
           description: t('module.qrManagement.qrGeneratedSuccessDescription'),
         });
-        // updateTable({
-        //   id: values.table,
-        //   data: {
-        //     name: tableName,
-        //     qr_code: url,
-        //   },
-        // });
       })
       .catch((err) => {
         toast.error(t('module.qrManagement.qrGenerationError'), {
           description: err.message || t('module.qrManagement.qrGenerationErrorDescription'),
         });
       });
+    setTimeout(() => {
+      if (!canvasRef.current) {
+        throw new Error(t('module.qrManagement.qrGenerationErrorDescription'));
+      }
+      htmlToImage.toBlob(canvasRef.current as HTMLDivElement).then((blob) => {
+        if (!blob) {
+          throw new Error(t('module.qrManagement.qrGenerationErrorDescription'));
+        }
+        updateTable({
+          id: values.table,
+          data: {
+            name: tableName,
+            qr_code: blob,
+          },
+        });
+      });
+    }, 3000);
     // onCancel();
   };
 
@@ -243,14 +255,25 @@ const CreateQR = () => {
 
   const handleDownload = async (type: string) => {
     if (!canvasRef.current) return;
-    // const canvas = await html2canvas(canvasRef.current);
+    if (type === 'png') {
+      return htmlToImage.toPng(canvasRef.current, { quality: 1 }).then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = `downloaded-table-${qrTitle}.${type}`;
+        link.href = dataUrl;
+        link.click();
+        document.body.removeChild(link);
+      });
+    }
 
-    const link = document.createElement('a');
-    link.download = `downloaded-image.${type}`;
-    // link.href = canvas.toDataURL(`image/${type}`, 1.0); // 1.0 = chất lượng cao
-    link.href = qrCodeImage;
-    link.click();
-    document.body.removeChild(link);
+    if (type === 'jpeg') {
+      return htmlToImage.toJpeg(canvasRef.current, { quality: 1 }).then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = `downloaded-table-${qrTitle}.${type}`;
+        link.href = dataUrl;
+        link.click();
+        document.body.removeChild(link);
+      });
+    }
   };
 
   return (
@@ -448,7 +471,7 @@ const CreateQR = () => {
         <div className="flex-1 flex flex-col items-center justify-center mb-6">
           <div
             ref={canvasRef}
-            className={`w-72 min-h-72 h-fit flex items-center justify-center border-2 p-2 rounded-lg mb-4 ${qrGenerated ? 'border' : 'border-dashed border bg-white text-black'}`}
+            className={`w-72  bg-white text-black min-h-72 h-fit flex items-center justify-center border-2 p-2 rounded-lg mb-4 ${qrGenerated ? 'border' : 'border-dashed border'}`}
           >
             {qrGenerated ? (
               <div className="w-full h-full flex flex-col items-center justify-between text-center">

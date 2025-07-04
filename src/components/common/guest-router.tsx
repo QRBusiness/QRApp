@@ -1,15 +1,10 @@
 import { CART, MENU_MANAGEMENT } from '@/constants';
-import { Home, ShoppingCart, UtensilsCrossed } from 'lucide-react';
+import { ShoppingCart, UtensilsCrossed } from 'lucide-react';
 import { Outlet } from 'react-router-dom';
 import MobileBottomBar from './mobile-bottom-bar';
 
 const GuestRouter = () => {
   const items = [
-    {
-      title: 'HOME',
-      path_url: '/',
-      icon: <Home />,
-    },
     {
       title: 'Menu',
       path_url: MENU_MANAGEMENT,
@@ -24,8 +19,8 @@ const GuestRouter = () => {
   return (
     <header>
       {/* Add guest router content here */}
-      <header>
-        <h1 className="text-2xl font-bold">Welcome to the Guest Area</h1>
+      <header className="flex justify-center items-center bg-muted p-4 shadow-md">
+        <h1 className="text-2xl font-bold text-center">Welcome to the Guest Area</h1>
       </header>
       <MobileBottomBar items={items} />
       <main className="px-4 py-8 flex flex-col items-center justify-center">

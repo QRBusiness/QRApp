@@ -16,6 +16,7 @@ import { z } from 'zod';
 //       message: 'module.authentication.passwordComplexityError',
 //     }),
 // });
+const blobOrFileSchema = z.instanceof(Blob).or(z.instanceof(File)).or(z.string().url());
 
 export const loginSchema = z.object({
   username: z.string().min(1, { message: 'module.authentication.usernameError' }),
@@ -31,7 +32,7 @@ export const createQRSchema = z.object({
 export const createAreaSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldNameError' }),
   description: z.string().optional(),
-  image_url: z.string().optional(),
+  image_url: blobOrFileSchema.optional(),
   branch: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldBranchIdError' }),
 });
 
@@ -39,7 +40,7 @@ export const createTableSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldNameError' }),
   area: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldAreaIdError' }),
   description: z.string().optional(),
-  qr_code: z.string().optional(),
+  qr_code: blobOrFileSchema.optional(),
 });
 
 export const createAdditionalFieldSchema = z.object({
@@ -165,8 +166,7 @@ export const createBranchSchema = z.object({
 
 export const updateTableSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldNameError' }),
-  // qr_code: z.instanceof(File).optional(), // chấp nhận null
-  qr_code: z.string().optional(), // Assuming qr_code is a string URL or path
+  qr_code: blobOrFileSchema.optional(),
 });
 
 export const createUserSchema = z.object({
@@ -228,4 +228,8 @@ export const createProductSchema = z.object({
       })
     )
     .optional(),
+});
+
+export const createGuestUserSchema = z.object({
+  name: z.string().min(1, { message: 'module.guestUser.create.name.error' }),
 });

@@ -113,7 +113,17 @@ export const useCreateTable = () => {
 
 const updateTable = async (tableId: string, tableData: z.infer<typeof updateTableSchema>) => {
   try {
-    const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, tableData);
+    const qrCodeBlobPart = tableData.qr_code !== undefined ? tableData.qr_code : '';
+    const file = new File([qrCodeBlobPart], 'upload.png', {
+      type: qrCodeBlobPart instanceof Blob ? qrCodeBlobPart.type : 'image/png',
+      lastModified: Date.now(),
+    });
+
+    const formData = new FormData();
+    formData.append('qr_code', file);
+    formData.append('name', tableData.name);
+
+    const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, formData);
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to update table',

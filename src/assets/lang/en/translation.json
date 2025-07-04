@@ -99,7 +99,9 @@
       "logout": "Logout",
       "account": "Account Management",
       "greeting": "Hi, {{name}} !",
-      "create": "Create New"
+      "create": "Create New",
+      "category": "Category",
+      "subcategory": "Subcategory"
     },
     "mobileSidebar": {
       "home": "Home",
@@ -666,6 +668,25 @@
           "description.placeholder": "Enter subcategory description",
           "description.error": "Subcategory description is required."
         }
+      }
+    },
+    "guestUser": {
+      "create": {
+        "title": "Type your name to continue",
+        "description": "Enter your name to proceed choosing menu options and request an order."
+      },
+      "field": {
+        "name": {
+          "label": "Name",
+          "description": "* Enter your name.",
+          "placeholder": "Enter your name",
+          "error": "Name cannot be empty."
+        }
+      },
+      "button": {
+        "cancel": "Cancel",
+        "submit": "Submit",
+        "edit": "Edit Guest User"
       }
     }
   }

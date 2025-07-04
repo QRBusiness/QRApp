@@ -15,6 +15,7 @@ import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, PROFILE, QR_MANAGEMENT } 
 import Cookies from 'js-cookie';
 import {
   Building2,
+  ChartColumnStacked,
   ChartNoAxesCombined,
   Contact,
   HandPlatter,
@@ -113,12 +114,12 @@ const RootApp = ({ role }: RootAppProps) => {
           {
             title: 'module.sidebar.menu-management.categories',
             path_url: CATEGORY_MANAGEMENT,
-            icon: <UtensilsCrossed />,
+            icon: <ChartColumnStacked />,
           },
           {
             title: 'module.sidebar.menu-management.subcategories',
             path_url: SUBCATEGORY_MANAGEMENT,
-            icon: <UtensilsCrossed />,
+            icon: <ChartColumnStacked />,
           },
         ],
       },

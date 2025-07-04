@@ -1,5 +1,5 @@
 import React from 'react';
-import { CirclePlus, CircleX, Info, Minus, Plus } from 'lucide-react';
+import { CirclePlus, CircleX, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { addToCart } from '@/components/common/states/cartState';
 import { Button } from '@/components/ui/button';
@@ -22,9 +22,9 @@ export interface CartItemProps {
   name: string;
   quantity: number;
   price: number;
-  selectedSize: string;
-  selectedPreferences: string[];
-  specialInstructions: string;
+  variant: string;
+  options: string[];
+  note: string;
 }
 
 interface AddToCartDialogProps {
@@ -32,10 +32,9 @@ interface AddToCartDialogProps {
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
   item: Menu;
-  onSubmit?: (cartItem: CartItemProps) => void;
 }
 
-const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open, onOpenChange, onSubmit }) => {
+const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open, onOpenChange }) => {
   const { t } = useTranslation();
   const [quantity, setQuantity] = React.useState(1);
   const [selectedPreferences, setSelectedPreferences] = React.useState<string[]>([]);
@@ -64,12 +63,12 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
       _id: item._id,
       name: item.name,
       quantity,
-      selectedSize,
-      selectedPreferences,
-      specialInstructions,
+      variant: selectedSize,
+      options: selectedPreferences,
+      note: specialInstructions,
       price: item.variants[variantIndex]?.price + totalPreferencesPrice || 0,
     };
-    onSubmit && onSubmit(cartItem);
+    // debugger;
     addToCart(cartItem);
     onOpenChange(false);
   };
@@ -79,7 +78,7 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
       <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
-            <Info />
+            <ShoppingCart />
             {item.name}
           </DialogTitle>
         </DialogHeader>
