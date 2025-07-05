@@ -10,6 +10,7 @@ export interface SubCategoryProps {
   description: string;
   created_at: string;
   updated_at: string;
+  category?: CategoryProps | null;
 }
 
 export interface CategoryProps {

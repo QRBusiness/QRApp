@@ -1,9 +1,10 @@
 import React from 'react';
-import { useUpdateCategory } from '@/services/owner/categories-service';
+import { type SubCategoryProps, useUpdateCategory } from '@/services/owner/categories-service';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
 import CreateNewCategory from '../dialog/create-categories-dialog';
@@ -13,6 +14,7 @@ export type CategogyProps = {
   _id: string;
   name: string;
   description: string;
+  sub_category?: SubCategoryProps[] | null;
   created_at: string;
   updated_at: string;
 };
@@ -41,6 +43,24 @@ export const columns: ColumnDef<CategogyProps>[] = [
     cell: ({ getValue }) => {
       const value = getValue() as string;
       return <span className="text-sm text-muted-foreground">{value || 'No description'}</span>;
+    },
+  },
+  {
+    accessorKey: 'sub_category',
+    header: 'Sub Categories',
+    cell: ({ row }) => {
+      const subCategories = row.getValue('sub_category') as SubCategoryProps[] | null;
+      return (
+        <div className="text-sm font-medium">
+          {subCategories && subCategories.length > 0
+            ? subCategories.map((sub) => (
+                <Badge variant="outline" key={sub._id}>
+                  {sub.name}
+                </Badge>
+              ))
+            : 'No mapping sub categories'}
+        </div>
+      );
     },
   },
   {

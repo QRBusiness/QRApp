@@ -1,48 +1,32 @@
+import type { OrderResponseProps } from '@/services/owner/order-service';
 import { format } from 'date-fns';
-import { CircleUser, Clock, Eye, HandPlatter, MapPin } from 'lucide-react';
+import { CircleUser, Clock, CreditCard, Info, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import StatusBadge from '../status/status-baged';
 
-export interface OrderItem {
-  id: string;
-  area: string;
-  table: string;
-  status: string;
-  customer: {
-    name: string;
-  };
-  createdAt: string;
-  totalAmount: number;
-  items: {
-    _id: string;
-    name: string;
-    quantity: number;
-    price: number;
-    variant?: string;
-    options?: string[];
-    note?: string;
-  }[];
-}
-
-const CardOrderItem = ({ order }: { order: OrderItem }) => {
+const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
   const { t } = useTranslation();
-  const formattedDate = format(new Date(order.createdAt), 'h:mm a - MMM dd, yyyy');
+  const formattedDate = format(new Date(order.created_at), 'h:mm a - MMM dd, yyyy');
+  const navigate = useNavigate();
   return (
-    <Card key={order.id} className="py-2">
+    <Card key={order._id} className="py-2">
       <CardContent className="px-2 py-0">
         {/* Header card */}
         <div className="flex justify-between items-center p-2 bg-background">
           <div className="flex flex-col items-start space-x-2 text-sm text-muted-foreground">
             <div className="font-medium text-muted-foreground">
-              <span className="text-primary texl-2xl font-medium">{order.id}</span>
+              <div className="flex flex-row items-center space-x-2">
+                <p>ID: </p> <p className="text-primary font-medium">{order._id}</p>
+              </div>
             </div>
             <div className="flex items-center ">
               <MapPin className="inline size-4 mr-1" />
               <p>
-                {order.area} - {order.table}
+                {order.area.name || 'Unknown Area'} - {order.service_unit.name || 'Unknown Unit'}
               </p>
             </div>
             <div className="flex items-center">
@@ -50,17 +34,17 @@ const CardOrderItem = ({ order }: { order: OrderItem }) => {
               {formattedDate}
             </div>
           </div>
-          <StatusBadge status={order.status as 'Cancelled' | 'Completed' | 'Pending' | 'Waiting' | 'Paid'} />
+          <StatusBadge status={order.status as 'Cancelled' | 'Completed' | 'Pending' | 'Waiting' | 'Paid' | 'Unpaid'} />
         </div>
         {/* Thông tin khách hàng */}
         <div className="px-2 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <CircleUser className="size-5" />
-            <div className="font-normal">{order.customer.name}</div>
+            <div className="font-normal">{'Unknown'}</div>
           </div>
           <div className="flex flex-col items-start text-sm text-muted-foreground">
             <span className="font-medium text-primary">
-              {order.totalAmount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+              {order.amount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
             </span>
 
             <span className="text-xs text-muted-foreground">
@@ -101,12 +85,17 @@ const CardOrderItem = ({ order }: { order: OrderItem }) => {
         {/* Footer card */}
         <div className="flex justify-between space-x-2 w-full">
           <Button variant="outline" size="sm" className="flex-1 items-center space-x-2">
-            <HandPlatter className="size-4 md:size-5" />
-            {t('module.orderManagement.orderCard.markReady')}
-          </Button>
-          <Button variant="outline" size="sm" className="flex-1 items-center space-x-2">
-            <Eye className="size-4 md:size-5" />
+            <Info className="size-4 md:size-5" />
             {t('module.orderManagement.orderCard.details')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex-1 items-center space-x-2"
+            onClick={() => navigate(order._id)}
+          >
+            <CreditCard className="size-4 md:size-5" />
+            {t('module.orderManagement.orderCard.payment')}
           </Button>
         </div>
       </CardFooter>

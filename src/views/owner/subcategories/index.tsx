@@ -22,6 +22,7 @@ const SubcategoryPage = () => {
           description: subcategory.description,
           created_at: subcategory.created_at,
           updated_at: subcategory.updated_at,
+          category: subcategory.category || null,
         }))
       );
     }

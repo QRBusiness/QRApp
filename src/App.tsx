@@ -42,7 +42,6 @@ const MenuManagement = React.lazy(() => import('@/views/owner/menu-management'))
 const OrderManager = React.lazy(() => import('@/views/owner/order-management'));
 const QRManagement = React.lazy(() => import('@/views/owner/qr-management'));
 const StaffManagement = React.lazy(() => import('@/views/owner/staff-management'));
-const OrderDetails = React.lazy(() => import('@/views/owner/order-management/details'));
 const LandingPage = React.lazy(() => import('@/views/user/landing-page'));
 const ProtectedRoute = React.lazy(() => import('@/views/authenticate/protected-router'));
 const BusinessOwnerManagement = React.lazy(() => import('@/views/admin/busines-owner-mgmt'));
@@ -59,6 +58,7 @@ const UserMenuPage = React.lazy(() => import('@/views/user/Menu'));
 const SubcategoryPage = React.lazy(() => import('@/views/owner/subcategories'));
 const CategoryPage = React.lazy(() => import('@/views/owner/categories'));
 const UserProfile = React.lazy(() => import('@/views/owner/user'));
+const PaymentOrderPage = React.lazy(() => import('@/views/owner/order-management/payment'));
 
 const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
 
@@ -105,14 +105,6 @@ function App() {
               element: <UserCartPage />,
             },
             {
-              path: ORDER_MANAGEMENT,
-              element: <OrderManager />,
-            },
-            {
-              path: `${ORDER_MANAGEMENT}/:id`,
-              element: <OrderDetails />,
-            },
-            {
               path: CHECKOUT,
               element: <UserCheckoutPage />,
             },
@@ -149,7 +141,7 @@ function App() {
             },
             {
               path: `${ORDER_MANAGEMENT}/:id`,
-              element: <OrderDetails />,
+              element: <PaymentOrderPage />,
             },
             {
               path: STAFF_MANAGEMENT,

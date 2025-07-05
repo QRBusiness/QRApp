@@ -32,9 +32,9 @@ const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, childr
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Info className="size-5" />
-            {t('module.qrManagement.addAreaField.viewTitle')}
+            {t('module.categoriesMgmt.subCategories.viewTitle')}
           </DialogTitle>
-          <DialogDescription>{t('module.qrManagement.addAreaField.viewDescription')}</DialogDescription>
+          <DialogDescription>{t('module.categoriesMgmt.subCategories.viewDescription')}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">

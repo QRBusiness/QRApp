@@ -21,6 +21,7 @@ const CartItemsDetails: React.FC = () => {
   const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
+  const { name } = useGuestState();
 
   const { createOrderRequest } = useCreateOrderRequest();
 
@@ -59,6 +60,7 @@ const CartItemsDetails: React.FC = () => {
       reason: 'checkout',
       service_unit: table,
       area: area,
+      guest_name: name,
       data: cartItems.map((item) => ({
         _id: item._id,
         name: item.name,

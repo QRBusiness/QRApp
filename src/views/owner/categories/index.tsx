@@ -21,6 +21,7 @@ const CategoryPage = () => {
           _id: category._id,
           name: category.name,
           description: category.description,
+          sub_category: category.sub_category || null,
           created_at: category.created_at,
           updated_at: category.updated_at,
         }))

@@ -12,6 +12,7 @@ export type SubcategoryProps = {
   _id: string;
   name: string;
   description: string;
+  category: Categories | null;
   created_at: string;
   updated_at: string;
 };

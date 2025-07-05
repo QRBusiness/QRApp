@@ -16,6 +16,7 @@ export interface RequestInfo {
   type: string;
   reason: string;
   service_unit: string;
+  guest_name: string; // Optional, can be used for user requests
   area: string;
   data: CartItem[];
 }

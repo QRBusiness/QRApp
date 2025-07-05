@@ -2,7 +2,7 @@ import { CircleCheck, CircleX, Loader } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface StatusBadgeProps {
-  status: 'Cancelled' | 'Completed' | 'Pending' | 'Waiting' | 'Paid' | 'Active' | 'Inactive';
+  status: 'Cancelled' | 'Completed' | 'Pending' | 'Waiting' | 'Paid' | 'Active' | 'Inactive' | 'Unpaid';
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
@@ -26,6 +26,11 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
       {status === 'Waiting' && (
         <>
           <Loader className="fill-status-waiting mr-1" /> Waiting
+        </>
+      )}
+      {status === 'Unpaid' && (
+        <>
+          <Loader className="fill-status-waiting mr-1" /> Unpaid
         </>
       )}
       {status === 'Paid' && (

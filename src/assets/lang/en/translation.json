@@ -377,8 +377,8 @@
       "title": "Order Management",
       "description": "Manage your restaurant orders efficiently.",
       "orderCard": {
-        "markReady": "Mark Ready",
         "details": "Details",
+        "payment": "Payment",
         "customer": "Customer",
         "table": "Table",
         "items": "x {{count}} Items",
@@ -643,8 +643,8 @@
         "add": "Add New Category"
       },
       "subCategories": {
-        "title": "Subcategories",
-        "description": "Manage subcategories under this category.",
+        "viewTitle": "Subcategory Details",
+        "viewDescription": "Below are the detailed information and attributes of this subcategory.",
         "button": {
           "add": "Add New Subcategory",
           "cancel": "Cancel",
