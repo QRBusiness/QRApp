@@ -1,5 +1,5 @@
 import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type { ProductProps } from './product-services';
 
@@ -78,6 +78,37 @@ export const useOrders = () => {
   return {
     orders: data || [],
     isLoading,
+    isError,
+    error,
+  };
+};
+
+const checkoutOrder = async (orderId: string): Promise<string> => {
+  try {
+    const response: ApiResponse<{ data: string }> = await apiClient.post(`/orders/checkout/${orderId}`);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error checking out order', {
+        description: response.errorMessage || 'An error occurred while checking out the order.',
+      });
+      throw new Error(response.errorMessage || 'Error checking out order');
+    }
+    return response.data.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error checking out order', {
+      description: error.errorMessage || 'An error occurred while checking out the order.',
+    });
+    throw new Error(error.errorMessage || 'Error checking out order');
+  }
+};
+
+export const useCheckoutOrder = () => {
+  const { mutate, isError, error } = useMutation({
+    mutationKey: ['checkoutOrder'],
+    mutationFn: checkoutOrder,
+  });
+
+  return {
+    checkoutOrder: mutate,
     isError,
     error,
   };
