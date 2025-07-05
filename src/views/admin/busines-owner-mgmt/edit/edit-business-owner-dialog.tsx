@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useUpdateUser } from '@/services/admin/business-owner-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleCheck, CircleX, UserRoundPen } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -25,10 +24,9 @@ interface EditBusinessOwnerDialogProps {
   children: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit?: () => void;
+  onSubmit?: (data: z.infer<typeof editUserSchema>) => void;
   onCancel?: () => void;
   initialData?: z.infer<typeof editUserSchema>;
-  id: string;
 }
 
 const EditBusinessOwnerDialog = ({
@@ -39,11 +37,8 @@ const EditBusinessOwnerDialog = ({
   onSubmit,
   onCancel,
   initialData,
-  id,
 }: EditBusinessOwnerDialogProps) => {
   const { t } = useTranslation();
-
-  const { updateUser } = useUpdateUser();
   const form = useForm<z.infer<typeof editUserSchema>>({
     resolver: zodResolver(editUserSchema),
     defaultValues: initialData,
@@ -61,8 +56,7 @@ const EditBusinessOwnerDialog = ({
   };
 
   const onSubmitForm = async (data: z.infer<typeof editUserSchema>) => {
-    onSubmit && onSubmit();
-    await updateUser({ id, data });
+    onSubmit && onSubmit(data);
     onOpenChange(false);
   };
 
@@ -88,7 +82,7 @@ const EditBusinessOwnerDialog = ({
                 <FormItem>
                   <div className="flex items-center gap-2">
                     <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} className="w-10 h-6" />
+                      <Switch checked={field.value} onCheckedChange={field.onChange} className="w-10 h-6" disabled />
                     </FormControl>
                     <FormLabel>
                       {isUser

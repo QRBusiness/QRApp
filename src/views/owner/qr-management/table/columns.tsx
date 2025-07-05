@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDeleteTable } from '@/services/owner/table-service';
 import type { ColumnDef } from '@tanstack/react-table';
-import { CircleCheck, CircleX, Download, Edit, Eye, Trash } from 'lucide-react';
+import { CircleCheck, CircleX, Download, Edit, Eye, Image, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
@@ -54,6 +54,24 @@ export const columns: ColumnDef<QRTable>[] = [
         {row.original.available ? 'Available' : 'Unavailable'}
       </Badge>
     ),
+  },
+  {
+    accessorKey: 'qr_code',
+    header: 'QR Code',
+    cell: ({ row }) => {
+      const qrCode = row.getValue('qr_code') as string;
+      return (
+        <div className="w-12 h-12 object-cover">
+          {qrCode ? (
+            <img src={qrCode} alt="QR Code" />
+          ) : (
+            <div className="w-full h-full p-1 border border-dashed text-xs flex items-center justify-center">
+              <Image />
+            </div>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'branch',

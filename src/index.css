@@ -42,6 +42,11 @@
   --color-status-active: var(--status-active);
   --color-status-inactive: var(--status-inactive);
   --color-status-warning: var(--status-warning);
+  --color-status-cancel: var(--status-cancel);
+  --color-status-completed: var(--status-completed);
+  --color-status-pending: var(--status-pending);
+  --color-status-waiting: var(--status-waiting);
+  --color-status-paid: var(--status-paid);
 }
 
 :root {
@@ -80,6 +85,11 @@
   --status-active: oklch(0.6 0.13 163);
   --status-inactive: oklch(0.59 0.22 18);
   --status-warning: oklch(0.68 0.14 76);
+  --status-cancel: oklch(0.51 0.2 17);
+  --status-completed: oklch(0.59 0.14 242);
+  --status-pending: oklch(0.68 0.14 76);
+  --status-waiting: oklch(0.59 0.22 18);
+  --status-paid: oklch(0.6 0.13 163);
 }
 
 .dark {
@@ -117,6 +127,11 @@
   --status-active: oklch(0.59 0.14 242);
   --status-inactive: oklch(0.59 0.22 18);
   --status-warning: oklch(0.68 0.14 76);
+  --status-cancel: oklch(0.51 0.2 17);
+  --status-completed: oklch(0.59 0.14 242);
+  --status-pending: oklch(0.68 0.14 76);
+  --status-waiting: oklch(0.59 0.22 18);
+  --status-paid: oklch(0.6 0.13 163);
 }
 
 @layer base {

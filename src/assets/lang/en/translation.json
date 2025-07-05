@@ -101,7 +101,8 @@
       "greeting": "Hi, {{name}} !",
       "create": "Create New",
       "category": "Category",
-      "subcategory": "Subcategory"
+      "subcategory": "Subcategory",
+      "profile": "User Profile"
     },
     "mobileSidebar": {
       "home": "Home",
@@ -376,8 +377,6 @@
       "title": "Order Management",
       "description": "Manage your restaurant orders efficiently.",
       "orderCard": {
-        "order": "Order",
-        "status": "Status",
         "markReady": "Mark Ready",
         "details": "Details",
         "customer": "Customer",

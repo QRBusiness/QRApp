@@ -9,6 +9,8 @@ interface userPros {
   phone: string;
   address: string;
   image_url: string;
+  available: boolean;
+  username: string;
   created_at: string;
   updated_at: string;
   role: string;
@@ -26,6 +28,8 @@ export const defaultUserState: userPros = {
   phone: '',
   address: '',
   image_url: '',
+  available: false,
+  username: '',
   created_at: '',
   updated_at: '',
   role: '',
@@ -69,4 +73,12 @@ export const setUserPermissions = (permissions: Permission[]) => {
   }
   permissionState.permissions = permissions;
   saveToLocalStorage(USER_PERMISSIONS, { permissions });
+};
+
+export const useSetUserProfile = (name: string, phone: string, address: string, image_url: string) => {
+  userState.name = name;
+  userState.phone = phone;
+  userState.address = address;
+  userState.image_url = image_url || '';
+  setTimeout(() => saveToLocalStorage(USER_SESSION, { ...userState, name, phone, address, image_url }), 3000);
 };

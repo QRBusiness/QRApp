@@ -48,7 +48,7 @@ const MenuManagement = () => {
   const isShowAction = user?.role === OWNER_ROLE || user?.role === ADMIN_ROLE;
 
   return (
-    <div className="container mx-auto pb-10 space-y-4">
+    <div className="mx-auto pb-10 space-y-4 w-full">
       {isShowAction && (
         <div className="flex items-center space-x-2 justify-self-end mr-4 md:mr-0">
           {/* Create new Menu Item Dialog */}

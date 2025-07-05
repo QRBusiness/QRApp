@@ -74,8 +74,7 @@ const ReadOnlyMenuItemDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose
             </div>
             <div className="flex items-center justify-between">
               <Label>{t('module.common.readOnlyDialog.price')}:</Label>{' '}
-              {data.variants[0]?.price.toLocaleString('vi-VN') || 0}
-              {' VND'}
+              {data.variants[0]?.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || 0}
             </div>
             <div className="flex items-center justify-between">
               <Label>{t('module.common.readOnlyDialog.variants')}:</Label>

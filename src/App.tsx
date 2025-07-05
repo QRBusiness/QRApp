@@ -19,6 +19,7 @@ import {
   ORDER_MANAGEMENT,
   OWNER,
   OWNER_ROLE,
+  PROFILE,
   QR_MANAGEMENT,
   STAFF_MANAGEMENT,
   STAFF_ROLE,
@@ -57,6 +58,7 @@ const UserCartPage = React.lazy(() => import('@/views/user/Cart'));
 const UserMenuPage = React.lazy(() => import('@/views/user/Menu'));
 const SubcategoryPage = React.lazy(() => import('@/views/owner/subcategories'));
 const CategoryPage = React.lazy(() => import('@/views/owner/categories'));
+const UserProfile = React.lazy(() => import('@/views/owner/user'));
 
 const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
 
@@ -160,6 +162,10 @@ function App() {
             {
               path: BRANCH,
               element: <BranchManagement />,
+            },
+            {
+              path: PROFILE,
+              element: <UserProfile />,
             },
           ],
         },

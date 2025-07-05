@@ -78,7 +78,7 @@ const BranchManagement = () => {
   };
 
   return (
-    <div className="container mx-auto pb-10 flex flex-col space-y-4">
+    <div className="w-full mx-auto pb-10 flex flex-col space-y-4">
       <div className="flex items-center justify-between">
         <Tabs value={selectedTab} onValueChange={handleTabChange}>
           <TabsList className="w-full space-x-2">

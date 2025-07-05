@@ -72,7 +72,7 @@ const CartItemsDetails: React.FC = () => {
   };
 
   return (
-    <div className="relative flex flex-col min-h-screen p-4 border w-full max-w-5xl rounded-lg mx-auto">
+    <div className="relative flex flex-col min-h-full p-4 border w-full max-w-5xl rounded-lg mx-auto">
       {/* Main Content */}
       <ScrollArea className="flex-1">
         {cartItems.length === 0 ? (
@@ -111,7 +111,9 @@ const CartItemsDetails: React.FC = () => {
                         <span className="font-medium text-black">{item.variant}</span>
                       </div>
                       <div className="mt-1 mb-2">
-                        <span className="text-black font-medium">{item.price.toLocaleString('vi-VN')} VND</span>
+                        <span className="text-black font-medium">
+                          {item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                        </span>
                       </div>
                     </div>
 
@@ -149,7 +151,7 @@ const CartItemsDetails: React.FC = () => {
                       </div>
                       <div className="text-right text-primary">
                         <span className="font-medium">
-                          {(item.price * item.quantity).toLocaleString('vi-VN') + ' VND'}
+                          {(item.price * item.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                         </span>
                       </div>
                     </div>
@@ -173,18 +175,24 @@ const CartItemsDetails: React.FC = () => {
             <div className="space-y-2 mb-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">{t('module.menuManagement.cart.subtotal')}</span>
-                <span className="font-medium">{subtotal.toLocaleString('vi-VN')} VND</span>
+                <span className="font-medium">
+                  {subtotal.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">
                   {t('module.menuManagement.cart.tax', { taxRate: '8.25' })}
                 </span>
-                <span className="font-medium">{tax.toLocaleString('vi-VN')} VND</span>
+                <span className="font-medium">
+                  {tax.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                </span>
               </div>
               <Separator className="my-2" />
               <div className="flex justify-between">
                 <span className="text-muted-foreground font-semibold">{t('module.menuManagement.cart.total')}</span>
-                <span className="text-muted-foreground font-semibold">{total.toLocaleString('vi-VN')} VND</span>
+                <span className="text-muted-foreground font-semibold">
+                  {total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                </span>
               </div>
             </div>
 

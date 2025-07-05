@@ -277,7 +277,7 @@ const CreateQR = () => {
   };
 
   return (
-    <div className="container mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-5 gap-4">
+    <div className="w-full mx-auto h-full grid grid-cols-1 lg:grid-cols-5 gap-4">
       {/* Left pane wrapper */}
       <Card className="flex flex-col lg:col-span-3 items-start justify-between w-full p-4 space-y-4 rounded border shadow-md flex-1 mr-4 h-full">
         {/* Title and Description */}

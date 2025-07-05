@@ -1,5 +1,5 @@
 import React from 'react';
-import { ACCESS_TOKEN, ADMIN_ROLE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constants';
+import { ACCESS_TOKEN, ADMIN_ROLE, PROFILE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constants';
 import { logoutService } from '@/services/auth-service';
 import { ChevronLeft, ChevronRight, CircleHelp, LogOut, Settings, User, UserCog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -75,7 +75,7 @@ const SidebarApp = ({ items }: SidebarProps) => {
     {
       label: t('module.sidebar.account'),
       icon: <User />,
-      onClick: () => {},
+      onClick: () => navigate(`${PROFILE}`),
     },
     {
       label: t('module.sidebar.logout'),

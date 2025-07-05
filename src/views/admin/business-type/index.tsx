@@ -38,7 +38,7 @@ const BusinessTypeManagement = () => {
   }, [businessTypes]);
 
   return (
-    <div className="container mx-auto pb-10 flex flex-col space-y-4">
+    <div className="w-full mx-auto pb-10 flex flex-col space-y-4">
       <div className="self-end">
         <CreateNewBusinessType open={open} onOpenChange={setOpen} onSubmit={onSubmit}>
           <Button variant="default">

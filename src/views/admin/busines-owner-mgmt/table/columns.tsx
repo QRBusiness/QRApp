@@ -1,5 +1,5 @@
 import React from 'react';
-import { useToggleAvailabilityUser } from '@/services/admin/business-owner-service';
+import { useToggleAvailabilityUser, useUpdateUser } from '@/services/admin/business-owner-service';
 import type { ColumnDef } from '@tanstack/react-table';
 import { CircleCheck, CircleX, Edit, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -116,6 +116,7 @@ export const columns: ColumnDef<BusinessOwner>[] = [
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
       const [openReadOnlyDialog, setOpenReadOnlyDialog] = React.useState(false);
       const { toggleAvailabilityUser } = useToggleAvailabilityUser();
+      const { updateUser } = useUpdateUser();
       return (
         <div className="flex gap-2">
           <ReadOnlyDialog isOpen={openReadOnlyDialog} onClose={setOpenReadOnlyDialog} data={row.original}>
@@ -128,7 +129,7 @@ export const columns: ColumnDef<BusinessOwner>[] = [
             open={openEditDialog}
             onOpenChange={setOpenEditDialog}
             initialData={row.original}
-            id={row.original.id as string}
+            onSubmit={(data) => updateUser({ id: row.original.id, data })}
           >
             <Button variant="outline" size="sm" onClick={() => setOpenEditDialog(true)}>
               <Edit className="mr-2" />

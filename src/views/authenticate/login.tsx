@@ -56,6 +56,8 @@ const Login = () => {
         created_at: user.data.created_at,
         updated_at: user.data.updated_at,
         role: user.data.role,
+        username: user.data.username,
+        available: user.data.available,
         business: {
           _id: user.data.business?._id || '1',
         },

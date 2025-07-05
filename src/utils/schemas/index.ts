@@ -233,3 +233,16 @@ export const createProductSchema = z.object({
 export const createGuestUserSchema = z.object({
   name: z.string().min(1, { message: 'module.guestUser.create.name.error' }),
 });
+
+export const editUserProfileSchema = z.object({
+  name: z.string().min(1, { message: 'module.profile.edit.name.error' }),
+  phone: z
+    .string()
+    .min(10, { message: 'module.profile.edit.phone.error' })
+    .max(11, { message: 'module.profile.edit.phone.error' })
+    .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
+      message: 'module.profile.edit.phone.formatError',
+    }),
+  address: z.string().min(1, { message: 'module.profile.edit.address.error' }),
+  image_url: z.instanceof(File).optional(),
+});

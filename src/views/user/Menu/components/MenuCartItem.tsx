@@ -26,11 +26,11 @@ const MenuCardItem: React.FC<Menu> = ({
   const available = true; // Placeholder for availability, can be replaced with actual availability logic
   return (
     <Card key={_id} className="flex overflow-hidden border shadow-sm p-2 relative flex-col justify-between">
-      <div className="flex flex-row gap-2 items-start">
-        <div className="w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 overflow-hidden rounded-md">
-          <img src={image} alt={name} className="object-cover w-full h-full object-top rounded-md" />
-        </div>
-        <div className="flex flex-col justify-between flex-1">
+      <div className="flex gap-2 items-center justify-between">
+        <div className="flex flex-row gap-2 items-start">
+          <div className="w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 overflow-hidden rounded-md">
+            <img src={image} alt={name} className="object-cover w-full h-full object-top rounded-md" />
+          </div>
           <div className="flex justify-between flex-1 items-start ">
             <div className="flex flex-col pr-2">
               <h3 className="font-semibold text-black text-base mb-1">{name}</h3>
@@ -44,53 +44,55 @@ const MenuCardItem: React.FC<Menu> = ({
                 </Badge>
               </div>
             </div>
-            <div className="flex flex-col items-end justify-between ml-1">
-              <span className="font-medium text-primary">{price.toLocaleString('vi-VN')}</span>
-            </div>
-          </div>
-          <div className="flex items-center self-end space-x-2">
-            <ReadOnlyMenuItemDialog
-              isOpen={viewDialogOpen}
-              onClose={setViewDialogOpen}
-              data={{
-                _id,
-                name,
-                category,
-                subcategory,
-                image,
-                options,
-                variants,
-                description,
-                created_at,
-                updated_at,
-              }}
-            >
-              <Button size="icon" className="rounded-full" disabled={!available} variant={'outline'}>
-                <ScanText className="size-4 md:size-5" />
-              </Button>
-            </ReadOnlyMenuItemDialog>
-            <AddToCartDialog
-              open={addToCartDialogOpen}
-              onOpenChange={setAddToCartDialogOpen}
-              item={{
-                _id,
-                name,
-                category,
-                subcategory,
-                image,
-                options,
-                variants,
-                description,
-                created_at,
-                updated_at,
-              }}
-            >
-              <Button size="icon" className="rounded-full" disabled={!available} variant={'default'}>
-                <Plus className="size-4 md:size-5" />
-              </Button>
-            </AddToCartDialog>
           </div>
         </div>
+        <div className="self-start">
+          <span className="font-medium text-primary">
+            {price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+          </span>
+        </div>
+      </div>
+      <div className="flex items-center self-end space-x-2">
+        <ReadOnlyMenuItemDialog
+          isOpen={viewDialogOpen}
+          onClose={setViewDialogOpen}
+          data={{
+            _id,
+            name,
+            category,
+            subcategory,
+            image,
+            options,
+            variants,
+            description,
+            created_at,
+            updated_at,
+          }}
+        >
+          <Button size="icon" className="rounded-full" disabled={!available} variant={'outline'}>
+            <ScanText className="size-4 md:size-5" />
+          </Button>
+        </ReadOnlyMenuItemDialog>
+        <AddToCartDialog
+          open={addToCartDialogOpen}
+          onOpenChange={setAddToCartDialogOpen}
+          item={{
+            _id,
+            name,
+            category,
+            subcategory,
+            image,
+            options,
+            variants,
+            description,
+            created_at,
+            updated_at,
+          }}
+        >
+          <Button size="icon" className="rounded-full" disabled={!available} variant={'default'}>
+            <Plus className="size-4 md:size-5" />
+          </Button>
+        </AddToCartDialog>
       </div>
     </Card>
   );

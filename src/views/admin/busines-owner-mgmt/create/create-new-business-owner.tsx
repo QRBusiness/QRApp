@@ -103,7 +103,7 @@ const CreateNewBusinessOwner = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 space-y-4">
+    <div className="w-full mx-auto p-4 space-y-4">
       <div className="flex items-center justify-center">
         {Array.from({ length: totalSteps }).map((_, index) => (
           <div key={index} className="flex items-center">

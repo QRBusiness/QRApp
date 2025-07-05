@@ -1,6 +1,8 @@
-import apiClient, { type ApiResponse } from '@/services';
-import { useQuery } from '@tanstack/react-query';
+import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import type z from 'zod';
+import type { editUserProfileSchema } from '@/utils/schemas';
 import type { Permission } from './owner/group-service';
 
 export interface UserProfile {
@@ -14,6 +16,8 @@ export interface UserProfile {
     updated_at: string;
     role: string;
     permissions: any[];
+    username: string;
+    available: boolean;
     business: {
       _id: string;
       name: string;
@@ -83,5 +87,73 @@ export const useUserPermissions = () => {
     isFetching,
     isSuccess,
     refetch,
+  };
+};
+
+const uploadAvatarApi = async (file: File): Promise<string> => {
+  const formData = new FormData();
+  formData.append('avatar', file);
+  try {
+    const response: ApiResponse<{ image_url: string }> = await apiClient.post('/upload-avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to upload avatar',
+      });
+    }
+    return response.data.image_url;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.error, {
+      description: error.errorMessage || 'An error occurred while uploading avatar',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useUploadAvatar = () => {
+  const { mutateAsync: uploadAvatar } = useMutation<string, Error, File>({
+    mutationKey: ['uploadAvatar'],
+    mutationFn: uploadAvatarApi,
+  });
+
+  return {
+    uploadAvatar,
+  };
+};
+
+const updateUserProfileApi = async (data: { data: z.infer<typeof editUserProfileSchema> }) => {
+  try {
+    const response: ApiResponse<UserProfile> = await apiClient.put('/me', data);
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to update user profile',
+      });
+    }
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.error, {
+      description: error.errorMessage || 'An error occurred while updating user profile',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useUpdateUserProfile = () => {
+  const { mutateAsync: updateUserProfile } = useMutation<
+    UserProfile,
+    Error,
+    { data: z.infer<typeof editUserProfileSchema> }
+  >({
+    mutationKey: ['updateUserProfile'],
+    mutationFn: updateUserProfileApi,
+    onSuccess: () => {
+      toast.success('User profile updated successfully');
+    },
+  });
+  return {
+    updateUserProfile,
   };
 };

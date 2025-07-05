@@ -33,7 +33,7 @@ const BusinessManagement = () => {
   }, [businesses]);
 
   return (
-    <div className="container mx-auto pb-10 flex flex-col space-y-4">
+    <div className="w-full mx-auto pb-10 flex flex-col space-y-4">
       <div className="self-end">
         <Button variant="default" onClick={() => navigate(`../${BUSINESS_OWNER_MANAGEMENT}/create`)}>
           <CirclePlus className="mr-2 size-4 md:size-5" />

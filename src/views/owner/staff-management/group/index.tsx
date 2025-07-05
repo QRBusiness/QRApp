@@ -79,7 +79,7 @@ const GroupConfig = () => {
   };
 
   return (
-    <div className="container mx-auto space-y-6 py-6">
+    <div className="w-full mx-auto space-y-6 py-6">
       <GroupCardView
         title={'Permission Group Configuration'}
         leftPaneTitle="Available Permission Groups"

@@ -108,14 +108,14 @@ export const useToggleAvailabilityUser = () => {
 
 const updateUser = async (id: string, data: z.infer<typeof editUserSchema>): Promise<User> => {
   try {
-    const response: ApiResponse<User> = await apiClient.put(`/users/${id}`, data);
+    const response: ApiResponse<{ data: User }> = await apiClient.put(`/users/${id}`, data);
     if (response.status !== 200) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to update user',
       });
       throw new Error(response.errorMessage || 'Failed to update user');
     }
-    return response.data;
+    return response.data.data;
   } catch (error: ErrorResponse | any) {
     toast.error((error as ErrorResponse).error || 'Internal server error', {
       description:
@@ -129,7 +129,7 @@ export const useUpdateUser = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
     mutationFn: ({ id, data }: { id: string; data: z.infer<typeof editUserSchema> }) => updateUser(id, data),
-    onSuccess: (data: User) => {
+    onSuccess: (data) => {
       toast.success('User updated successfully', {
         description: `User ${data.name} has been updated.`,
       });

@@ -30,7 +30,7 @@ const SubcategoryPage = () => {
   const { addSubCategory } = useAddSubCategory();
 
   return (
-    <div className="container mx-auto pb-10 space-y-4">
+    <div className="w-full mx-auto pb-10 space-y-4">
       <div className="flex items-center justify-end">
         <CreateNewSubCategory
           open={openCreateSubCategoryDialog}
