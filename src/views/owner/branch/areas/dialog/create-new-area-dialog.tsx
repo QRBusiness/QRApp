@@ -125,7 +125,7 @@ const CreateNewArea = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="image_url"
               render={({ field }) => (
@@ -141,7 +141,7 @@ const CreateNewArea = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="branch"
