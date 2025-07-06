@@ -71,13 +71,21 @@ apiClient.interceptors.response.use(
         } catch (refreshError) {
           // Nếu refresh token thất bại, chuyển hướng đến /login
           window.location.href = '/login';
-          return Promise.reject(refreshError);
+          return Promise.reject({
+            status: response?.status,
+            error: response?.data?.error || 'Refresh token failed',
+            errorMessage: response?.data?.message,
+          });
         }
       }
     } else if ((response.status === 401 || response.status === 403) && config._retry) {
       // Nếu đã retry mà vẫn thất bại, chuyển hướng đến /login
       // window.location.href = '/login';
-      return Promise.reject(error);
+      return Promise.reject({
+        status: response?.status,
+        error: response?.data?.error || 'Unauthorized access',
+        errorMessage: response?.data?.message,
+      });
     }
 
     return Promise.reject({

@@ -27,7 +27,7 @@ const CartItemsDetails: React.FC = () => {
 
   useEffect(() => {
     const newSubtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const newTax = newSubtotal * 0.0825; // 8.25% tax rate
+    const newTax = newSubtotal * 0; // 0% tax rate
     const newTotal = newSubtotal + newTax;
     setSubtotal(newSubtotal);
     setTax(newTax);
@@ -183,7 +183,7 @@ const CartItemsDetails: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">
-                  {t('module.menuManagement.cart.tax', { taxRate: '8.25' })}
+                  {t('module.menuManagement.cart.tax', { taxRate: `${tax}%` })}
                 </span>
                 <span className="font-medium">
                   {tax.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}

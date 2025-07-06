@@ -40,7 +40,7 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
         <div className="px-2 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <CircleUser className="size-5" />
-            <div className="font-normal">{'Unknown'}</div>
+            <div className="font-normal">{order.guest_name || 'Unknown'}</div>
           </div>
           <div className="flex flex-col items-start text-sm text-muted-foreground">
             <span className="font-medium text-primary">

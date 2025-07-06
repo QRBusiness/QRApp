@@ -81,7 +81,14 @@ export const useProcessRequest = () => {
   const { mutateAsync } = useMutation({
     mutationFn: processRequest,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['requests', 'orders'] });
+      // Invalidate tất cả queries liên quan đến requests
+      queryClient.invalidateQueries({ queryKey: ['requests'] });
+      // Invalidate tất cả queries liên quan đến orders
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      // Hoặc invalidate cả hai cùng lúc
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'requests' || query.queryKey[0] === 'orders',
+      });
       toast.success('Request processed successfully');
     },
     onError: (error) => {

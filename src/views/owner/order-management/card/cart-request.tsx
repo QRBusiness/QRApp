@@ -48,9 +48,9 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name }
           </span>
         </p>
 
-        <p>
-          <strong>Guest Name:</strong> {guest_name || 'N/A'}
-        </p>
+        <div className="flex items-center space-x-2">
+          <span>Guest Name:</span> <p className="font-semibold">{guest_name || 'N/A'}</p>
+        </div>
       </div>
       <div className="flex flex-col items-start justify-between gap-2 h-full flex-1">
         <StatusBadge status={status as 'Waiting' | 'Pending' | 'Cancelled' | 'Completed'} />

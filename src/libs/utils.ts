@@ -73,7 +73,11 @@ export const removeFromSessionStorage = (key: string) => {
   }
 };
 
-export const formattedDate = (date: string) => format(new Date(date), 'MMM dd, yyyy • h:mm a');
+export const formattedDate = (date: string) => {
+  const d = new Date(date);
+  d.setHours(d.getHours() + 7);
+  return format(d, 'MMM dd, yyyy • h:mm a');
+};
 
 export const getTypeOfField = (fieldName: string): string => {
   switch (fieldName) {

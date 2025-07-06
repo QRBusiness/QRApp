@@ -10,6 +10,7 @@ export interface OrderResponseProps {
   _id: string;
   created_at: string;
   updated_at: string;
+  guest_name: string;
   items: Array<{
     name: string;
     quantity: number;
@@ -94,7 +95,8 @@ const checkoutOrder = async (orderId: string): Promise<string> => {
     }
     return response.data.data;
   } catch (error: ErrorResponse | any) {
-    toast.error(error.message || 'Error checking out order', {
+    console.error('Error checking out order:', error);
+    toast.error(error.error || 'Error checking out order', {
       description: error.errorMessage || 'An error occurred while checking out the order.',
     });
     throw new Error(error.errorMessage || 'Error checking out order');
@@ -109,6 +111,78 @@ export const useCheckoutOrder = () => {
 
   return {
     checkoutOrder: mutate,
+    isError,
+    error,
+  };
+};
+
+export interface QRPaymentProps {
+  code: string;
+  data: {
+    qrDataURL: string;
+  };
+}
+const getQRPayment = async (orderId: string): Promise<QRPaymentProps> => {
+  try {
+    const response: ApiResponse<{ data: QRPaymentProps }> = await apiClient.get(
+      `/orders/${orderId}/qrcode?template=compact`
+    );
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error fetching QR payment', {
+        description: response.errorMessage || 'An error occurred while fetching the QR payment.',
+      });
+      throw new Error(response.errorMessage || 'Error fetching QR payment');
+    }
+    return response.data.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error fetching QR payment', {
+      description: error.errorMessage || 'An error occurred while fetching the QR payment.',
+    });
+    throw new Error(error.errorMessage || 'Error fetching QR payment');
+  }
+};
+
+export const useQRPayment = (orderId: string) => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['qrPayment', orderId],
+    queryFn: () => getQRPayment(orderId),
+  });
+
+  return {
+    qrPayment: data,
+    isLoading,
+    isError,
+    error,
+  };
+};
+
+const getOrderById = async (orderId: string): Promise<OrderResponseProps> => {
+  try {
+    const response: ApiResponse<{ data: OrderResponseProps }> = await apiClient.get(`/orders/${orderId}`);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error fetching order details', {
+        description: response.errorMessage || 'An error occurred while fetching the order details.',
+      });
+      throw new Error(response.errorMessage || 'Error fetching order details');
+    }
+    return response.data.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error fetching order details', {
+      description: error.errorMessage || 'An error occurred while fetching the order details.',
+    });
+    throw new Error(error.errorMessage || 'Error fetching order details');
+  }
+};
+
+export const useOrderById = (orderId: string) => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['order', orderId],
+    queryFn: () => getOrderById(orderId),
+  });
+
+  return {
+    orderDetails: data,
+    isLoading,
     isError,
     error,
   };
