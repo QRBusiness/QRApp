@@ -156,7 +156,7 @@ const CreateNewMenuDialog = ({
                     {!createProductSchema.shape.description.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.menuManagement.createMenuField.descriptionDescription')}</FormDescription>
                   <FormMessage />

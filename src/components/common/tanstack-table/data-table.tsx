@@ -18,6 +18,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 
@@ -87,70 +88,73 @@ export function DataTable<TData, TValue>({ columns, data, table_key }: DataTable
         </DropdownMenuContent>
       </DropdownMenu>
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            typeof header.column.columnDef.header === 'string'
-                              ? t(header.column.columnDef.header)
-                              : header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => {
-                    // Check if this cell is in the "description" column
-                    const isDescriptionColumn = cell.column.id === 'description' || cell.column.id === 'address';
-
-                    // If it is, truncate the content
-                    if (isDescriptionColumn) {
-                      return (
-                        <Hint label={cell.getValue() as string} key={cell.id} align="start">
-                          <TableCell
-                            className={cn('max-w-[200px] truncate', cell.column.columnDef.meta?.className || '')}
-                            key={cell.id}
-                            title={cell.getValue() as string} // Show full text on hover
-                          >
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </TableCell>
-                        </Hint>
-                      );
-                    }
-
+        <ScrollArea className="w-full whitespace-normal">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
                     return (
-                      <TableCell
-                        className={cn('max-w-[200px] truncate', cell.column.columnDef.meta?.className || '')}
-                        key={cell.id}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              typeof header.column.columnDef.header === 'string'
+                                ? t(header.column.columnDef.header)
+                                : header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
                     );
                   })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                    {row.getVisibleCells().map((cell) => {
+                      // Check if this cell is in the "description" column
+                      const isDescriptionColumn = cell.column.id === 'description' || cell.column.id === 'address';
+
+                      // If it is, truncate the content
+                      if (isDescriptionColumn) {
+                        return (
+                          <Hint label={cell.getValue() as string} key={cell.id} align="start">
+                            <TableCell
+                              className={cn('max-w-[200px] truncate', cell.column.columnDef.meta?.className || '')}
+                              key={cell.id}
+                              title={cell.getValue() as string} // Show full text on hover
+                            >
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
+                          </Hint>
+                        );
+                      }
+
+                      return (
+                        <TableCell
+                          className={cn('max-w-[200px] truncate', cell.column.columnDef.meta?.className || '')}
+                          key={cell.id}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
       <DataTablePagination table={table} />
     </div>

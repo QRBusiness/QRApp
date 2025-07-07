@@ -95,7 +95,7 @@ const createBusiness = async ({
   business_tax_code,
 }: CreateBusinessInput): Promise<BusinessProps> => {
   try {
-    const response: ApiResponse<BusinessProps> = await apiClient.post('/business', {
+    const response: ApiResponse<{ data: BusinessProps }> = await apiClient.post('/business', {
       username,
       password,
       owner_name,
@@ -113,7 +113,7 @@ const createBusiness = async ({
       });
       throw new Error(response.errorMessage || 'Failed to create business');
     }
-    return response.data;
+    return response.data.data;
   } catch (error: ErrorResponse | any) {
     toast.error((error as ErrorResponse).error || 'Internal server error', {
       description: (error as ErrorResponse).errorMessage || 'An unexpected error occurred while creating the business.',

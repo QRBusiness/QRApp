@@ -53,7 +53,7 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name }
         </div>
       </div>
       <div className="flex flex-col items-start justify-between gap-2 h-full flex-1">
-        <StatusBadge status={status as 'Waiting' | 'Pending' | 'Cancelled' | 'Completed'} />
+        <StatusBadge status={status as 'Waiting' | 'Pending' | 'Cancelled'} />
         <Button onClick={onAssignToMe} className="w-full" variant="default">
           <Check />
           Confirm

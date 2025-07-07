@@ -105,7 +105,11 @@ const CreateNewCategory = ({
                     {!createCategoriesSchema.shape.description.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder={t('module.categoriesMgmt.create.description.placeholder')} />
+                    <Input
+                      {...field}
+                      placeholder={t('module.categoriesMgmt.create.description.placeholder')}
+                      value={field.value || ''}
+                    />
                   </FormControl>
                   <FormDescription>{t('module.categoriesMgmt.create.description.description')}</FormDescription>
                   <FormMessage />

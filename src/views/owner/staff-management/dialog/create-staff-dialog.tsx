@@ -32,7 +32,7 @@ interface CreateNewUserProps {
 
 const CreateNewUser = ({
   create = true,
-  initialData = { name: '', phone: '', address: '', username: '', password: '', branch: '' },
+  initialData = { username: '', password: '', branch: '' },
   children,
   open,
   onOpenChange,
@@ -119,7 +119,7 @@ const CreateNewUser = ({
                     {!createUserSchema.shape.password.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={!create} />
+                    <Input {...field} disabled={!create} type="password" />
                   </FormControl>
                   <FormDescription>{t('module.staffManagement.create.password.description')}</FormDescription>
                   <FormMessage />
@@ -136,7 +136,7 @@ const CreateNewUser = ({
                     {!createUserSchema.shape.name.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.staffManagement.create.name.description')}</FormDescription>
                   <FormMessage />
@@ -153,7 +153,7 @@ const CreateNewUser = ({
                     {!createUserSchema.shape.phone.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.staffManagement.create.phone.description')}</FormDescription>
                   <FormMessage />
@@ -170,7 +170,7 @@ const CreateNewUser = ({
                     {!createUserSchema.shape.address.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.staffManagement.create.address.description')}</FormDescription>
                   <FormMessage />

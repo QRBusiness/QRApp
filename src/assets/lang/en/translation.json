@@ -187,9 +187,9 @@
         "fieldDescriptionDescription": "* Enter area description",
         "fieldDescriptionPlaceholder": "Enter area description",
 
-        "fieldImageUrl": "Area Image URL",
-        "fieldImageUrlDescription": "* Enter the image URL for the area",
-        "fieldImageUrlPlaceholder": "Enter image URL",
+        "fieldImageUrl": "Area Image",
+        "fieldImageUrlDescription": "* Choose an area image",
+        "fieldImageUrlPlaceholder": "Choose an area image",
 
         "fieldBranchId": "Branch ID",
         "fieldBranchIdDescription": "* Select the branch for this area",
@@ -540,7 +540,8 @@
         "contact": {
           "label": "Branch Contact Number",
           "description": "Enter the contact number of the branch.",
-          "error": "Branch contact number is required."
+          "error": "Branch contact number is required.",
+          "formatError": "Please enter a valid contact number."
         }
       },
       "action": {
@@ -686,6 +687,39 @@
         "cancel": "Cancel",
         "submit": "Submit",
         "edit": "Edit Guest User"
+      }
+    },
+    "profile": {
+      "edit": {
+        "title": "User profile",
+        "description": "Update your profile information.",
+        "image": {
+          "label": "Profile Image",
+          "description": "Upload a profile image.",
+          "error": "Profile image is required."
+        },
+        "name": {
+          "label": "Name",
+          "description": "* Enter your name.",
+          "placeholder": "Enter your name",
+          "error": "Name cannot be empty."
+        },
+        "phone": {
+          "label": "Phone Number",
+          "description": "* Enter your phone number.",
+          "placeholder": "Enter your phone number",
+          "error": "Phone number cannot be empty."
+        },
+        "address": {
+          "label": "Address",
+          "description": "* Enter your address.",
+          "placeholder": "Enter your address",
+          "error": "Address cannot be empty."
+        },
+        "button": {
+          "cancel": "Cancel",
+          "save": "Save Changes"
+        }
       }
     }
   }

@@ -157,9 +157,11 @@ const RootApp = ({ role }: RootAppProps) => {
     <SidebarProvider defaultOpen={cookie === 'true'}>
       {/* Desktop Sidebar Trigger */}
       <SidebarApp items={sidebarItems} />
-      <SidebarTrigger />
-      <main className="w-full h-full flex flex-col items-center justify-center p-0 md:px-4">
-        <Headers />
+      <main className="w-full h-full flex flex-col items-center justify-center p-0 md:px-4 overflow-x-hidden">
+        <div className="flex items-center justify-between w-full overflow-x-none">
+          <SidebarTrigger />
+          <Headers />
+        </div>
         <Outlet />
       </main>
     </SidebarProvider>

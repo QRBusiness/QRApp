@@ -113,14 +113,15 @@ export const useCreateTable = () => {
 
 const updateTable = async (tableId: string, tableData: z.infer<typeof updateTableSchema>) => {
   try {
-    const qrCodeBlobPart = tableData.qr_code !== undefined ? tableData.qr_code : '';
-    const file = new File([qrCodeBlobPart], 'upload.png', {
+    const qrCodeBlobPart = tableData.qr_code ?? '';
+    const safeQrCodeBlobPart: BlobPart = qrCodeBlobPart === null ? '' : qrCodeBlobPart;
+    const file = new File([safeQrCodeBlobPart], 'upload.png', {
       type: qrCodeBlobPart instanceof Blob ? qrCodeBlobPart.type : 'image/png',
       lastModified: Date.now(),
     });
 
     const formData = new FormData();
-    formData.append('qr_code', file);
+    if (file && file.size > 0) formData.append('qr_code', file);
     formData.append('name', tableData.name);
 
     const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, formData);

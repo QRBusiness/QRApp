@@ -13,7 +13,7 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
   const formattedDate = format(new Date(order.created_at), 'h:mm a - MMM dd, yyyy');
   const navigate = useNavigate();
   return (
-    <Card key={order._id} className="py-2">
+    <Card key={order._id} className="py-2 flex flex-col justify-between h-full">
       <CardContent className="px-2 py-0">
         {/* Header card */}
         <div className="flex justify-between items-center p-2 bg-background">
@@ -39,8 +39,8 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
         {/* Thông tin khách hàng */}
         <div className="px-2 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <CircleUser className="size-5" />
-            <div className="font-normal">{order.guest_name || 'Unknown'}</div>
+            <CircleUser className="size-5 text-muted-foreground" />
+            <div className="font-semibold">{order.guest_name || 'Unknown'}</div>
           </div>
           <div className="flex flex-col items-start text-sm text-muted-foreground">
             <span className="font-medium text-primary">

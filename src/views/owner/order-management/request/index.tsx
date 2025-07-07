@@ -1,4 +1,4 @@
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import type { CartRequestProps } from '../card/cart-request';
 import CartRequest from '../card/cart-request';
 
@@ -15,7 +15,7 @@ const RequestBar = ({ data }: RequestBarProps) => {
     );
   }
   return (
-    <ScrollArea className="w-full">
+    <ScrollArea className="w-full h-full p-4">
       <div className="flex flex-row gap-2">
         {data.map((request) => (
           <CartRequest
@@ -32,6 +32,7 @@ const RequestBar = ({ data }: RequestBarProps) => {
           />
         ))}
       </div>
+      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 };

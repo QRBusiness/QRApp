@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { ErrorResponse } from '@/services';
 import { useCreateBusiness } from '@/services/admin/business-service';
 import { useBusinessTypes } from '@/services/admin/business-type-service';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -64,6 +65,13 @@ const CreateNewBusinessOwner = () => {
   const { handleSubmit, control, reset } = form;
 
   const onSubmit = async (data: any) => {
+    if (step === 0 && data.password !== data.confirmPassword) {
+      form.setError('confirmPassword', {
+        type: 'manual',
+        message: t('module.createBusinessOwnerField.step1.confirmPassword.error'),
+      });
+      return;
+    }
     // Gắn prefix step vào key, ví dụ: 1_name, 2_email
     const newFormData = {
       ...formData,
@@ -76,20 +84,25 @@ const CreateNewBusinessOwner = () => {
     } else {
       setIsLoading(true);
       // Gọi API tạo tài khoản doanh nghiệp
-      await createBusiness({
-        username: newFormData['1_username'],
-        password: newFormData['1_password'],
-        owner_name: newFormData['2_name'],
-        owner_address: newFormData['2_address'],
-        owner_contact: newFormData['2_phone'],
-        business_name: newFormData['3_name'],
-        business_address: newFormData['3_address'],
-        business_contact: newFormData['3_contact'],
-        business_type: newFormData['3_businessType'],
-        business_tax_code: newFormData['3_businessTaxCode'],
-      });
-      setIsLoading(false);
-      // Reset step and form data after successful submission
+      try {
+        await createBusiness({
+          username: newFormData['1_username'],
+          password: newFormData['1_password'],
+          owner_name: newFormData['2_name'],
+          owner_address: newFormData['2_address'],
+          owner_contact: newFormData['2_phone'],
+          business_name: newFormData['3_name'],
+          business_address: newFormData['3_address'],
+          business_contact: newFormData['3_contact'],
+          business_type: newFormData['3_businessType'],
+          business_tax_code: newFormData['3_businessTaxCode'],
+        });
+      } catch (error: ErrorResponse | any) {
+        return;
+      } finally {
+        setIsLoading(false);
+        // Reset step and form data after successful submission
+      }
       setStep(0);
       setFormData({});
       reset(); // reset react-hook-form fields

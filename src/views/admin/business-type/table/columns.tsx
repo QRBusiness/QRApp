@@ -64,7 +64,7 @@ export const columns: ColumnDef<BusinessType>[] = [
       const { updateBusinessType } = useUpdateBusinessType();
       const { deleteBusinessType } = useDeleteBusinessType();
 
-      const onSubmit = (data: { name: string; description?: string }) => {
+      const onSubmit = (data: { name: string; description?: string | null | undefined }) => {
         updateBusinessType({ id: row.row.original.id, data });
         setIsUpdateOpen(false);
       };
@@ -73,7 +73,7 @@ export const columns: ColumnDef<BusinessType>[] = [
         <div className="flex gap-2">
           <ReadOnlyDialog isOpen={isViewOpen} onClose={setIsViewOpen} data={row.row.original}>
             <Button variant="outline" size="sm">
-              <Eye className="mr-2" />
+              <Eye className="mr-1" />
               {t('module.common.view')}
             </Button>
           </ReadOnlyDialog>
@@ -85,7 +85,7 @@ export const columns: ColumnDef<BusinessType>[] = [
             initialData={{ name: row.row.original.name, description: row.row.original.description }}
           >
             <Button variant="outline" size="sm">
-              <Edit className="mr-2" />
+              <Edit className="mr-1" />
               {t('module.common.edit')}
             </Button>
           </CreateNewBusinessType>
@@ -95,7 +95,7 @@ export const columns: ColumnDef<BusinessType>[] = [
             onSubmit={() => deleteBusinessType(row.row.original.id)}
           >
             <Button variant="destructive" size="sm">
-              <Trash className="mr-2" />
+              <Trash className="mr-1" />
               {t('module.common.delete')}
             </Button>
           </CustomAlertDialog>

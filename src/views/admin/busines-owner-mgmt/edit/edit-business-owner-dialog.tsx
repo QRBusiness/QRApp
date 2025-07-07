@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
 import { editUserSchema } from '@/utils/schemas';
 
 interface EditBusinessOwnerDialogProps {
@@ -77,30 +76,6 @@ const EditBusinessOwnerDialog = ({
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
             <FormField
               control={form.control}
-              name="available"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center gap-2">
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} className="w-10 h-6" disabled />
-                    </FormControl>
-                    <FormLabel>
-                      {isUser
-                        ? t('module.staffManagement.create.available.label')
-                        : t('module.businessOwner.editField.available.label')}
-                    </FormLabel>
-                  </div>
-                  <FormDescription>
-                    {isUser
-                      ? t('module.staffManagement.create.available.description')
-                      : t('module.businessOwner.editField.available.description')}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
@@ -108,7 +83,7 @@ const EditBusinessOwnerDialog = ({
                     {isUser
                       ? t('module.staffManagement.create.name.label')
                       : t('module.businessOwner.editField.name.label')}
-                    <p className="text-red-700">*</p>
+                    {!editUserSchema.shape.name.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -131,7 +106,7 @@ const EditBusinessOwnerDialog = ({
                     {isUser
                       ? t('module.staffManagement.create.address.label')
                       : t('module.businessOwner.editField.address.label')}
-                    <p className="text-red-700">*</p>
+                    {!editUserSchema.shape.address.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -154,7 +129,7 @@ const EditBusinessOwnerDialog = ({
                     {isUser
                       ? t('module.staffManagement.create.phone.label')
                       : t('module.businessOwner.editField.phone.label')}
-                    <p className="text-red-700">*</p>
+                    {!editUserSchema.shape.phone.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -177,7 +152,7 @@ const EditBusinessOwnerDialog = ({
                     {isUser
                       ? t('module.staffManagement.create.username.label')
                       : t('module.businessOwner.editField.username.label')}
-                    <p className="text-red-700">*</p>
+                    {!editUserSchema.shape.username.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} disabled={true} />

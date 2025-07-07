@@ -96,7 +96,7 @@ export const columns: ColumnDef<BusinessType>[] = [
         <div className="flex gap-2">
           <ReadOnlyBusinessDialog data={row.original} isOpen={openViewDialog} onClose={setOpenViewDialog}>
             <Button variant="outline" size="sm">
-              <Eye className="mr-2" />
+              <Eye className="mr-1" />
               {t('module.common.view')}
             </Button>
           </ReadOnlyBusinessDialog>
@@ -111,7 +111,7 @@ export const columns: ColumnDef<BusinessType>[] = [
             id={row.original.id as string}
           >
             <Button variant="outline" size="sm">
-              <Edit className="mr-2" />
+              <Edit className="mr-1" />
               {t('module.common.edit')}
             </Button>
           </EditBusinessDialog>
@@ -127,12 +127,12 @@ export const columns: ColumnDef<BusinessType>[] = [
           >
             {row.original.available ? (
               <Button variant="destructive" size="sm">
-                <CircleX className="mr-2" />
+                <CircleX className="mr-1" />
                 {t('module.common.disable')}
               </Button>
             ) : (
               <Button variant="outline" size="sm">
-                <CircleCheck className="mr-2" />
+                <CircleCheck className="mr-1" />
                 {t('module.common.enable')}
               </Button>
             )}

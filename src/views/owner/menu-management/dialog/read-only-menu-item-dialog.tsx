@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { formattedDate } from '@/libs/utils';
 import type { Menu } from '../tables/columns';
 
@@ -93,6 +93,7 @@ const ReadOnlyMenuItemDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose
               <p>{formattedDate(data.updated_at)}</p>
             </div>
           </div>
+          <ScrollBar orientation="vertical" />
         </ScrollArea>
         <DialogFooter>
           <Button onClick={() => onClose(false)}>{t('module.common.readOnlyDialog.button')}</Button>

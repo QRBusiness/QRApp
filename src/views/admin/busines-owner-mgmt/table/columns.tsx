@@ -121,7 +121,7 @@ export const columns: ColumnDef<BusinessOwner>[] = [
         <div className="flex gap-2">
           <ReadOnlyDialog isOpen={openReadOnlyDialog} onClose={setOpenReadOnlyDialog} data={row.original}>
             <Button variant="outline" size="sm" onClick={() => setOpenReadOnlyDialog(true)}>
-              <Eye className="mr-2" />
+              <Eye className="mr-1" />
               {t('module.common.view')}
             </Button>
           </ReadOnlyDialog>
@@ -132,7 +132,7 @@ export const columns: ColumnDef<BusinessOwner>[] = [
             onSubmit={(data) => updateUser({ id: row.original.id, data })}
           >
             <Button variant="outline" size="sm" onClick={() => setOpenEditDialog(true)}>
-              <Edit className="mr-2" />
+              <Edit className="mr-1" />
               {t('module.common.edit')}
             </Button>
           </EditBusinessOwnerDialog>
@@ -148,12 +148,12 @@ export const columns: ColumnDef<BusinessOwner>[] = [
           >
             {row.original.available ? (
               <Button variant="destructive" size="sm">
-                <CircleX className="mr-2" />
+                <CircleX className="mr-1" />
                 {t('module.common.disable')}
               </Button>
             ) : (
               <Button variant="outline" size="sm">
-                <CircleCheck className="mr-2" />
+                <CircleCheck className="mr-1" />
                 {t('module.common.enable')}
               </Button>
             )}

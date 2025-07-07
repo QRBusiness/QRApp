@@ -186,6 +186,10 @@ function App() {
               index: true,
               element: <Navigate to={BUSINESS_TYPE} replace />,
             },
+            {
+              path: PROFILE,
+              element: <UserProfile />,
+            },
           ],
         },
       ]),

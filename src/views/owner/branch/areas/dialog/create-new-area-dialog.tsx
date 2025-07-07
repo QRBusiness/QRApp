@@ -32,7 +32,7 @@ interface CreateNewAreaProps {
 
 const CreateNewArea = ({
   create = true,
-  initialData = { name: '', branch: '' },
+  initialData = { name: '', branch: '', description: '' },
   children,
   open,
   onOpenChange,
@@ -118,14 +118,14 @@ const CreateNewArea = ({
                     {!createAreaSchema.shape.description.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormDescription>{t('module.qrManagement.addAreaField.fieldDescriptionDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* <FormField
+            <FormField
               control={form.control}
               name="image_url"
               render={({ field }) => (
@@ -135,13 +135,22 @@ const CreateNewArea = ({
                     {!createAreaSchema.shape.image_url.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      type="file"
+                      name={field.name}
+                      ref={field.ref}
+                      onBlur={field.onBlur}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        field.onChange(file);
+                      }}
+                    />
                   </FormControl>
                   <FormDescription>{t('module.qrManagement.addAreaField.fieldImageUrlDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
             <FormField
               control={form.control}
               name="branch"

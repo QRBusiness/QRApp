@@ -105,7 +105,7 @@ const CreateNewGroup = ({
                     {!createGroupSchema.shape.description.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.groupManagement.create.description.description')}</FormDescription>
                   <FormMessage />

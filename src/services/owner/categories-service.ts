@@ -206,7 +206,7 @@ export const useAddSubCategory = () => {
     mutationFn: addSubCategory,
     onSuccess: () => {
       toast.success('Subcategory added successfully');
-      queryClient.invalidateQueries({ queryKey: ['categoriesQuery'] });
+      queryClient.invalidateQueries({ queryKey: ['subcategoriesQuery'] });
     },
   });
   return {

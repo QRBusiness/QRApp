@@ -74,6 +74,8 @@ export const useOrders = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['orders'],
     queryFn: getOrders,
+    refetchInterval: 5000, // Refetch every 5 seconds
+    refetchOnWindowFocus: true, // Refetch when the window is focused
   });
 
   return {

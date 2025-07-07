@@ -52,9 +52,11 @@ const ReadOnlyDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose, childr
           <div className="flex items-center justify-between">
             <Label>{t('module.common.readOnlyDialog.name')}:</Label> {data.name}
           </div>
-          <div className="flex items-center justify-between">
-            <Label>{t('module.common.readOnlyDialog.description')}:</Label> {data.description}
-          </div>
+          {data.description && (
+            <div className="flex items-center justify-between">
+              <Label>{t('module.common.readOnlyDialog.description')}:</Label> {data.description}
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <Label>{t('module.common.readOnlyDialog.createdAt')}:</Label> <p>{formattedDate(data.created_at)}</p>
           </div>

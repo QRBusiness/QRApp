@@ -150,6 +150,7 @@ const CreateNewSubCategory = ({
                     <Input
                       {...field}
                       disabled={!create}
+                      value={field.value || ''}
                       placeholder={t('module.categoriesMgmt.subCategories.create.description.placeholder')}
                     />
                   </FormControl>
