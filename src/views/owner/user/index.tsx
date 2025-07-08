@@ -49,13 +49,11 @@ const UserProfile = () => {
       await uploadAvatar(data.image_url);
     }
     const response = await updateUserProfile({
-      data: {
-        name: data.name,
-        phone: data.phone,
-        address: data.address,
-      },
+      name: data.name,
+      phone: data.phone,
+      address: data.address,
     });
-    useSetUserProfile(response.data.name, response.data.phone, response.data.address, response.data.image_url || '');
+    useSetUserProfile(response.name, response.phone, response.address, response.image_url || '');
   };
 
   return (

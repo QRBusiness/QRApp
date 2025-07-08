@@ -102,22 +102,60 @@ export const columns: ColumnDef<QRTable>[] = [
 
       const { deleteTable } = useDeleteTable();
 
-      const handleDownload = (url: string) => {
+      const handleDownload = async (url: string) => {
         if (!url) {
           toast.error(t('module.qrManagement.qrDownloadError'), {
             description: t('module.qrManagement.qrDownloadErrorDescription'),
           });
           return;
         }
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `qr-code-${row.getValue('area')}-${row.getValue('name')}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        toast.success(t('module.qrManagement.qrDownloadSuccess'), {
-          description: t('module.qrManagement.qrDownloadSuccessDescription'),
-        });
+        try {
+          // Method 1: Fetch image and create blob (tốt hơn cho CORS)
+          const response = await fetch(url, {
+            mode: 'cors',
+            credentials: 'same-origin',
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = `qr-code-${row.getValue('area')}-${row.getValue('name')}.png`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          // Cleanup blob URL
+          URL.revokeObjectURL(blobUrl);
+
+          toast.success(t('module.qrManagement.qrDownloadSuccess'), {
+            description: t('module.qrManagement.qrDownloadSuccessDescription'),
+          });
+        } catch (error) {
+          console.error('Download failed, falling back to direct link:', error);
+          try {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `qr-code-${row.getValue('area')}-${row.getValue('name')}.png`;
+            link.target = '_blank'; // Mở tab mới nếu download fail
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            toast.success(t('module.qrManagement.qrDownloadSuccess'), {
+              description: t('module.qrManagement.qrDownloadSuccessDescription'),
+            });
+          } catch (fallbackError) {
+            toast.error(t('module.qrManagement.qrDownloadError'), {
+              description: 'Failed to download QR code. Please try again.',
+            });
+          }
+        }
       };
 
       return (

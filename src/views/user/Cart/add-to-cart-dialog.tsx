@@ -68,7 +68,6 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
       note: specialInstructions,
       price: item.variants[variantIndex]?.price + totalPreferencesPrice || 0,
     };
-    // debugger;
     addToCart(cartItem);
     onOpenChange(false);
   };

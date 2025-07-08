@@ -143,14 +143,14 @@ export const useCreateBusiness = () => {
 
 const toggleAvailableBusiness = async (id: string): Promise<BusinessProps> => {
   try {
-    const response: ApiResponse<BusinessProps> = await apiClient.put(`/business/active/${id}`);
+    const response: ApiResponse<{ data: BusinessProps }> = await apiClient.put(`/business/active/${id}`);
     if (response.status !== 200) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to toggling enable/disable business',
       });
       throw new Error(response.errorMessage || 'Failed to toggling enable/disable business');
     }
-    return response.data;
+    return response.data.data;
   } catch (error: ErrorResponse | any) {
     toast.error((error as ErrorResponse).error, {
       description:
@@ -196,7 +196,6 @@ const updateBusiness = async (
       business_type: businessType,
       tax_code: businessTaxCode,
     });
-    debugger;
     if (response.status !== 200) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to update business',

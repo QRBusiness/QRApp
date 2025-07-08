@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { MENU_MANAGEMENT } from '@/constants';
 import { useCreateOrderRequest } from '@/services/user/user-request-service';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
-import { removeFromCart, updateCartItemQuantity, useCartItems } from '@/components/common/states/cartState';
+import { clearCart, removeFromCart, updateCartItemQuantity, useCartItems } from '@/components/common/states/cartState';
 import { useGuestState } from '@/components/common/states/guestState';
 import { useViewState } from '@/components/common/states/viewState';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +24,7 @@ const CartItemsDetails: React.FC = () => {
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
   const { name } = useGuestState();
+  const navigate = useNavigate();
 
   const { createOrderRequest } = useCreateOrderRequest();
 
@@ -71,6 +74,8 @@ const CartItemsDetails: React.FC = () => {
         note: item.note || '',
       })),
     });
+    clearCart();
+    navigate(`../${MENU_MANAGEMENT}?area=${area}&table=${table}`);
   };
 
   return (

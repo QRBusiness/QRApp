@@ -124,7 +124,7 @@ export const useUploadAvatar = () => {
   };
 };
 
-const updateUserProfileApi = async (data: { data: z.infer<typeof editUserProfileSchema> }) => {
+const updateUserProfileApi = async (data: z.infer<typeof editUserProfileSchema>) => {
   try {
     const response: ApiResponse<UserProfile> = await apiClient.put('/me', data);
     if (response.status !== 200) {
@@ -132,7 +132,7 @@ const updateUserProfileApi = async (data: { data: z.infer<typeof editUserProfile
         description: response.errorMessage || 'Failed to update user profile',
       });
     }
-    return response.data;
+    return response.data.data;
   } catch (error: ErrorResponse | any) {
     toast.error(error.error, {
       description: error.errorMessage || 'An error occurred while updating user profile',
@@ -142,17 +142,14 @@ const updateUserProfileApi = async (data: { data: z.infer<typeof editUserProfile
 };
 
 export const useUpdateUserProfile = () => {
-  const { mutateAsync: updateUserProfile } = useMutation<
-    UserProfile,
-    Error,
-    { data: z.infer<typeof editUserProfileSchema> }
-  >({
+  const { mutateAsync: updateUserProfile } = useMutation({
     mutationKey: ['updateUserProfile'],
     mutationFn: updateUserProfileApi,
     onSuccess: () => {
       toast.success('User profile updated successfully');
     },
   });
+
   return {
     updateUserProfile,
   };

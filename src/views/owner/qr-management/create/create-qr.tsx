@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constants';
 import { getAreas, useCreateArea } from '@/services/owner/area-service';
 import { useBranches } from '@/services/owner/branch-service';
-import { getTables, useCreateTable, useUpdateTable } from '@/services/owner/table-service';
+import { getTables, useCreateTable, useUpdateQRCode } from '@/services/owner/table-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import * as htmlToImage from 'html-to-image';
@@ -41,7 +41,7 @@ const CreateQR = () => {
   const { branches } = useBranches({ page: 1, limit: 50 });
   const { createArea, data: createdArea } = useCreateArea();
   const { createTable, data: createdTable } = useCreateTable();
-  const { updateTable } = useUpdateTable();
+  const { updateQRCode } = useUpdateQRCode();
 
   React.useEffect(() => {
     if (branches.length > 0) {
@@ -232,12 +232,13 @@ const CreateQR = () => {
         if (!blob) {
           throw new Error(t('module.qrManagement.qrGenerationErrorDescription'));
         }
-        updateTable({
+        const file = new File([blob], `qr-code-${qrTitle}.png`, { type: 'image/png' });
+        if (!file) {
+          throw new Error(t('module.qrManagement.qrGenerationErrorDescription'));
+        }
+        updateQRCode({
           id: values.table,
-          data: {
-            name: tableName,
-            qr_code: blob,
-          },
+          qr_code: file,
         });
       });
     }, 3000);

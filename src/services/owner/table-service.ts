@@ -113,15 +113,7 @@ export const useCreateTable = () => {
 
 const updateTable = async (tableId: string, tableData: z.infer<typeof updateTableSchema>) => {
   try {
-    const qrCodeBlobPart = tableData.qr_code ?? '';
-    const safeQrCodeBlobPart: BlobPart = qrCodeBlobPart === null ? '' : qrCodeBlobPart;
-    const file = new File([safeQrCodeBlobPart], 'upload.png', {
-      type: qrCodeBlobPart instanceof Blob ? qrCodeBlobPart.type : 'image/png',
-      lastModified: Date.now(),
-    });
-
     const formData = new FormData();
-    if (file && file.size > 0) formData.append('qr_code', file);
     formData.append('name', tableData.name);
 
     const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, formData);
@@ -151,6 +143,49 @@ export const useUpdateTable = () => {
   });
   return {
     updateTable: mutateAsync,
+    isError,
+    isPending,
+    isSuccess,
+    data,
+  };
+};
+
+const getUpdateQRCode = async ({ id, qr_code }: { id: string; qr_code: File }): Promise<TableResponse> => {
+  try {
+    const formData = new FormData();
+    if (qr_code) formData.append('qr_code', qr_code);
+
+    const response: ApiResponse<{ data: TableResponse }> = await apiClient.post(`/services/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to update QR code',
+      });
+      return response.data.data;
+    }
+    toast.success('QR code updated successfully');
+    return response.data.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while updating the QR code.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useUpdateQRCode = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isError, isPending, isSuccess, data } = useMutation({
+    mutationFn: getUpdateQRCode,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tablesQuery'] });
+    },
+  });
+  return {
+    updateQRCode: mutateAsync,
     isError,
     isPending,
     isSuccess,

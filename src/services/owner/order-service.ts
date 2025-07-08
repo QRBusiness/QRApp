@@ -76,6 +76,7 @@ export const useOrders = () => {
     queryFn: getOrders,
     refetchInterval: 5000, // Refetch every 5 seconds
     refetchOnWindowFocus: true, // Refetch when the window is focused
+    refetchOnReconnect: true, // Refetch when the network reconnects
   });
 
   return {

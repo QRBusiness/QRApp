@@ -48,6 +48,9 @@ export const useRequests = ({ status }: { status?: string }) => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['requests', status],
     queryFn: () => getRequests(status),
+    refetchInterval: 5000, // Refetch every 5 seconds
+    refetchOnWindowFocus: true, // Refetch when the window is focused
+    refetchOnReconnect: true, // Refetch when the network reconnects
   });
 
   return {

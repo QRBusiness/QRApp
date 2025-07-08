@@ -1,5 +1,5 @@
 import React from 'react';
-import { useUpdateTable } from '@/services/owner/table-service';
+import { useUpdateQRCode, useUpdateTable } from '@/services/owner/table-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleX, Table } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -45,6 +45,7 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
   const { t } = useTranslation();
 
   const { updateTable } = useUpdateTable();
+  const { updateQRCode } = useUpdateQRCode();
   const form = useForm<z.infer<typeof updateTableSchema>>({
     resolver: zodResolver(updateTableSchema),
     values: initialValues,
@@ -55,6 +56,13 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
       id: id as string,
       data,
     });
+
+    if (data.qr_code instanceof File) {
+      await updateQRCode({
+        id: id as string,
+        qr_code: data.qr_code,
+      });
+    }
     if (onSubmit) {
       onSubmit();
     }
