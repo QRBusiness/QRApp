@@ -2,13 +2,14 @@ import React from 'react';
 import { useToggleAvailableBusiness } from '@/services/admin/business-service';
 import { useBusinessTypes } from '@/services/admin/business-type-service';
 import type { ColumnDef } from '@tanstack/react-table';
-import { CircleCheck, CircleX, Edit, Eye } from 'lucide-react';
+import { CircleCheck, CircleX, ClockPlus, Edit, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
 import EditBusinessDialog from '../dialog/edit-business-dialog';
+import ExtendExpireDateDialog from '../dialog/extend-expire-date-dialog';
 import ReadOnlyBusinessDialog from '../dialog/read-only-business-dialog';
 
 export type BusinessType = {
@@ -21,6 +22,7 @@ export type BusinessType = {
   available: boolean;
   created_at: string;
   updated_at: string;
+  expired_at: string;
 };
 
 export const columns: ColumnDef<BusinessType>[] = [
@@ -83,12 +85,21 @@ export const columns: ColumnDef<BusinessType>[] = [
     },
   },
   {
+    accessorKey: 'expired_at',
+    header: 'Expired At',
+    cell: ({ row }) => {
+      const expiredAt = row.getValue('expired_at');
+      return expiredAt ? formattedDate(expiredAt as string) : 'N/A';
+    },
+  },
+  {
     accessorKey: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
       const { t } = useTranslation();
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
       const [openViewDialog, setOpenViewDialog] = React.useState(false);
+      const [openExtendDialog, setOpenExtendDialog] = React.useState(false);
       const { toggleAvailableBusiness } = useToggleAvailableBusiness();
       const { businessTypes } = useBusinessTypes({ page: 1, limit: 50 });
       const businessTypeId = businessTypes.find((type) => type.name === row.original.business_type)?._id;
@@ -115,6 +126,16 @@ export const columns: ColumnDef<BusinessType>[] = [
               {t('module.common.edit')}
             </Button>
           </EditBusinessDialog>
+          <ExtendExpireDateDialog
+            open={openExtendDialog}
+            onOpenChange={setOpenExtendDialog}
+            initialData={{ expired_at: row.original.expired_at }}
+          >
+            <Button variant="outline" size="sm">
+              <ClockPlus className="mr-1" />
+              {t('module.common.extend')}
+            </Button>
+          </ExtendExpireDateDialog>
           <CustomAlertDialog
             title={t('module.common.confirmAction')}
             description={t('module.common.confirmActionDescription', {

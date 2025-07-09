@@ -14,6 +14,7 @@ interface CustomVariantsSelectProps {
   options?: { value: string; label: string }[];
   placeholder?: string;
   selectLabel?: string;
+  disabled?: boolean;
 }
 
 export function CustomVariantsSelect({
@@ -22,17 +23,18 @@ export function CustomVariantsSelect({
   options,
   placeholder,
   selectLabel,
+  disabled = false,
 }: CustomVariantsSelectProps) {
   return (
     <Select value={value} onValueChange={onChange} defaultValue={value}>
-      <SelectTrigger className="w-fit min-w-[156px]">
+      <SelectTrigger className={`w-full min-w-[156px]`}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           {selectLabel && <SelectLabel>{selectLabel}</SelectLabel>}
           {options?.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <SelectItem key={option.value} value={option.value} disabled={disabled}>
               {option.label}
             </SelectItem>
           ))}

@@ -30,9 +30,12 @@ const UserMenuPage: React.FC = () => {
 
   const navigate = useNavigate();
   const { totalQuantity } = useCartTotalQuantity();
-  const { products: items } = useProducts();
-  const { subcategories } = useSubcategories();
   const [currentFilterSubcategory, setCurrentFilterSubcategory] = React.useState<string>('all');
+  const { products: items } = useProducts({
+    category: '',
+    sub_category: currentFilterSubcategory === 'all' ? '' : currentFilterSubcategory,
+  });
+  const { subcategories } = useSubcategories();
 
   let categoryOptions = subcategories.map((subcategory) => ({
     label: subcategory.name,
@@ -41,37 +44,35 @@ const UserMenuPage: React.FC = () => {
   categoryOptions = [{ label: 'All', value: 'all' }, ...categoryOptions];
 
   return (
-    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
+    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 w-full mx-auto">
       <UserInputModel
         open={openUserInputModel}
         onOpenChange={setOpenUserInputModel}
         onSubmit={(values) => useSetGuestName(values.name)}
       />
       <HorizontalFilterScroll
-        className="col-span-1 md:col-span-2 lg:col-span-4 mb-4"
+        className="col-span-1 md:col-span-2 lg:col-span-4 mb-4 w-full"
         orderStatuses={categoryOptions.map((category) => ({
           label: category.label,
           value: category.value,
         }))}
         onChange={setCurrentFilterSubcategory}
       />
-      {items
-        .filter((item) => currentFilterSubcategory === 'all' || item.subcategory._id === currentFilterSubcategory)
-        .map((item) => (
-          <MenuCardItem
-            key={item._id}
-            _id={item._id}
-            name={item.name}
-            image="https://readdy.ai/api/search-image?query=Gourmet%20avocado%20toast%20with%20poached%20egg%20on%20sourdough%20bread%2C%20topped%20with%20cherry%20tomatoes%20and%20microgreens%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20shallow%20depth%20of%20field%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=1&orientation=squarish"
-            variants={item.variants}
-            options={item.options}
-            category={item.category}
-            subcategory={item.subcategory}
-            description={item.description}
-            created_at={item.created_at}
-            updated_at={item.updated_at}
-          />
-        ))}
+      {items.map((item) => (
+        <MenuCardItem
+          key={item._id}
+          _id={item._id}
+          name={item.name}
+          image="https://readdy.ai/api/search-image?query=Gourmet%20avocado%20toast%20with%20poached%20egg%20on%20sourdough%20bread%2C%20topped%20with%20cherry%20tomatoes%20and%20microgreens%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20shallow%20depth%20of%20field%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=1&orientation=squarish"
+          variants={item.variants}
+          options={item.options}
+          category={item.category}
+          subcategory={item.subcategory}
+          description={item.description}
+          created_at={item.created_at}
+          updated_at={item.updated_at}
+        />
+      ))}
       <Hint label="View Cart Items" align="end">
         <Button
           variant="default"

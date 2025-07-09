@@ -1,6 +1,7 @@
 import React from 'react';
+import { OWNER_ROLE } from '@/constants';
 import { useUpdateUserProfile, useUploadAvatar } from '@/services/user-service';
-import { Calendar, Edit, MapPin, Phone, Shield, User } from 'lucide-react';
+import { Calendar, CalendarOff, ClockPlus, Edit, MapPin, Phone, Shield, User } from 'lucide-react';
 import type z from 'zod';
 import { useSetUserProfile, useUserPermissions, useUserState } from '@/components/common/states/userState';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -9,23 +10,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import type { editUserProfileSchema } from '@/utils/schemas';
+import { formattedDate } from '@/libs/utils';
 import StatusBadge from '../order-management/status/status-baged';
 import EditUserProfileDialog from './dialog/edit-user-profile-dialog';
+import OwnerExtendExpireDateDialog from './dialog/extend-expriration-dialog';
 
 const UserProfile = () => {
   const user = useUserState();
   const { permissions } = useUserPermissions();
   const [openEditDialog, setOpenEditDialog] = React.useState<boolean>(false);
+  const [openExtendDialog, setOpenExtendDialog] = React.useState<boolean>(false);
   const { updateUserProfile } = useUpdateUserProfile();
   const { uploadAvatar } = useUploadAvatar();
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
 
   const getInitials = (name: string) => {
     return name
@@ -95,8 +91,15 @@ const UserProfile = () => {
             <div className="flex items-center gap-3">
               <Calendar className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">Joined:</span>
-              <span className="text-sm font-medium">{formatDate(user.created_at)}</span>
+              <span className="text-sm font-medium">{formattedDate(user.created_at)}</span>
             </div>
+            {user.expired_at && (
+              <div className="flex items-center gap-3">
+                <CalendarOff className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Expires:</span>
+                <span className="text-sm font-medium">{formattedDate(user.expired_at)}</span>
+              </div>
+            )}
             <Separator />
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Status:</span>
@@ -118,6 +121,13 @@ const UserProfile = () => {
                 Edit Information
               </Button>
             </EditUserProfileDialog>
+            {user.expired_at && user.role === OWNER_ROLE && (
+              <OwnerExtendExpireDateDialog open={openExtendDialog} onOpenChange={setOpenExtendDialog}>
+                <Button className="w-full" variant="outline">
+                  <ClockPlus /> Extend Expiration
+                </Button>
+              </OwnerExtendExpireDateDialog>
+            )}
           </CardContent>
         </Card>
 

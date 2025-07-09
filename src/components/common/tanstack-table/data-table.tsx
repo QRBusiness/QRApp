@@ -33,9 +33,15 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   table_key: string; // Add key prop to DataTableProps
+  filterComponent?: React.ReactNode; // Optional filter component
 }
 
-export function DataTable<TData, TValue>({ columns, data, table_key }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  table_key,
+  filterComponent: FilterComponent,
+}: DataTableProps<TData, TValue>) {
   // Initialize column visibility states
   const visibilityMemo = loadFromLocalStorage(table_key + '_visibility', {
     created_at: false,
@@ -63,32 +69,36 @@ export function DataTable<TData, TValue>({ columns, data, table_key }: DataTable
 
   return (
     <div className="flex flex-col space-y-4">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="ml-auto space-x-2">
-            <Columns3 /> {t('module.common.table.visibleColumns')}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {table
-            .getAllColumns()
-            .filter((column) => column.getCanHide())
-            .map((column) => {
-              return (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
-                  {column.id}
-                </DropdownMenuCheckboxItem>
-              );
-            })}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex flex-row items-center justify-between w-full">
+        {FilterComponent && <div className="flex items-center space-x-2">{FilterComponent}</div>}
+        {/* Render the filter component if provided */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto space-x-2">
+              <Columns3 /> {t('module.common.table.visibleColumns')}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className="rounded-md border">
-        <ScrollArea className="w-full whitespace-normal">
+        <ScrollArea className="w-full">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

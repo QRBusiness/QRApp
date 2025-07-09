@@ -32,16 +32,16 @@ export const createQRSchema = z.object({
 
 export const createAreaSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldNameError' }),
-  description: z.string().optional().nullish(),
-  image_url: blobOrFileSchema.optional().nullish(),
+  description: z.string().nullish(),
+  image_url: blobOrFileSchema.nullish(),
   branch: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldBranchIdError' }),
 });
 
 export const createTableSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldNameError' }),
   area: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldAreaIdError' }),
-  description: z.string().optional().nullish(),
-  qr_code: blobOrFileSchema.optional().nullish(),
+  description: z.string().nullish(),
+  qr_code: blobOrFileSchema.nullish(),
 });
 
 export const createAdditionalFieldSchema = z.object({
@@ -51,12 +51,12 @@ export const createAdditionalFieldSchema = z.object({
 
 export const createMenuCategorySchema = z.object({
   name: z.string().min(1, { message: 'module.menuManagement.createMenuCategoryField.nameError' }),
-  description: z.string().optional().nullish(),
+  description: z.string().nullish(),
 });
 
 export const createMenuSubCategorySchema = z.object({
   name: z.string().min(1, { message: 'module.menuManagement.createMenuSubCategoryField.nameError' }),
-  description: z.string().optional().nullish(),
+  description: z.string().nullish(),
   categoryName: z.string().min(1, {
     message: 'module.menuManagement.createMenuSubCategoryField.categoryNameError',
   }),
@@ -74,7 +74,7 @@ export const createMenuItemOptionSchema = z.object({
 
 export const createMenuItemSchema = z.object({
   name: z.string().min(1, { message: 'module.menuManagement.createMenuField.nameError' }),
-  description: z.string().optional().nullish(),
+  description: z.string().nullish(),
   categoryName: z.string().min(1, {
     message: 'module.menuManagement.createMenuField.categoryNameError',
   }),
@@ -82,12 +82,12 @@ export const createMenuItemSchema = z.object({
     message: 'module.menuManagement.createMenuField.subCategoryNameError',
   }),
   sizes: z.array(createMenuItemSizeSchema).min(1, { message: 'module.menuManagement.createMenuField.sizeError' }),
-  options: z.array(createMenuItemOptionSchema).optional().nullish(),
+  options: z.array(createMenuItemOptionSchema).nullish(),
 });
 
 export const createBusinessTypeSchema = z.object({
   name: z.string().min(1, { message: 'module.businessType.createField.nameError' }),
-  description: z.string().optional().nullish(),
+  description: z.string().nullish(),
 });
 
 export const createBusinessOwnerSchema = z.object({
@@ -129,7 +129,7 @@ export const createBusinessSchema = z.object({
   businessType: z.string().min(1, {
     message: 'module.createBusinessOwnerField.step3.businessType.error',
   }),
-  businessTaxCode: z.string().optional().nullish(),
+  businessTaxCode: z.string().nullish(),
 });
 
 export const editUserSchema = z.object({
@@ -161,11 +161,11 @@ export const createBranchSchema = z.object({
 
 export const updateTableSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addTableField.fieldNameError' }),
-  qr_code: blobOrFileSchema.optional().nullish(),
+  qr_code: blobOrFileSchema.nullish(),
 });
 
 export const createUserSchema = z.object({
-  name: z.string().min(1, { message: 'module.staffManagement.create.name.error' }).optional().nullish(),
+  name: z.string().min(1, { message: 'module.staffManagement.create.name.error' }).nullish(),
   username: z.string().min(5, { message: 'module.staffManagement.create.username.error' }),
   password: z
     .string()
@@ -183,29 +183,29 @@ export const createUserSchema = z.object({
     })
     .optional() // Optional for guest users
     .nullish(),
-  address: z.string().min(1, { message: 'module.staffManagement.create.address.error' }).optional().nullish(),
+  address: z.string().min(1, { message: 'module.staffManagement.create.address.error' }).nullish(),
   branch: z.string().min(1, { message: 'module.staffManagement.create.branch.error' }),
 });
 
 export const createGroupSchema = z.object({
   name: z.string().min(1, { message: 'module.staffManagement.createGroup.name.error' }),
-  description: z.string().optional().nullish(),
+  description: z.string().nullish(),
 });
 
 export const createCategoriesSchema = z.object({
   name: z.string().min(1, { message: 'module.categoriesMgmt.create.name.error' }),
-  description: z.string().optional().nullish(),
+  description: z.string().nullish(),
 });
 
 export const createSubCategoriesSchema = z.object({
   category: z.string().min(1, { message: 'module.categoriesMgmt.create.category.error' }),
   name: z.string().min(1, { message: 'module.categoriesMgmt.create.name.error' }),
-  description: z.string().optional().nullish(),
+  description: z.string().nullish(),
 });
 
 export const createProductSchema = z.object({
   name: z.string().min(1, { message: 'module.menuManagement.createMenuField.nameError' }),
-  description: z.string().optional().nullish(),
+  description: z.string().nullish(),
   category: z.string().min(1, { message: 'module.menuManagement.createMenuField.categoryError' }),
   sub_category: z.string().min(1, { message: 'module.menuManagement.createMenuField.subcategoryError' }),
   variants: z
@@ -241,4 +241,13 @@ export const editUserProfileSchema = z.object({
     }),
   address: z.string().min(1, { message: 'module.profile.edit.address.error' }),
   image_url: z.instanceof(File).optional(),
+});
+
+export const extendExpireDateSchema = z.object({
+  expired_at: z.string().min(1, { message: 'module.business.extend.expired_at.error' }),
+});
+
+export const ownerExtendExpireDateSchema = z.object({
+  expired_at: z.string().min(1, { message: 'module.business.extend.expired_at.error' }),
+  image: z.instanceof(File),
 });

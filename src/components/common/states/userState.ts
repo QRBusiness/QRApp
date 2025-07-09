@@ -17,6 +17,7 @@ interface userPros {
   business: {
     _id: string;
   };
+  expired_at?: string; // Optional field for business expiration date
 }
 interface permissionProps {
   permissions: Permission[];

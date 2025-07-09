@@ -52,9 +52,27 @@ export interface OrderGetResponse {
   data: OrderResponseProps[];
 }
 
-const getOrders = async (): Promise<OrderResponseProps[]> => {
+export interface OrderRequestProps {
+  area?: string;
+  table?: string;
+  status?: string;
+}
+const getOrders = async (params: OrderRequestProps): Promise<OrderResponseProps[]> => {
   try {
-    const response: ApiResponse<OrderGetResponse> = await apiClient.get('/orders');
+    const queryParams: Record<string, string> = {};
+    if (params.area && params.area !== 'all') {
+      queryParams.area = params.area;
+    }
+    if (params.table && params.table !== 'all') {
+      queryParams.service_unit = params.table;
+    }
+    if (params.status && params.status !== 'all') {
+      queryParams.status = params.status;
+    }
+
+    const response: ApiResponse<OrderGetResponse> = await apiClient.get('/orders', {
+      params: queryParams,
+    });
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error || 'Error fetching orders', {
         description: response.errorMessage || 'An error occurred while fetching orders.',
@@ -70,10 +88,10 @@ const getOrders = async (): Promise<OrderResponseProps[]> => {
   }
 };
 
-export const useOrders = () => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['orders'],
-    queryFn: getOrders,
+export const useOrders = ({ area, table, status }: OrderRequestProps) => {
+  const { data, isLoading, isError, error, isFetching, refetch } = useQuery({
+    queryKey: ['orders', { area, table, status }],
+    queryFn: () => getOrders({ area, table, status }),
     refetchInterval: 5000, // Refetch every 5 seconds
     refetchOnWindowFocus: true, // Refetch when the window is focused
     refetchOnReconnect: true, // Refetch when the network reconnects
@@ -81,9 +99,11 @@ export const useOrders = () => {
 
   return {
     orders: data || [],
-    isLoading,
+    isLoading: isLoading,
+    isFetching,
     isError,
     error,
+    refetch,
   };
 };
 

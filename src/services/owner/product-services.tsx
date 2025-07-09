@@ -41,9 +41,21 @@ export interface ProductGetResponse {
   data: ProductProps[];
 }
 
-const getProducts = async (): Promise<ProductProps[]> => {
+export interface ProductCreateRequest {
+  category?: string;
+  sub_category?: string;
+}
+
+const getProducts = async ({ category, sub_category }: ProductCreateRequest): Promise<ProductProps[]> => {
   try {
-    const response: ApiResponse<ProductGetResponse> = await apiClient.get('/products');
+    const params: Record<string, string> = {};
+    if (category) {
+      params.category = category;
+    }
+    if (sub_category) {
+      params.sub_category = sub_category;
+    }
+    const response: ApiResponse<ProductGetResponse> = await apiClient.get('/products', { params });
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error || 'Error fetching products', {
         description: response.errorMessage || 'An error occurred while fetching products.',
@@ -59,10 +71,10 @@ const getProducts = async (): Promise<ProductProps[]> => {
   }
 };
 
-export const useProducts = () => {
+export const useProducts = ({ category, sub_category }: ProductCreateRequest) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<ProductProps[]>({
-    queryKey: ['productsQuery'],
-    queryFn: getProducts,
+    queryKey: ['productsQuery', { category, sub_category }],
+    queryFn: () => getProducts({ category, sub_category }),
   });
 
   return {

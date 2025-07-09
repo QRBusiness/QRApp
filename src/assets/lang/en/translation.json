@@ -23,6 +23,7 @@
       "search": "Search",
       "enable": "Enable",
       "disable": "Disable",
+      "extend": "Extend",
       "backToHome": "Back to Home",
       "table.visibleColumns": "Visible Columns",
       "confirmAction": "Are you sure?",
@@ -483,7 +484,23 @@
     "business": {
       "viewTitle": "Business Details",
       "viewDescription": "Below are the detailed information and attributes of this business.",
-      "createNew": "Create New Business"
+      "createNew": "Create New Business",
+      "extend": {
+        "title": "Extend Business Expiration",
+        "description": "Select a new expiration date for the business.",
+        "expired_at.label": "Expiration Date",
+        "expired_at.description": "* Select the new expiration date for the business.",
+        "expired_at.placeholder": "Choose expiration date",
+        "expired_at.error": "Expiration date is required.",
+        "image.label": "Business Image",
+        "image.description": "* Upload a new image for the business.",
+        "image.placeholder": "Select an image file",
+        "image.error": "Business image is required.",
+        "button": {
+          "cancel": "Cancel",
+          "save": "Save Changes"
+        }
+      }
     },
     "businessOwner": {
       "viewTitle": "Business Owner Details",

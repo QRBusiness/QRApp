@@ -27,6 +27,7 @@ const BusinessManagement = () => {
           contact: business.contact,
           tax_code: business.tax_code,
           available: business.available,
+          expired_at: business.expired_at,
         }))
       );
     }

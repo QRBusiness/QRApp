@@ -30,6 +30,7 @@ interface BusinessProps {
   created_at: string;
   updated_at: string;
   business_type: BusinessType;
+  expired_at: string;
 }
 
 const getBusiness = async ({ page = 1, limit = 50 }: BusinessInputProps): Promise<BusinessProps[]> => {

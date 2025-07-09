@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import React from 'react';
 import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
+import { useSubcategories } from '@/services/owner/categories-service';
 import { useCreateProduct, useProducts } from '@/services/owner/product-services';
 import { Laptop, Plus, Tablet } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Hint } from '@/components/common/hint';
+import HorizontalFilterScroll from '@/components/common/horizontal-filter-scroll';
 import { toggleMenuDisplayOptionState, useMenuDisplayOptionState } from '@/components/common/states/menuStates';
 import { useUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
@@ -15,57 +17,62 @@ import MenuTable from './tables/page';
 
 const MenuManagement = () => {
   const { t } = useTranslation();
-  const [data, setData] = useState<Menu[]>([]);
   const user = useUserState();
   const { isTable: isTableView } = useMenuDisplayOptionState();
   const [openCreateNewMenuDialog, setOpenCreateNewMenuDialog] = useState(false);
+  const { subcategories } = useSubcategories();
 
+  let categoryOptions = subcategories.map((subcategory) => ({
+    label: subcategory.name,
+    value: subcategory._id,
+  }));
+
+  categoryOptions = [{ label: 'All', value: 'all' }, ...categoryOptions];
   const { createProduct } = useCreateProduct();
+  const [currentFilterSubcategory, setCurrentFilterSubcategory] = React.useState<string>('all');
 
-  const { products } = useProducts();
+  const { products, refetch } = useProducts({
+    category: '',
+    sub_category: currentFilterSubcategory === 'all' ? '' : currentFilterSubcategory,
+  });
 
   React.useEffect(() => {
-    if (products && products.length > 0) {
-      setData(
-        products.map((product) => ({
-          _id: product._id,
-          name: product.name,
-          description: product.description,
-          image:
-            product.image_url ||
-            'https://readdy.ai/api/search-image?query=Gourmet%20avocado%20toast%20with%20poached%20egg%20on%20sourdough%20bread%2C%20topped%20with%20cherry%20tomatoes%20and%20microgreens%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20shallow%20depth%20of%20field%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=1&orientation=squarish',
-          category: product.category,
-          subcategory: product.subcategory,
-          variants: product.variants,
-          options: product.options,
-          created_at: product.created_at,
-          updated_at: product.updated_at,
-        }))
-      );
-    }
-  }, [products]);
+    const timeoutId = setTimeout(() => {
+      refetch();
+    }, 3000);
+    return () => clearTimeout(timeoutId);
+  }, [currentFilterSubcategory, refetch]);
 
   const isShowAction = user?.role === OWNER_ROLE || user?.role === ADMIN_ROLE;
 
   return (
     <div className="mx-auto pb-10 space-y-4 w-full">
       {isShowAction && (
-        <div className="flex items-center space-x-2 justify-self-end mr-4 md:mr-0">
-          {/* Create new Menu Item Dialog */}
-          <CreateNewMenuDialog
-            open={openCreateNewMenuDialog}
-            onOpenChange={setOpenCreateNewMenuDialog}
-            onSubmit={createProduct}
-            onCancel={() => {
-              // Handle cancel
-            }}
-          >
-            <Button variant="default" className="rounded-full md:rounded w-9 h-9 md:w-auto">
-              <Plus className="md:mr-2 h-4 w-4" />
-              <p className="text-sm hidden md:block">{t('module.menuManagement.action.add')}</p>
-            </Button>
-          </CreateNewMenuDialog>
-
+        <div className="flex items-center space-x-2 justify-between mr-4 md:mr-0">
+          {/* subcategory filter */}
+          <HorizontalFilterScroll
+            orderStatuses={categoryOptions.map((category) => ({
+              label: category.label,
+              value: category.value,
+            }))}
+            onChange={setCurrentFilterSubcategory}
+          />
+          <div className="flex items-center space-x-2">
+            {/* Create new Menu Item Dialog */}
+            <CreateNewMenuDialog
+              open={openCreateNewMenuDialog}
+              onOpenChange={setOpenCreateNewMenuDialog}
+              onSubmit={createProduct}
+              onCancel={() => {
+                // Handle cancel
+              }}
+            >
+              <Button variant="default" className="rounded-full md:rounded w-9 h-9 md:w-auto">
+                <Plus className="md:mr-2 h-4 w-4" />
+                <p className="text-sm hidden md:block">{t('module.menuManagement.action.add')}</p>
+              </Button>
+            </CreateNewMenuDialog>
+          </div>
           {isTableView ? (
             <Hint label="Switch to Card View" align="end">
               <Button variant={'outline'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
@@ -81,7 +88,7 @@ const MenuManagement = () => {
           )}
         </div>
       )}
-      {isTableView ? <MenuTable data={data} /> : <MobileMenuView items={data} />}
+      {isTableView ? <MenuTable data={products as Menu[]} /> : <MobileMenuView items={products as Menu[]} />}
     </div>
   );
 };

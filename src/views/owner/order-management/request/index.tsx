@@ -1,13 +1,10 @@
+import { useRequests } from '@/services/owner/request-service';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import type { CartRequestProps } from '../card/cart-request';
 import CartRequest from '../card/cart-request';
 
-interface RequestBarProps {
-  data: CartRequestProps[];
-}
-
-const RequestBar = ({ data }: RequestBarProps) => {
-  if (!data || data.length === 0) {
+const RequestBar = () => {
+  const { requests } = useRequests({ status: 'Waiting' });
+  if (!requests || requests.length === 0) {
     return (
       <div className="mx-auto w-full max-w-7xl p-4">
         <p className="text-center text-muted-foreground">No requests available</p>
@@ -17,7 +14,7 @@ const RequestBar = ({ data }: RequestBarProps) => {
   return (
     <ScrollArea className="w-full h-full p-4">
       <div className="flex flex-row gap-2">
-        {data.map((request) => (
+        {requests.map((request) => (
           <CartRequest
             key={request._id}
             _id={request._id}
