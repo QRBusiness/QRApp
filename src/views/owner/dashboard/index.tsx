@@ -1,12 +1,7 @@
-import { useRefreshTokenService } from '@/services/auth-service';
-import { Button } from '@/components/ui/button';
-
 const Dashboard = () => {
   return (
     <div>
       <h1>Dashboard</h1>
-      {/* Add dashboard content here */}
-      <Button onClick={() => useRefreshTokenService()}>Refresh</Button>
     </div>
   );
 };

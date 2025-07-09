@@ -31,8 +31,14 @@ interface TableInputProps {
 
 export const getTables = async ({ page = 1, limit = 50, area, branch }: TableInputProps): Promise<TableResponse[]> => {
   try {
+    const params: Record<string, string | number | undefined> = {
+      page,
+      limit,
+    };
+    if (area) params.area = area;
+    if (branch) params.branch = branch;
     const response: ApiResponse<TableResponseData> = await apiClient.get('/services', {
-      params: { page, limit, area, branch },
+      params: params,
     });
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {

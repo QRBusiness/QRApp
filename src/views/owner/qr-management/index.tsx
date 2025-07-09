@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
+import { type AreaResponse, getAreas } from '@/services/owner/area-service';
+import { useBranches } from '@/services/owner/branch-service';
 import { useTables } from '@/services/owner/table-service';
+import { FunnelPlus, FunnelX } from 'lucide-react';
 import { useViewState } from '@/components/common/states/viewState';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { CustomVariantsSelect } from '../menu-management/dialog/custom-variants-select';
 import CreateQR from './create/create-qr';
 import MobileTable from './mobile-card';
 import { type QRTable as QRTableType } from './table/columns';
@@ -8,38 +14,123 @@ import QRTable from './table/page';
 
 const QRManagement = () => {
   const { isMobile } = useViewState();
-  const [data, setData] = React.useState<QRTableType[]>([]);
-  const { tables } = useTables({
+  const [selectedArea, setSelectedArea] = React.useState<string>('');
+  const [selectedBranch, setSelectedBranch] = React.useState<string>('');
+  const [areaOptions, setAreaOptions] = React.useState<{ value: string; label: string }[]>([]);
+  const { branches } = useBranches({
     page: 1,
     limit: 50,
   });
+  const branchOptions = branches.map((branch) => ({
+    value: branch._id,
+    label: branch.name,
+  }));
+
+  const { tables, refetch } = useTables({
+    page: 1,
+    limit: 50,
+    branch: selectedBranch,
+    area: selectedArea,
+  });
+
+  const formatedTables: QRTableType[] = tables.map((table) => ({
+    _id: table._id,
+    name: table.name,
+    qr_code: table.qr_code,
+    area: typeof table.area === 'string' ? table.area : table.area?.name || '', // Use area name or fallback
+    branch: table.area.branch.name,
+    available: typeof table.available === 'boolean' ? table.available : true,
+    created_at: table.created_at,
+    updated_at: table.updated_at,
+  }));
+
+  const handleBranchChange = async (value: string) => {
+    setSelectedBranch(value);
+    const response = await getAreas({
+      page: 1,
+      limit: 50,
+      branch: value,
+    });
+    setAreaOptions(
+      response.map((area: AreaResponse) => ({
+        value: area._id,
+        label: area.name,
+      }))
+    );
+  };
+
+  const handleClearFilters = () => {
+    setSelectedArea('');
+    setSelectedBranch('');
+  };
 
   useEffect(() => {
-    if (tables && tables.length > 0) {
-      setData(
-        tables.map((table) => ({
-          _id: table._id,
-          name: table.name,
-          qr_code: table.qr_code,
-          area: typeof table.area === 'string' ? table.area : table.area?.name || '', // Use area name or fallback
-          branch: table.area.branch.name,
-          available: typeof table.available === 'boolean' ? table.available : true,
-          created_at: table.created_at,
-          updated_at: table.updated_at,
-        }))
-      );
-    }
-  }, [tables]);
+    const timeoutId = setTimeout(() => {
+      refetch();
+    }, 3000);
+    return () => clearTimeout(timeoutId);
+  }, [selectedBranch, selectedArea, refetch]);
+
+  const Filters = () => {
+    return (
+      <div className="flex items-start justify-start gap-2 flex-col p-3 border rounded-lg w-full">
+        <div className="flex items-center justify-between space-x-2 w-full">
+          <div className="flex items-center space-x-2">
+            <FunnelPlus className="size-4 md:size-5" />
+            <Label className="font-semibold text-base ">Filters Options</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleClearFilters}
+              disabled={selectedArea === '' && selectedBranch === ''}
+            >
+              <FunnelX className="size-4 md:size-5" />
+              Clear Filters
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 w-full items-center justify-between flex-wrap gap-2">
+          <div className="flex flex-col items-start justify-center space-y-2">
+            <Label className="text-muted-foreground">Branch Filter</Label>
+            <CustomVariantsSelect
+              options={branchOptions}
+              value={selectedBranch}
+              onChange={handleBranchChange}
+              placeholder="Select Branch"
+            />
+          </div>
+          <div className="flex flex-col items-start justify-center space-y-2">
+            <Label className="text-muted-foreground">Area Filter</Label>
+            <CustomVariantsSelect
+              options={areaOptions}
+              value={selectedArea}
+              onChange={setSelectedArea}
+              placeholder="Select Area"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
       {isMobile ? (
-        <MobileTable />
+        <div className="w-full mx-auto flex flex-col gap-4">
+          <div className="p-2">
+            <Filters />
+          </div>
+          <MobileTable />
+        </div>
       ) : (
-        <React.Fragment>
+        <div className="w-full p-4 mx-auto flex flex-col gap-4">
           <CreateQR />
-          <QRTable data={data} />
-        </React.Fragment>
+          <Filters />
+          <QRTable data={formatedTables} />
+        </div>
       )}
     </>
   );

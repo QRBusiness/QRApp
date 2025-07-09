@@ -61,7 +61,7 @@ const Login = () => {
         business: {
           _id: user.data.business?._id || '1',
         },
-        expired_at: user.data.business.expired_at,
+        expired_at: user.data.business?.expired_at || '',
       });
       const permissions = await getUserPermissions();
       setUserPermissions(permissions);
