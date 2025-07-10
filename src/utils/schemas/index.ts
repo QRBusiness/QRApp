@@ -251,3 +251,13 @@ export const ownerExtendExpireDateSchema = z.object({
   expired_at: z.string().min(1, { message: 'module.business.extend.expired_at.error' }),
   image: z.instanceof(File),
 });
+
+export const configureBanksSchema = z.object({
+  accountNo: z.string().min(1, { message: 'module.profile.configureBank.accountNumber.error' }),
+  accountName: z.string().min(1, { message: 'module.profile.configureBank.accountName.error' }),
+  bin: z.string().min(1, { message: 'module.profile.configureBank.bank.error' }),
+});
+
+export const createRequestSchema = z.object({
+  request: z.string().min(1, { message: '' }),
+});

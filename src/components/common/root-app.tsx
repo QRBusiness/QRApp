@@ -41,6 +41,7 @@ const RootApp = ({ role }: RootAppProps) => {
   const location = useLocation();
   const { isMobile } = useViewState();
   const { role: currentRole } = useUserState();
+
   if (!role.includes(currentRole)) {
     return <Navigate to={LOGIN} replace={true} />;
   }

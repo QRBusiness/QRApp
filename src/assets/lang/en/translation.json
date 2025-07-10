@@ -704,6 +704,20 @@
         "cancel": "Cancel",
         "submit": "Submit",
         "edit": "Edit Guest User"
+      },
+      "createRequest": {
+        "title": "Create Request",
+        "description": "Fill in the details to create a new request.",
+        "request": {
+          "label": "Request Details",
+          "description": "* Enter the details of your request.",
+          "placeholder": "Enter request details",
+          "error": "Request details cannot be empty."
+        },
+        "button": {
+          "submit": "Submit Request",
+          "cancel": "Cancel"
+        }
       }
     },
     "profile": {
@@ -736,6 +750,32 @@
         "button": {
           "cancel": "Cancel",
           "save": "Save Changes"
+        }
+      },
+      "configureBank": {
+        "title": "Configure Bank",
+        "description": "Update the bank configuration details.",
+        "button": {
+          "cancel": "Cancel",
+          "save": "Save Configure"
+        },
+        "accountNo": {
+          "label": "Account Number",
+          "description": "* Enter your bank account number.",
+          "placeholder": "Enter account number",
+          "error": "Account number cannot be empty."
+        },
+        "accountName": {
+          "label": "Account Name",
+          "description": "* Enter your bank account name.",
+          "placeholder": "Enter account name",
+          "error": "Account name cannot be empty."
+        },
+        "bank": {
+          "label": "Bank Name",
+          "description": "* Select your bank's name.",
+          "placeholder": "Select bank's name",
+          "error": "Bank name cannot be empty."
         }
       }
     }

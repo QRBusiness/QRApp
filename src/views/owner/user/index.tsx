@@ -1,7 +1,8 @@
 import React from 'react';
 import { OWNER_ROLE } from '@/constants';
+import { useConfigureBank } from '@/services/owner/bank-service';
 import { useUpdateUserProfile, useUploadAvatar } from '@/services/user-service';
-import { Calendar, CalendarOff, ClockPlus, Edit, MapPin, Phone, Shield, User } from 'lucide-react';
+import { Calendar, CalendarOff, ClockPlus, Edit, Landmark, MapPin, Phone, Shield, User } from 'lucide-react';
 import type z from 'zod';
 import { useSetUserProfile, useUserPermissions, useUserState } from '@/components/common/states/userState';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,6 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import type { editUserProfileSchema } from '@/utils/schemas';
 import { formattedDate } from '@/libs/utils';
 import StatusBadge from '../order-management/status/status-baged';
+import ConfigureBankAccount from './dialog/configure-bank-dialog';
 import EditUserProfileDialog from './dialog/edit-user-profile-dialog';
 import OwnerExtendExpireDateDialog from './dialog/extend-expriration-dialog';
 
@@ -20,6 +22,9 @@ const UserProfile = () => {
   const { permissions } = useUserPermissions();
   const [openEditDialog, setOpenEditDialog] = React.useState<boolean>(false);
   const [openExtendDialog, setOpenExtendDialog] = React.useState<boolean>(false);
+  const [openConfigureDialog, setOpenConfigureDialog] = React.useState<boolean>(false);
+
+  const { configureBank } = useConfigureBank();
   const { updateUserProfile } = useUpdateUserProfile();
   const { uploadAvatar } = useUploadAvatar();
 
@@ -122,11 +127,23 @@ const UserProfile = () => {
               </Button>
             </EditUserProfileDialog>
             {user.expired_at && user.role === OWNER_ROLE && (
-              <OwnerExtendExpireDateDialog open={openExtendDialog} onOpenChange={setOpenExtendDialog}>
-                <Button className="w-full" variant="outline">
-                  <ClockPlus /> Extend Expiration
-                </Button>
-              </OwnerExtendExpireDateDialog>
+              <>
+                <OwnerExtendExpireDateDialog open={openExtendDialog} onOpenChange={setOpenExtendDialog}>
+                  <Button className="w-full" variant="outline">
+                    <ClockPlus /> Extend Expiration
+                  </Button>
+                </OwnerExtendExpireDateDialog>
+                <ConfigureBankAccount
+                  open={openConfigureDialog}
+                  onOpenChange={setOpenConfigureDialog}
+                  onSubmit={configureBank}
+                >
+                  <Button className="w-full" variant="outline">
+                    <Landmark className="w-4 h-4 mr-2" />
+                    Configure Bank
+                  </Button>
+                </ConfigureBankAccount>
+              </>
             )}
           </CardContent>
         </Card>

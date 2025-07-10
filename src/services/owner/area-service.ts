@@ -34,8 +34,15 @@ interface AreaInputProps {
 
 export const getAreas = async ({ page = 1, limit = 50, branch }: AreaInputProps): Promise<AreaResponse[]> => {
   try {
-    const response: ApiResponse<AreaResponseData> = await apiClient.get(`/areas?${branch && `branch=${branch}`}`, {
-      params: { page, limit },
+    const params: Record<string, string | number> = {
+      page,
+      limit,
+    };
+    if (branch) {
+      params.branch = branch;
+    }
+    const response: ApiResponse<AreaResponseData> = await apiClient.get(`/areas`, {
+      params,
     });
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {

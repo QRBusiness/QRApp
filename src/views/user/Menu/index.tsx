@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSubcategories } from '@/services/owner/categories-service';
 import { useProducts } from '@/services/owner/product-services';
-import { ShoppingCart } from 'lucide-react';
+import { Bell, ShoppingCart } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Hint } from '@/components/common/hint';
 import HorizontalFilterScroll from '@/components/common/horizontal-filter-scroll';
@@ -10,6 +10,7 @@ import { useGuestState, useSetAreaAndTable, useSetGuestName } from '@/components
 import { Button } from '@/components/ui/button';
 import MenuCardItem from './components/MenuCartItem';
 import UserInputModel from './components/UserInputModel';
+import CreateRequestDialog from './components/dialog/create-request-dialog';
 
 const UserMenuPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -17,6 +18,7 @@ const UserMenuPage: React.FC = () => {
   const table = searchParams.get('table')!;
   const { name } = useGuestState();
   const [openUserInputModel, setOpenUserInputModel] = React.useState<boolean>(!name);
+  const [openCreateRequestDialog, setOpenCreateRequestDialog] = React.useState<boolean>(false);
 
   useEffect(() => {
     // Set the guest state with area and table from search params
@@ -73,20 +75,35 @@ const UserMenuPage: React.FC = () => {
           updated_at={item.updated_at}
         />
       ))}
-      <Hint label="View Cart Items" align="end">
-        <Button
-          variant="default"
-          className="fixed bottom-17 md:bottom-4 right-4 flex items-center p-2 w-12 h-12 rounded-md cursor-pointer"
-          onClick={() => navigate('../cart')}
-        >
-          <div className="relative w-full h-full  flex items-center justify-center">
-            <ShoppingCart className="size-6" />
-            <p className="absolute text-xs md:text-sm font-medium -top-4 -right-4 p-1 border bg-white border-primary text-black h-5 w-5 rounded-full flex items-center justify-center">
-              {totalQuantity > 10 ? '10+' : totalQuantity}
-            </p>
-          </div>
-        </Button>
-      </Hint>
+      <div className="fixed bottom-17 md:bottom-4 right-4 flex flex-col gap-3 z-50">
+        <CreateRequestDialog open={openCreateRequestDialog} onOpenChange={setOpenCreateRequestDialog}>
+          <Hint label="View Cart Items" align="end">
+            <Button
+              variant="default"
+              className="flex items-center p-2 w-12 h-12 rounded-md cursor-pointer"
+              onClick={() => setOpenCreateRequestDialog(true)}
+            >
+              <div className="relative w-full h-full flex items-center justify-center">
+                <Bell className="size-6" />
+              </div>
+            </Button>
+          </Hint>
+        </CreateRequestDialog>
+        <Hint label="View Cart Items" align="end">
+          <Button
+            variant="default"
+            className="flex items-center p-2 w-12 h-12 rounded-md cursor-pointer"
+            onClick={() => navigate('../cart')}
+          >
+            <div className="relative w-full h-full flex items-center justify-center">
+              <ShoppingCart className="size-6" />
+              <p className="absolute text-xs md:text-sm font-medium -top-4 -right-4 p-1 border bg-white border-primary text-black h-5 w-5 rounded-full flex items-center justify-center">
+                {totalQuantity > 10 ? '10+' : totalQuantity}
+              </p>
+            </div>
+          </Button>
+        </Hint>
+      </div>
     </div>
   );
 };
