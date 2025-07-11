@@ -23,15 +23,15 @@ export interface CartRequestProps {
   guest_name: string;
 }
 
-const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name }: CartRequestProps) => {
+const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, reason }: CartRequestProps) => {
   const { processRequest } = useProcessRequest();
 
-  const onAssignToMe = async () => {
+  const onConfirm = async () => {
     await processRequest(_id);
   };
 
   return (
-    <Card className="h-full flex flex-row items-center justify-between p-3 w-[400px]">
+    <Card className="h-full flex flex-row items-center justify-between p-3 max-w-[380px]">
       <div className="flex flex-col gap-2">
         <div className="font-semibold flex flex-row items-center">
           <p>ID: </p>
@@ -51,10 +51,15 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name }
         <div className="flex items-center space-x-2">
           <span>Guest Name:</span> <p className="font-semibold">{guest_name || 'N/A'}</p>
         </div>
+        {reason && (
+          <div className="flex items-center space-x-2">
+            <span>Reason:</span> <p className="font-semibold">{reason || 'N/A'}</p>
+          </div>
+        )}
       </div>
-      <div className="flex flex-col items-start justify-between gap-2 h-full flex-1">
+      <div className="flex flex-col items-start justify-around gap-2 h-full flex-1">
         <StatusBadge status={status as 'Waiting' | 'Pending' | 'Cancelled'} />
-        <Button onClick={onAssignToMe} className="w-full" variant="default">
+        <Button onClick={onConfirm} className="w-full" variant="default">
           <Check />
           Confirm
         </Button>

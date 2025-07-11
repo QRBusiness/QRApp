@@ -253,3 +253,83 @@ export const useSubcategories = (categoryId?: string) => {
     refetch,
   };
 };
+
+export interface CategoryRequest {
+  business: string;
+  page?: number;
+  limit?: number;
+}
+
+const getCategoriesByBusiness = async (request: CategoryRequest): Promise<CategoryProps[]> => {
+  try {
+    const response: ApiResponse<{ data: CategoryProps[] }> = await apiClient.get(`/category/${request.business}`, {
+      params: request,
+    });
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to fetch categories for business',
+      });
+      return [];
+    }
+    return response.data ? response.data.data : [];
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while fetching categories for business.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const usePublicCategories = (request: CategoryRequest) => {
+  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<CategoryProps[]>({
+    queryKey: ['categoriesByBusinessQuery', request.business],
+    queryFn: () => getCategoriesByBusiness(request),
+    enabled: !!request.business,
+  });
+
+  return {
+    categoriesByBusiness: data || [],
+    error,
+    isLoading,
+    isFetching,
+    isSuccess,
+    refetch,
+  };
+};
+
+const getPublicSubcategories = async (request: CategoryRequest): Promise<SubCategoryProps[]> => {
+  try {
+    const response: ApiResponse<{ data: SubCategoryProps[] }> = await apiClient.get(
+      `/sub-category/${request.business}`
+    );
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to fetch subcategories for category',
+      });
+      return [];
+    }
+    return response.data ? response.data.data : [];
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while fetching subcategories for category.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const usePublicSubcategories = (request: CategoryRequest) => {
+  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<SubCategoryProps[]>({
+    queryKey: ['publicSubcategoriesQuery', request.business],
+    queryFn: () => getPublicSubcategories(request),
+    enabled: !!request.business,
+  });
+
+  return {
+    publicSubcategories: data || [],
+    error,
+    isLoading,
+    isFetching,
+    isSuccess,
+    refetch,
+  };
+};

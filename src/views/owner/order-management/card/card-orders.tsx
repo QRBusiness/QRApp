@@ -11,45 +11,28 @@ import CardOrderItem from './card-order-item';
 
 export const CardOrders = () => {
   const { areas } = useAreas({ page: 1, limit: 50 });
-  const [selectedArea, setSelectedArea] = React.useState<string>('all');
-  const [selectedTable, setSelectedTable] = React.useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = React.useState<string>('all');
+  const [selectedArea, setSelectedArea] = React.useState<string>('');
+  const [selectedTable, setSelectedTable] = React.useState<string>('');
+  const [selectedStatus, setSelectedStatus] = React.useState<string>('');
   const { orders, isLoading, refetch } = useOrders({
     area: selectedArea,
     table: selectedTable,
     status: selectedStatus,
   });
   const data = orders as OrderResponseProps[];
-  const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([
-    { value: 'all', label: 'All Tables' },
-  ]);
+  const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([]);
 
   const areaOptions = React.useMemo(() => {
     if (!areas || areas.length === 0) {
-      return [
-        {
-          value: 'all',
-          label: 'All Areas',
-        },
-      ];
+      return [];
     }
-    return [
-      {
-        value: 'all',
-        label: 'All Areas',
-      },
-      ...areas.map((area) => ({
-        value: area._id,
-        label: area.name,
-      })),
-    ];
+    return areas.map((area) => ({
+      value: area._id,
+      label: area.name,
+    }));
   }, [areas]);
   const statusOptions = React.useMemo(() => {
     return [
-      {
-        value: 'all',
-        label: 'All Statuses',
-      },
       {
         value: 'Unpaid',
         label: 'Unpaid',
@@ -63,9 +46,9 @@ export const CardOrders = () => {
 
   const handleAreaChange = async (value: string) => {
     setSelectedArea(value);
-    if (value === 'all') {
-      setTableOptions([{ value: 'all', label: 'All Tables' }]);
-      setSelectedTable('all');
+    if (value === '') {
+      setTableOptions([]);
+      setSelectedTable('');
       return;
     }
     const area = areas.find((area) => area._id === value);
@@ -75,14 +58,13 @@ export const CardOrders = () => {
       value: table._id,
       label: table.name,
     }));
-    tableOptions.unshift({ value: 'all', label: 'All Tables' });
-    setSelectedTable('all');
+    setSelectedTable('');
     setTableOptions(tableOptions);
   };
 
   React.useEffect(() => {
     const timeout = setTimeout(() => {
-      if (selectedArea !== 'all' || selectedTable !== 'all' || selectedStatus !== 'all') {
+      if (selectedArea !== '' || selectedTable !== '' || selectedStatus !== '') {
         refetch();
       }
     }, 3000);
@@ -90,9 +72,9 @@ export const CardOrders = () => {
   }, [selectedArea, selectedTable, selectedStatus]);
 
   const handleClearFilters = () => {
-    setSelectedArea('all');
-    setSelectedStatus('all');
-    setSelectedTable('all');
+    setSelectedArea('');
+    setSelectedStatus('');
+    setSelectedTable('');
   };
 
   if (isLoading) {
@@ -117,7 +99,7 @@ export const CardOrders = () => {
               variant="destructive"
               size="sm"
               onClick={handleClearFilters}
-              disabled={selectedArea === 'all' && selectedTable === 'all' && selectedStatus === 'all'}
+              disabled={selectedArea === '' && selectedTable === '' && selectedStatus === ''}
             >
               <FunnelX className="size-4 md:size-5" />
               Clear Filters
@@ -127,7 +109,12 @@ export const CardOrders = () => {
         <div className="grid grid-cols-3 w-full items-center justify-between flex-wrap gap-2">
           <div className="flex flex-col items-start justify-center space-y-2">
             <Label className="text-muted-foreground">Area Filter</Label>
-            <CustomVariantsSelect options={areaOptions} value={selectedArea} onChange={handleAreaChange} />
+            <CustomVariantsSelect
+              options={areaOptions}
+              value={selectedArea}
+              onChange={handleAreaChange}
+              placeholder="Select Area"
+            />
           </div>
 
           <div className="flex flex-col items-start justify-center space-y-2">
@@ -136,13 +123,19 @@ export const CardOrders = () => {
               options={tableOptions}
               value={selectedTable}
               onChange={setSelectedTable}
-              disabled={selectedArea === 'all'}
+              disabled={selectedArea === ''}
+              placeholder="Select Table"
             />
           </div>
 
           <div className="flex flex-col items-start justify-center space-y-2">
             <Label className="text-muted-foreground">Status Filter</Label>
-            <CustomVariantsSelect options={statusOptions} value={selectedStatus} onChange={setSelectedStatus} />
+            <CustomVariantsSelect
+              options={statusOptions}
+              value={selectedStatus}
+              onChange={setSelectedStatus}
+              placeholder="Select Status"
+            />
           </div>
         </div>
       </div>

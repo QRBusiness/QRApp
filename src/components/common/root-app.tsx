@@ -32,7 +32,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import Headers from '@/components/common/headers';
 import MobileBottomBar, { type SidebarItem } from '@/components/common/mobile-bottom-bar';
 import SidebarApp from '@/components/common/sidebar';
-import { useUserState } from '@/components/common/states/userState';
+import { useUserPermissions, useUserState } from '@/components/common/states/userState';
 import { useViewState } from '@/components/common/states/viewState';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
@@ -45,6 +45,7 @@ const RootApp = ({ role }: RootAppProps) => {
   const location = useLocation();
   const { isMobile } = useViewState();
   const { role: currentRole } = useUserState();
+  const { permissions } = useUserPermissions();
 
   if (!role.includes(currentRole)) {
     return <Navigate to={LOGIN} replace={true} />;
@@ -52,11 +53,6 @@ const RootApp = ({ role }: RootAppProps) => {
 
   const mobileSidebarItems: SidebarItem[] = useMemo(
     () => [
-      {
-        title: 'module.mobileSidebar.dashboard',
-        path_url: DASHBOARD,
-        icon: <ChartNoAxesCombined />,
-      },
       {
         title: 'module.mobileSidebar.qr-management',
         path_url: QR_MANAGEMENT,
@@ -77,9 +73,19 @@ const RootApp = ({ role }: RootAppProps) => {
         path_url: PROFILE,
         icon: <User />,
       },
+      {
+        title: 'module.mobileSidebar.request',
+        path_url: REQUEST,
+        icon: <Bell />,
+      },
     ],
     []
   );
+
+  const haveViewGroupAndUserPermissions = permissions.some(
+    (permission) => permission.code === 'view.group' || permission.code === 'view.user'
+  );
+
   const sidebarItems: SidebarItem[] = useMemo(() => {
     if (role.includes(ADMIN_ROLE)) {
       return [
@@ -105,7 +111,7 @@ const RootApp = ({ role }: RootAppProps) => {
         },
       ];
     }
-    return [
+    const bissinessOptions: SidebarItem[] = [
       {
         title: 'module.sidebar.dashboard',
         path_url: DASHBOARD,
@@ -144,16 +150,19 @@ const RootApp = ({ role }: RootAppProps) => {
         icon: <Bell />,
       },
       {
-        title: 'module.sidebar.staff-management',
-        path_url: STAFF_MANAGEMENT,
-        icon: <UserCog />,
-      },
-      {
         title: 'module.sidebar.branch',
         path_url: BRANCH,
         icon: <Building2 />,
       },
     ];
+    if (haveViewGroupAndUserPermissions) {
+      bissinessOptions.push({
+        title: 'module.sidebar.staff-management',
+        path_url: STAFF_MANAGEMENT,
+        icon: <UserCog />,
+      });
+    }
+    return bissinessOptions;
   }, [location.pathname, role]);
 
   if (isMobile) {

@@ -47,7 +47,6 @@ const CreateRequestDialog = ({ children, open, onOpenChange, onSubmit, onCancel,
   };
 
   const onSubmitForm = (data: z.infer<typeof createRequestSchema>) => {
-    console.log('Submitted data:', data);
     onSubmit && onSubmit(data);
     onOpenChange(false);
   };

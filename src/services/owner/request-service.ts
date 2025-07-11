@@ -2,6 +2,16 @@ import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
+export interface ItemRequestProps {
+  _id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  variant?: string;
+  options?: string[];
+  note?: string;
+}
+
 export interface RequestResponseProps {
   _id: string;
   created_at: string;
@@ -18,16 +28,34 @@ export interface RequestResponseProps {
     name: string;
   };
   guest_name: string;
+  data: ItemRequestProps[];
 }
 
 export interface CreateRequestProps {
   data: RequestResponseProps[];
 }
 
-const getRequests = async (status?: string): Promise<RequestResponseProps[]> => {
+export interface RequestServiceProps {
+  status?: string;
+  type?: string;
+  page?: number;
+  limit?: number;
+}
+
+const getRequests = async ({
+  status,
+  type,
+  page = 0,
+  limit = 10,
+}: RequestServiceProps): Promise<RequestResponseProps[]> => {
   try {
+    const params: Record<string, any> = {};
+    if (status) params.status = status;
+    if (type) params.type = type;
+    if (page) params.page = page;
+    if (limit) params.limit = limit;
     const response: ApiResponse<CreateRequestProps> = await apiClient.get('/request', {
-      params: { status },
+      params,
     });
     if (response.status !== 200) {
       toast.error(response.error, {
@@ -44,10 +72,10 @@ const getRequests = async (status?: string): Promise<RequestResponseProps[]> => 
   }
 };
 
-export const useRequests = ({ status }: { status?: string }) => {
+export const useRequests = ({ status, type, page, limit }: RequestServiceProps) => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['requests', status],
-    queryFn: () => getRequests(status),
+    queryKey: ['requests', status, type, page, limit],
+    queryFn: () => getRequests({ status, type, page, limit }),
     refetchInterval: 5000, // Refetch every 5 seconds
     refetchOnWindowFocus: true, // Refetch when the window is focused
     refetchOnReconnect: true, // Refetch when the network reconnects

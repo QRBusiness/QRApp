@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { useSubcategories } from '@/services/owner/categories-service';
+import { usePublicSubcategories } from '@/services/owner/categories-service';
 import { usePublicProducts } from '@/services/owner/product-services';
+import { useCreateOrderRequest } from '@/services/user/user-request-service';
 import { Bell, ShoppingCart } from 'lucide-react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Hint } from '@/components/common/hint';
@@ -40,6 +41,7 @@ const UserMenuPage: React.FC = () => {
   }, [area, table]);
 
   const navigate = useNavigate();
+  const { createOrderRequest } = useCreateOrderRequest();
   const { totalQuantity } = useCartTotalQuantity();
   const [currentFilterSubcategory, setCurrentFilterSubcategory] = React.useState<string>('all');
   const { products: items } = usePublicProducts({
@@ -47,13 +49,25 @@ const UserMenuPage: React.FC = () => {
     category: '',
     sub_category: currentFilterSubcategory === 'all' ? '' : currentFilterSubcategory,
   });
-  const { subcategories } = useSubcategories();
+  const { publicSubcategories } = usePublicSubcategories({ business: businessId! });
 
-  let categoryOptions = subcategories.map((subcategory) => ({
+  let categoryOptions = publicSubcategories.map((subcategory) => ({
     label: subcategory.name,
     value: subcategory._id,
   }));
   categoryOptions = [{ label: 'All', value: 'all' }, ...categoryOptions];
+
+  const handleSubmitRequest = async (values: string) => {
+    await createOrderRequest({
+      type: 'Request',
+      reason: values,
+      service_unit: table!,
+      area: area!,
+      guest_name: name,
+      data: [],
+    });
+    setOpenUserInputModel(false);
+  };
 
   return (
     <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2 w-full mx-auto">
@@ -86,7 +100,11 @@ const UserMenuPage: React.FC = () => {
         />
       ))}
       <div className="fixed bottom-17 md:bottom-4 right-4 flex flex-col gap-3 z-50">
-        <CreateRequestDialog open={openCreateRequestDialog} onOpenChange={setOpenCreateRequestDialog}>
+        <CreateRequestDialog
+          open={openCreateRequestDialog}
+          onOpenChange={setOpenCreateRequestDialog}
+          onSubmit={(data) => handleSubmitRequest(data.request)}
+        >
           <Hint label="View Cart Items" align="end">
             <Button
               variant="default"

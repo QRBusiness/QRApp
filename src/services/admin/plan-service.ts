@@ -15,7 +15,7 @@ export interface PlanProps {
 
 const getPlan = async (): Promise<PlanProps[]> => {
   try {
-    const response: ApiResponse<{ data: PlanProps[] }> = await apiClient.get(`/plan`);
+    const response: ApiResponse<{ data: PlanProps[] }> = await apiClient.get(`/plans`);
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to fetch plan details',
@@ -49,7 +49,7 @@ export const usePlans = () => {
 
 const createPlan = async (data: z.infer<typeof createPlanSchema>): Promise<PlanProps | null> => {
   try {
-    const response: ApiResponse<{ data: PlanProps }> = await apiClient.post('/plan', data);
+    const response: ApiResponse<{ data: PlanProps }> = await apiClient.post('/plans', data);
     if (response.status !== 201 && response.status !== 200) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to create plan',
@@ -92,7 +92,7 @@ const updatePlan = async ({
   data: z.infer<typeof createPlanSchema>;
 }): Promise<PlanProps | null> => {
   try {
-    const response: ApiResponse<{ data: PlanProps }> = await apiClient.put(`/plan/${id}`, data);
+    const response: ApiResponse<{ data: PlanProps }> = await apiClient.put(`/plans/${id}`, data);
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to update plan',
@@ -129,7 +129,7 @@ export const useUpdatePlan = () => {
 
 const deletePlan = async (id: string): Promise<void> => {
   try {
-    const response: ApiResponse<null> = await apiClient.delete(`/plan/${id}`);
+    const response: ApiResponse<null> = await apiClient.delete(`/plans/${id}`);
     if (response.status !== 200 && response.status !== 204) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to delete plan',

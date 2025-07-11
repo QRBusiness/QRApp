@@ -120,7 +120,8 @@
       "help": "Help",
       "logout": "Logout",
       "account": "Account Management",
-      "profile": "Profile"
+      "profile": "Profile",
+      "request": "Request"
     },
 
     "area": {

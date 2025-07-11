@@ -1,9 +1,9 @@
 import { useRequests } from '@/services/owner/request-service';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import CartRequest from '../card/cart-request';
+import CardRequestOrder from '../card/cart-request-order';
 
 const RequestBar = () => {
-  const { requests } = useRequests({ status: 'Waiting' });
+  const { requests } = useRequests({ status: 'Waiting', type: 'Order' });
   if (!requests || requests.length === 0) {
     return (
       <div className="mx-auto w-full max-w-7xl p-4">
@@ -15,18 +15,7 @@ const RequestBar = () => {
     <ScrollArea className="w-full h-full p-4">
       <div className="flex flex-row gap-2">
         {requests.map((request) => (
-          <CartRequest
-            key={request._id}
-            _id={request._id}
-            created_at={request.created_at}
-            updated_at={request.updated_at}
-            type={request.type}
-            reason={request.reason}
-            status={request.status}
-            area={request.area}
-            service_unit={request.service_unit}
-            guest_name={request.guest_name}
-          />
+          <CardRequestOrder key={request._id} order={request} />
         ))}
       </div>
       <ScrollBar orientation="horizontal" />
