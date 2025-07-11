@@ -40,7 +40,7 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
         <div className="px-2 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <CircleUser className="size-5 text-muted-foreground" />
-            <div className="font-semibold">{order.guest_name || 'Unknown'}</div>
+            <div className="font-semibold">{order.request.guest_name || 'Unknown'}</div>
           </div>
           <div className="flex flex-col items-start text-sm text-muted-foreground">
             <span className="font-medium text-primary">
@@ -88,15 +88,17 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
             <Info className="size-4 md:size-5" />
             {t('module.orderManagement.orderCard.details')}
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex-1 items-center space-x-2"
-            onClick={() => navigate(order._id)}
-          >
-            <CreditCard className="size-4 md:size-5" />
-            {t('module.orderManagement.orderCard.payment')}
-          </Button>
+          {order.status === 'Paid' && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 items-center space-x-2"
+              onClick={() => navigate(order._id)}
+            >
+              <CreditCard className="size-4 md:size-5" />
+              {t('module.orderManagement.orderCard.payment')}
+            </Button>
+          )}
         </div>
       </CardFooter>
     </Card>

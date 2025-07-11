@@ -10,7 +10,6 @@ export interface OrderResponseProps {
   _id: string;
   created_at: string;
   updated_at: string;
-  guest_name: string;
   items: Array<{
     name: string;
     quantity: number;
@@ -43,8 +42,11 @@ export interface OrderResponseProps {
     collection: string;
   };
   request: {
-    id: string;
-    collection: string;
+    _id: string;
+    guest_name: string;
+    type: string;
+    reason: string;
+    status: string;
   };
 }
 
