@@ -59,22 +59,6 @@ export const columns: ColumnDef<GroupProps>[] = [
     },
   },
   {
-    accessorKey: 'users',
-    header: 'Users',
-    cell: ({ row }) => {
-      const users: Array<User> = row.getValue('users') || [];
-      return (
-        <div className="flex flex-wrap gap-2">
-          {users.map((user: User, index: number) => (
-            <Badge key={index} variant="secondary" className="text-xs">
-              {user.name}
-            </Badge>
-          ))}
-        </div>
-      );
-    },
-  },
-  {
     accessorKey: 'created_at',
     header: 'Created At',
     cell: ({ row }) => {

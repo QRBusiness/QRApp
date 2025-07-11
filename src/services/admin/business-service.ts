@@ -186,14 +186,14 @@ export const useToggleAvailableBusiness = () => {
 };
 
 const updateBusiness = async (
-  { name, address, contact, businessType, businessTaxCode }: z.infer<typeof createBusinessSchema>,
+  { name_B, address_B, contact_B, businessType, businessTaxCode }: z.infer<typeof createBusinessSchema>,
   id: string
 ): Promise<BusinessProps> => {
   try {
     const response: ApiResponse<BusinessProps> = await apiClient.put(`/business/${id}`, {
-      name,
-      address,
-      contact,
+      name: name_B,
+      address: address_B,
+      contact: contact_B,
       business_type: businessType,
       tax_code: businessTaxCode,
     });

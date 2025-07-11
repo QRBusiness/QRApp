@@ -93,12 +93,12 @@ const EditBusinessDialog = ({
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
             <FormField
               control={form.control}
-              name="name"
+              name="name_B"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
                     {t('module.createBusinessOwnerField.step3.name.label')}
-                    {!createBusinessSchema.shape.name.isOptional() && <p className="text-red-700">*</p>}
+                    {!createBusinessSchema.shape.name_B.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value || ''} />
@@ -110,12 +110,12 @@ const EditBusinessDialog = ({
             />
             <FormField
               control={form.control}
-              name="address"
+              name="address_B"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
                     {t('module.createBusinessOwnerField.step3.address.label')}
-                    {!createBusinessSchema.shape.address.isOptional() && <p className="text-red-700">*</p>}
+                    {!createBusinessSchema.shape.address_B.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value || ''} />
@@ -127,12 +127,12 @@ const EditBusinessDialog = ({
             />
             <FormField
               control={form.control}
-              name="contact"
+              name="contact_B"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
                     {t('module.createBusinessOwnerField.step3.contact.label')}
-                    {!createBusinessSchema.shape.contact.isOptional() && <p className="text-red-700">*</p>}
+                    {!createBusinessSchema.shape.contact_B.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value || ''} />

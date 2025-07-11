@@ -125,9 +125,9 @@ const CartItemsDetails: React.FC = () => {
                     </div>
 
                     {item.options && item.options.length > 0 && (
-                      <div className="flex flex-wrap gap-1 my-2">
+                      <div className="grid grid-col-1 md:grid-cols-2 gap-1 my-2">
                         {item.options.map((opt) => (
-                          <Badge key={opt} variant="outline" className="text-xs text-muted-foreground">
+                          <Badge key={opt} variant="outline" className="text-xs text-muted-foreground col-span-1">
                             {opt}
                           </Badge>
                         ))}

@@ -7,6 +7,8 @@ import {
   BUSINESS_TYPE,
   CATEGORY_MANAGEMENT,
   LOGIN,
+  PLAN,
+  REQUEST,
   SIDEBAR_COOKIE_NAME,
   STAFF_MANAGEMENT,
   SUBCATEGORY_MANAGEMENT,
@@ -14,7 +16,9 @@ import {
 import { DASHBOARD, MENU_MANAGEMENT, ORDER_MANAGEMENT, PROFILE, QR_MANAGEMENT } from '@/constants';
 import Cookies from 'js-cookie';
 import {
+  Bell,
   Building2,
+  CalendarPlus,
   ChartColumnStacked,
   ChartNoAxesCombined,
   Contact,
@@ -94,6 +98,11 @@ const RootApp = ({ role }: RootAppProps) => {
           path_url: BUSINESS_OWNER_MANAGEMENT,
           icon: <Contact />,
         },
+        {
+          title: 'module.sidebar.plan',
+          path_url: PLAN,
+          icon: <CalendarPlus />,
+        },
       ];
     }
     return [
@@ -128,6 +137,11 @@ const RootApp = ({ role }: RootAppProps) => {
         title: 'module.sidebar.order-management',
         path_url: ORDER_MANAGEMENT,
         icon: <HandPlatter />,
+      },
+      {
+        title: 'module.sidebar.request',
+        path_url: REQUEST,
+        icon: <Bell />,
       },
       {
         title: 'module.sidebar.staff-management',

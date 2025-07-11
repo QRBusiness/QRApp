@@ -19,8 +19,10 @@ import {
   ORDER_MANAGEMENT,
   OWNER,
   OWNER_ROLE,
+  PLAN,
   PROFILE,
   QR_MANAGEMENT,
+  REQUEST,
   STAFF_MANAGEMENT,
   STAFF_ROLE,
   SUBCATEGORY_MANAGEMENT,
@@ -59,6 +61,8 @@ const SubcategoryPage = React.lazy(() => import('@/views/owner/subcategories'));
 const CategoryPage = React.lazy(() => import('@/views/owner/categories'));
 const UserProfile = React.lazy(() => import('@/views/owner/user'));
 const PaymentOrderPage = React.lazy(() => import('@/views/owner/order-management/payment'));
+const RequestPage = React.lazy(() => import('@/views/owner/request'));
+const PlanPage = React.lazy(() => import('@/views/admin/plan'));
 
 const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
 
@@ -159,6 +163,10 @@ function App() {
               path: PROFILE,
               element: <UserProfile />,
             },
+            {
+              path: REQUEST,
+              element: <RequestPage />,
+            },
           ],
         },
         // Admin routes
@@ -166,6 +174,10 @@ function App() {
           path: ADMIN,
           element: <RootApp role={[ADMIN_ROLE]} />,
           children: [
+            {
+              index: true,
+              element: <Navigate to={BUSINESS_TYPE} replace />,
+            },
             {
               path: BUSINESS_TYPE,
               element: <BusinessTypeManagement />,
@@ -183,12 +195,12 @@ function App() {
               element: <CreateNewBusinessOwner />,
             },
             {
-              index: true,
-              element: <Navigate to={BUSINESS_TYPE} replace />,
-            },
-            {
               path: PROFILE,
               element: <UserProfile />,
+            },
+            {
+              path: PLAN,
+              element: <PlanPage />,
             },
           ],
         },

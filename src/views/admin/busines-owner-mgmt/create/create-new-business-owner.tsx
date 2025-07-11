@@ -88,12 +88,12 @@ const CreateNewBusinessOwner = () => {
         await createBusiness({
           username: newFormData['1_username'],
           password: newFormData['1_password'],
-          owner_name: newFormData['2_name'],
-          owner_address: newFormData['2_address'],
-          owner_contact: newFormData['2_phone'],
-          business_name: newFormData['3_name'],
-          business_address: newFormData['3_address'],
-          business_contact: newFormData['3_contact'],
+          owner_name: newFormData['2_name_BO'],
+          owner_address: newFormData['2_address_BO'],
+          owner_contact: newFormData['2_phone_BO'],
+          business_name: newFormData['3_name_B'],
+          business_address: newFormData['3_address_B'],
+          business_contact: newFormData['3_contact_B'],
           business_type: newFormData['3_businessType'],
           business_tax_code: newFormData['3_businessTaxCode'],
         });

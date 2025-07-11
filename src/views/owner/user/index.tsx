@@ -1,5 +1,5 @@
 import React from 'react';
-import { OWNER_ROLE } from '@/constants';
+import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
 import { useConfigureBank } from '@/services/owner/bank-service';
 import { useUpdateUserProfile, useUploadAvatar } from '@/services/user-service';
 import { Calendar, CalendarOff, ClockPlus, Edit, Landmark, MapPin, Phone, Shield, User } from 'lucide-react';
@@ -127,23 +127,23 @@ const UserProfile = () => {
               </Button>
             </EditUserProfileDialog>
             {user.expired_at && user.role === OWNER_ROLE && (
-              <>
-                <OwnerExtendExpireDateDialog open={openExtendDialog} onOpenChange={setOpenExtendDialog}>
-                  <Button className="w-full" variant="outline">
-                    <ClockPlus /> Extend Expiration
-                  </Button>
-                </OwnerExtendExpireDateDialog>
-                <ConfigureBankAccount
-                  open={openConfigureDialog}
-                  onOpenChange={setOpenConfigureDialog}
-                  onSubmit={configureBank}
-                >
-                  <Button className="w-full" variant="outline">
-                    <Landmark className="w-4 h-4 mr-2" />
-                    Configure Bank
-                  </Button>
-                </ConfigureBankAccount>
-              </>
+              <OwnerExtendExpireDateDialog open={openExtendDialog} onOpenChange={setOpenExtendDialog}>
+                <Button className="w-full" variant="outline">
+                  <ClockPlus /> Extend Expiration
+                </Button>
+              </OwnerExtendExpireDateDialog>
+            )}
+            {(user.role === OWNER_ROLE || user.role === ADMIN_ROLE) && (
+              <ConfigureBankAccount
+                open={openConfigureDialog}
+                onOpenChange={setOpenConfigureDialog}
+                onSubmit={configureBank}
+              >
+                <Button className="w-full" variant="outline">
+                  <Landmark className="w-4 h-4 mr-2" />
+                  Configure Bank
+                </Button>
+              </ConfigureBankAccount>
             )}
           </CardContent>
         </Card>

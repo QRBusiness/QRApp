@@ -17,11 +17,13 @@ export const GROUP = 'group';
 export const AREA_MANAGEMENT = 'area';
 export const CATEGORY_MANAGEMENT = 'category';
 export const SUBCATEGORY_MANAGEMENT = 'subcategory';
+export const REQUEST = 'request';
 
 export const BUSINESS = 'business';
 export const BRANCH = 'branch';
 export const BUSINESS_OWNER_MANAGEMENT = 'business-owner-management';
 export const BUSINESS_TYPE = 'business-type';
+export const PLAN = 'plan';
 
 export const OWNER = '/owner';
 export const ADMIN = '/admin';
@@ -55,6 +57,7 @@ export const ORDER_MANAGEMENT_TABLE = 'ORDER_MANAGEMENT_TABLE';
 export const AREA_MANAGEMENT_TABLE = 'AREA_MANAGEMENT_TABLE';
 export const CATEGORY_MANAGEMENT_TABLE = 'CATEGORY_MANAGEMENT_TABLE';
 export const SUBCATEGORY_MANAGEMENT_TABLE = 'SUBCATEGORY_MANAGEMENT_TABLE';
+export const PLAN_MANAGEMENT_TABLE = 'PLAN_MANAGEMENT_TABLE';
 export const STAFF_SWITCH_SELECT = 'STAFF_SWITCH_SELECT';
 export const MENU_SWITCH_SELECT = 'MENU_SWITCH_SELECT';
 export const USER_CART_STORAGE = 'USER_CART_STORAGE';

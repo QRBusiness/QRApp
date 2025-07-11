@@ -115,7 +115,9 @@ export const columns: ColumnDef<BusinessType>[] = [
             open={openEditDialog}
             onOpenChange={setOpenEditDialog}
             initialData={{
-              ...row.original,
+              name_B: row.original.name,
+              address_B: row.original.address,
+              contact_B: row.original.contact,
               businessTaxCode: row.original.tax_code,
               businessType: businessTypeId || '',
             }}

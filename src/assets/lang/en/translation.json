@@ -50,7 +50,9 @@
         "subcategory": "Subcategory",
         "price": "Default Price",
         "variants": "Variants",
-        "options": "Options"
+        "options": "Options",
+        "period": "Period",
+        "days": "Days"
       }
     },
     "authentication": {
@@ -103,7 +105,9 @@
       "create": "Create New",
       "category": "Category",
       "subcategory": "Subcategory",
-      "profile": "User Profile"
+      "profile": "User Profile",
+      "plan": "Plan Management",
+      "request": "Request Management"
     },
     "mobileSidebar": {
       "home": "Home",
@@ -135,6 +139,7 @@
       "title": "QR Management",
       "description": "Manage your QR codes for easy access to services.",
       "create": "Generate QR Code",
+      "createCollapse": "Create QR Code Session",
       "createDescription": "Create a new QR code for your area or table.",
       "createSession": "Create New QR Code",
       "createSessionShortKey": "Create New",
@@ -407,42 +412,43 @@
       },
 
       "step2": {
-        "name.label": "Full Name",
-        "name.description": "* Enter your full name.",
-        "name.placeholder": "Enter your full name",
-        "name.error": "Name cannot be empty.",
+        "name_BO.label": "Full Name",
+        "name_BO.description": "* Enter your full name.",
+        "name_BO.placeholder": "Enter your full name",
+        "name_BO.error": "Name cannot be empty.",
 
-        "phone.label": "Phone Number",
-        "phone.description": "* Enter your phone number.",
-        "phone.placeholder": "Enter your phone number",
-        "phone.error": "Phone number must be at least 10 characters long and can only contain numbers.",
-        "phone.errorFormat": "Please enter a valid phone number.",
+        "phone_BO.label": "Phone Number",
+        "phone_BO.description": "* Enter your phone number.",
+        "phone_BO.placeholder": "Enter your phone number",
+        "phone_BO.error": "Phone number must be at least 10 characters long and can only contain numbers.",
+        "phone_BO.errorFormat": "Please enter a valid phone number.",
 
-        "address.label": "Personal Address",
-        "address.description": "* Enter your personal address.",
-        "address.placeholder": "Enter your personal address",
-        "address.error": "Personal address must be a valid address.",
-        "address.errorFormat": "Please enter a valid address."
+        "address_BO.label": "Personal Address",
+        "address_BO.description": "* Enter your personal address.",
+        "address_BO.placeholder": "Enter your personal address",
+        "address_BO.error": "Personal address must be a valid address.",
+        "address_BO.errorFormat": "Please enter a valid address."
       },
       "step3": {
         "title": "Edit Business",
         "description": "Update the details of your business.",
         "button.cancel": "Cancel",
         "button.save": "Save Changes",
-        "name.label": "Business Name",
-        "name.description": "* Enter your business name.",
-        "name.placeholder": "Enter your business name",
-        "name.error": "Business name cannot be empty.",
 
-        "address.label": "Business Address",
-        "address.description": "* Enter your business address.",
-        "address.placeholder": "Enter your business address",
-        "address.error": "Business address cannot be empty.",
+        "name_B.label": "Business Name",
+        "name_B.description": "* Enter your business name.",
+        "name_B.placeholder": "Enter your business name",
+        "name_B.error": "Business name cannot be empty.",
 
-        "contact.label": "Business Contact Number",
-        "contact.description": "* Enter your business contact number.",
-        "contact.placeholder": "Enter your business contact number",
-        "contact.error": "Business contact number must be at least 10 characters long and can only contain numbers.",
+        "address_B.label": "Business Address",
+        "address_B.description": "* Enter your business address.",
+        "address_B.placeholder": "Enter your business address",
+        "address_B.error": "Business address cannot be empty.",
+
+        "contact_B.label": "Business Contact Number",
+        "contact_B.description": "* Enter your business contact number.",
+        "contact_B.placeholder": "Enter your business contact number",
+        "contact_B.error": "Business contact number must be at least 10 characters long and can only contain numbers.",
 
         "businessType.label": "Business Type",
         "businessType.description": "* Select your business type.",
@@ -777,6 +783,41 @@
           "placeholder": "Select bank's name",
           "error": "Bank name cannot be empty."
         }
+      }
+    },
+    "plan": {
+      "create": {
+        "title": "Create New Plan",
+        "description": "Fill in the details to create a new plan.",
+        "name.label": "Plan Name",
+        "name.description": "* Enter the name of the plan.",
+        "name.placeholder": "Enter plan name",
+        "name.error": "Plan name is required.",
+        "period.label": "Plan Duration",
+        "period.description": "* Enter the duration of the plan in days.",
+        "period.placeholder": "Enter plan duration",
+        "period.error": "Plan duration is required.",
+        "description.label": "Plan Description",
+        "description.description": "* Enter a brief description of the plan.",
+        "description.placeholder": "Enter plan description",
+        "description.error": "Plan description is required.",
+        "price.label": "Price",
+        "price.description": "* Enter the price of the plan.",
+        "price.placeholder": "Enter price",
+        "price.error": "Price is required."
+      },
+      "edit": {
+        "title": "Edit Plan",
+        "description": "Update the details of the plan.",
+        "name.error": "Plan name cannot be empty.",
+        "period.error": "Plan duration cannot be empty.",
+        "price.error": "Price cannot be empty."
+      },
+      "action": {
+        "cancel": "Cancel",
+        "create": "Create Plan",
+        "edit": "Edit Plan",
+        "createNew": "Create New Plan"
       }
     }
   }

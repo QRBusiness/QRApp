@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useCategories, useSubcategories } from '@/services/owner/categories-service';
+import { getSubcategories, useCategories } from '@/services/owner/categories-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CirclePlus, CircleX, UtensilsCrossed } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -61,19 +61,6 @@ const CreateNewMenuDialog = ({
     values: initialValues,
   });
 
-  const { subcategories, refetch } = useSubcategories(form.getValues('category') || initialValues.category);
-
-  useEffect(() => {
-    if (subcategories && subcategories.length > 0) {
-      setSubCategories(
-        subcategories.map((subcategory) => ({
-          label: subcategory.name,
-          value: subcategory._id,
-        }))
-      );
-    }
-  }, [subcategories]);
-
   const {
     fields: sizeFields,
     append: appendSize,
@@ -111,7 +98,13 @@ const CreateNewMenuDialog = ({
   const handleCategoryChange = async (value: string) => {
     const selectedCategory = categories.find((category) => category._id === value);
     if (selectedCategory) {
-      refetch();
+      const subcategories = await getSubcategories(selectedCategory._id);
+      setSubCategories(
+        subcategories.map((subcategory) => ({
+          label: subcategory.name,
+          value: subcategory._id,
+        }))
+      );
     }
   };
 

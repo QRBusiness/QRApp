@@ -91,9 +91,9 @@ export const createBusinessTypeSchema = z.object({
 });
 
 export const createBusinessOwnerSchema = z.object({
-  name: z.string().min(1, { message: 'module.createBusinessOwnerField.step2.name.error' }),
-  address: z.string().min(1, { message: 'module.createBusinessOwnerField.step2.address.error' }),
-  phone: z
+  name_BO: z.string().min(1, { message: 'module.createBusinessOwnerField.step2.name.error' }),
+  address_BO: z.string().min(1, { message: 'module.createBusinessOwnerField.step2.address.error' }),
+  phone_BO: z
     .string()
     .min(10, { message: 'module.createBusinessOwnerField.step2.phone.error' })
     .max(11, { message: 'module.createBusinessOwnerField.step2.phone.error' })
@@ -117,9 +117,9 @@ export const createAccoutSchema = z.object({
 });
 
 export const createBusinessSchema = z.object({
-  name: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.name.error' }),
-  address: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.address.error' }),
-  contact: z
+  name_B: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.name.error' }),
+  address_B: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.address.error' }),
+  contact_B: z
     .string()
     .min(10, { message: 'module.createBusinessOwnerField.step3.contact.error' })
     .max(11, { message: 'module.createBusinessOwnerField.step3.contact.error' })
@@ -260,4 +260,15 @@ export const configureBanksSchema = z.object({
 
 export const createRequestSchema = z.object({
   request: z.string().min(1, { message: '' }),
+});
+
+export const createPlanSchema = z.object({
+  name: z.string().min(1, { message: 'module.plan.create.name.error' }),
+  period: z.number().min(1, { message: 'module.plan.create.period.error' }), // in days
+});
+
+export const updatePlanSchema = z.object({
+  name: z.string().min(1, { message: 'module.plan.edit.name.error' }),
+  period: z.number().min(1, { message: 'module.plan.edit.period.error' }), // in days
+  price: z.number().min(0, { message: 'module.plan.edit.price.error' }),
 });

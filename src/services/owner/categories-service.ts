@@ -218,7 +218,7 @@ export const useAddSubCategory = () => {
   };
 };
 
-const getSubcategories = async (categoryId?: string): Promise<SubCategoryProps[]> => {
+export const getSubcategories = async (categoryId?: string): Promise<SubCategoryProps[]> => {
   try {
     const response: ApiResponse<{ data: SubCategoryProps[] }> = await apiClient.get(
       categoryId ? `/categories/subcategory?category=${categoryId}` : `/categories/subcategory`

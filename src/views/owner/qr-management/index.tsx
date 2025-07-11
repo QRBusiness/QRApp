@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { type AreaResponse, getAreas } from '@/services/owner/area-service';
 import { useBranches } from '@/services/owner/branch-service';
 import { useTables } from '@/services/owner/table-service';
-import { FunnelPlus, FunnelX } from 'lucide-react';
+import { ChevronLeft, FunnelPlus, FunnelX } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useViewState } from '@/components/common/states/viewState';
 import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Label } from '@/components/ui/label';
 import { CustomVariantsSelect } from '../menu-management/dialog/custom-variants-select';
 import CreateQR from './create/create-qr';
@@ -14,6 +16,7 @@ import QRTable from './table/page';
 
 const QRManagement = () => {
   const { isMobile } = useViewState();
+  const { t } = useTranslation();
   const [selectedArea, setSelectedArea] = React.useState<string>('');
   const [selectedBranch, setSelectedBranch] = React.useState<string>('');
   const [areaOptions, setAreaOptions] = React.useState<{ value: string; label: string }[]>([]);
@@ -127,7 +130,17 @@ const QRManagement = () => {
         </div>
       ) : (
         <div className="w-full p-4 mx-auto flex flex-col gap-4">
-          <CreateQR />
+          <Collapsible className="group/collapsible" defaultOpen={false} key={'create-qr-collapsible'}>
+            <CollapsibleTrigger>
+              <Button variant="secondary">
+                <p>{t('module.qrManagement.createCollapse')}</p>
+                <ChevronLeft className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="py-4">
+              <CreateQR />
+            </CollapsibleContent>
+          </Collapsible>
           <Filters />
           <QRTable data={formatedTables} />
         </div>

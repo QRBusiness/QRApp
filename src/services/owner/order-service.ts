@@ -107,9 +107,9 @@ export const useOrders = ({ area, table, status }: OrderRequestProps) => {
   };
 };
 
-const checkoutOrder = async (orderId: string): Promise<string> => {
+const checkoutOrder = async (orderId: string): Promise<OrderResponseProps> => {
   try {
-    const response: ApiResponse<{ data: string }> = await apiClient.post(`/orders/checkout/${orderId}`);
+    const response: ApiResponse<{ data: OrderResponseProps }> = await apiClient.post(`/orders/checkout/${orderId}`);
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error || 'Error checking out order', {
         description: response.errorMessage || 'An error occurred while checking out the order.',
@@ -130,6 +130,11 @@ export const useCheckoutOrder = () => {
   const { mutate, isError, error } = useMutation({
     mutationKey: ['checkoutOrder'],
     mutationFn: checkoutOrder,
+    onSuccess: (data) => {
+      toast.success('Order checked out successfully', {
+        description: `Order ID: ${data._id}`,
+      });
+    },
   });
 
   return {

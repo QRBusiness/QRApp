@@ -71,10 +71,69 @@ const getProducts = async ({ category, sub_category }: ProductCreateRequest): Pr
   }
 };
 
+const getPublicProducts = async ({
+  business,
+  category,
+  sub_category,
+}: {
+  business: string;
+  category?: string;
+  sub_category?: string;
+}): Promise<ProductProps[]> => {
+  try {
+    const params: Record<string, string> = {};
+    if (category) {
+      params.category = category;
+    }
+    if (sub_category) {
+      params.sub_category = sub_category;
+    }
+    const response: ApiResponse<ProductGetResponse> = await apiClient.get(`/products/${business}`, {
+      params,
+    });
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error fetching public products', {
+        description: response.errorMessage || 'An error occurred while fetching public products.',
+      });
+      throw new Error(response.errorMessage || 'Error fetching public products');
+    }
+    return response.data ? response.data.data : [];
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error fetching public products', {
+      description: error.errorMessage || 'An error occurred while fetching public products.',
+    });
+    throw new Error(error.errorMessage || 'Error fetching public products');
+  }
+};
+
 export const useProducts = ({ category, sub_category }: ProductCreateRequest) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<ProductProps[]>({
     queryKey: ['productsQuery', { category, sub_category }],
     queryFn: () => getProducts({ category, sub_category }),
+  });
+
+  return {
+    products: data || [],
+    error,
+    isLoading,
+    isFetching,
+    isSuccess,
+    refetch,
+  };
+};
+
+export const usePublicProducts = ({
+  business,
+  category,
+  sub_category,
+}: {
+  business: string;
+  category?: string;
+  sub_category?: string;
+}) => {
+  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<ProductProps[]>({
+    queryKey: ['publicProductsQuery', { business, category, sub_category }],
+    queryFn: () => getPublicProducts({ business, category, sub_category }),
   });
 
   return {

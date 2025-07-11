@@ -25,17 +25,17 @@ const MenuCardItem: React.FC<Menu> = ({
   const price = variants[0]?.price || 0; // Placeholder for price, can be replaced with actual price logic
   const available = true; // Placeholder for availability, can be replaced with actual availability logic
   return (
-    <Card key={_id} className="flex overflow-hidden border shadow-sm p-2 relative flex-col justify-between">
+    <Card key={_id} className="flex overflow-hidden border shadow-sm p-2 relative flex-col justify-between w-full">
       <div className="flex gap-2 items-center justify-between">
-        <div className="flex flex-row gap-2 items-start">
+        <div className="flex flex-row gap-2 items-start flex-1 whitespace-break-spaces">
           <div className="w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 overflow-hidden rounded-md">
             <img src={image} alt={name} className="object-cover w-full h-full object-top rounded-md" />
           </div>
-          <div className="flex justify-between flex-1 items-start ">
+          <div className="flex justify-between flex-1 items-start break-words">
             <div className="flex flex-col pr-2">
               <h3 className="font-semibold text-black text-base mb-1">{name}</h3>
               <p className="text-muted-foreground text-sm line-clamp-2 mb-2">{description}</p>
-              <div className="flex flex-row items-center justify-start gap-1">
+              <div className="grid grid-cols-1 md:grid-cols-2items-center justify-start gap-1">
                 <Badge variant="secondary" className="text-xs font-medium px-2 py-1 rounded">
                   {category.name}
                 </Badge>
@@ -46,8 +46,8 @@ const MenuCardItem: React.FC<Menu> = ({
             </div>
           </div>
         </div>
-        <div className="self-start">
-          <span className="font-medium text-primary">
+        <div className="self-start min-w-fit flex-none">
+          <span className="font-medium text-primary whitespace-nowrap">
             {price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
           </span>
         </div>
