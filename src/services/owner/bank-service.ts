@@ -96,3 +96,37 @@ export const useConfigureBank = () => {
     configureBank: mutateAsync,
   };
 };
+
+const getMyBank = async (): Promise<ConfigureBankProps | null> => {
+  try {
+    const response: ApiResponse<{ data: ConfigureBankProps }> = await apiClient.get('/payment/my-bank');
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to fetch my bank',
+      });
+      return null;
+    }
+    return response.data ? response.data.data : null;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while fetching your bank.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useMyBank = () => {
+  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<ConfigureBankProps | null>({
+    queryKey: ['myBankQuery'],
+    queryFn: getMyBank,
+  });
+
+  return {
+    data,
+    error,
+    isLoading,
+    isFetching,
+    isSuccess,
+    refetch,
+  };
+};

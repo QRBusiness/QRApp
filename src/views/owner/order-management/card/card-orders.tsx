@@ -106,7 +106,7 @@ export const CardOrders = () => {
             </Button>
           </div>
         </div>
-        <div className="grid grid-cols-3 w-full items-center justify-between flex-wrap gap-2">
+        <div className="grid grid-cols-2 xl:grid-cols-3 w-full items-center justify-between flex-wrap gap-2">
           <div className="flex flex-col items-start justify-center space-y-2">
             <Label className="text-muted-foreground">Area Filter</Label>
             <CustomVariantsSelect

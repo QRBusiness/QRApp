@@ -69,14 +69,14 @@ const RootApp = ({ role }: RootAppProps) => {
         icon: <HandPlatter />,
       },
       {
-        title: 'module.mobileSidebar.profile',
-        path_url: PROFILE,
-        icon: <User />,
-      },
-      {
         title: 'module.mobileSidebar.request',
         path_url: REQUEST,
         icon: <Bell />,
+      },
+      {
+        title: 'module.mobileSidebar.profile',
+        path_url: PROFILE,
+        icon: <User />,
       },
     ],
     []

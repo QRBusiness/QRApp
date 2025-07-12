@@ -1,6 +1,7 @@
 import React from 'react';
-import { useToggleAvailableBusiness } from '@/services/admin/business-service';
+import { useExtendExpiration, useToggleAvailableBusiness } from '@/services/admin/business-service';
 import { useBusinessTypes } from '@/services/admin/business-type-service';
+import { usePlans } from '@/services/admin/plan-service';
 import type { ColumnDef } from '@tanstack/react-table';
 import { CircleCheck, CircleX, ClockPlus, Edit, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -100,9 +101,24 @@ export const columns: ColumnDef<BusinessType>[] = [
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
       const [openViewDialog, setOpenViewDialog] = React.useState(false);
       const [openExtendDialog, setOpenExtendDialog] = React.useState(false);
+
+      const { plans } = usePlans();
       const { toggleAvailableBusiness } = useToggleAvailableBusiness();
       const { businessTypes } = useBusinessTypes({ page: 1, limit: 50 });
+      const { extendExpiration } = useExtendExpiration();
+
       const businessTypeId = businessTypes.find((type) => type.name === row.original.business_type)?._id;
+
+      const handleExtendPlan = (planId: string) => {
+        const selectedPlan = plans.find((plan) => plan._id === planId);
+        if (!selectedPlan) {
+          return;
+        }
+        extendExpiration({
+          id: row.original.id,
+          days: selectedPlan.period,
+        });
+      };
       return (
         <div className="flex gap-2">
           <ReadOnlyBusinessDialog data={row.original} isOpen={openViewDialog} onClose={setOpenViewDialog}>
@@ -131,7 +147,7 @@ export const columns: ColumnDef<BusinessType>[] = [
           <ExtendExpireDateDialog
             open={openExtendDialog}
             onOpenChange={setOpenExtendDialog}
-            initialData={{ expired_at: row.original.expired_at }}
+            onSubmit={(values) => handleExtendPlan(values.plan)}
           >
             <Button variant="outline" size="sm">
               <ClockPlus className="mr-1" />

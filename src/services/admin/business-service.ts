@@ -128,7 +128,7 @@ export const useCreateBusiness = () => {
     mutationFn: createBusiness,
     onSuccess: (data: BusinessProps) => {
       toast.success('Business created successfully', {
-        description: `Business ${data.name} has been created.`,
+        description: `Business's ${data.name} has been created.`,
       });
     },
   });
@@ -230,6 +230,51 @@ export const useUpdateBusiness = () => {
 
   return {
     updateBusiness: mutateAsync,
+    data,
+    isPending,
+    isError,
+    isSuccess,
+  };
+};
+
+const extendExpiration = async ({ id, days }: { id: string; days: number }): Promise<BusinessProps> => {
+  try {
+    const response: ApiResponse<{ data: BusinessProps }> = await apiClient.post(`/business/extend`, {
+      id,
+      days,
+    });
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to extend business expiration',
+      });
+      throw new Error(response.errorMessage || 'Failed to extend business expiration');
+    }
+    return response.data.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error((error as ErrorResponse).error, {
+      description:
+        (error as ErrorResponse).errorMessage || 'An unexpected error occurred while extending business expiration.',
+    });
+    throw new Error('Internal server error');
+  }
+};
+
+export const useExtendExpiration = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, data, isPending, isError, isSuccess } = useMutation({
+    mutationFn: extendExpiration,
+    onSuccess: (data: BusinessProps) => {
+      toast.success('Business expiration extended successfully', {
+        description: `Business ${data.name} expiration has been extended.`,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['businessQuery'],
+      });
+    },
+  });
+
+  return {
+    extendExpiration: mutateAsync,
     data,
     isPending,
     isError,

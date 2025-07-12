@@ -9,7 +9,6 @@ import {
   BUSINESS_TYPE,
   CART,
   CATEGORY_MANAGEMENT,
-  CHECKOUT,
   DASHBOARD,
   FORGOT_PASSWORD,
   GROUP,
@@ -54,7 +53,6 @@ const BranchManagement = React.lazy(() => import('@/views/owner/branch'));
 const BusinessManagement = React.lazy(() => import('@/views/admin/business'));
 const BusinessTypeManagement = React.lazy(() => import('@/views/admin/business-type'));
 const GroupConfig = React.lazy(() => import('@/views/owner/staff-management/group'));
-const UserCheckoutPage = React.lazy(() => import('@/views/user/Checkout'));
 const UserCartPage = React.lazy(() => import('@/views/user/Cart'));
 const UserMenuPage = React.lazy(() => import('@/views/user/Menu'));
 const SubcategoryPage = React.lazy(() => import('@/views/owner/subcategories'));
@@ -63,6 +61,7 @@ const UserProfile = React.lazy(() => import('@/views/owner/user'));
 const PaymentOrderPage = React.lazy(() => import('@/views/owner/order-management/payment'));
 const RequestPage = React.lazy(() => import('@/views/owner/request'));
 const PlanPage = React.lazy(() => import('@/views/admin/plan'));
+const UserOrder = React.lazy(() => import('@/views/user/order/index'));
 
 const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
 
@@ -109,8 +108,8 @@ function App() {
               element: <UserCartPage />,
             },
             {
-              path: CHECKOUT,
-              element: <UserCheckoutPage />,
+              path: ORDER_MANAGEMENT,
+              element: <UserOrder />,
             },
           ],
         },

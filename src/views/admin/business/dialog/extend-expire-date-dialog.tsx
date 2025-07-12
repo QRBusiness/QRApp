@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
+import { usePlans } from '@/services/admin/plan-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleCheck, CircleX, ClockPlus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { CalendarComponent } from '@/components/common/calendar';
+import CustomSelect from '@/components/common/custom-select';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -36,11 +37,18 @@ const ExtendExpireDateDialog = ({
   initialData,
 }: EditBusinessDialogProps) => {
   const { t } = useTranslation();
-  const [openDialog, setOpenDialog] = React.useState(open);
+
   const form = useForm<z.infer<typeof extendExpireDateSchema>>({
     resolver: zodResolver(extendExpireDateSchema),
     values: initialData,
   });
+
+  const { plans } = usePlans();
+  const planOptions =
+    plans?.map((plan) => ({
+      value: plan._id,
+      label: `${plan.name}`,
+    })) || [];
 
   useEffect(() => {
     if (!open) {
@@ -54,7 +62,6 @@ const ExtendExpireDateDialog = ({
   };
 
   const onSubmitForm = (data: z.infer<typeof extendExpireDateSchema>) => {
-    console.log('Submitted data:', data);
     onSubmit && onSubmit(data);
     onOpenChange(false);
   };
@@ -71,33 +78,28 @@ const ExtendExpireDateDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
+            {/* Button action */}
             <FormField
               control={form.control}
-              name="expired_at"
+              name="plan"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.business.extend.expired_at.label')}
-                    {!extendExpireDateSchema.shape.expired_at.isOptional() && <p className="text-red-700">*</p>}
+                    {t('module.business.extend.plan.label')}
+                    {!extendExpireDateSchema.shape.plan.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <CalendarComponent
-                      placeholder={t('module.business.extend.expired_at.placeholder')}
-                      openDialog={openDialog}
-                      setOpenDialog={setOpenDialog}
-                      date={field.value ? new Date(field.value) : undefined}
-                      setDate={(date: Date | undefined) => {
-                        field.onChange(date ? date.toISOString() : '');
-                      }}
+                    <CustomSelect
+                      options={planOptions}
+                      onFieldChange={field.onChange}
+                      placeholder={t('module.business.extend.plan.placeholder')}
                     />
                   </FormControl>
-                  <FormDescription>{t('module.business.extend.expired_at.description')}</FormDescription>
+                  <FormDescription>{t('module.business.extend.plan.description')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            {/* Button action */}
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onCancelHandler}>
                 <CircleX className="size-5" />

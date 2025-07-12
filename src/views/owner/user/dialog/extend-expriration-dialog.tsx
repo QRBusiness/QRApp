@@ -4,7 +4,6 @@ import { CircleCheck, CircleX, ClockPlus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { CalendarComponent } from '@/components/common/calendar';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -37,7 +36,6 @@ const OwnerExtendExpireDateDialog = ({
   initialData,
 }: EditBusinessDialogProps) => {
   const { t } = useTranslation();
-  const [openDialog, setOpenDialog] = React.useState(open);
   const form = useForm<z.infer<typeof ownerExtendExpireDateSchema>>({
     resolver: zodResolver(ownerExtendExpireDateSchema),
     values: initialData,
@@ -72,31 +70,6 @@ const OwnerExtendExpireDateDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
-            <FormField
-              control={form.control}
-              name="expired_at"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {t('module.business.extend.expired_at.label')}
-                    {!ownerExtendExpireDateSchema.shape.expired_at.isOptional() && <p className="text-red-700">*</p>}
-                  </FormLabel>
-                  <FormControl>
-                    <CalendarComponent
-                      placeholder={t('module.business.extend.expired_at.placeholder')}
-                      openDialog={openDialog}
-                      setOpenDialog={setOpenDialog}
-                      date={field.value ? new Date(field.value) : undefined}
-                      setDate={(date: Date | undefined) => {
-                        field.onChange(date ? date.toISOString() : '');
-                      }}
-                    />
-                  </FormControl>
-                  <FormDescription>{t('module.business.extend.expired_at.description')}</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="image"

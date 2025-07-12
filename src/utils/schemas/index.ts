@@ -244,11 +244,11 @@ export const editUserProfileSchema = z.object({
 });
 
 export const extendExpireDateSchema = z.object({
-  expired_at: z.string().min(1, { message: 'module.business.extend.expired_at.error' }),
+  plan: z.string().min(1, { message: 'module.business.extend.plan.error' }),
 });
 
 export const ownerExtendExpireDateSchema = z.object({
-  expired_at: z.string().min(1, { message: 'module.business.extend.expired_at.error' }),
+  plan: z.string().min(1, { message: 'module.business.extend.plan.error' }),
   image: z.instanceof(File),
 });
 

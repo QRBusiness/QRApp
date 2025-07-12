@@ -9,6 +9,7 @@ export interface PlanProps {
   name: string;
   price: number;
   period: number; // in days
+  qr_code: string;
   created_at: string;
   updated_at: string;
 }
@@ -49,7 +50,7 @@ export const usePlans = () => {
 
 const createPlan = async (data: z.infer<typeof createPlanSchema>): Promise<PlanProps | null> => {
   try {
-    const response: ApiResponse<{ data: PlanProps }> = await apiClient.post('/plans', data);
+    const response: ApiResponse<{ data: PlanProps }> = await apiClient.post('/plan', data);
     if (response.status !== 201 && response.status !== 200) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to create plan',
@@ -92,7 +93,7 @@ const updatePlan = async ({
   data: z.infer<typeof createPlanSchema>;
 }): Promise<PlanProps | null> => {
   try {
-    const response: ApiResponse<{ data: PlanProps }> = await apiClient.put(`/plans/${id}`, data);
+    const response: ApiResponse<{ data: PlanProps }> = await apiClient.put(`/plan/${id}`, data);
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to update plan',
@@ -129,14 +130,13 @@ export const useUpdatePlan = () => {
 
 const deletePlan = async (id: string): Promise<void> => {
   try {
-    const response: ApiResponse<null> = await apiClient.delete(`/plans/${id}`);
+    const response: ApiResponse<null> = await apiClient.delete(`/plan/${id}`);
     if (response.status !== 200 && response.status !== 204) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to delete plan',
       });
       return;
     }
-    toast.success('Plan deleted successfully');
   } catch (error: ErrorResponse | any) {
     toast.error((error as ErrorResponse).error, {
       description: (error as ErrorResponse).errorMessage || 'An unexpected error occurred while deleting plan.',
@@ -152,9 +152,6 @@ export const useDeletePlan = () => {
     onSuccess: () => {
       toast.success('Plan deleted successfully');
       queryClient.invalidateQueries({ queryKey: ['planQuery'] });
-    },
-    onError: (error: ErrorResponse) => {
-      toast.error(error.errorMessage || 'Failed to delete plan');
     },
   });
   return {

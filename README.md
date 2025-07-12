@@ -32,6 +32,7 @@ A simple application for generating and scanning QR codes.
 - Open the app in your browser .
 - Enter text or a URL to generate a QR code.
 - Use the scan feature to read QR codes with your camera.
+
 ## License
 
 This project is licensed under the MIT License.

@@ -1,8 +1,19 @@
 import React from 'react';
 import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
-import { useConfigureBank } from '@/services/owner/bank-service';
+import { useBanksInfo, useConfigureBank, useMyBank } from '@/services/owner/bank-service';
 import { useUpdateUserProfile, useUploadAvatar } from '@/services/user-service';
-import { Calendar, CalendarOff, ClockPlus, Edit, Landmark, MapPin, Phone, Shield, User } from 'lucide-react';
+import {
+  Calendar,
+  CalendarOff,
+  ClockPlus,
+  Edit,
+  IdCardLanyard,
+  Landmark,
+  MapPin,
+  Phone,
+  Shield,
+  User,
+} from 'lucide-react';
 import type z from 'zod';
 import { useSetUserProfile, useUserPermissions, useUserState } from '@/components/common/states/userState';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -17,6 +28,18 @@ import ConfigureBankAccount from './dialog/configure-bank-dialog';
 import EditUserProfileDialog from './dialog/edit-user-profile-dialog';
 import OwnerExtendExpireDateDialog from './dialog/extend-expriration-dialog';
 
+const ItemCard = ({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) => {
+  return (
+    <div className="flex items-center gap-3 justify-between">
+      <div className="flex items-center gap-2">
+        {icon}
+        <span className="text-sm text-muted-foreground">{label}</span>
+      </div>
+      <span className="text-sm font-medium">{value}</span>
+    </div>
+  );
+};
+
 const UserProfile = () => {
   const user = useUserState();
   const { permissions } = useUserPermissions();
@@ -24,6 +47,8 @@ const UserProfile = () => {
   const [openExtendDialog, setOpenExtendDialog] = React.useState<boolean>(false);
   const [openConfigureDialog, setOpenConfigureDialog] = React.useState<boolean>(false);
 
+  const { data: myBankData } = useMyBank();
+  const { data: banks } = useBanksInfo();
   const { configureBank } = useConfigureBank();
   const { updateUserProfile } = useUpdateUserProfile();
   const { uploadAvatar } = useUploadAvatar();
@@ -78,32 +103,54 @@ const UserProfile = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center gap-3">
-              <User className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Username:</span>
-              <span className="text-sm font-medium">{user.username}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Phone:</span>
-              <span className="text-sm font-medium">{user.phone}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <MapPin className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Address:</span>
-              <span className="text-sm font-medium">{user.address}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Calendar className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Joined:</span>
-              <span className="text-sm font-medium">{formattedDate(user.created_at)}</span>
-            </div>
+            <ItemCard icon={<Phone className="w-4 h-4 text-muted-foreground" />} label="Phone:" value={user.phone} />
+
             {user.expired_at && (
-              <div className="flex items-center gap-3">
-                <CalendarOff className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Expires:</span>
-                <span className="text-sm font-medium">{formattedDate(user.expired_at)}</span>
-              </div>
+              <ItemCard
+                icon={<MapPin className="w-4 h-4 text-muted-foreground" />}
+                label="Address"
+                value={user.address}
+              />
+            )}
+            {user.created_at && (
+              <ItemCard
+                icon={<Calendar className="w-4 h-4 text-muted-foreground" />}
+                label="Joined"
+                value={formattedDate(user.created_at)}
+              />
+            )}
+            {user.expired_at && (
+              <ItemCard
+                icon={<CalendarOff className="w-4 h-4 text-muted-foreground" />}
+                label="Expiration Date"
+                value={formattedDate(user.expired_at)}
+              />
+            )}
+            {(user.role === OWNER_ROLE || user.role === ADMIN_ROLE) && myBankData ? (
+              <>
+                <ItemCard
+                  icon={<Landmark className="w-4 h-4 text-muted-foreground" />}
+                  label="Bank"
+                  value={
+                    myBankData
+                      ? banks?.[banks?.findIndex((bank) => bank.bin.toString() === myBankData.acqId.toString())]
+                          ?.short_name || 'N/A'
+                      : 'N/A'
+                  }
+                />
+                <ItemCard
+                  icon={<IdCardLanyard className="w-4 h-4 text-muted-foreground" />}
+                  label="Account No"
+                  value={myBankData ? myBankData.accountNo : 'N/A'}
+                />
+                <ItemCard
+                  icon={<User className="w-4 h-4 text-muted-foreground" />}
+                  label="Account Name"
+                  value={myBankData ? myBankData.accountName : 'N/A'}
+                />
+              </>
+            ) : (
+              <div>No Bank Information Available</div>
             )}
             <Separator />
             <div className="flex items-center justify-between">

@@ -377,7 +377,9 @@
         "subtotal": "Subtotal",
         "tax": "Tax ({{taxRate}}%)",
         "total": "Total",
-        "checkout": "Checkout"
+        "checkout": "Checkout",
+        "quantity": "Quantity",
+        "price": "Price"
       }
     },
     "orderManagement": {
@@ -495,10 +497,13 @@
       "extend": {
         "title": "Extend Business Expiration",
         "description": "Select a new expiration date for the business.",
-        "expired_at.label": "Expiration Date",
-        "expired_at.description": "* Select the new expiration date for the business.",
-        "expired_at.placeholder": "Choose expiration date",
-        "expired_at.error": "Expiration date is required.",
+        "plan.label": "Select Plan",
+        "plan.description": "* Choose a plan to extend the business expiration.",
+        "plan.error": "Plan must be selected.",
+        "plan.placeholder": "Select a plan",
+        "expiredAt.label": "Expiration Date",
+        "qr.label": "QR Code",
+        "qr.description": "* Scan a QR code to extend the business.",
         "image.label": "Business Image",
         "image.description": "* Upload a new image for the business.",
         "image.placeholder": "Select an image file",

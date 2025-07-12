@@ -4,7 +4,6 @@ export const LOGIN = '/login';
 export const FORGOT_PASSWORD = '/forgot-password';
 export const LANDING_PAGE = '/';
 export const CART = 'cart';
-export const CHECKOUT = 'checkout';
 
 export const DASHBOARD = 'dashboard';
 export const QR_MANAGEMENT = 'qr-management';

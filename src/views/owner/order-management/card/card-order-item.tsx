@@ -1,3 +1,4 @@
+import React from 'react';
 import type { OrderResponseProps } from '@/services/owner/order-service';
 import { format } from 'date-fns';
 import { CircleUser, Clock, CreditCard, Info, MapPin } from 'lucide-react';
@@ -6,12 +7,16 @@ import { useNavigate } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import OrderDetailsDialog from '../details/order-details-dialog';
 import StatusBadge from '../status/status-baged';
 
 const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
   const { t } = useTranslation();
+  const [isOpen, setIsOpen] = React.useState(false);
+
   const formattedDate = format(new Date(order.created_at), 'h:mm a - MMM dd, yyyy');
   const navigate = useNavigate();
+
   return (
     <Card key={order._id} className="py-2 flex flex-col justify-between h-full">
       <CardContent className="px-2 py-0">
@@ -84,11 +89,13 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
       <CardFooter className="px-2 bg-background">
         {/* Footer card */}
         <div className="flex justify-between space-x-2 w-full">
-          <Button variant="outline" size="sm" className="flex-1 items-center space-x-2">
-            <Info className="size-4 md:size-5" />
-            {t('module.orderManagement.orderCard.details')}
-          </Button>
-          {order.status === 'Paid' && (
+          <OrderDetailsDialog isOpen={isOpen} onOpenChange={setIsOpen} data={order}>
+            <Button variant="outline" size="sm" className="flex-1 items-center space-x-2">
+              <Info className="size-4 md:size-5" />
+              {t('module.orderManagement.orderCard.details')}
+            </Button>
+          </OrderDetailsDialog>
+          {order.status !== 'Paid' && (
             <Button
               variant="outline"
               size="sm"

@@ -109,9 +109,17 @@ export const useOrders = ({ area, table, status }: OrderRequestProps) => {
   };
 };
 
-const checkoutOrder = async (orderId: string): Promise<OrderResponseProps> => {
+const checkoutOrder = async ({
+  orderId,
+  method = 'Cash',
+}: {
+  orderId: string;
+  method?: string;
+}): Promise<OrderResponseProps> => {
   try {
-    const response: ApiResponse<{ data: OrderResponseProps }> = await apiClient.post(`/orders/checkout/${orderId}`);
+    const response: ApiResponse<{ data: OrderResponseProps }> = await apiClient.post(`/orders/checkout/${orderId}`, {
+      method,
+    });
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error || 'Error checking out order', {
         description: response.errorMessage || 'An error occurred while checking out the order.',
