@@ -25,5 +25,5 @@ steps:
         - git restore .
         - git checkout main
         - git restore .
-        - git pull origin main || true
+        - git pull origin main
         - make deploy
