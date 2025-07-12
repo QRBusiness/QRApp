@@ -16,9 +16,6 @@ steps:
         from_secret: VITE_API_URL
       VITE_SOCKET_URL:
         from_secret: VITE_SOCKET_URL
-    commands:
-      - echo "VITE_API_URL=$VITE_API_URL"
-      - echo "VITE_SOCKET_URL=$VITE_SOCKET_URL"
     settings:
       username: 
         from_secret: DOCKERHUB_USERNAME # pragma: allowlist secret
@@ -29,8 +26,8 @@ steps:
         - nhathuyd4hp/qrapp-frontend:latest
       build_args:
         - BUILDKIT_INLINE_CACHE=1
-        - VITE_API_URL=${VITE_API_URL}
-        - VITE_SOCKET_URL=${VITE_SOCKET_URL}
+        - VITE_API_URL=VITE_API_URL
+        - VITE_SOCKET_URL=VITE_SOCKET_URL
       tags:
         - latest
   - name: Deploy to VPS
