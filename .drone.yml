@@ -26,9 +26,8 @@ steps:
         - nhathuyd4hp/qrapp-frontend:latest
       build_args:
         - BUILDKIT_INLINE_CACHE=1
-      build_args_from_env:
-        - VITE_API_URL
-        - VITE_SOCKET_URL
+        - VITE_API_URL=${VITE_API_URL}
+        - VITE_SOCKET_URL=${VITE_SOCKET_URL}
       tags:
         - latest
   - name: Deploy to VPS
