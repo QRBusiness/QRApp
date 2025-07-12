@@ -1,6 +1,6 @@
 services:
   qrapp-frontend:
-    image: fe-test-v3:latest
+    image: nhathuyd4hp/qrapp-frontend:latest
     container_name: qrapp-frontend
     hostname: qrapp
     restart: always
