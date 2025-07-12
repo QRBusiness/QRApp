@@ -123,11 +123,15 @@ const CartItemsDetails: React.FC = () => {
 
   return (
     <div className="relative flex flex-col min-h-full p-4 border w-full max-w-5xl rounded-lg mx-auto">
-      <CreateNewOrderRequest
-        open={createOrderRequestDialog}
-        onOpenChange={setCreateOrderRequestDialog}
-        onSubmit={(data) => onStaffCheckout(data)}
-      />
+      {user.role === STAFF_ROLE ||
+        (user.role === OWNER_ROLE && (
+          <CreateNewOrderRequest
+            open={createOrderRequestDialog}
+            onOpenChange={setCreateOrderRequestDialog}
+            onSubmit={(data) => onStaffCheckout(data)}
+          />
+        ))}
+
       {/* Main Content */}
       <ScrollArea className="flex-1">
         {cartItems.length === 0 ? (

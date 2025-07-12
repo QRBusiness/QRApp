@@ -206,7 +206,6 @@ const CreateQR = () => {
   const onSubmit = (values: z.infer<typeof createQRSchema>) => {
     const location = window.location.origin;
     const navigateURL = `${location}/${UNAUTHORIZED}/${business._id}/${MENU_MANAGEMENT}?area=${values.area}&table=${values.table}`;
-    console.log('Navigate URL:', navigateURL);
     const areaName = areaOptions.find((area) => area.value === values.area)?.label || 'unknown-area';
     const tableName = tableOptions.find((table) => table.value === values.table)?.label || 'unknown-table';
     setQrTitle(`${areaName} - ${tableName}`);

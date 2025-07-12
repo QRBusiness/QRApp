@@ -7,5 +7,5 @@ build:
 push:
 	docker push nhathuyd4hp/qrapp-frontend
 run:
-	docker compose up -d
+	docker compose up --force-recreate -d 
 deploy: build push run

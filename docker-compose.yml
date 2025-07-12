@@ -2,6 +2,7 @@ services:
   qrapp-frontend:
     image: nhathuyd4hp/qrapp-frontend:latest
     container_name: qrapp-frontend
+    pull_policy: always
     hostname: qrapp
     restart: always
     ports:
