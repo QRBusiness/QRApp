@@ -7,7 +7,7 @@ import { CustomVariantsSelect } from '../menu-management/dialog/custom-variants-
 import CartRequest from '../order-management/card/cart-request';
 
 const RequestPage = () => {
-  const [selectedStatus, setSelectedStatus] = React.useState<string>('');
+  const [selectedStatus, setSelectedStatus] = React.useState<string>('Waiting');
   const { requests } = useRequests({ status: selectedStatus, type: 'Request' });
   const statusOptions = React.useMemo(() => {
     return [

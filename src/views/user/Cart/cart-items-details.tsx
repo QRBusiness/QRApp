@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MENU_MANAGEMENT } from '@/constants';
+import { MENU_MANAGEMENT, OWNER_ROLE, STAFF_ROLE } from '@/constants';
 import { useCreateOrderRequest } from '@/services/user/user-request-service';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { clearCart, removeFromCart, updateCartItemQuantity, useCartItems } from '@/components/common/states/cartState';
 import { useGuestState } from '@/components/common/states/guestState';
+import { useUserState } from '@/components/common/states/userState';
 import { useViewState } from '@/components/common/states/viewState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import CreateNewOrderRequest from '@/views/owner/menu-management/dialog/create-staff-order-dialog';
 import { cn } from '@/libs/utils';
 
 const CartItemsDetails: React.FC = () => {
@@ -25,6 +27,9 @@ const CartItemsDetails: React.FC = () => {
   const [total, setTotal] = useState(0);
   const { name } = useGuestState();
   const navigate = useNavigate();
+  const user = useUserState();
+
+  const [createOrderRequestDialog, setCreateOrderRequestDialog] = React.useState(false);
 
   const { createOrderRequest } = useCreateOrderRequest();
 
@@ -58,6 +63,13 @@ const CartItemsDetails: React.FC = () => {
   );
 
   const onCheckout = async () => {
+    if (user.role === STAFF_ROLE || user.role === OWNER_ROLE) {
+      setCreateOrderRequestDialog(true);
+    } else {
+      await onGuestCheckout();
+    }
+  };
+  const onGuestCheckout = async () => {
     await createOrderRequest({
       type: 'Order',
       reason: 'checkout',
@@ -67,6 +79,7 @@ const CartItemsDetails: React.FC = () => {
       data: cartItems.map((item) => ({
         _id: item._id,
         name: item.name,
+        img_url: item.img_url || '', // Ensure img_url is included
         quantity: item.quantity,
         price: item.price,
         variant: item.variant,
@@ -78,8 +91,43 @@ const CartItemsDetails: React.FC = () => {
     navigate(`../${MENU_MANAGEMENT}?area=${area}&table=${table}`);
   };
 
+  const onStaffCheckout = async ({
+    area,
+    service_unit,
+    guest_name,
+  }: {
+    area: string;
+    service_unit: string;
+    guest_name: string;
+  }) => {
+    await createOrderRequest({
+      type: 'Order',
+      reason: 'checkout',
+      service_unit: service_unit,
+      area: area,
+      guest_name: guest_name,
+      data: cartItems.map((item) => ({
+        _id: item._id,
+        name: item.name,
+        img_url: item.img_url || '', // Ensure img_url is included
+        quantity: item.quantity,
+        price: item.price,
+        variant: item.variant,
+        options: item.options ? [...item.options] : [],
+        note: item.note || '',
+      })),
+    });
+    clearCart();
+    navigate(`../${MENU_MANAGEMENT}?area=${area}&table=${service_unit}`);
+  };
+
   return (
     <div className="relative flex flex-col min-h-full p-4 border w-full max-w-5xl rounded-lg mx-auto">
+      <CreateNewOrderRequest
+        open={createOrderRequestDialog}
+        onOpenChange={setCreateOrderRequestDialog}
+        onSubmit={(data) => onStaffCheckout(data)}
+      />
       {/* Main Content */}
       <ScrollArea className="flex-1">
         {cartItems.length === 0 ? (
@@ -91,9 +139,7 @@ const CartItemsDetails: React.FC = () => {
                 <div className="gap-3 flex">
                   <div className="w-20 h-20 flex-shrink-0">
                     <img
-                      src={
-                        'https://readdy.ai/api/search-image?query=Gourmet%20avocado%20toast%20with%20poached%20egg%20on%20sourdough%20bread%2C%20topped%20with%20cherry%20tomatoes%20and%20microgreens%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20shallow%20depth%20of%20field%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=1&orientation=squarish'
-                      }
+                      src={item.img_url!}
                       alt={item.name}
                       className="w-full h-full object-cover rounded-md object-top"
                     />
@@ -188,7 +234,7 @@ const CartItemsDetails: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">
-                  {t('module.menuManagement.cart.tax', { taxRate: `${tax}%` })}
+                  {t('module.menuManagement.cart.tax', { taxRate: `${tax}` })}
                 </span>
                 <span className="font-medium">
                   {tax.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}

@@ -204,6 +204,7 @@ export const createSubCategoriesSchema = z.object({
 });
 
 export const createProductSchema = z.object({
+  image: blobOrFileSchema.nullish(),
   name: z.string().min(1, { message: 'module.menuManagement.createMenuField.nameError' }),
   description: z.string().nullish(),
   category: z.string().min(1, { message: 'module.menuManagement.createMenuField.categoryError' }),
@@ -271,4 +272,11 @@ export const updatePlanSchema = z.object({
   name: z.string().min(1, { message: 'module.plan.edit.name.error' }),
   period: z.number().min(1, { message: 'module.plan.edit.period.error' }), // in days
   price: z.number().min(0, { message: 'module.plan.edit.price.error' }),
+});
+
+export const createOrderRequestSchema = z.object({
+  branch: z.string().min(1, { message: 'module.orderRequest.create.branch.error' }),
+  area: z.string().min(1, { message: 'module.orderRequest.create.area.error' }),
+  service_unit: z.string().min(1, { message: 'module.orderRequest.create.serviceUnit.error' }),
+  guest_name: z.string().min(1, { message: 'module.orderRequest.create.guestName.error' }),
 });

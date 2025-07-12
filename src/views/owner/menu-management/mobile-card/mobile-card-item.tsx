@@ -1,11 +1,14 @@
 import React from 'react';
-import { useDeleteProduct, useUpdateProduct } from '@/services/owner/product-services';
-import { Edit, ScanText, X } from 'lucide-react';
+import { useDeleteProduct, useUpdateProduct, useUploadProductImage } from '@/services/owner/product-services';
+import type { CartItem } from '@/services/user/user-request-service';
+import { Edit, Plus, ScanText, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { CustomAlertDialog } from '@/components/common/dialog/custom-alert-dialog';
+import { addToCart } from '@/components/common/states/cartState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import AddToCartDialog from '@/views/user/Cart/add-to-cart-dialog';
 import CreateNewMenuDialog from '../../../user/Cart/create-new-menu-dialog';
 import ReadOnlyMenuItemDialog from '../dialog/read-only-menu-item-dialog';
 import type { Menu } from '../tables/columns';
@@ -23,11 +26,13 @@ const MenuCardItem: React.FC<Menu> = ({
   updated_at,
 }) => {
   const { t } = useTranslation();
-  const { deleteProduct } = useDeleteProduct();
   const [viewDialogOpen, setViewDialogOpen] = React.useState(false);
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
-  const { updateProduct } = useUpdateProduct();
+  const [addToCartDialogOpen, setAddToCartDialogOpen] = React.useState(false);
 
+  const { uploadProductImage } = useUploadProductImage();
+  const { updateProduct } = useUpdateProduct();
+  const { deleteProduct } = useDeleteProduct();
   const price = variants[0]?.price || 0; // Placeholder for price, can be replaced with actual price logic
   const available = true; // Placeholder for availability, can be replaced with actual availability logic
   return (
@@ -97,6 +102,7 @@ const MenuCardItem: React.FC<Menu> = ({
           }}
           onSubmit={async (values) => {
             await updateProduct({ id: _id, data: values });
+            await uploadProductImage({ id: _id, file: values.image as File });
             setEditDialogOpen(false);
           }}
         >
@@ -104,6 +110,27 @@ const MenuCardItem: React.FC<Menu> = ({
             <Edit className="size-4 md:size-5" />
           </Button>
         </CreateNewMenuDialog>
+        <AddToCartDialog
+          open={addToCartDialogOpen}
+          onOpenChange={setAddToCartDialogOpen}
+          item={{
+            _id,
+            name,
+            category,
+            subcategory,
+            image,
+            options,
+            variants,
+            description,
+            created_at,
+            updated_at,
+          }}
+          onSubmit={(cartItem: CartItem) => addToCart(cartItem)}
+        >
+          <Button size="icon" className="rounded-full" disabled={!available} variant={'default'}>
+            <Plus className="size-4 md:size-5" />
+          </Button>
+        </AddToCartDialog>
         <CustomAlertDialog
           title={t('module.qrManagement.alertDialog.title')}
           description={t('module.qrManagement.alertDialog.description')}
@@ -116,7 +143,6 @@ const MenuCardItem: React.FC<Menu> = ({
       </div>
     </Card>
   );
-  ``;
 };
 
 export default MenuCardItem;

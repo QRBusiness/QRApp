@@ -1,7 +1,6 @@
 import React from 'react';
 import { CirclePlus, CircleX, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { addToCart } from '@/components/common/states/cartState';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -20,6 +19,7 @@ import type { Menu } from '../../owner/menu-management/tables/columns';
 export interface CartItemProps {
   _id: string;
   name: string;
+  img_url: string; // Optional, can be used for product images
   quantity: number;
   price: number;
   variant: string;
@@ -32,9 +32,10 @@ interface AddToCartDialogProps {
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
   item: Menu;
+  onSubmit: (item: CartItemProps) => void;
 }
 
-const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open, onOpenChange }) => {
+const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open, onOpenChange, onSubmit }) => {
   const { t } = useTranslation();
   const [quantity, setQuantity] = React.useState(1);
   const [selectedPreferences, setSelectedPreferences] = React.useState<string[]>([]);
@@ -62,13 +63,14 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
     const cartItem = {
       _id: item._id,
       name: item.name,
+      img_url: item.image || '', // Ensure img_url is included
       quantity,
       variant: selectedSize,
       options: selectedPreferences,
       note: specialInstructions,
       price: item.variants[variantIndex]?.price + totalPreferencesPrice || 0,
     };
-    addToCart(cartItem);
+    onSubmit && onSubmit(cartItem);
     onOpenChange(false);
   };
   return (

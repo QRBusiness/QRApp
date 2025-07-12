@@ -5,6 +5,7 @@ import { loadFromSessionStorage, saveToSessionStorage } from '@/libs/utils';
 interface CartItem {
   _id: string;
   name: string;
+  img_url: string; // Optional, in case some items don't have images
   quantity: number;
   price: number;
   variant: string;

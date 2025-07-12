@@ -61,7 +61,7 @@ const UserProfile = React.lazy(() => import('@/views/owner/user'));
 const PaymentOrderPage = React.lazy(() => import('@/views/owner/order-management/payment'));
 const RequestPage = React.lazy(() => import('@/views/owner/request'));
 const PlanPage = React.lazy(() => import('@/views/admin/plan'));
-const UserOrder = React.lazy(() => import('@/views/user/order/index'));
+const UserOrder = React.lazy(() => import('@/views/user/Order/index'));
 
 const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
 
@@ -125,6 +125,10 @@ function App() {
             {
               path: QR_MANAGEMENT,
               element: <QRManagement />,
+            },
+            {
+              path: CART,
+              element: <UserCartPage />,
             },
             {
               path: MENU_MANAGEMENT,

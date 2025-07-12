@@ -29,7 +29,7 @@ export interface ProductProps {
   _id: string;
   name: string;
   description: string;
-  image_url?: string;
+  img_url?: string;
   category: Categories;
   subcategory: Subcategories;
   variants: VariantProps[];
@@ -256,6 +256,49 @@ export const useDeleteProduct = () => {
 
   return {
     deleteProduct: mutateAsync,
+    isPending,
+    error,
+    isSuccess,
+    data,
+  };
+};
+
+const uploadProductImage = async ({ id, file }: { id: string; file: File }): Promise<string> => {
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+    const response: ApiResponse<{ data: { url: string } }> = await apiClient.post(`/products/image/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error uploading product image', {
+        description: response.errorMessage || 'An error occurred while uploading the product image.',
+      });
+      throw new Error(response.errorMessage || 'Error uploading product image');
+    }
+    return response.data ? response.data.data.url : '';
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error uploading product image', {
+      description: error.errorMessage || 'An error occurred while uploading the product image.',
+    });
+    throw new Error(error.errorMessage || 'Error uploading product image');
+  }
+};
+
+export const useUploadProductImage = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending, error, isSuccess, data } = useMutation({
+    mutationFn: uploadProductImage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['productsQuery'] });
+      toast.success('Product image uploaded successfully');
+    },
+  });
+
+  return {
+    uploadProductImage: mutateAsync,
     isPending,
     error,
     isSuccess,

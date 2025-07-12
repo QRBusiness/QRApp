@@ -70,7 +70,7 @@ const UserMenuPage: React.FC = () => {
   };
 
   return (
-    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2 w-full mx-auto">
+    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2 w-full mx-auto pb-10">
       <UserInputModel
         open={openUserInputModel}
         onOpenChange={setOpenUserInputModel}
@@ -89,7 +89,7 @@ const UserMenuPage: React.FC = () => {
           key={item._id}
           _id={item._id}
           name={item.name}
-          image="https://readdy.ai/api/search-image?query=Gourmet%20avocado%20toast%20with%20poached%20egg%20on%20sourdough%20bread%2C%20topped%20with%20cherry%20tomatoes%20and%20microgreens%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20shallow%20depth%20of%20field%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=1&orientation=squarish"
+          image={item.img_url!}
           variants={item.variants}
           options={item.options}
           category={item.category}

@@ -122,6 +122,36 @@ const CreateNewMenuDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
+            {!isCreate && (
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t('module.menuManagement.createMenuField.image')}
+                      {!createProductSchema.shape.image.isOptional() && <p className="text-red-700">*</p>}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          form.setValue('image', file);
+                          field.onChange(file);
+                        }}
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        ref={field.ref}
+                        placeholder={t('module.menuManagement.createMenuField.imagePlaceholder')}
+                      />
+                    </FormControl>
+                    <FormDescription>{t('module.menuManagement.createMenuField.imageDescription')}</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="name"
@@ -132,7 +162,7 @@ const CreateNewMenuDialog = ({
                     {!createProductSchema.shape.name.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} placeholder={t('module.menuManagement.createMenuField.namePlaceholder')} />
                   </FormControl>
                   <FormDescription>{t('module.menuManagement.createMenuField.nameDescription')}</FormDescription>
                   <FormMessage />
@@ -149,7 +179,11 @@ const CreateNewMenuDialog = ({
                     {!createProductSchema.shape.description.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value || ''} />
+                    <Input
+                      {...field}
+                      value={field.value || ''}
+                      placeholder={t('module.menuManagement.createMenuField.descriptionPlaceholder')}
+                    />
                   </FormControl>
                   <FormDescription>{t('module.menuManagement.createMenuField.descriptionDescription')}</FormDescription>
                   <FormMessage />
@@ -176,6 +210,7 @@ const CreateNewMenuDialog = ({
                         }}
                         value={field.value}
                         defaultValue={field.value}
+                        placeholder={t('module.menuManagement.createMenuField.categoryNamePlaceholder')}
                       />
                     </div>
                   </FormControl>
@@ -203,6 +238,7 @@ const CreateNewMenuDialog = ({
                         onFieldChange={field.onChange}
                         value={field.value}
                         defaultValue={field.value}
+                        placeholder={t('module.menuManagement.createMenuField.subCategoryNamePlaceholder')}
                       />
                     </div>
                   </FormControl>

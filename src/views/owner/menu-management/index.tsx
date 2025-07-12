@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
 import { useSubcategories } from '@/services/owner/categories-service';
 import { useCreateProduct, useProducts } from '@/services/owner/product-services';
@@ -19,7 +18,9 @@ const MenuManagement = () => {
   const { t } = useTranslation();
   const user = useUserState();
   const { isTable: isTableView } = useMenuDisplayOptionState();
+
   const [openCreateNewMenuDialog, setOpenCreateNewMenuDialog] = useState(false);
+
   const { subcategories } = useSubcategories();
 
   let categoryOptions = subcategories.map((subcategory) => ({
@@ -35,6 +36,23 @@ const MenuManagement = () => {
     category: '',
     sub_category: currentFilterSubcategory === 'all' ? '' : currentFilterSubcategory,
   });
+
+  const productsTransformed: Menu[] = React.useMemo(() => {
+    return products.map((product) => ({
+      ...product,
+      category: product.category, // keep as object of type Categories
+      subcategory: product.subcategory, // keep as object of type Subcategories
+      variants: product.variants.map((variant) => ({
+        ...variant,
+        type: variant.type,
+      })),
+      options: product.options.map((option) => ({
+        ...option,
+        type: option.type,
+      })),
+      image: product.img_url || '',
+    }));
+  }, [products]);
 
   React.useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -88,7 +106,7 @@ const MenuManagement = () => {
           )}
         </div>
       )}
-      {isTableView ? <MenuTable data={products as Menu[]} /> : <MobileMenuView items={products as Menu[]} />}
+      {isTableView ? <MenuTable data={productsTransformed} /> : <MobileMenuView items={productsTransformed} />}
     </div>
   );
 };

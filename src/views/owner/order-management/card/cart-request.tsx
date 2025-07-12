@@ -59,10 +59,12 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, 
       </div>
       <div className="flex flex-col items-start justify-around gap-2 h-full flex-1">
         <StatusBadge status={status as 'Waiting' | 'Pending' | 'Cancelled'} />
-        <Button onClick={onConfirm} className="w-full" variant="default">
-          <Check />
-          Confirm
-        </Button>
+        {status === 'Waiting' && (
+          <Button onClick={onConfirm} className="w-full" variant="default">
+            <Check />
+            Confirm
+          </Button>
+        )}
       </div>
     </Card>
   );

@@ -6,9 +6,10 @@ export interface CartItem {
   _id: string;
   name: string;
   quantity: number;
-  variant?: string;
-  options?: string[];
-  note?: string;
+  img_url: string; // Optional, can be used for product images
+  variant: string;
+  options: string[];
+  note: string;
   price: number;
 }
 

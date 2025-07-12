@@ -13,7 +13,7 @@ export const CardOrders = () => {
   const { areas } = useAreas({ page: 1, limit: 50 });
   const [selectedArea, setSelectedArea] = React.useState<string>('');
   const [selectedTable, setSelectedTable] = React.useState<string>('');
-  const [selectedStatus, setSelectedStatus] = React.useState<string>('');
+  const [selectedStatus, setSelectedStatus] = React.useState<string>('Unpaid');
   const { orders, isLoading, refetch } = useOrders({
     area: selectedArea,
     table: selectedTable,

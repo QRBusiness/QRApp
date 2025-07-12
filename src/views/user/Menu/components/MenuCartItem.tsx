@@ -1,5 +1,7 @@
 import React from 'react';
+import type { CartItem } from '@/services/user/user-request-service';
 import { Plus, ScanText } from 'lucide-react';
+import { addToCart } from '@/components/common/states/cartState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -88,6 +90,7 @@ const MenuCardItem: React.FC<Menu> = ({
             created_at,
             updated_at,
           }}
+          onSubmit={(cartItem: CartItem) => addToCart(cartItem)}
         >
           <Button size="icon" className="rounded-full" disabled={!available} variant={'default'}>
             <Plus className="size-4 md:size-5" />
