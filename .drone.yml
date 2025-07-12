@@ -1,0 +1,52 @@
+kind: pipeline
+type: docker
+name: CI Frontend
+
+trigger:
+  branch:
+    - main
+  event:
+    - push
+
+steps:
+  - name: Build & Push Docker Image
+    image: plugins/docker
+    environment:
+      VITE_API_URL:
+        from_secret: VITE_API_URL
+      VITE_SOCKET_URL:
+        from_secret: VITE_SOCKET_URL
+    settings:
+      username: 
+        from_secret: DOCKERHUB_USERNAME # pragma: allowlist secret
+      password: 
+        from_secret: DOCKERHUB_TOKEN # pragma: allowlist secret
+      repo: nhathuyd4hp/qrapp-frontend
+      cache_from:
+        - nhathuyd4hp/qrapp-frontend:latest
+      build_args:
+        - BUILDKIT_INLINE_CACHE=1
+      build_args_from_env:
+        - VITE_API_URL
+        - VITE_SOCKET_URL
+      tags:
+        - latest
+  - name: Deploy to VPS
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SSH_HOST
+      username:
+        from_secret: SSH_USERNAME
+      password:
+        from_secret: SSH_PASSWORD
+      port: 22
+      script:
+        - mkdir -p ~/Document/QRApp/Frontend
+        - cd ~/Document/QRApp/Frontend
+        - git restore . 
+        - git checkout main
+        - git restore .
+        - git pull origin main || true
+        - docker network create QRNetwork || true
+        - docker compose up -d
