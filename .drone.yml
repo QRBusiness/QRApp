@@ -26,6 +26,4 @@ steps:
         - git checkout main
         - git restore .
         - git pull origin main || true
-        - make build
-        - make push
-        - make run
+        - make deploy

@@ -8,3 +8,4 @@ push:
 	docker push nhathuyd4hp/qrapp-frontend
 run:
 	docker compose up -d
+deploy: build push run
