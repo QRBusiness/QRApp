@@ -27,12 +27,11 @@ A simple application for generating and scanning QR codes.
    npm run dev
    ```
 
-## Usage
+## Usage [http://103.7.43.118:5173](http://103.7.43.118:5173)
 
-- Open the app in your browser.
+- Open the app in your browser .
 - Enter text or a URL to generate a QR code.
 - Use the scan feature to read QR codes with your camera.
-
 ## License
 
 This project is licensed under the MIT License.
