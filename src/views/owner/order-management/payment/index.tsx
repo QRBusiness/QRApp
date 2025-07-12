@@ -50,7 +50,7 @@ const PaymentOrderPage = () => {
                 {formattedDate(orderDetails?.created_at ?? new Date().toISOString())}
               </p>
               <p className="text-muted-foreground">
-                <span className="font-semibold">Guest Name:</span> {orderDetails?.guest_name || 'Unknown'}
+                <span className="font-semibold">Guest Name:</span> {orderDetails?.request?.guest_name || 'Unknown'}
               </p>
             </div>
           </div>
