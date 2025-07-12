@@ -65,4 +65,4 @@ steps:
         - git restore . || true
         - git pull origin main || true
         - docker network create QRNetwork || true
-        - docker compose up -d --remove-orphans
+        - docker compose up -d
