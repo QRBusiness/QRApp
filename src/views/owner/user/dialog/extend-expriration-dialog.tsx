@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import { usePlans } from '@/services/admin/plan-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleCheck, CircleX, ClockPlus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import CustomSelect from '@/components/common/custom-select';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -36,6 +38,9 @@ const OwnerExtendExpireDateDialog = ({
   initialData,
 }: EditBusinessDialogProps) => {
   const { t } = useTranslation();
+  const { plans } = usePlans();
+  const [selectPlan, setSelectPlan] = React.useState('');
+
   const form = useForm<z.infer<typeof ownerExtendExpireDateSchema>>({
     resolver: zodResolver(ownerExtendExpireDateSchema),
     values: initialData,
@@ -70,6 +75,45 @@ const OwnerExtendExpireDateDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6 w-full">
+            <FormField
+              control={form.control}
+              name="plan"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('module.business.extend.plan.label')}
+                    {!ownerExtendExpireDateSchema.shape.plan.isOptional() && <p className="text-red-700">*</p>}
+                  </FormLabel>
+                  <FormControl>
+                    <CustomSelect
+                      options={plans.map((plan) => ({
+                        value: plan._id,
+                        label: `${plan.name} - ${plan.price}`,
+                      }))}
+                      onFieldChange={(props) => {
+                        setSelectPlan(props);
+                        field.onChange(props);
+                      }}
+                      {...field}
+                      placeholder={t('module.business.extend.plan.placeholder')}
+                    />
+                  </FormControl>
+                  <FormDescription>{t('module.business.extend.plan.description')}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {selectPlan && (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-58 h-58 object-cover flex justify-between items-center">
+                  <img
+                    src={plans.find((plan) => plan._id === selectPlan)?.qr_code || ''}
+                    alt="Preview"
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                </div>
+              </div>
+            )}
             <FormField
               control={form.control}
               name="image"

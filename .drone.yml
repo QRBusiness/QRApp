@@ -22,7 +22,7 @@ steps:
       script:
         - mkdir -p ~/Document/QRApp/Frontend
         - cd ~/Document/QRApp/Frontend
-        - git restore . 
+        - git restore .
         - git checkout main
         - git restore .
         - git pull origin main || true
