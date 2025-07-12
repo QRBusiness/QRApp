@@ -12,6 +12,7 @@ ENV VITE_API_URL=$VITE_API_URL
 ARG VITE_SOCKET_URL
 ENV VITE_SOCKET_URL=$VITE_SOCKET_URL
 
+RUN sudo rm -rf dist
 RUN npm run build
 
 # Bước 2: Dùng Nginx để phục vụ
