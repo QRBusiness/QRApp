@@ -16,6 +16,9 @@ steps:
         from_secret: VITE_API_URL
       VITE_SOCKET_URL:
         from_secret: VITE_SOCKET_URL
+    commands:
+      - echo "VITE_API_URL=$VITE_API_URL"
+      - echo "VITE_SOCKET_URL=$VITE_SOCKET_URL"
     settings:
       username: 
         from_secret: DOCKERHUB_USERNAME # pragma: allowlist secret
