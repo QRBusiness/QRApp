@@ -33,7 +33,6 @@ export const createQRSchema = z.object({
 export const createAreaSchema = z.object({
   name: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldNameError' }),
   description: z.string().nullish(),
-  image_url: blobOrFileSchema.nullish(),
   branch: z.string().min(1, { message: 'module.qrManagement.addAreaField.fieldBranchIdError' }),
 });
 

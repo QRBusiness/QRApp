@@ -83,12 +83,6 @@ const CreateQR = () => {
       isRequired: false,
     },
     {
-      name: 'image_url',
-      label: t('module.qrManagement.addAreaField.fieldImageUrl'),
-      description: t('module.qrManagement.addAreaField.fieldImageUrlDescription'),
-      isRequired: false,
-    },
-    {
       name: 'branch',
       label: t('module.qrManagement.addAreaField.fieldBranchId'),
       description: t('module.qrManagement.addAreaField.fieldBranchIdDescription'),
@@ -137,7 +131,6 @@ const CreateQR = () => {
     await createArea({
       name: values.name,
       description: values.description,
-      image_url: values.image_url,
       branch: values.branch,
     });
   };
