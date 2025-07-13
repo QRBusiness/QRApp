@@ -41,6 +41,13 @@ const OwnerExtendExpireDateDialog = ({
   const { plans } = usePlans();
   const [selectPlan, setSelectPlan] = React.useState('');
 
+  const planOptions = plans
+    .filter((plan) => plan.price > 0)
+    .map((plan) => ({
+      value: plan._id,
+      label: `${plan.name} - ${plan.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`,
+    }));
+
   const form = useForm<z.infer<typeof ownerExtendExpireDateSchema>>({
     resolver: zodResolver(ownerExtendExpireDateSchema),
     values: initialData,
@@ -58,7 +65,6 @@ const OwnerExtendExpireDateDialog = ({
   };
 
   const onSubmitForm = (data: z.infer<typeof ownerExtendExpireDateSchema>) => {
-    console.log('Submitted data:', data);
     onSubmit && onSubmit(data);
     onOpenChange(false);
   };
@@ -86,10 +92,7 @@ const OwnerExtendExpireDateDialog = ({
                   </FormLabel>
                   <FormControl>
                     <CustomSelect
-                      options={plans.map((plan) => ({
-                        value: plan._id,
-                        label: `${plan.name} - ${plan.price}`,
-                      }))}
+                      options={planOptions}
                       onFieldChange={(props) => {
                         setSelectPlan(props);
                         field.onChange(props);
@@ -152,7 +155,7 @@ const OwnerExtendExpireDateDialog = ({
 
               <Button type="submit" className="min-w-[120px]" disabled={!form.formState.isDirty}>
                 <CircleCheck className="size-5 mr-[6px]" />
-                {t('module.business.extend.button.save')}
+                {t('module.business.extend.button.confirm')}
               </Button>
             </DialogFooter>
           </form>

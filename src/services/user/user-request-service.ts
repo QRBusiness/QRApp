@@ -22,20 +22,26 @@ export interface RequestInfo {
   data: CartItem[];
 }
 
-interface CreateOrderRequestResponse {
-  data: string;
+export interface RequestResponseProps {
+  _id: string;
+  created_at: string;
+  updated_at: string;
+  type: string;
+  reason: string;
+  status: string;
+  guest_name: string;
 }
 
-const createOrderRequest = async (requestInfo: RequestInfo) => {
+const createOrderRequest = async (requestInfo: RequestInfo): Promise<RequestResponseProps | null> => {
   try {
-    const response: ApiResponse<CreateOrderRequestResponse> = await apiClient.post('/request', requestInfo);
+    const response: ApiResponse<{ data: RequestResponseProps }> = await apiClient.post('/request', requestInfo);
     if (response.status !== 201 && response.status !== 200) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to create order request',
       });
       throw new Error(response.errorMessage || 'Failed to create order request');
     }
-    return response.data;
+    return response.data ? response.data.data : null;
   } catch (error: ErrorResponse | any) {
     toast.error(error.message || 'Internal server error', {
       description: error.errorMessage || 'An unexpected error occurred while creating order request.',

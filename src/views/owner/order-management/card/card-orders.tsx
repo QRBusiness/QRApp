@@ -2,7 +2,7 @@ import React from 'react';
 import { useAreas } from '@/services/owner/area-service';
 import { type OrderResponseProps, useOrders } from '@/services/owner/order-service';
 import { getTables } from '@/services/owner/table-service';
-import { FunnelPlus, FunnelX, RefreshCcw } from 'lucide-react';
+import { FunnelPlus, FunnelX } from 'lucide-react';
 import Loading from '@/components/common/loading';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -147,14 +147,14 @@ export const CardOrders = () => {
       {data.map((order) => (
         <CardOrderItem key={order._id} order={order} />
       ))}
-      {data.length > 0 && (
+      {/* {data.length > 0 && (
         <div className="col-span-1 md:col-span-2 lg:col-span-3 2xl:col-span-4 flex justify-center items-center justify-items-center mt-8">
           <Button>
             <RefreshCcw className="size-4 md:size-5 mr-1" />
             Load More
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

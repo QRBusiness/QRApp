@@ -7,7 +7,7 @@ interface StatusBadgeProps {
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   return (
-    <Badge variant="outline" className="text-foreground px-2 py-1 text-sm rounded-2xl">
+    <Badge variant="outline" className="text-foreground px-2 py-1 text-sm rounded-2xl bg-background">
       {status === 'Cancelled' && (
         <>
           <CircleX className="fill-status-cancel mr-1" /> Cancelled
@@ -30,7 +30,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
       )}
       {status === 'Unpaid' && (
         <>
-          <Loader className="fill-status-waiting mr-1" /> Unpaid
+          <CircleX className="fill-status-inactive   mr-1" /> Unpaid
         </>
       )}
       {status === 'Paid' && (

@@ -97,13 +97,13 @@ const EditBusinessDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.createBusinessOwnerField.step3.name.label')}
+                    {t('module.createBusinessOwnerField.step3.name_B.label')}
                     {!createBusinessSchema.shape.name_B.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value || ''} />
                   </FormControl>
-                  <FormDescription>{t('module.createBusinessOwnerField.step3.name.description')}</FormDescription>
+                  <FormDescription>{t('module.createBusinessOwnerField.step3.name_B.description')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -114,13 +114,13 @@ const EditBusinessDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.createBusinessOwnerField.step3.address.label')}
+                    {t('module.createBusinessOwnerField.step3.address_B.label')}
                     {!createBusinessSchema.shape.address_B.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value || ''} />
                   </FormControl>
-                  <FormDescription>{t('module.createBusinessOwnerField.step3.address.description')}</FormDescription>
+                  <FormDescription>{t('module.createBusinessOwnerField.step3.address_B.description')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -131,13 +131,13 @@ const EditBusinessDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('module.createBusinessOwnerField.step3.contact.label')}
+                    {t('module.createBusinessOwnerField.step3.contact_B.label')}
                     {!createBusinessSchema.shape.contact_B.isOptional() && <p className="text-red-700">*</p>}
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value || ''} />
                   </FormControl>
-                  <FormDescription>{t('module.createBusinessOwnerField.step3.contact.description')}</FormDescription>
+                  <FormDescription>{t('module.createBusinessOwnerField.step3.contact_B.description')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
 import { useBanksInfo, useConfigureBank, useMyBank } from '@/services/owner/bank-service';
+import { useCreateExtendedRequest } from '@/services/owner/request-service';
 import { useUpdateUserProfile, useUploadAvatar } from '@/services/user-service';
 import {
   Calendar,
@@ -21,7 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import type { editUserProfileSchema } from '@/utils/schemas';
+import type { editUserProfileSchema, ownerExtendExpireDateSchema } from '@/utils/schemas';
 import { formattedDate } from '@/libs/utils';
 import StatusBadge from '../order-management/status/status-baged';
 import ConfigureBankAccount from './dialog/configure-bank-dialog';
@@ -52,6 +53,7 @@ const UserProfile = () => {
   const { configureBank } = useConfigureBank();
   const { updateUserProfile } = useUpdateUserProfile();
   const { uploadAvatar } = useUploadAvatar();
+  const { createExtendedRequest } = useCreateExtendedRequest();
 
   const getInitials = (name: string) => {
     return name
@@ -80,6 +82,10 @@ const UserProfile = () => {
       address: data.address,
     });
     useSetUserProfile(response.name, response.phone, response.address, response.image_url || '');
+  };
+
+  const handleExtendExpireDate = async (data: z.infer<typeof ownerExtendExpireDateSchema>) => {
+    createExtendedRequest(data);
   };
 
   return (
@@ -174,7 +180,11 @@ const UserProfile = () => {
               </Button>
             </EditUserProfileDialog>
             {user.expired_at && user.role === OWNER_ROLE && (
-              <OwnerExtendExpireDateDialog open={openExtendDialog} onOpenChange={setOpenExtendDialog}>
+              <OwnerExtendExpireDateDialog
+                open={openExtendDialog}
+                onOpenChange={setOpenExtendDialog}
+                onSubmit={handleExtendExpireDate}
+              >
                 <Button className="w-full" variant="outline">
                   <ClockPlus /> Extend Expiration
                 </Button>

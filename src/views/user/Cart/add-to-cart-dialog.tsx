@@ -1,5 +1,5 @@
 import React from 'react';
-import { CirclePlus, CircleX, Minus, Plus, ShoppingCart } from 'lucide-react';
+import { CirclePlus, CircleX, Minus, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -44,13 +44,13 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
 
   const sizesOptions = item.variants.map((variant) => ({
     value: variant.type,
-    label: `${variant.type} - ${variant.price.toLocaleString('vn-VN')} VND`,
+    label: `${variant.type} - ${variant.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`,
   }));
   const [selectedSize, setSelectedSize] = React.useState(sizesOptions[0]?.value || '');
 
   const menuOptions = item.options.map((option) => ({
     value: option.type,
-    label: option.type + ' - ' + option.price.toLocaleString('vn-VN') + ' VND',
+    label: option.type + ' - ' + option.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }),
   }));
 
   const onAddToCart = () => {
@@ -77,21 +77,23 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-4xl">
-        <DialogHeader>
-          <DialogTitle className="text-xl flex items-center gap-2">
-            <ShoppingCart />
-            {item.name}
-          </DialogTitle>
-        </DialogHeader>
         {/* Dialog Description */}
         <div className="grid gap-4 py-4">
           <div className="flex items-center gap-4">
             <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
             <div>
-              <DialogDescription className="text-sm text-muted-foreground">{item.description}</DialogDescription>
-              <p className="text-lg font-semibold text-primary mt-2">
-                {(item.variants[0]?.price * quantity).toLocaleString('vn-VN') + ' VND'}
-              </p>
+              <DialogHeader>
+                <DialogTitle className="text-xl flex items-center gap-2 capitalize">{item.name}</DialogTitle>
+              </DialogHeader>
+              <DialogDescription className="text-sm text-muted-foreground">
+                {item.description || 'No description available'}
+              </DialogDescription>
+              <div className="flex items-center space-x-2 text-sm">
+                <p className="text-muted-foreground">Price:</p>
+                <p className="text-xl font-semibold text-primary">
+                  {(item.variants[0]?.price * quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                </p>
+              </div>
             </div>
           </div>
           {/* Quantity Selector */}

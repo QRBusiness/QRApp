@@ -2,7 +2,7 @@ import { useProcessRequest } from '@/services/owner/request-service';
 import { Check, Clock9, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { formattedDate } from '@/libs/utils';
+import { cn, formattedDate } from '@/libs/utils';
 import StatusBadge from '../status/status-baged';
 
 export interface CartRequestProps {
@@ -31,7 +31,7 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, 
   };
 
   return (
-    <Card className="h-full flex flex-row items-center justify-between p-3 max-w-[380px]">
+    <Card className="h-full flex flex-row items-center justify-between p-3 max-w-[400px]">
       <div className="flex flex-col gap-2">
         <div className="font-semibold flex flex-row items-center">
           <p>ID: </p>
@@ -57,8 +57,13 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, 
           </div>
         )}
       </div>
-      <div className="flex flex-col items-start justify-around gap-2 h-full flex-1">
-        <StatusBadge status={status as 'Waiting' | 'Pending' | 'Cancelled'} />
+      <div
+        className={cn(
+          'flex flex-col items-start gap-2 h-full flex-1',
+          status === 'Waiting' ? 'justify-around' : 'justify-start'
+        )}
+      >
+        <StatusBadge status={status as 'Waiting' | 'Pending' | 'Cancelled' | 'Completed'} />
         {status === 'Waiting' && (
           <Button onClick={onConfirm} className="w-full" variant="default">
             <Check />

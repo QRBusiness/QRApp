@@ -517,7 +517,7 @@
         "image.error": "Business image is required.",
         "button": {
           "cancel": "Cancel",
-          "save": "Save Changes"
+          "confirm": "Confirm Extension"
         }
       }
     },
@@ -799,6 +799,7 @@
       }
     },
     "plan": {
+      "table-session": "Plan Table Session",
       "create": {
         "title": "Create New Plan",
         "description": "Fill in the details to create a new plan.",

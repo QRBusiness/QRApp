@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MENU_MANAGEMENT, OWNER_ROLE, STAFF_ROLE } from '@/constants';
+import { useProcessRequest } from '@/services/owner/request-service';
 import { useCreateOrderRequest } from '@/services/user/user-request-service';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +33,7 @@ const CartItemsDetails: React.FC = () => {
   const [createOrderRequestDialog, setCreateOrderRequestDialog] = React.useState(false);
 
   const { createOrderRequest } = useCreateOrderRequest();
+  const { processRequest } = useProcessRequest();
 
   useEffect(() => {
     const newSubtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -63,6 +65,7 @@ const CartItemsDetails: React.FC = () => {
   );
 
   const onCheckout = async () => {
+    debugger;
     if (user.role === STAFF_ROLE || user.role === OWNER_ROLE) {
       setCreateOrderRequestDialog(true);
     } else {
@@ -100,7 +103,7 @@ const CartItemsDetails: React.FC = () => {
     service_unit: string;
     guest_name: string;
   }) => {
-    await createOrderRequest({
+    const response = await createOrderRequest({
       type: 'Order',
       reason: 'checkout',
       service_unit: service_unit,
@@ -117,20 +120,21 @@ const CartItemsDetails: React.FC = () => {
         note: item.note || '',
       })),
     });
+    if (!response) return;
+    await processRequest(response._id);
     clearCart();
     navigate(`../${MENU_MANAGEMENT}?area=${area}&table=${service_unit}`);
   };
 
   return (
     <div className="relative flex flex-col min-h-full p-4 border w-full max-w-5xl rounded-lg mx-auto">
-      {user.role === STAFF_ROLE ||
-        (user.role === OWNER_ROLE && (
-          <CreateNewOrderRequest
-            open={createOrderRequestDialog}
-            onOpenChange={setCreateOrderRequestDialog}
-            onSubmit={(data) => onStaffCheckout(data)}
-          />
-        ))}
+      {(user.role === OWNER_ROLE || user.role === STAFF_ROLE) && (
+        <CreateNewOrderRequest
+          open={createOrderRequestDialog}
+          onOpenChange={setCreateOrderRequestDialog}
+          onSubmit={(data) => onStaffCheckout(data)}
+        />
+      )}
 
       {/* Main Content */}
       <ScrollArea className="flex-1">

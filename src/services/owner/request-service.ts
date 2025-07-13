@@ -1,6 +1,8 @@
 import apiClient, { type ApiResponse, type ErrorResponse } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import type z from 'zod';
+import type { ownerExtendExpireDateSchema } from '@/utils/schemas';
 
 export interface ItemRequestProps {
   _id: string;
@@ -127,4 +129,95 @@ export const useProcessRequest = () => {
     },
   });
   return { processRequest: mutateAsync };
+};
+
+const createExtendedRequest = async (
+  data: z.infer<typeof ownerExtendExpireDateSchema>
+): Promise<RequestResponseProps[]> => {
+  try {
+    const response: ApiResponse<CreateRequestProps> = await apiClient.post('/request/extend', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (response.status !== 201 && response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to create request',
+      });
+      throw new Error(response.errorMessage || 'Failed to create request');
+    }
+    return response.data ? response.data.data : [];
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while creating the request.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useCreateExtendedRequest = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useMutation({
+    mutationFn: createExtendedRequest,
+    onSuccess: () => {
+      // Invalidate all queries related to requests
+      queryClient.invalidateQueries({ queryKey: ['requests-extend'] });
+      toast.success('Extend expiration request created successfully');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Failed to create request');
+    },
+  });
+  return { createExtendedRequest: mutateAsync };
+};
+
+export interface ExtendedRequestProps {
+  _id: string;
+  name: string;
+  business: {
+    id: string;
+  };
+  plan: {
+    id: string;
+  };
+  image: string;
+  payment_method: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+const getExtendedRequests = async (): Promise<ExtendedRequestProps[]> => {
+  try {
+    const response: ApiResponse<{ data: ExtendedRequestProps[] }> = await apiClient.get('/request/extend');
+    if (response.status !== 200) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to fetch extended requests',
+      });
+      throw new Error(response.errorMessage || 'Failed to fetch extended requests');
+    }
+    return response.data ? response.data.data : [];
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while fetching extended requests.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useExtendedRequests = () => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['requests-extend'],
+    queryFn: getExtendedRequests,
+    refetchInterval: 5000, // Refetch every 5 seconds
+    refetchOnWindowFocus: true, // Refetch when the window is focused
+    refetchOnReconnect: true, // Refetch when the network reconnects
+  });
+
+  return {
+    extendedRequests: data || [],
+    isLoading,
+    isError,
+    error,
+  };
 };

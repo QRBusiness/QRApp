@@ -127,6 +127,7 @@ export function DataTable<TData, TValue>({
                     {row.getVisibleCells().map((cell) => {
                       // Check if this cell is in the "description" column
                       const isDescriptionColumn = cell.column.id === 'description' || cell.column.id === 'address';
+                      const isActionsColumn = cell.column.id === 'actions';
 
                       // If it is, truncate the content
                       if (isDescriptionColumn) {
@@ -142,10 +143,20 @@ export function DataTable<TData, TValue>({
                           </Hint>
                         );
                       }
+                      if (isActionsColumn) {
+                        return (
+                          <TableCell
+                            className={cn('min-w-[300px] truncate', cell.column.columnDef.meta?.className || '')}
+                            key={cell.id}
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </TableCell>
+                        );
+                      }
 
                       return (
                         <TableCell
-                          className={cn('max-w-[200px] truncate', cell.column.columnDef.meta?.className || '')}
+                          className={cn('max-w-[300px] truncate', cell.column.columnDef.meta?.className || '')}
                           key={cell.id}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}

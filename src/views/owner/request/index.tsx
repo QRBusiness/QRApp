@@ -33,7 +33,7 @@ const RequestPage = () => {
             <Label className="font-semibold text-base ">Filters Options</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="destructive" size="sm" onClick={handleClearFilters} disabled={selectedStatus === 'all'}>
+            <Button variant="destructive" size="sm" onClick={handleClearFilters} disabled={selectedStatus === ''}>
               <FunnelX className="size-4 md:size-5" />
               Clear Filters
             </Button>
