@@ -31,7 +31,7 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, 
   };
 
   return (
-    <Card className="h-full flex flex-row items-center justify-between p-3 max-w-[400px]">
+    <Card className="h-full flex flex-row items-center justify-between p-2 max-w-[400px]">
       <div className="flex flex-col gap-2">
         <div className="font-semibold flex flex-row items-center">
           <p>ID: </p>

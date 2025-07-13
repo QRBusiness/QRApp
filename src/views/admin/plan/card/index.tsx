@@ -1,8 +1,7 @@
-import { Building2, Check, Package } from 'lucide-react';
+import { Building2, CalendarPlus2, Check, CircleDollarSign, CreditCard, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import StatusBadge from '@/views/owner/order-management/status/status-baged';
-import { formattedDate } from '@/libs/utils';
 
 export interface CardExtendPlanRequestProps {
   // Define any additional props if needed
@@ -42,12 +41,14 @@ export const CardExtendPlanRequest = (request: CardExtendPlanRequestProps) => {
         <CardItem
           label="Plan Price"
           value={request.planPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-          icon={<Package className="size-4" />}
+          icon={<CircleDollarSign className="size-4" />}
         />
-        <CardItem label="Plan Period" value={request.planPeriod + ' days'} icon={<Package className="size-4" />} />
-        <CardItem label="Payment Method" value={request.paymentMethod} icon={<Package className="size-4" />} />
-        <CardItem label="Created At" value={formattedDate(request.created_at)} icon={<Package className="size-4" />} />
-        <CardItem label="Updated At" value={formattedDate(request.updated_at)} icon={<Package className="size-4" />} />
+        <CardItem
+          label="Plan Period"
+          value={request.planPeriod + ' days'}
+          icon={<CalendarPlus2 className="size-4" />}
+        />
+        <CardItem label="Payment Method" value={request.paymentMethod} icon={<CreditCard className="size-4" />} />
         <div className="flex w-full justify-end items-center">
           <Button className="self-end">
             <Check className="size-5" />

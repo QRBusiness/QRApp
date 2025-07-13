@@ -25,7 +25,7 @@ const RequestPage = () => {
     setSelectedStatus('');
   };
   return (
-    <div className="flex flex-col gap-4 p-4 w-full mx-auto">
+    <div className="flex flex-col gap-4 p-2 md:p-4 w-full mx-auto">
       <div className="col-span-1 md:col-span-2 lg:col-span-3 2xl:col-span-4 flex items-start justify-start gap-2 flex-col p-3 border rounded-lg">
         <div className="flex items-center justify-between space-x-2 w-full">
           <div className="flex items-center space-x-2">
@@ -51,7 +51,7 @@ const RequestPage = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 p-4 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 w-full">
         {requests.map((request) => (
           <CartRequest
             key={request._id}
