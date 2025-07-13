@@ -21,7 +21,13 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
     <Card key={order._id} className="py-2 flex flex-col justify-between h-full">
       <CardContent className="px-2 py-0">
         {/* Header card */}
-        <div className="flex justify-between items-center p-2 bg-background">
+        <div className="flex justify-between items-center p-1 bg-background relative">
+          <div className="absolute top-0 right-0">
+            <StatusBadge
+              status={order.status as 'Cancelled' | 'Completed' | 'Pending' | 'Waiting' | 'Paid' | 'Unpaid'}
+            />
+          </div>
+
           <div className="flex flex-col items-start space-x-2 text-sm text-muted-foreground">
             <div className="font-medium text-muted-foreground">
               <div className="flex flex-row items-center space-x-2">
@@ -39,7 +45,6 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
               {formattedDate}
             </div>
           </div>
-          <StatusBadge status={order.status as 'Cancelled' | 'Completed' | 'Pending' | 'Waiting' | 'Paid' | 'Unpaid'} />
         </div>
         {/* Thông tin khách hàng */}
         <div className="px-2 flex justify-between items-center">

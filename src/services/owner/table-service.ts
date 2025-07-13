@@ -126,11 +126,7 @@ const updateTable = async (tableId: string, tableData: z.infer<typeof updateTabl
     const formData = new FormData();
     formData.append('name', tableData.name);
 
-    const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, formData);
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to update table',

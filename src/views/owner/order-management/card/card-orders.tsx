@@ -86,9 +86,9 @@ export const CardOrders = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 pb-14">
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 pb-14">
       {/* filters */}
-      <div className="col-span-1 md:col-span-2 lg:col-span-3 2xl:col-span-4 flex items-start justify-start gap-2 flex-col p-3 border rounded-lg">
+      <div className="col-span-1 lg:col-span-2 xl:col-span-3 2xl:col-span-4 flex items-start justify-start gap-2 flex-col p-3 border rounded-lg">
         <div className="flex items-center justify-between space-x-2 w-full">
           <div className="flex items-center space-x-2">
             <FunnelPlus className="size-4 md:size-5" />
