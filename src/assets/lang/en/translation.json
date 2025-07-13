@@ -522,7 +522,8 @@
         "image.error": "Business image is required.",
         "button": {
           "cancel": "Cancel",
-          "confirm": "Confirm Extension"
+          "confirm": "Confirm Extension",
+          "save": "Save Changes"
         }
       }
     },
