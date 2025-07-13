@@ -39,7 +39,7 @@ const BusinessTypeManagement = () => {
 
   return (
     <div className="w-full mx-auto pb-10 flex flex-col space-y-4">
-      <div className="self-end">
+      <div className="self-end mr-2 xl:mr-0">
         <CreateNewBusinessType open={open} onOpenChange={setOpen} onSubmit={onSubmit}>
           <Button variant="default">
             <CirclePlus className="mr-2 size-4 md:size-5" />

@@ -131,7 +131,7 @@ const QRManagement = () => {
       ) : (
         <div className="w-full p-4 mx-auto flex flex-col gap-4">
           <Collapsible className="group/collapsible" defaultOpen={false} key={'create-qr-collapsible'}>
-            <CollapsibleTrigger>
+            <CollapsibleTrigger asChild>
               <Button variant="secondary">
                 <p>{t('module.qrManagement.createCollapse')}</p>
                 <ChevronLeft className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />

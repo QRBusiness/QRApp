@@ -333,3 +333,123 @@ export const usePublicSubcategories = (request: CategoryRequest) => {
     refetch,
   };
 };
+
+const deleteCategory = async (id: string): Promise<boolean> => {
+  try {
+    const response: ApiResponse<{ data: boolean }> = await apiClient.delete(`/categories/${id}`);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to delete category',
+      });
+      return false;
+    }
+    return response.data ? response.data.data : false;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while deleting the category.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useDeleteCategory = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isError, isPending, isSuccess, data } = useMutation({
+    mutationFn: deleteCategory,
+    onSuccess: () => {
+      toast.success('Category deleted successfully');
+      queryClient.invalidateQueries({ queryKey: ['categoriesQuery'] });
+    },
+  });
+
+  return {
+    deleteCategory: mutateAsync,
+    isError,
+    isPending,
+    isSuccess,
+    data,
+  };
+};
+
+const deleteSubCategory = async (id: string): Promise<boolean> => {
+  try {
+    const response: ApiResponse<{ data: boolean }> = await apiClient.delete(`/categories/${id}/subcategory`);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to delete subcategory',
+      });
+      return false;
+    }
+    return response.data ? response.data.data : false;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while deleting the subcategory.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useDeleteSubCategory = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isError, isPending, isSuccess, data } = useMutation({
+    mutationFn: deleteSubCategory,
+    onSuccess: () => {
+      toast.success('Subcategory deleted successfully');
+      queryClient.invalidateQueries({ queryKey: ['subcategoriesQuery'] });
+    },
+  });
+
+  return {
+    deleteSubCategory: mutateAsync,
+    isError,
+    isPending,
+    isSuccess,
+    data,
+  };
+};
+
+const updateSubCategory = async ({
+  id,
+  subCategory,
+}: {
+  id: string;
+  subCategory: z.infer<typeof createSubCategoriesSchema>;
+}): Promise<SubCategoryProps | null> => {
+  try {
+    const response: ApiResponse<{ data: SubCategoryProps }> = await apiClient.put(
+      `/categories/subcategory/${id}`,
+      subCategory
+    );
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to update subcategory',
+      });
+      return null;
+    }
+    return response.data ? response.data.data : null;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while updating the subcategory.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+export const useUpdateSubCategory = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isError, isSuccess, data } = useMutation({
+    mutationFn: updateSubCategory,
+    onSuccess: (data) => {
+      if (data) {
+        toast.success('Subcategory updated successfully');
+        queryClient.invalidateQueries({ queryKey: ['subcategoriesQuery'] });
+      }
+    },
+  });
+
+  return {
+    updateSubCategory: mutateAsync,
+    isError,
+    data,
+    isSuccess,
+  };
+};

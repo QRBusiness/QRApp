@@ -1,17 +1,16 @@
 import React from 'react';
 import { MENU_MANAGEMENT, UNAUTHORIZED } from '@/constants';
 import { useDeleteTable } from '@/services/owner/table-service';
-import { format } from 'date-fns';
-import { CircleCheck, CircleX, Download, Edit, Eye, Trash } from 'lucide-react';
+import { Building2, Download, Edit, Eye, Locate, Table, Trash } from 'lucide-react';
 import QRCode from 'qrcode';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { useUserState } from '@/components/common/states/userState';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import StatusBadge from '../../order-management/status/status-baged';
 import PopUpQRCode from '../details/pop-up-qr-code';
 import EditTableDialog from '../edit/edit-table-dialog';
 
@@ -27,17 +26,7 @@ export interface MobileCardItemProps {
   updated_at?: string;
 }
 
-const MobileCardItem: React.FC<MobileCardItemProps> = ({
-  id,
-  table,
-  area,
-  available,
-  created_at,
-  area_id,
-  table_id,
-  branch,
-}) => {
-  const formattedDate = format(new Date(created_at), 'MMM dd, yyyy • h:mm a');
+const MobileCardItem: React.FC<MobileCardItemProps> = ({ id, table, area, available, area_id, table_id, branch }) => {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const [qrCodeUrl, setQrCodeUrl] = React.useState<string>('');
@@ -77,41 +66,31 @@ const MobileCardItem: React.FC<MobileCardItemProps> = ({
   };
 
   return (
-    <Card className="mb-4 shadow-sm borde">
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
-          <div>
-            <p className="text-sm text-muted-foreground">ID: {id}</p>
-            <p className="text-xs text-muted-foreground">{formattedDate}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge className="font-medium" variant={'outline'}>
-              Pending
-            </Badge>
-            <Badge variant="outline" className="text-foreground px-[3px] text-sm rounded-2xl">
-              {available === true ? (
-                <CircleCheck className="fill-status-active mr-1" />
-              ) : (
-                <CircleX className="fill-status-inactive mr-1" />
-              )}
-              {available ? 'Available' : 'Unavailable'}
-            </Badge>
-          </div>
-        </div>
+    <Card className="mb-4 shadow-sm borde relative">
+      <div className="absolute top-2 right-2 z-10">
+        <StatusBadge status={available ? 'Active' : 'Inactive'} />
+      </div>
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center">ID: {id}</CardTitle>
       </CardHeader>
-
-      <CardContent className="pt-2 pb-3">
+      <CardContent>
         <div className="space-y-2">
           <div className="flex items-start gap-2">
-            <span className="text-muted-foreground w-20 flex-shrink-0 text-sm">Table:</span>
+            <div className="text-muted-foreground w-20 flex-shrink-0 text-base flex items-center space-x-2">
+              <Table /> <p>Table:</p>
+            </div>
             <span className="font-medium text-black">{table}</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-muted-foreground w-20 flex-shrink-0 text-sm">Area:</span>
+            <div className="text-muted-foreground w-20 flex-shrink-0 text-base flex items-center space-x-2">
+              <Locate /> <p>Area:</p>
+            </div>
             <span className="text-black">{area}</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-muted-foreground w-20 flex-shrink-0 text-sm">Branch:</span>
+            <div className="text-muted-foreground w-20 flex-shrink-0 text-base flex items-center space-x-2">
+              <Building2 /> <p>Branch:</p>
+            </div>
             <span className="text-black">{branch}</span>
           </div>
         </div>

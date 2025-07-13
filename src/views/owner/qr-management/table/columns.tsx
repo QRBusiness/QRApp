@@ -203,7 +203,7 @@ export const columns: ColumnDef<QRTable>[] = [
             description={t('module.qrManagement.alertDialog.description')}
             onSubmit={async () => await deleteTable(row.original._id)}
           >
-            <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground">
+            <Button variant={'destructive'} className="hover:bg-destructive hover:text-destructive-foreground">
               <Trash className="mr-2" />
               {t('module.qrManagement.table.actionButton.delete')}
             </Button>

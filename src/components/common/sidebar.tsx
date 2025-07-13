@@ -62,13 +62,18 @@ const SidebarApp = ({ items }: SidebarProps) => {
   }
 
   const handleLogout = async () => {
-    const refresh_token = loadFromLocalStorage(REFRESH_TOKEN, 'REFRESH_TOKEN');
-    await logoutService({ refresh_token: refresh_token });
-    navigate('/login');
-    saveToLocalStorage(USER_SESSION, defaultUserState);
-    saveToLocalStorage(USER_PERMISSIONS, []);
-    saveToLocalStorage(REFRESH_TOKEN, null);
-    saveToLocalStorage(ACCESS_TOKEN, null);
+    try {
+      const refresh_token = loadFromLocalStorage(REFRESH_TOKEN, 'REFRESH_TOKEN');
+      await logoutService({ refresh_token: refresh_token });
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      navigate('/login');
+      saveToLocalStorage(USER_SESSION, defaultUserState);
+      saveToLocalStorage(USER_PERMISSIONS, []);
+      saveToLocalStorage(REFRESH_TOKEN, null);
+      saveToLocalStorage(ACCESS_TOKEN, null);
+    }
   };
 
   const defaultItems = [

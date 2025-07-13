@@ -46,9 +46,9 @@ const PlanPage = () => {
     setOpenCreateDialog(false);
   };
   return (
-    <div className="w-full mx-auto pb-10 flex flex-col space-y-4">
+    <div className="w-full mx-auto pb-10 flex flex-col space-y-4 p-2">
       <Collapsible className="group/collapsible" defaultOpen={false} key={'create-qr-collapsible'}>
-        <CollapsibleTrigger>
+        <CollapsibleTrigger asChild>
           <Button variant="secondary">
             {t('module.plan.table-session')}
             <ChevronLeft className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />
@@ -66,8 +66,8 @@ const PlanPage = () => {
           <PlanManagementTable data={plans as PlanType[]} />
         </CollapsibleContent>
       </Collapsible>
-      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4 justify-center items-center">
-        <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-start justify-start gap-2 flex-col p-3 border rounded-lg">
+      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4 justify-center items-center">
+        <div className="col-span-1 xl:col-span-2 2xl:col-span-3 flex items-start justify-start gap-2 flex-col p-3 border rounded-lg">
           <div className="flex items-center justify-between space-x-2 w-full">
             <div className="flex items-center space-x-2">
               <FunnelPlus className="size-4 md:size-5" />
@@ -95,14 +95,15 @@ const PlanPage = () => {
         {extendedRequests
           .filter((request) => request.status === selectedStatus)
           .map((request) => {
-            const businessName = business[business.findIndex((b) => b._id === request.business.id)]?.name || '';
+            const selectedBusiness = business[business.findIndex((b) => b._id === request.business.id)] || null;
             const selectedPlan = plans.find((p) => p._id === request.plan.id);
 
             return (
               <CardExtendPlanRequest
                 key={request._id}
                 _id={request._id}
-                businessName={businessName}
+                businessName={selectedBusiness?.name || ''}
+                businessId={selectedBusiness?._id || ''}
                 planName={selectedPlan?.name || ''}
                 planPrice={selectedPlan?.price || 0}
                 planPeriod={selectedPlan?.period || 0}

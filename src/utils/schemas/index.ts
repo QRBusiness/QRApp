@@ -148,8 +148,8 @@ export const editUserSchema = z.object({
 });
 
 export const createBranchSchema = z.object({
-  name: z.string().min(5, { message: 'module.branchManagement.createField.name.error' }),
-  address: z.string().min(5, { message: 'module.branchManagement.createField.address.error' }),
+  name: z.string().min(1, { message: 'module.branchManagement.createField.name.error' }),
+  address: z.string().min(1, { message: 'module.branchManagement.createField.address.error' }),
   contact: z
     .string()
     .min(10, { message: 'module.branchManagement.createField.contact.error' })

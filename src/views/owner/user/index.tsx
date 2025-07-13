@@ -1,5 +1,6 @@
 import React from 'react';
-import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
+import { ACCESS_TOKEN, ADMIN_ROLE, OWNER_ROLE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constants';
+import { logoutService } from '@/services/auth-service';
 import { useBanksInfo, useConfigureBank, useMyBank } from '@/services/owner/bank-service';
 import { useCreateExtendedRequest } from '@/services/owner/request-service';
 import { useUpdateUserProfile, useUploadAvatar } from '@/services/user-service';
@@ -7,23 +8,32 @@ import {
   Calendar,
   CalendarOff,
   ClockPlus,
+  ContactRound,
   Edit,
   IdCardLanyard,
   Landmark,
+  LogOut,
   MapPin,
   Phone,
   Shield,
+  ShieldUser,
   User,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import type z from 'zod';
-import { useSetUserProfile, useUserPermissions, useUserState } from '@/components/common/states/userState';
+import {
+  defaultUserState,
+  useSetUserProfile,
+  useUserPermissions,
+  useUserState,
+} from '@/components/common/states/userState';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import type { editUserProfileSchema, ownerExtendExpireDateSchema } from '@/utils/schemas';
-import { formattedDate } from '@/libs/utils';
+import { formattedDate, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 import StatusBadge from '../order-management/status/status-baged';
 import ConfigureBankAccount from './dialog/configure-bank-dialog';
 import EditUserProfileDialog from './dialog/edit-user-profile-dialog';
@@ -54,6 +64,7 @@ const UserProfile = () => {
   const { updateUserProfile } = useUpdateUserProfile();
   const { uploadAvatar } = useUploadAvatar();
   const { createExtendedRequest } = useCreateExtendedRequest();
+  const navigate = useNavigate();
 
   const getInitials = (name: string) => {
     return name
@@ -88,6 +99,20 @@ const UserProfile = () => {
     createExtendedRequest(data);
   };
 
+  const handleLogout = async () => {
+    try {
+      const refresh_token = loadFromLocalStorage(REFRESH_TOKEN, 'REFRESH_TOKEN');
+      await logoutService({ refresh_token: refresh_token });
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      navigate('/login');
+      saveToLocalStorage(USER_SESSION, defaultUserState);
+      saveToLocalStorage(USER_PERMISSIONS, []);
+      saveToLocalStorage(REFRESH_TOKEN, null);
+      saveToLocalStorage(ACCESS_TOKEN, null);
+    }
+  };
   return (
     <div className="container mx-auto p-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
@@ -103,7 +128,11 @@ const UserProfile = () => {
             <CardTitle className="text-xl">{user.name}</CardTitle>
             <CardDescription className="flex items-center justify-center gap-2">
               <Badge variant={user.role === 'Admin' ? 'default' : 'secondary'}>
-                <Shield className="w-3 h-3 mr-1" />
+                {user.role === 'Admin' ? (
+                  <ShieldUser className="size-4 mr-1" />
+                ) : (
+                  <ContactRound className="size-4 mr-1" />
+                )}
                 {user.role}
               </Badge>
             </CardDescription>
@@ -202,6 +231,10 @@ const UserProfile = () => {
                 </Button>
               </ConfigureBankAccount>
             )}
+            <Button onClick={handleLogout} className="w-full" variant="outline">
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
           </CardContent>
         </Card>
 

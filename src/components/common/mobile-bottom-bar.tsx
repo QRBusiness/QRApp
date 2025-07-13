@@ -31,7 +31,8 @@ const MobileBottomBar = ({ items }: MobileBottomBarProps) => {
           variant="ghost"
           className={cn(
             'flex ',
-            params.pathname.includes(item.path_url) && 'text-primary',
+
+            params.pathname.split('/').pop() === item.path_url && 'text-primary',
             items.length > 3 ? 'flex-col justify-center items-center' : 'flex-row items-center space-x-1'
           )}
           onClick={() => navigate(item.path_url)}
@@ -39,7 +40,7 @@ const MobileBottomBar = ({ items }: MobileBottomBarProps) => {
           {item.icon}
           <span
             className={cn(
-              'text-black',
+              'text-black font-semibold',
               params.pathname === item.path_url ? 'text-primary' : 'text-black',
               items.length > 2 ? 'text-sm' : 'text-base'
             )}

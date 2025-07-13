@@ -13,8 +13,8 @@ export const MobileTable = () => {
 
   useEffect(() => {
     if (tables) {
-      const formattedData = tables.map((table, index) => ({
-        id: String(index + 1), // Using index as ID for display purposes
+      const formattedData = tables.map((table) => ({
+        id: table._id, // Using index as ID for display purposes
         table: table.name,
         table_id: table._id, // Assuming table ID is the same as _id
         area: table.area.name,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDeleteSubCategory, useUpdateSubCategory } from '@/services/owner/categories-service';
 import { type Categories } from '@/services/owner/product-services';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Edit, Eye, Trash } from 'lucide-react';
@@ -6,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
 import { Button } from '@/components/ui/button';
 import { formattedDate } from '@/libs/utils';
+import CreateNewSubCategory from '../dialog/create-subsategories-dialog';
 import ReadOnlyDialog from '../dialog/read-only-subcategory-dialog';
 
 export type SubcategoryProps = {
@@ -73,6 +75,9 @@ export const columns: ColumnDef<SubcategoryProps>[] = [
     cell: ({ row }) => {
       const { t } = useTranslation();
       const [openViewDialog, setOpenViewDialog] = React.useState(false);
+      const [openEditDialog, setOpenEditDialog] = React.useState(false);
+      const { updateSubCategory } = useUpdateSubCategory();
+      const { deleteSubCategory } = useDeleteSubCategory();
 
       return (
         <div className="flex items-center gap-2">
@@ -87,17 +92,28 @@ export const columns: ColumnDef<SubcategoryProps>[] = [
             </Button>
           </ReadOnlyDialog>
 
-          <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground" disabled>
-            <Edit className="mr-2" />
-            {t('module.qrManagement.table.actionButton.edit')}
-          </Button>
-
+          <CreateNewSubCategory
+            open={openEditDialog}
+            onOpenChange={setOpenEditDialog}
+            create={false}
+            initialData={{
+              name: row.original.name,
+              description: row.original.description,
+              category: row.original.category?._id || '',
+            }}
+            onSubmit={(data) => updateSubCategory({ id: row.original._id, subCategory: data })}
+          >
+            <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+              <Edit className="mr-2" />
+              {t('module.qrManagement.table.actionButton.edit')}
+            </Button>
+          </CreateNewSubCategory>
           <CustomAlertDialog
             title={t('module.qrManagement.alertDialog.title')}
             description={t('module.qrManagement.alertDialog.description')}
-            onSubmit={() => {}}
+            onSubmit={() => deleteSubCategory(row.original._id)}
           >
-            <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground" disabled>
+            <Button variant={'destructive'} className="hover:bg-destructive hover:text-destructive-foreground">
               <Trash className="mr-2" />
               {t('module.qrManagement.table.actionButton.delete')}
             </Button>

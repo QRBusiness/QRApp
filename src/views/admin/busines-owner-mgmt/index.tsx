@@ -35,7 +35,7 @@ const BusinessOwnerManagement = () => {
 
   return (
     <div className="w-full mx-auto pb-10 flex flex-col space-y-4">
-      <div className="self-end">
+      <div className="self-end mr-2 xl:mr-0">
         <Button
           variant="default"
           onClick={() => navigate(`../${BUSINESS_OWNER_MANAGEMENT}/create`)}

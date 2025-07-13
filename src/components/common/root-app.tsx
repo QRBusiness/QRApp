@@ -51,36 +51,65 @@ const RootApp = ({ role }: RootAppProps) => {
     return <Navigate to={LOGIN} replace={true} />;
   }
 
-  const mobileSidebarItems: SidebarItem[] = useMemo(
-    () => [
-      {
-        title: 'module.mobileSidebar.qr-management',
-        path_url: QR_MANAGEMENT,
-        icon: <QrCode />,
-      },
-      {
-        title: 'module.mobileSidebar.menu-management',
-        path_url: MENU_MANAGEMENT,
-        icon: <UtensilsCrossed />,
-      },
-      {
-        title: 'module.mobileSidebar.order-management',
-        path_url: ORDER_MANAGEMENT,
-        icon: <HandPlatter />,
-      },
-      {
-        title: 'module.mobileSidebar.request',
-        path_url: REQUEST,
-        icon: <Bell />,
-      },
-      {
-        title: 'module.mobileSidebar.profile',
-        path_url: PROFILE,
-        icon: <User />,
-      },
-    ],
-    []
-  );
+  const mobileSidebarItems: SidebarItem[] = useMemo(() => {
+    if (role.includes(ADMIN_ROLE)) {
+      return [
+        {
+          title: 'module.mobileSidebar.business-type',
+          path_url: BUSINESS_TYPE,
+          icon: <Building2 />,
+        },
+        {
+          title: 'module.mobileSidebar.business',
+          path_url: BUSINESS,
+          icon: <Building2 />,
+        },
+        {
+          title: 'module.mobileSidebar.business-owner-management',
+          path_url: BUSINESS_OWNER_MANAGEMENT,
+          icon: <Contact />,
+        },
+        {
+          title: 'module.mobileSidebar.plan',
+          path_url: PLAN,
+          icon: <CalendarPlus />,
+        },
+        {
+          title: 'module.mobileSidebar.profile',
+          path_url: PROFILE,
+          icon: <User />,
+        },
+      ];
+    } else {
+      return [
+        {
+          title: 'module.mobileSidebar.qr-management',
+          path_url: QR_MANAGEMENT,
+          icon: <QrCode />,
+        },
+        {
+          title: 'module.mobileSidebar.menu-management',
+          path_url: MENU_MANAGEMENT,
+          icon: <UtensilsCrossed />,
+        },
+        {
+          title: 'module.mobileSidebar.order-management',
+          path_url: ORDER_MANAGEMENT,
+          icon: <HandPlatter />,
+        },
+        {
+          title: 'module.mobileSidebar.request',
+          path_url: REQUEST,
+          icon: <Bell />,
+        },
+        {
+          title: 'module.mobileSidebar.profile',
+          path_url: PROFILE,
+          icon: <User />,
+        },
+      ];
+    }
+  }, [role, currentRole]);
 
   const haveViewGroupAndUserPermissions = permissions.some(
     (permission) => permission.code === 'view.group' || permission.code === 'view.user'

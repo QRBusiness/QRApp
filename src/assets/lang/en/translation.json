@@ -121,7 +121,12 @@
       "logout": "Logout",
       "account": "Account Management",
       "profile": "Profile",
-      "request": "Request"
+      "request": "Request",
+      "plan": "Plan",
+      "business": "Business",
+      "branch": "Branch",
+      "business-owner-management": "Owner",
+      "business-type": "Type"
     },
 
     "area": {
@@ -703,6 +708,10 @@
           "description.description": "* Enter a brief description of the subcategory.",
           "description.placeholder": "Enter subcategory description",
           "description.error": "Subcategory description is required."
+        },
+        "edit": {
+          "title": "Edit Subcategory",
+          "description": "Update the details of the subcategory."
         }
       }
     },

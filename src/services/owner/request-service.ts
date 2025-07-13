@@ -221,3 +221,34 @@ export const useExtendedRequests = () => {
     error,
   };
 };
+
+const processExtendedRequest = async (requestId: string): Promise<ExtendedRequestProps> => {
+  try {
+    const response: ApiResponse<ExtendedRequestProps> = await apiClient.put(`/request/extend/${requestId}`);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error, {
+        description: response.errorMessage || 'Failed to process extended request',
+      });
+      throw new Error(response.errorMessage || 'Failed to process extended request');
+    }
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Internal server error', {
+      description: error.errorMessage || 'An unexpected error occurred while processing the extended request.',
+    });
+    throw new Error(error.errorMessage || 'Internal server error');
+  }
+};
+
+export const useProcessExtendedRequest = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useMutation({
+    mutationFn: processExtendedRequest,
+    onSuccess: () => {
+      // Invalidate all queries related to extended requests
+      queryClient.invalidateQueries({ queryKey: ['requests-extend'] });
+      toast.success('Extended request processed successfully');
+    },
+  });
+  return { processExtendedRequest: mutateAsync };
+};

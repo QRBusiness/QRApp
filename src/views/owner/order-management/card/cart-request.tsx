@@ -2,6 +2,7 @@ import { useProcessRequest } from '@/services/owner/request-service';
 import { Check, Clock9, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn, formattedDate } from '@/libs/utils';
 import StatusBadge from '../status/status-baged';
 
@@ -25,14 +26,15 @@ export interface CartRequestProps {
 
 const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, reason }: CartRequestProps) => {
   const { processRequest } = useProcessRequest();
+  const isMobile = useIsMobile();
 
   const onConfirm = async () => {
     await processRequest(_id);
   };
 
   return (
-    <Card className="h-full flex flex-row items-center justify-between p-2 max-w-[400px]">
-      <div className="flex flex-col gap-2">
+    <Card className="h-full flex flex-row items-center justify-between p-2 w-full relative">
+      <div className="flex flex-col gap-2 w-full">
         <div className="font-semibold flex flex-row items-center">
           <p>ID: </p>
           <span className="text-primary ml-1">{_id}</span>
@@ -56,21 +58,26 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, 
             <span>Reason:</span> <p className="font-semibold">{reason || 'N/A'}</p>
           </div>
         )}
+        <div className={cn('flex flex-col items-end justify-end h-full w-full', isMobile ? 'block' : 'block')}>
+          {status === 'Waiting' && (
+            <Button onClick={onConfirm} className="w-full" variant="default">
+              <Check />
+              Confirm
+            </Button>
+          )}
+        </div>
       </div>
-      <div
-        className={cn(
-          'flex flex-col items-start gap-2 h-full flex-1',
-          status === 'Waiting' ? 'justify-around' : 'justify-start'
-        )}
-      >
+      <div className="absolute right-2 top-2 z-10">
         <StatusBadge status={status as 'Waiting' | 'Pending' | 'Cancelled' | 'Completed'} />
+      </div>
+      {/* <div className={cn('flex flex-col items-end justify-end h-full', isMobile ? 'hidden' : '')}>
         {status === 'Waiting' && (
           <Button onClick={onConfirm} className="w-full" variant="default">
             <Check />
             Confirm
           </Button>
         )}
-      </div>
+      </div> */}
     </Card>
   );
 };

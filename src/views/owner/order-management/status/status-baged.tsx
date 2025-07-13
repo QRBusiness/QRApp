@@ -7,7 +7,10 @@ interface StatusBadgeProps {
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   return (
-    <Badge variant="outline" className="text-foreground px-2 py-1 text-sm rounded-2xl bg-background">
+    <Badge
+      variant="outline"
+      className="text-foreground px-2 py-1 text-sm rounded-2xl bg-background drop-shadow-xl shadow-xl"
+    >
       {status === 'Cancelled' && (
         <>
           <CircleX className="fill-status-cancel mr-1" /> Cancelled
