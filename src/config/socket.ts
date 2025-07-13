@@ -1,6 +1,6 @@
 // src/services/websocketService.ts
 import { ACCESS_TOKEN } from '@/constants';
-import { toast } from 'sonner';
+// import { toast } from 'sonner';
 import { loadFromLocalStorage } from '@/libs/utils';
 
 class WebSocketService {
@@ -29,7 +29,7 @@ class WebSocketService {
 
     this.socket.onmessage = (event) => {
       console.log('Message from server:', event.data);
-      toast.info(`Message from server: ${event.data}`);
+      // toast.info(`Message from server: ${event.data}`);
     };
 
     this.socket.onerror = (error) => {

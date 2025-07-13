@@ -65,7 +65,6 @@ const CartItemsDetails: React.FC = () => {
   );
 
   const onCheckout = async () => {
-    debugger;
     if (user.role === STAFF_ROLE || user.role === OWNER_ROLE) {
       setCreateOrderRequestDialog(true);
     } else {

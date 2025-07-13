@@ -82,7 +82,11 @@ interface createTableResponse {
 
 const createTable = async (tableData: z.infer<typeof createTableSchema>) => {
   try {
-    const response: ApiResponse<createTableResponse> = await apiClient.post('/services', tableData);
+    const response: ApiResponse<createTableResponse> = await apiClient.post('/services', tableData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to create table',
@@ -122,7 +126,11 @@ const updateTable = async (tableId: string, tableData: z.infer<typeof updateTabl
     const formData = new FormData();
     formData.append('name', tableData.name);
 
-    const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, formData);
+    const response: ApiResponse<TableResponse> = await apiClient.put(`/services/${tableId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to update table',
