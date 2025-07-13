@@ -90,7 +90,6 @@ export const columns: ColumnDef<AreaProps>[] = [
               name: row.original.name,
               description: row.original.description,
               branch: row.original.branch.id,
-              image_url: row.original.image_url,
             }}
             onSubmit={(values) => updateArea({ id: row.original.id, data: values })}
           >

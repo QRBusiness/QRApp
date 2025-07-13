@@ -49,11 +49,11 @@ export const CardExtendPlanRequest = (request: CardExtendPlanRequestProps) => {
   };
   return (
     <Card className="grid grid-cols-5 p-2 relative">
-      <div className="2xl:h-44 2xl:w-44 3xl:h-48 3xl:w-48 overflow-scroll-y overflow-x-hidden col-span-2">
+      <div className="h-44 w-44 3xl:h-48 3xl:w-48 overflow-scroll-y overflow-x-hidden col-span-2">
         <img
           src={request.imageUrl}
           alt={request.planName}
-          className="xl:h-44 2xl:w-44 3xl:h-48 3xl:w-48 object-cover rounded-lg"
+          className="h-44 w-44 3xl:h-48 3xl:w-48 object-cover rounded-lg"
         />
       </div>
       <div className="p-2 col-span-3 space-y-1 bg-background text-foreground">

@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 interface ImagePopUpProps {
   children: React.ReactNode;
@@ -36,9 +37,16 @@ const ImagePopUp: React.FC<ImagePopUpProps> = ({ children, open, openChange, tit
         </DialogHeader>
         <div className="flex-1 flex flex-col items-center justify-center mb-6">
           <div
-            className={`w-full min-w-[350px] min-h-[350px] h-fit flex items-center justify-center border-2 ${false ? 'border' : 'border-dashed border'} rounded-lg mb-4`}
+            className={`w-full min-w-[350px] min-h-[350px] h-fit max-h-96 flex items-center justify-center border-2 ${false ? 'border' : 'border-dashed border'} rounded-lg mb-4`}
           >
-            <img src={url} alt="Image" className="flex-1 object-cover" />
+            <ScrollArea className="w-full h-full p-1">
+              <img
+                src={url}
+                alt="Image"
+                className="flex-1 object-cover w-full min-w-[350px] min-h-[350px] h-fit max-h-96 overflow-y-scroll"
+              />
+              <ScrollBar orientation="vertical" />
+            </ScrollArea>
           </div>
         </div>
         {/* Download Format */}

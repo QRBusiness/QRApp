@@ -158,7 +158,6 @@ const MobileCreateDialog: React.FC<MobileCreateDialogProps> = ({
     await createArea({
       name: values.name,
       description: values.description,
-      image_url: values.image_url,
       branch: values.branch,
     });
   };

@@ -243,6 +243,9 @@ const CreateQR = () => {
       area: '',
       table: '',
     });
+    setBranchOptions([]);
+    setAreaOptions([]);
+    setTableOptions([]);
     setAdditionalInfo([]);
   };
 

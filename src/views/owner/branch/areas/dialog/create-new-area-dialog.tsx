@@ -127,32 +127,6 @@ const CreateNewArea = ({
             />
             <FormField
               control={form.control}
-              name="image_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {t('module.qrManagement.addAreaField.fieldImageUrl')}
-                    {!createAreaSchema.shape.image_url.isOptional() && <p className="text-red-700">*</p>}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      name={field.name}
-                      ref={field.ref}
-                      onBlur={field.onBlur}
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        field.onChange(file);
-                      }}
-                    />
-                  </FormControl>
-                  <FormDescription>{t('module.qrManagement.addAreaField.fieldImageUrlDescription')}</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="branch"
               render={({ field }) => (
                 <FormItem>

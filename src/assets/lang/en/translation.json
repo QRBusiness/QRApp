@@ -160,6 +160,10 @@
       "qrDownloadErrorDescription": "An error occurred while downloading the QR code. Please try again.",
       "qrDownloadSuccess": "QR Code downloaded successfully.",
       "qrDownloadSuccessDescription": "The QR code has been downloaded to your device.",
+      "tableError": "Table is required.",
+      "areaError": "Area is required.",
+      "branchError": "Branch is required.",
+
       "additionalField": {
         "title": "Additional Fields",
         "description": "Add any additional fields you need embedded in the QR code.",
@@ -842,6 +846,14 @@
         "create": "Create Plan",
         "edit": "Edit Plan",
         "createNew": "Create New Plan"
+      }
+    },
+    "orderRequest": {
+      "create": {
+        "branch.error": "Branch is required.",
+        "area.error": "Area is required.",
+        "service_unit.error": "Table is required.",
+        "guestName.error": "Guest name cannot be empty."
       }
     }
   }

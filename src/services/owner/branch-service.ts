@@ -27,7 +27,7 @@ const getBranches = async ({ page = 1, limit = 50 }: BranchInputProps): Promise<
     const response: ApiResponse<BranchResponseData> = await apiClient.get(`/branches`, {
       params: { page, limit },
     });
-    if (response.status !== 200) {
+    if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error, {
         description: response.errorMessage || 'Failed to fetch branches',
       });
@@ -44,7 +44,7 @@ const getBranches = async ({ page = 1, limit = 50 }: BranchInputProps): Promise<
 
 export const useBranches = ({ page = 1, limit = 50 }: BranchInputProps) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<BranchResponse[]>({
-    queryKey: ['branchesQuery', { page, limit }],
+    queryKey: ['branches', page, limit], // ✅ Include page, limit
     queryFn: () => getBranches({ page, limit }),
   });
 
@@ -88,7 +88,7 @@ export const useCreateBranch = () => {
       toast.success('Branch created successfully', {
         description: `Branch ${data.name} has been created.`,
       });
-      queryClient.invalidateQueries({ queryKey: ['branchesQuery'] });
+      queryClient.invalidateQueries({ queryKey: ['branches'] }); // ✅ Invalidate tất cả branches queries
     },
   });
 
@@ -122,7 +122,7 @@ export const useUpdateBranch = () => {
       toast.success('Branch updated successfully', {
         description: `Branch ${data.name} has been updated.`,
       });
-      queryClient.invalidateQueries({ queryKey: ['branchesQuery'] });
+      queryClient.invalidateQueries({ queryKey: ['branches'] }); // ✅ Invalidate tất cả branches queries
     },
   });
 
@@ -154,7 +154,7 @@ export const useDeleteBranch = () => {
       toast.success('Branch deleted successfully', {
         description: 'The branch has been deleted.',
       });
-      queryClient.invalidateQueries({ queryKey: ['branchesQuery'] });
+      queryClient.invalidateQueries({ queryKey: ['branches'] }); // ✅ Invalidate tất cả branches queries
     },
   });
 

@@ -93,7 +93,7 @@ const PlanPage = () => {
           </div>
         </div>
         {extendedRequests
-          .filter((request) => request.status === selectedStatus)
+          .filter((request) => request.status === selectedStatus || selectedStatus === '')
           .map((request) => {
             const selectedBusiness = business[business.findIndex((b) => b._id === request.business.id)] || null;
             const selectedPlan = plans.find((p) => p._id === request.plan.id);
