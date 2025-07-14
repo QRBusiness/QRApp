@@ -35,7 +35,7 @@ const PaymentOrderPage = () => {
   };
 
   return (
-    <div className="min-h-screen  flex justify-center py-10 px-4">
+    <div className="lg:min-h-screen flex justify-center py-10 px-4 w-full">
       <div className="w-full max-w-3xl">
         <Card className="p-8 shadow-lg">
           <div ref={invoiceRef} className="space-y-6 bg-background text-foreground p-4 rounded-2xl">
@@ -117,15 +117,20 @@ const PaymentOrderPage = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-center gap-4 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 items-center justify-center gap-4 mt-8">
             <Button variant={'outline'} onClick={handleDownLoadInvoice}>
               <Printer />
+              <p className="block lg:hidden:">Download Invoice</p>
             </Button>
             <Button variant={'default'} onClick={() => checkoutOrder({ orderId: id!, method: 'Cash' })}>
-              <WalletCards className="mr-2 size-4 md:size-5 w-full" /> Confirm Cash
+              <WalletCards className="mr-2 size-4 md:size-5" /> <p>Confirm Cash</p>
             </Button>
-            <Button variant={'default'} onClick={() => checkoutOrder({ orderId: id!, method: 'Bank' })}>
-              <CreditCard className="mr-2 size-4 md:size-5 w-full" /> Confirm Bank Transfer
+            <Button
+              variant={'default'}
+              onClick={() => checkoutOrder({ orderId: id!, method: 'Bank' })}
+              className="flex items-center justify-center"
+            >
+              <CreditCard className="mr-2 size-4 md:size-5" /> <p>Confirm Bank Transfer</p>
             </Button>
           </div>
           <div className="mt-8 text-center text-muted-foreground text-sm">

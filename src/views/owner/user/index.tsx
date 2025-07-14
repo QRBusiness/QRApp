@@ -58,8 +58,12 @@ const UserProfile = () => {
   const [openExtendDialog, setOpenExtendDialog] = React.useState<boolean>(false);
   const [openConfigureDialog, setOpenConfigureDialog] = React.useState<boolean>(false);
 
-  const { data: myBankData } = useMyBank();
-  const { data: banks } = useBanksInfo();
+  const { data: myBankData } = useMyBank({
+    enabled: user?.role === OWNER_ROLE || user?.role === ADMIN_ROLE,
+  });
+  const { data: banks } = useBanksInfo({
+    enabled: user?.role === OWNER_ROLE || user?.role === ADMIN_ROLE,
+  });
   const { configureBank } = useConfigureBank();
   const { updateUserProfile } = useUpdateUserProfile();
   const { uploadAvatar } = useUploadAvatar();
@@ -68,7 +72,7 @@ const UserProfile = () => {
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
+      ?.split(' ')
       .map((n) => n[0])
       .join('')
       .toUpperCase()
@@ -259,7 +263,7 @@ const UserProfile = () => {
                     <div className="text-xs text-muted-foreground">{permission.code}</div>
                   </div>
                   <Badge variant="outline" className="text-xs">
-                    {permission.code.split('.')[0]}
+                    {permission?.code?.split('.')[0]}
                   </Badge>
                 </div>
               ))}

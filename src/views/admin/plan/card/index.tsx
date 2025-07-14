@@ -83,7 +83,12 @@ export const CardExtendPlanRequest = (request: CardExtendPlanRequestProps) => {
               View
             </Button>
           </ImagePopUp>
-          <Button className="self-end" onClick={handleProcessRequest} variant="default">
+          <Button
+            className="self-end"
+            onClick={handleProcessRequest}
+            variant="default"
+            disabled={request.status !== 'Unpaid'}
+          >
             <Check className="size-5" />
             Confirm Paid
           </Button>

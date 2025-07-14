@@ -37,18 +37,17 @@ const getBanksInfo = async (): Promise<bankResponse[]> => {
   }
 };
 
-export const useBanksInfo = () => {
-  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<bankResponse[]>({
-    queryKey: ['banksQuery'],
+export const useBanksInfo = (options?: { enabled?: boolean }) => {
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ['banksInfo'],
     queryFn: getBanksInfo,
+    enabled: options?.enabled ?? true,
   });
 
   return {
     data,
     error,
     isLoading,
-    isFetching,
-    isSuccess,
     refetch,
   };
 };
@@ -115,18 +114,17 @@ const getMyBank = async (): Promise<ConfigureBankProps | null> => {
   }
 };
 
-export const useMyBank = () => {
-  const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<ConfigureBankProps | null>({
-    queryKey: ['myBankQuery'],
+export const useMyBank = (options?: { enabled?: boolean }) => {
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ['myBank'],
     queryFn: getMyBank,
+    enabled: options?.enabled ?? true, // Default là true
   });
 
   return {
     data,
     error,
     isLoading,
-    isFetching,
-    isSuccess,
     refetch,
   };
 };
