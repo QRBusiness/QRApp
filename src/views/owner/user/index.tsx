@@ -33,7 +33,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import type { editUserProfileSchema, ownerExtendExpireDateSchema } from '@/utils/schemas';
-import { formattedDate, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
+import { formattedDate, loadFromLocalStorage, resetTableStorage, saveToLocalStorage } from '@/libs/utils';
 import StatusBadge from '../order-management/status/status-baged';
 import ConfigureBankAccount from './dialog/configure-bank-dialog';
 import EditUserProfileDialog from './dialog/edit-user-profile-dialog';
@@ -115,6 +115,7 @@ const UserProfile = () => {
       saveToLocalStorage(USER_PERMISSIONS, []);
       saveToLocalStorage(REFRESH_TOKEN, null);
       saveToLocalStorage(ACCESS_TOKEN, null);
+      resetTableStorage();
     }
   };
   return (

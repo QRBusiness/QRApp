@@ -15,17 +15,17 @@ export type ErrorResponse = {
 };
 
 export type ApiResponse<T> = SuccessResponse<T> & ErrorResponse;
+
 // Config axios instance
-// This file is used to configure the axios instance for API requests.
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+  withCredentials: true, // ✅ Cho phép gửi cookies với request
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
   },
 });
-// Type aliases removed because they are only valid in TypeScript files.
 
 // Add a request interceptor
 apiClient.interceptors.request.use(
@@ -36,6 +36,10 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+
+    // ✅ Đảm bảo withCredentials được set cho mỗi request
+    config.withCredentials = true;
+
     return config;
   },
   (error) => {
@@ -67,10 +71,10 @@ apiClient.interceptors.response.use(
               ...config.headers,
               Authorization: `Bearer ${access_token}`,
             },
+            withCredentials: true, // ✅ Đảm bảo retry request cũng có withCredentials
           });
         } catch (refreshError) {
           // Nếu refresh token thất bại, chuyển hướng đến /login
-
           window.location.href = '/login';
 
           return Promise.reject({

@@ -35,12 +35,17 @@ import SidebarApp from '@/components/common/sidebar';
 import { useUserPermissions, useUserState } from '@/components/common/states/userState';
 import { useViewState } from '@/components/common/states/viewState';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Toaster } from '@/components/ui/sonner';
+import webSocketService from '@/config/socket';
 
 interface RootAppProps {
   role: string[];
 }
 
+const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
+
 const RootApp = ({ role }: RootAppProps) => {
+  webSocketService.connect(webSocketUrl);
   const cookie = Cookies.get(SIDEBAR_COOKIE_NAME);
   const location = useLocation();
   const { isMobile } = useViewState();
@@ -217,7 +222,9 @@ const RootApp = ({ role }: RootAppProps) => {
         </div>
         <Outlet />
       </main>
+      <Toaster duration={3000} position="bottom-right" />
     </SidebarProvider>
   );
 };
+
 export default RootApp;

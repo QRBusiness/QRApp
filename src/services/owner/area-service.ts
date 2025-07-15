@@ -61,7 +61,7 @@ export const getAreas = async ({ page = 1, limit = 50, branch }: AreaInputProps)
 
 export const useAreas = ({ page = 1, limit = 50, branch }: AreaInputProps) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<AreaResponse[]>({
-    queryKey: ['areasQuery'],
+    queryKey: ['areasQuery', { page, limit, branch }],
     queryFn: () => getAreas({ page, limit, branch }),
   });
 

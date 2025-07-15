@@ -12,6 +12,7 @@ export interface OrderResponseProps {
   updated_at: string;
   items: Array<{
     name: string;
+    img_url: string;
     quantity: number;
     price: number;
     variant: string;
@@ -94,7 +95,7 @@ export const useOrders = ({ area, table, status }: OrderRequestProps) => {
   const { data, isLoading, isError, error, isFetching, refetch } = useQuery({
     queryKey: ['orders', { area, table, status }],
     queryFn: () => getOrders({ area, table, status }),
-    refetchInterval: 5000, // Refetch every 5 seconds
+    refetchInterval: 10000, // Refetch every 10 seconds
     refetchOnWindowFocus: true, // Refetch when the window is focused
     refetchOnReconnect: true, // Refetch when the network reconnects
   });

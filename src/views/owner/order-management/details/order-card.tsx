@@ -13,13 +13,7 @@ const OrderCardDetails = ({ order }: { order: OrderResponseProps }) => {
           <Card key={`${order._id + item.name}`} className="p-1 border shadow-sm">
             <div className="gap-2 flex">
               <div className="w-20 h-20 flex-shrink-0">
-                <img
-                  src={
-                    'https://readdy.ai/api/search-image?query=Gourmet%20avocado%20toast%20with%20poached%20egg%20on%20sourdough%20bread%2C%20topped%20with%20cherry%20tomatoes%20and%20microgreens%2C%20professional%20food%20photography%2C%20bright%20natural%20lighting%2C%20shallow%20depth%20of%20field%2C%20appetizing%20presentation%2C%20isolated%20on%20light%20neutral%20background%2C%20high%20resolution&width=400&height=400&seq=1&orientation=squarish'
-                  }
-                  alt={item.name}
-                  className="w-full h-full object-cover rounded-md object-top"
-                />
+                <img src={item.img_url} alt={item.name} className="w-full h-full object-cover rounded-md object-top" />
               </div>
               <div className="flex-1">
                 <div className="flex justify-between items-start space-x-2">

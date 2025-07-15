@@ -1,3 +1,17 @@
+import {
+  AREA_MANAGEMENT_TABLE,
+  BRANCH_TABLE,
+  BUSINESS_OWNER_TABLE,
+  BUSINESS_TABLE,
+  BUSINESS_TYPE_TABLE,
+  CATEGORY_MANAGEMENT_TABLE,
+  MENU_MANAGEMENT_TABLE,
+  ORDER_MANAGEMENT_TABLE,
+  PLAN_MANAGEMENT_TABLE,
+  QR_MANAGEMENT_TABLE,
+  STAFF_MANAGEMENT_TABLE,
+  SUBCATEGORY_MANAGEMENT_TABLE,
+} from '@/constants';
 import { type ClassValue, clsx } from 'clsx';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
@@ -96,4 +110,19 @@ export const getTypeOfField = (fieldName: string): string => {
     default:
       return 'text';
   }
+};
+
+export const resetTableStorage = () => {
+  removeFromLocalStorage(AREA_MANAGEMENT_TABLE + '_visibility'); //1
+  removeFromLocalStorage(BUSINESS_OWNER_TABLE + '_visibility'); //2
+  removeFromLocalStorage(BUSINESS_TABLE + '_visibility'); //3
+  removeFromLocalStorage(BRANCH_TABLE + '_visibility'); //4
+  removeFromLocalStorage(BUSINESS_TYPE_TABLE + '_visibility'); //5
+  removeFromLocalStorage(QR_MANAGEMENT_TABLE + '_visibility'); //6
+  removeFromLocalStorage(MENU_MANAGEMENT_TABLE + '_visibility'); //7
+  removeFromLocalStorage(STAFF_MANAGEMENT_TABLE + '_visibility'); //8
+  removeFromLocalStorage(ORDER_MANAGEMENT_TABLE + '_visibility'); //9
+  removeFromLocalStorage(CATEGORY_MANAGEMENT_TABLE + '_visibility'); //10
+  removeFromLocalStorage(SUBCATEGORY_MANAGEMENT_TABLE + '_visibility'); //11
+  removeFromLocalStorage(PLAN_MANAGEMENT_TABLE + '_visibility'); //12
 };

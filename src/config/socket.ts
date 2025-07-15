@@ -1,6 +1,5 @@
-// src/services/websocketService.ts
 import { ACCESS_TOKEN } from '@/constants';
-// import { toast } from 'sonner';
+import { QueryClient } from '@tanstack/react-query';
 import { loadFromLocalStorage } from '@/libs/utils';
 
 class WebSocketService {
@@ -17,6 +16,7 @@ class WebSocketService {
   }
 
   connect(url: string) {
+    const queryClient = new QueryClient();
     if (this.socket) return;
 
     const token = loadFromLocalStorage(ACCESS_TOKEN, null);
@@ -29,7 +29,16 @@ class WebSocketService {
 
     this.socket.onmessage = (event) => {
       console.log('Message from server:', event.data);
-      // toast.info(`Message from server: ${event.data}`);
+      // Play notification sound when a message is received
+      const notificationSound = document.getElementById('notification-sound') as HTMLAudioElement;
+      if (notificationSound) {
+        notificationSound.play().catch((error) => {
+          console.error('Error playing notification sound:', error);
+        });
+      }
+      // Invalidate the query client to refresh data
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['requests'] });
     };
 
     this.socket.onerror = (error) => {

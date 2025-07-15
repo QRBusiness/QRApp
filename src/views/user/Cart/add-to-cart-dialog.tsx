@@ -89,9 +89,15 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
                 {item.description || 'No description available'}
               </DialogDescription>
               <div className="flex items-center space-x-2 text-sm">
-                <p className="text-muted-foreground">Price:</p>
+                <p className="text-muted-foreground">Price (once item):</p>
                 <p className="text-xl font-semibold text-primary">
-                  {(item.variants[0]?.price * quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                  {(
+                    item.variants[sizesOptions.findIndex((option) => option.value === selectedSize)]?.price +
+                    selectedPreferences.reduce((total, pref) => {
+                      const option = item.options.find((opt) => opt.type === pref);
+                      return total + (option?.price || 0);
+                    }, 0)
+                  ).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                 </p>
               </div>
             </div>

@@ -32,7 +32,6 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Loading from '@/components/common/loading';
 import { useResizeListener } from '@/components/common/states/viewState';
-import webSocketService from '@/config/socket';
 
 const RootApp = React.lazy(() => import('@/components/common/root-app'));
 const GuestRouter = React.lazy(() => import('@/components/common/guest-router'));
@@ -62,10 +61,6 @@ const PaymentOrderPage = React.lazy(() => import('@/views/owner/order-management
 const RequestPage = React.lazy(() => import('@/views/owner/request'));
 const PlanPage = React.lazy(() => import('@/views/admin/plan'));
 const UserOrder = React.lazy(() => import('@/views/user/UserOrder'));
-
-const webSocketUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:8000/ws';
-
-webSocketService.connect(webSocketUrl);
 
 function App() {
   const { t } = useTranslation();

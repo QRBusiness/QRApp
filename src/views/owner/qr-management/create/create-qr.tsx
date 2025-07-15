@@ -233,7 +233,7 @@ const CreateQR = () => {
           qr_code: file,
         });
       });
-    }, 3000);
+    }, 1500);
     // onCancel();
   };
 

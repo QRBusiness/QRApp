@@ -86,6 +86,7 @@ export const useConfigureBank = () => {
     onSuccess: (data) => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ['banksQuery'] });
+        queryClient.invalidateQueries({ queryKey: ['myBank'] });
         toast.success('Bank configured successfully');
       }
     },

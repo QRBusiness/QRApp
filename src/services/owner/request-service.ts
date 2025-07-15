@@ -78,7 +78,7 @@ export const useRequests = ({ status, type, page, limit }: RequestServiceProps) 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['requests', status, type, page, limit],
     queryFn: () => getRequests({ status, type, page, limit }),
-    refetchInterval: 5000, // Refetch every 5 seconds
+    refetchInterval: 10000, // Refetch every 10 seconds
     refetchOnWindowFocus: true, // Refetch when the window is focused
     refetchOnReconnect: true, // Refetch when the network reconnects
   });

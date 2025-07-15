@@ -20,7 +20,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import { cn, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
+import { cn, loadFromLocalStorage, resetTableStorage, saveToLocalStorage } from '@/libs/utils';
 import { CustomDropdownMenu } from './custom-dropdown-menu';
 import type { SidebarItem } from './mobile-bottom-bar';
 import { defaultUserState, useUserState } from './states/userState';
@@ -73,6 +73,7 @@ const SidebarApp = ({ items }: SidebarProps) => {
       saveToLocalStorage(USER_PERMISSIONS, []);
       saveToLocalStorage(REFRESH_TOKEN, null);
       saveToLocalStorage(ACCESS_TOKEN, null);
+      resetTableStorage();
     }
   };
 
