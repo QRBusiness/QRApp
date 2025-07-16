@@ -87,10 +87,10 @@ export const removeFromSessionStorage = (key: string) => {
   }
 };
 
-export const formattedDate = (date: string) => {
+export const formattedDate = (date: string, formatString?: string) => {
   const d = new Date(date);
   d.setHours(d.getHours() - 1);
-  return format(d, 'MMM dd, yyyy • h:mm a');
+  return format(d, formatString || 'MMM dd, yyyy • h:mm a');
 };
 
 export const getTypeOfField = (fieldName: string): string => {

@@ -34,11 +34,11 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({ isOpen, onOpenC
         <DialogHeader>
           <DialogTitle className="flex gap-2">
             <Bell className="size-5" />
-            Order Details
+            {t('module.order.view.title')}
           </DialogTitle>
           <DialogDescription className="flex items-center">
             <Info className="size-4 mr-2" />
-            View the details of the order including items, status, and timestamps.
+            {t('module.order.view.description')}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -54,19 +54,19 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({ isOpen, onOpenC
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <Label>Status:</Label>
+            <Label>{t('module.common.readOnlyDialog.status')}</Label>
             <StatusBadge status={data.status as 'Waiting' | 'Unpaid' | 'Paid'} />
           </div>
           <div className="flex items-center justify-between">
-            <Label>Guest name:</Label>
+            <Label>{t('module.common.readOnlyDialog.guestName')}</Label>
             <p>{data.request.guest_name}</p>
           </div>
           <div className="flex items-center justify-between">
-            <Label>Area:</Label>
+            <Label>{t('module.common.readOnlyDialog.area')}</Label>
             <p>{data.area.name}</p>
           </div>
           <div className="flex items-center justify-between">
-            <Label>Table name:</Label>
+            <Label>{t('module.common.readOnlyDialog.table')}</Label>
             <p>{data.service_unit.name}</p>
           </div>
           <div className="flex items-center justify-between">

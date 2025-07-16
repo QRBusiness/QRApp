@@ -1,18 +1,926 @@
 {
   "module": {
+    "app": {
+      "name": "Ứng dụng",
+      "description": "Mô tả về ứng dụng."
+    },
+    "common": {
+      "loading": "Vui lòng chờ, đang tải...",
+      "submitting": "Đang gửi...",
+      "error": "Đã xảy ra lỗi. Vui lòng thử lại sau.",
+      "success": "Thao tác thành công.",
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "edit": "Chỉnh sửa",
+      "more": "Thêm",
+      "delete": "Xóa",
+      "view": "Xem",
+      "create": "Tạo mới",
+      "back": "Quay lại",
+      "next": "Tiếp theo",
+      "submit": "Gửi",
+      "update": "Cập nhật",
+      "search": "Tìm kiếm",
+      "enable": "Kích hoạt",
+      "disable": "Vô hiệu hóa",
+      "extend": "Gia hạn",
+      "backToHome": "Quay về trang chủ",
+      "table.visibleColumns": "Cột hiển thị",
+      "confirmAction": "Bạn có chắc không?",
+      "confirmActionDescription": "Bạn có thực sự muốn {{status}} {{name}} này không?.",
+      "readOnlyDialog": {
+        "button": "Đóng",
+        "id": "ID",
+        "name": "Tên",
+        "description": "Mô tả",
+        "createdAt": "Ngày tạo",
+        "updatedAt": "Ngày cập nhật",
+        "status": "Trạng thái",
+        "available": "Có sẵn",
+        "unavailable": "Không có sẵn",
+        "actions": "Thao tác",
+        "copyId": "Sao chép ID",
+        "address": "Địa chỉ",
+        "contact": "Liên hệ",
+        "phone": "Số điện thoại",
+        "email": "Email",
+        "businessType": "Loại hình kinh doanh",
+        "businessTaxCode": "Mã số thuế doanh nghiệp",
+        "category": "Danh mục",
+        "subcategory": "Danh mục con",
+        "price": "Giá mặc định",
+        "variants": "Biến thể",
+        "options": "Tùy chọn",
+        "period": "Thời hạn",
+        "days": "Ngày",
+        "expiration": "Ngày hết hạn",
+        "join": "Tham gia",
+        "bank": "Ngân hàng",
+        "bankNO": "Số tài khoản",
+        "bankName": "Tên ngân hàng",
+        "area": "Khu vực",
+        "table": "Bàn",
+        "guestName": "Tên khách"
+      }
+    },
     "authentication": {
-      "title": "Đăng nhập",
+      "title": "CHÀO MỪNG TRỞ LẠI!",
+      "subtitle": "Đăng nhập để truy cập bảng điều khiển cá nhân và dịch vụ.",
       "phone": "Số điện thoại",
-      "phoneDescription": "* Đây là tên hiển thị công khai của bạn.",
+      "phoneDescription": "* Đây là số điện thoại bạn đã đăng ký với chúng tôi.",
       "phonePlaceholder": "Nhập số điện thoại của bạn",
       "phoneErrorLength": "Số điện thoại phải có ít nhất 10 ký tự.",
       "phoneErrorFormat": "Vui lòng nhập số điện thoại hợp lệ.",
+      "username": "Tên đăng nhập",
+      "usernameDescription": "* Đây là tên đăng nhập của bạn.",
+      "usernamePlaceholder": "Nhập tên đăng nhập",
+      "usernameError": "Tên đăng nhập phải có ít nhất 5 ký tự.",
+      "usernameErrorFormat": "Tên đăng nhập chỉ được chứa chữ cái, số và dấu gạch dưới.",
       "password": "Mật khẩu",
-      "passwordDescription": "* Đây là khóa riêng tư của bạn.",
-      "passwordPlaceholder": "Nhập mật khẩu của bạn",
-      "passwordError": "Vui lòng nhập mật khẩu hợp lệ.",
+      "passwordDescription": "* Đây là mật khẩu của bạn.",
+      "passwordPlaceholder": "Nhập mật khẩu",
+      "passwordError": "Mật khẩu phải có ít nhất 6 ký tự.",
+      "passwordComplexityError": "Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường và một số.",
       "loginButton": "Đăng nhập",
-      "forgotPassword": "Quên mật khẩu?"
+      "forgotPassword": "Quên mật khẩu?",
+      "logout": "Đăng xuất"
+    },
+    "sidebar": {
+      "home": "Trang chủ",
+      "owner": "Quản lý chủ",
+      "admin": "Quản trị viên",
+      "unauthorized": "Khách",
+      "businessId": "ID doanh nghiệp",
+      "dashboard": "Bảng điều khiển",
+      "branch": "Quản lý chi nhánh",
+      "group": "Nhóm",
+      "business-owner-management": "Quản lý chủ doanh nghiệp",
+      "business": "Quản lý doanh nghiệp",
+      "business-type": "Quản lý loại hình doanh nghiệp",
+      "qr-management": "Quản lý QR",
+      "menu-management": "Quản lý thực đơn",
+      "menu-management.categories": "Danh mục thực đơn",
+      "menu-management.subcategories": "Danh mục con thực đơn",
+      "order-management": "Quản lý đơn hàng",
+      "order-details": "Chi tiết đơn hàng",
+      "staff-management": "Quản lý nhân viên",
+      "cart": "Đơn hàng của bạn",
+      "settings": "Cài đặt",
+      "help": "Trợ giúp",
+      "logout": "Đăng xuất",
+      "account": "Quản lý tài khoản",
+      "greeting": "Xin chào, {{name}} !",
+      "create": "Tạo mới",
+      "category": "Danh mục",
+      "subcategory": "Danh mục con",
+      "profile": "Hồ sơ người dùng",
+      "plan": "Quản lý gói",
+      "request": "Quản lý yêu cầu"
+    },
+    "mobileSidebar": {
+      "home": "Trang chủ",
+      "dashboard": "Bảng điều khiển",
+      "qr-management": "QR",
+      "menu-management": "Thực đơn",
+      "order-management": "Đơn hàng",
+      "staff-management": "Nhân viên",
+      "settings": "Cài đặt",
+      "help": "Trợ giúp",
+      "logout": "Đăng xuất",
+      "account": "Quản lý tài khoản",
+      "profile": "Hồ sơ",
+      "request": "Yêu cầu",
+      "plan": "Gói",
+      "business": "Doanh nghiệp",
+      "branch": "Chi nhánh",
+      "business-owner-management": "Chủ",
+      "business-type": "Loại hình"
+    },
+    "area": {
+      "title": "Chọn khu vực",
+      "description": "* Chọn khu vực của bạn.",
+      "placeholder": "Chọn khu vực",
+      "create": "Tạo khu vực"
+    },
+    "table": {
+      "title": "Chọn bàn",
+      "description": "* Chọn số bàn của bạn.",
+      "placeholder": "Chọn bàn",
+      "create": "Tạo bàn"
+    },
+    "qrManagement": {
+      "title": "Quản lý QR",
+      "description": "Quản lý mã QR để truy cập dịch vụ dễ dàng.",
+      "create": "Tạo mã QR",
+      "createCollapse": "Tạo phiên mã QR",
+      "createDescription": "Tạo mã QR mới cho khu vực hoặc bàn của bạn.",
+      "createSession": "Tạo mã QR mới",
+      "createSessionShortKey": "Tạo mới",
+      "editSession": "Chỉnh sửa mã QR",
+      "cancel": "Hủy",
+      "reset": "Đặt lại biểu mẫu",
+      "qrGeneratedSuccess": "Tạo mã QR thành công.",
+      "qrGeneratedSuccessDescription": "Bạn có thể tải xuống hoặc in mã QR.",
+      "qrGenerationError": "Tạo mã QR thất bại.",
+      "qrGenerationErrorDescription": "Đã xảy ra lỗi khi tạo mã QR. Vui lòng thử lại.",
+      "qrDownloadError": "Tải mã QR thất bại.",
+      "qrDownloadErrorDescription": "Đã xảy ra lỗi khi tải mã QR. Vui lòng thử lại.",
+      "qrDownloadSuccess": "Tải mã QR thành công.",
+      "qrDownloadSuccessDescription": "Mã QR đã được tải về thiết bị của bạn.",
+      "tableError": "Bàn là bắt buộc.",
+      "areaError": "Khu vực là bắt buộc.",
+      "branchError": "Chi nhánh là bắt buộc.",
+      "additionalField": {
+        "title": "Trường bổ sung",
+        "description": "Thêm các trường bổ sung bạn cần nhúng vào mã QR.",
+        "addField": "Thêm trường",
+        "buttonTriggerTitle": "Thêm trường bổ sung",
+        "cancelButton": "Hủy",
+        "submitButton": "Thêm",
+        "fieldName": "Tên trường",
+        "fieldNameError": "Tên trường không được để trống.",
+        "fieldNameDescription": "* Nhập tên trường",
+        "fieldNamePlaceholder": "Nhập tên trường",
+        "fieldValue": "Giá trị trường",
+        "fieldValueDescription": "* Nhập giá trị trường",
+        "fieldValuePlaceholder": "Nhập giá trị trường",
+        "fieldValueError": "Giá trị trường không được để trống."
+      },
+      "addAreaField": {
+        "title": "Thêm khu vực",
+        "description": "Thêm khu vực nếu chưa có để nhúng vào mã QR.",
+        "create": "Thêm khu vực mới",
+        "reset": "Đặt lại biểu mẫu",
+        "edit": "Chỉnh sửa khu vực",
+        "edit.title": "Chỉnh sửa khu vực",
+        "edit.description": "Cập nhật thông tin khu vực.",
+        "viewTitle": "Chi tiết khu vực",
+        "viewDescription": "Thông tin chi tiết và thuộc tính của khu vực này.",
+        "fieldName": "Tên khu vực",
+        "fieldNameError": "Tên khu vực không được để trống.",
+        "fieldNameDescription": "* Nhập tên khu vực",
+        "fieldNamePlaceholder": "Nhập tên khu vực",
+        "fieldDescription": "Mô tả khu vực",
+        "fieldDescriptionError": "Mô tả khu vực không được để trống.",
+        "fieldDescriptionDescription": "* Nhập mô tả khu vực",
+        "fieldDescriptionPlaceholder": "Nhập mô tả khu vực",
+        "fieldImageUrl": "Ảnh khu vực",
+        "fieldImageUrlDescription": "* Chọn ảnh khu vực",
+        "fieldImageUrlPlaceholder": "Chọn ảnh khu vực",
+        "fieldBranchId": "ID chi nhánh",
+        "fieldBranchIdDescription": "* Chọn chi nhánh cho khu vực này",
+        "fieldBranchIdPlaceholder": "Chọn chi nhánh",
+        "fieldBranchIdError": "ID chi nhánh không được để trống."
+      },
+      "addTableField": {
+        "title": "Thêm bàn",
+        "description": "Thêm bàn nếu chưa có để nhúng vào mã QR.",
+        "create": "Thêm bàn mới",
+        "reset": "Đặt lại biểu mẫu",
+        "fieldName": "Số bàn",
+        "fieldNameError": "Số bàn không được để trống.",
+        "fieldNameDescription": "* Nhập số bàn",
+        "fieldNamePlaceholder": "Nhập số bàn",
+        "fieldAreaId": "ID khu vực",
+        "fieldAreaIdError": "ID khu vực không được để trống.",
+        "fieldAreaIdDescription": "* Nhập ID khu vực",
+        "fieldAreaIdPlaceholder": "Nhập ID khu vực",
+        "fieldDescription": "Mô tả bàn",
+        "fieldDescriptionError": "Mô tả bàn không được để trống.",
+        "fieldDescriptionDescription": "* Nhập mô tả bàn",
+        "fieldDescriptionPlaceholder": "Nhập mô tả bàn",
+        "fieldQrCode": "Mã QR",
+        "fieldQrCodeDescription": "* Nhập mã QR",
+        "fieldQrCodePlaceholder": "Nhập mã QR"
+      },
+      "table": {
+        "title": "Tạo mã QR",
+        "description": "Cấu hình chi tiết cho mã QR mới.",
+        "additionalFields": "Trường bổ sung",
+        "additionalFieldsDescription": "Thêm các trường bổ sung bạn cần nhúng vào mã QR.",
+        "id": "ID",
+        "table": "Bàn",
+        "area": "Khu vực",
+        "createdAt": "Ngày tạo",
+        "actions": "Nút thao tác",
+        "available": "Có sẵn",
+        "status": "Trạng thái",
+        "tablesCount": "Bàn ({{tablesCount}})",
+        "actionButton": {
+          "edit": "Chỉnh sửa",
+          "delete": "Xóa",
+          "view": "Xem",
+          "downloadShortKey": "Tải xuống",
+          "download": "Tải xuống"
+        },
+        "pagination": {
+          "rowPerPage": "Số dòng mỗi trang",
+          "pagePerTotalpages": "Trang {{currentPage}} trên {{totalPages}}",
+          "goToFirstPage": "Về trang đầu",
+          "goToPreviousPage": "Trang trước",
+          "goToNextPage": "Trang tiếp",
+          "goToLastPage": "Về trang cuối"
+        }
+      },
+      "card": {
+        "branch": "Chi nhánh",
+        "area": "Khu vực",
+        "table": "Bàn"
+      },
+      "preview": {
+        "title": "Xem trước mã QR",
+        "description": "Xem trước mã QR đã tạo.",
+        "position": "Mã QR sẽ hiển thị ở đây",
+        "generate": "Tạo mã QR",
+        "downloadFormat": "Định dạng tải xuống",
+        "downloadButton": "Tải mã QR",
+        "printButton": "In mã QR"
+      },
+      "edit": {
+        "title": "Chỉnh sửa mã QR",
+        "description": "Cập nhật thông tin mã QR.",
+        "button": {
+          "cancel": "Hủy",
+          "save": "Lưu thay đổi"
+        },
+        "fieldName": {
+          "label": "Tên mã QR",
+          "description": "* Nhập tên mã QR.",
+          "placeholder": "Nhập tên mã QR",
+          "error": "Tên mã QR không được để trống."
+        },
+        "fieldDescription": {
+          "label": "Mô tả mã QR",
+          "description": "* Nhập mô tả cho mã QR.",
+          "placeholder": "Nhập mô tả mã QR",
+          "error": "Mô tả mã QR không được để trống."
+        },
+        "fieldQrCode": {
+          "label": "Mã QR",
+          "description": "* Nhập mã QR.",
+          "placeholder": "Nhập mã QR",
+          "error": "Mã QR không được để trống."
+        }
+      },
+      "alertDialog": {
+        "title": "Bạn có chắc không?",
+        "description": "Hành động này không thể hoàn tác. Điều này sẽ xóa vĩnh viễn bản ghi bàn và loại bỏ dữ liệu khỏi máy chủ.",
+        "cancelButton": "Hủy",
+        "confirmButton": "Xóa"
+      }
+    },
+    "menuManagement": {
+      "title": "Quản lý thực đơn",
+      "createTitle": "Tạo món mới",
+      "createDescription": "Tạo món mới cho nhà hàng của bạn.",
+      "editTitle": "Chỉnh sửa món",
+      "editDescription": "Chỉnh sửa thông tin món.",
+      "viewTitle": "Xem món",
+      "viewDescription": "Xem chi tiết món.",
+      "createMenuField": {
+        "image": "Ảnh món",
+        "imageDescription": "* Tải lên ảnh món.",
+        "imagePlaceholder": "Chọn file ảnh",
+        "name": "Tên món",
+        "nameDescription": "* Nhập tên món.",
+        "namePlaceholder": "Nhập tên món",
+        "description": "Mô tả",
+        "descriptionDescription": "* Nhập mô tả món.",
+        "descriptionPlaceholder": "Nhập mô tả món",
+        "categoryName": "Danh mục",
+        "categoryNameDescription": "* Chọn danh mục cho món.",
+        "categoryNamePlaceholder": "Chọn danh mục",
+        "subCategoryName": "Danh mục con",
+        "subCategoryNameDescription": "* Chọn danh mục con cho món.",
+        "subCategoryNamePlaceholder": "Chọn danh mục con",
+        "nameError": "Tên món không được để trống.",
+        "descriptionError": "Mô tả không được để trống.",
+        "categoryError": "Phải chọn danh mục.",
+        "subcategoryError": "Phải chọn danh mục con."
+      },
+      "sizeField": {
+        "label": "Kích cỡ",
+        "description": "Thêm kích cỡ cho món. Mỗi kích cỡ có thể có giá khác nhau.",
+        "name": "Tên kích cỡ",
+        "price": "Giá",
+        "add": "Thêm kích cỡ",
+        "remove": "Xóa"
+      },
+      "optionField": {
+        "label": "Tùy chọn",
+        "description": "Thêm tùy chọn cho món. Mỗi tùy chọn có thể có giá khác nhau.",
+        "name": "Tên tùy chọn",
+        "price": "Giá",
+        "add": "Thêm tùy chọn",
+        "remove": "Xóa"
+      },
+      "action": {
+        "cancel": "Hủy",
+        "add": "Thêm món mới",
+        "save": "Lưu thay đổi"
+      },
+      "createMenuItemVariantField": {
+        "name": "Tên biến thể",
+        "nameDescription": "Nhập tên biến thể.",
+        "nameError": "Tên biến thể không được để trống.",
+        "price": "Giá",
+        "priceDescription": "Nhập giá cho biến thể này.",
+        "priceError": "Giá phải là số không âm."
+      },
+      "createMenuItemOptionField": {
+        "name": "Tên tùy chọn",
+        "nameError": "Tên tùy chọn không được để trống.",
+        "price": "Giá",
+        "priceError": "Giá phải là số không âm."
+      },
+      "addToCartDialog": {
+        "quantity": "Số lượng",
+        "sizes": "Kích cỡ",
+        "additionalToppings": "Topping thêm",
+        "notes": "Ghi chú",
+        "notesPlaceholder": "Thêm yêu cầu đặc biệt...",
+        "cancel": "Hủy",
+        "addToCart": "Thêm vào giỏ"
+      },
+      "cart": {
+        "emptyCart": "Giỏ hàng của bạn trống",
+        "emptyCartDescription": "Có vẻ bạn chưa thêm gì vào giỏ hàng.",
+        "continueShopping": "Tiếp tục mua sắm",
+        "removeItemTitle": "Bạn có chắc không?",
+        "removeItemDescription": "Bạn có chắc muốn xóa món này khỏi giỏ hàng?",
+        "size": "Kích cỡ",
+        "remove": "Xóa",
+        "cancel": "Hủy",
+        "subtotal": "Tạm tính",
+        "tax": "Thuế ({{taxRate}}%)",
+        "total": "Tổng cộng",
+        "checkout": "Thanh toán",
+        "quantity": "Số lượng",
+        "price": "Giá"
+      }
+    },
+    "orderManagement": {
+      "title": "Quản lý đơn hàng",
+      "description": "Quản lý đơn hàng nhà hàng hiệu quả.",
+      "orderCard": {
+        "details": "Chi tiết",
+        "payment": "Thanh toán",
+        "customer": "Khách hàng",
+        "table": "Bàn",
+        "items": "x {{count}} món",
+        "orderDetails": "Chi tiết đơn hàng",
+        "itemQuantity": "x{{quantity}}",
+        "totalAmount": "Tổng tiền: "
+      }
+    },
+    "createBusinessOwnerField": {
+      "step1": {
+        "username.label": "Tên đăng nhập",
+        "username.description": "* Nhập tên đăng nhập.",
+        "username.placeholder": "Nhập tên đăng nhập",
+        "username.error": "Tên đăng nhập phải có ít nhất 5 ký tự.",
+        "password.label": "Mật khẩu",
+        "password.description": "* Nhập mật khẩu.",
+        "password.placeholder": "Nhập mật khẩu",
+        "password.error": "Mật khẩu phải có ít nhất 6 ký tự và phải chứa ít nhất một chữ hoa, một chữ thường và một số.",
+        "confirmPassword.label": "Xác nhận mật khẩu",
+        "confirmPassword.description": "* Nhập lại mật khẩu.",
+        "confirmPassword.placeholder": "Nhập lại mật khẩu",
+        "confirmPassword.error": "Mật khẩu không khớp."
+      },
+      "step2": {
+        "name_BO.label": "Họ và tên",
+        "name_BO.description": "* Nhập họ và tên.",
+        "name_BO.placeholder": "Nhập họ và tên",
+        "name_BO.error": "Tên không được để trống.",
+        "phone_BO.label": "Số điện thoại",
+        "phone_BO.description": "* Nhập số điện thoại.",
+        "phone_BO.placeholder": "Nhập số điện thoại",
+        "phone_BO.error": "Số điện thoại phải có ít nhất 10 ký tự và chỉ chứa số.",
+        "phone_BO.errorFormat": "Vui lòng nhập số điện thoại hợp lệ.",
+        "address_BO.label": "Địa chỉ cá nhân",
+        "address_BO.description": "* Nhập địa chỉ cá nhân.",
+        "address_BO.placeholder": "Nhập địa chỉ cá nhân",
+        "address_BO.error": "Địa chỉ cá nhân phải là địa chỉ hợp lệ.",
+        "address_BO.errorFormat": "Vui lòng nhập địa chỉ hợp lệ."
+      },
+      "step3": {
+        "title": "Chỉnh sửa doanh nghiệp",
+        "description": "Cập nhật thông tin doanh nghiệp.",
+        "button.cancel": "Hủy",
+        "button.save": "Lưu thay đổi",
+        "name_B.label": "Tên doanh nghiệp",
+        "name_B.description": "* Nhập tên doanh nghiệp.",
+        "name_B.placeholder": "Nhập tên doanh nghiệp",
+        "name_B.error": "Tên doanh nghiệp không được để trống.",
+        "address_B.label": "Địa chỉ doanh nghiệp",
+        "address_B.description": "* Nhập địa chỉ doanh nghiệp.",
+        "address_B.placeholder": "Nhập địa chỉ doanh nghiệp",
+        "address_B.error": "Địa chỉ doanh nghiệp không được để trống.",
+        "contact_B.label": "Số liên hệ doanh nghiệp",
+        "contact_B.description": "* Nhập số liên hệ doanh nghiệp.",
+        "contact_B.placeholder": "Nhập số liên hệ doanh nghiệp",
+        "contact_B.error": "Số liên hệ doanh nghiệp phải có ít nhất 10 ký tự và chỉ chứa số.",
+        "businessType.label": "Loại hình doanh nghiệp",
+        "businessType.description": "* Chọn loại hình doanh nghiệp.",
+        "businessType.error": "Phải chọn loại hình doanh nghiệp.",
+        "businessType.placeholder": "Chọn loại hình doanh nghiệp",
+        "businessTaxCode.label": "Mã số thuế doanh nghiệp",
+        "businessTaxCode.description": "* Nhập mã số thuế doanh nghiệp.",
+        "businessTaxCode.placeholder": "Nhập mã số thuế doanh nghiệp",
+        "businessTaxCode.error": "Mã số thuế doanh nghiệp phải có ít nhất 10 ký tự và chỉ chứa số."
+      }
+    },
+    "businessType": {
+      "createTitle": "Tạo loại hình doanh nghiệp mới",
+      "createDescription": "Điền thông tin để tạo loại hình doanh nghiệp mới.",
+      "editTitle": "Chỉnh sửa loại hình doanh nghiệp",
+      "editDescription": "Cập nhật thông tin loại hình doanh nghiệp.",
+      "viewTitle": "Chi tiết loại hình doanh nghiệp",
+      "viewDescription": "Thông tin chi tiết và thuộc tính của loại hình doanh nghiệp này.",
+      "button": {
+        "cancel": "Hủy",
+        "create": "Tạo loại hình doanh nghiệp",
+        "edit": "Chỉnh sửa loại hình doanh nghiệp"
+      },
+      "createField": {
+        "name": "Tên loại hình doanh nghiệp",
+        "nameDescription": "Nhập tên loại hình doanh nghiệp.",
+        "nameError": "Tên loại hình doanh nghiệp là bắt buộc.",
+        "description": "Mô tả loại hình doanh nghiệp",
+        "descriptionDescription": "Nhập mô tả ngắn về loại hình doanh nghiệp.",
+        "descriptionError": "Mô tả loại hình doanh nghiệp là bắt buộc."
+      },
+      "action": {
+        "cancel": "Hủy",
+        "create": "Tạo loại hình doanh nghiệp",
+        "edit": "Chỉnh sửa loại hình doanh nghiệp"
+      }
+    },
+    "business": {
+      "viewTitle": "Chi tiết doanh nghiệp",
+      "viewDescription": "Thông tin chi tiết và thuộc tính của doanh nghiệp này.",
+      "createNew": "Tạo doanh nghiệp mới",
+      "extend": {
+        "title": "Gia hạn doanh nghiệp",
+        "description": "Chọn ngày hết hạn mới cho doanh nghiệp.",
+        "plan.label": "Chọn gói",
+        "plan.description": "* Chọn gói để gia hạn doanh nghiệp.",
+        "plan.error": "Phải chọn gói.",
+        "plan.placeholder": "Chọn gói",
+        "expiredAt.label": "Ngày hết hạn",
+        "qr.label": "Mã QR",
+        "qr.description": "* Quét mã QR để gia hạn doanh nghiệp.",
+        "image.label": "Ảnh doanh nghiệp",
+        "image.description": "* Tải ảnh mới cho doanh nghiệp.",
+        "image.placeholder": "Chọn file ảnh",
+        "image.error": "Ảnh doanh nghiệp là bắt buộc.",
+        "button": {
+          "cancel": "Hủy",
+          "confirm": "Xác nhận gia hạn",
+          "save": "Lưu thay đổi"
+        }
+      }
+    },
+    "businessOwner": {
+      "viewTitle": "Chi tiết chủ doanh nghiệp",
+      "viewDescription": "Thông tin chi tiết và thuộc tính của chủ doanh nghiệp này.",
+      "createNew": "Tạo chủ doanh nghiệp mới",
+      "editField": {
+        "title": "Chỉnh sửa chủ doanh nghiệp",
+        "description": "Cập nhật thông tin chủ doanh nghiệp.",
+        "name.label": "Tên chủ doanh nghiệp",
+        "name.description": "Nhập tên chủ doanh nghiệp.",
+        "name.error": "Tên chủ doanh nghiệp là bắt buộc.",
+        "address.label": "Địa chỉ chủ doanh nghiệp",
+        "address.description": "Nhập địa chỉ chủ doanh nghiệp.",
+        "address.error": "Địa chỉ chủ doanh nghiệp là bắt buộc.",
+        "phone.label": "Số điện thoại chủ doanh nghiệp",
+        "phone.description": "Nhập số điện thoại chủ doanh nghiệp.",
+        "phone.error": "Số điện thoại chủ doanh nghiệp là bắt buộc.",
+        "phone.formatError": "Vui lòng nhập số điện thoại hợp lệ.",
+        "username.label": "Tên đăng nhập chủ doanh nghiệp",
+        "username.description": "Nhập tên đăng nhập chủ doanh nghiệp.",
+        "username.error": "Tên đăng nhập chủ doanh nghiệp là bắt buộc.",
+        "available.label": "Có sẵn",
+        "available.description": "Chủ doanh nghiệp có sẵn không?",
+        "button.cancel": "Hủy",
+        "button.save": "Lưu thay đổi"
+      }
+    },
+    "branchManagement": {
+      "viewTitle": "Chi tiết chi nhánh",
+      "viewDescription": "Thông tin chi tiết và thuộc tính của chi nhánh này.",
+      "createNew": "Tạo chi nhánh mới",
+      "title": "Chọn chi nhánh",
+      "description": "* Chọn chi nhánh của bạn.",
+      "placeholder": "Chọn chi nhánh",
+      "createField": {
+        "create": {
+          "title": "Tạo chi nhánh mới",
+          "description": "Điền thông tin để tạo chi nhánh mới."
+        },
+        "edit": {
+          "title": "Chỉnh sửa chi nhánh",
+          "description": "Cập nhật thông tin chi nhánh."
+        },
+        "name": {
+          "label": "Tên chi nhánh",
+          "description": "Nhập tên chi nhánh.",
+          "error": "Tên chi nhánh là bắt buộc."
+        },
+        "address": {
+          "label": "Địa chỉ chi nhánh",
+          "description": "Nhập địa chỉ chi nhánh.",
+          "error": "Địa chỉ chi nhánh là bắt buộc."
+        },
+        "contact": {
+          "label": "Số liên hệ chi nhánh",
+          "description": "Nhập số liên hệ chi nhánh.",
+          "error": "Số liên hệ chi nhánh là bắt buộc.",
+          "formatError": "Vui lòng nhập số liên hệ hợp lệ."
+        }
+      },
+      "action": {
+        "cancel": "Hủy",
+        "create": "Tạo chi nhánh",
+        "edit": "Chỉnh sửa chi nhánh"
+      }
+    },
+    "staffManagement": {
+      "viewTitle": "Chi tiết người dùng",
+      "viewDescription": "Thông tin chi tiết và thuộc tính của người dùng này.",
+      "createNew": "Tạo người dùng mới",
+      "button": {
+        "create": "Tạo người dùng mới",
+        "cancel": "Hủy",
+        "edit": "Lưu thay đổi"
+      },
+      "create": {
+        "title": "Tạo người dùng mới",
+        "description": "Điền thông tin để tạo người dùng mới.",
+        "name.label": "Tên",
+        "name.description": "Nhập tên người dùng.",
+        "name.error": "Tên là bắt buộc.",
+        "address.label": "Địa chỉ",
+        "address.description": "Nhập địa chỉ người dùng.",
+        "address.error": "Địa chỉ là bắt buộc.",
+        "phone.label": "Số điện thoại",
+        "phone.description": "Nhập số điện thoại người dùng.",
+        "phone.error": "Số điện thoại là bắt buộc.",
+        "phone.formatError": "Vui lòng nhập số điện thoại hợp lệ.",
+        "username.label": "Tên đăng nhập",
+        "username.description": "Nhập tên đăng nhập người dùng.",
+        "username.error": "Tên đăng nhập là bắt buộc.",
+        "password.label": "Mật khẩu",
+        "password.description": "Nhập mật khẩu cho người dùng.",
+        "password.error": "Mật khẩu là bắt buộc.",
+        "confirmPassword.label": "Xác nhận mật khẩu",
+        "confirmPassword.description": "Nhập lại mật khẩu để xác nhận.",
+        "confirmPassword.error": "Mật khẩu không khớp.",
+        "branch.label": "Chi nhánh",
+        "branch.description": "Chọn chi nhánh cho nhân viên này.",
+        "branch.error": "Phải chọn chi nhánh.",
+        "branch.placeholder": "Chọn chi nhánh",
+        "available": {
+          "label": "Có sẵn",
+          "description": "Nhân viên có sẵn không?"
+        }
+      },
+      "edit": {
+        "title": "Chỉnh sửa nhân viên",
+        "description": "Cập nhật thông tin nhân viên."
+      }
+    },
+    "groupManagement": {
+      "create": {
+        "title": "Tạo nhóm mới",
+        "description": "Điền thông tin để tạo nhóm mới.",
+        "name.label": "Tên nhóm",
+        "name.description": "Nhập tên nhóm.",
+        "name.error": "Tên nhóm là bắt buộc.",
+        "description.label": "Mô tả nhóm",
+        "description.description": "Nhập mô tả ngắn về nhóm.",
+        "description.error": "Mô tả nhóm là bắt buộc."
+      },
+      "edit": {
+        "title": "Chỉnh sửa nhóm",
+        "description": "Cập nhật thông tin nhóm."
+      },
+      "viewTitle": "Chi tiết nhóm",
+      "viewDescription": "Thông tin chi tiết và thuộc tính của nhóm này.",
+      "button": {
+        "cancel": "Hủy",
+        "create": "Tạo nhóm",
+        "edit": "Chỉnh sửa nhóm"
+      }
+    },
+    "categoriesMgmt": {
+      "viewTitle": "Chi tiết danh mục",
+      "viewDescription": "Thông tin chi tiết và thuộc tính của danh mục này.",
+      "create": {
+        "title": "Tạo danh mục mới",
+        "description": "Điền thông tin để tạo danh mục mới.",
+        "name.label": "Tên danh mục",
+        "name.description": "* Nhập tên danh mục.",
+        "name.placeholder": "Nhập tên danh mục",
+        "name.error": "Tên danh mục là bắt buộc.",
+        "description.label": "Mô tả danh mục",
+        "description.description": "* Nhập mô tả ngắn về danh mục.",
+        "description.placeholder": "Nhập mô tả danh mục",
+        "description.error": "Mô tả danh mục là bắt buộc."
+      },
+      "edit": {
+        "title": "Chỉnh sửa danh mục",
+        "description": "Cập nhật thông tin danh mục."
+      },
+      "button": {
+        "cancel": "Hủy",
+        "create": "Tạo danh mục",
+        "edit": "Chỉnh sửa danh mục",
+        "add": "Thêm danh mục mới"
+      },
+      "subCategories": {
+        "viewTitle": "Chi tiết danh mục con",
+        "viewDescription": "Thông tin chi tiết và thuộc tính của danh mục con này.",
+        "button": {
+          "add": "Thêm danh mục con mới",
+          "cancel": "Hủy",
+          "edit": "Chỉnh sửa danh mục con",
+          "create": "Tạo danh mục con"
+        },
+        "create": {
+          "title": "Tạo danh mục con mới",
+          "description": "Điền thông tin để tạo danh mục con mới.",
+          "category.label": "Danh mục",
+          "category.description": "* Chọn danh mục cho danh mục con này.",
+          "category.placeholder": "Chọn danh mục",
+          "category.error": "Phải chọn danh mục.",
+          "name.label": "Tên danh mục con",
+          "name.description": "* Nhập tên danh mục con.",
+          "name.placeholder": "Nhập tên danh mục con",
+          "name.error": "Tên danh mục con là bắt buộc.",
+          "description.label": "Mô tả danh mục con",
+          "description.description": "* Nhập mô tả ngắn về danh mục con.",
+          "description.placeholder": "Nhập mô tả danh mục con",
+          "description.error": "Mô tả danh mục con là bắt buộc."
+        },
+        "edit": {
+          "title": "Chỉnh sửa danh mục con",
+          "description": "Cập nhật thông tin danh mục con."
+        }
+      }
+    },
+    "guestUser": {
+      "create": {
+        "title": "Nhập tên để tiếp tục",
+        "description": "Nhập tên để tiếp tục chọn món và yêu cầu đặt hàng."
+      },
+      "field": {
+        "name": {
+          "label": "Tên",
+          "description": "* Nhập tên.",
+          "placeholder": "Nhập tên",
+          "error": "Tên không được để trống."
+        }
+      },
+      "button": {
+        "cancel": "Hủy",
+        "submit": "Gửi",
+        "edit": "Chỉnh sửa khách"
+      },
+      "createRequest": {
+        "title": "Tạo yêu cầu",
+        "description": "Điền thông tin để tạo yêu cầu mới.",
+        "request": {
+          "label": "Chi tiết yêu cầu",
+          "description": "* Nhập chi tiết yêu cầu.",
+          "placeholder": "Nhập chi tiết yêu cầu",
+          "error": "Chi tiết yêu cầu không được để trống."
+        },
+        "button": {
+          "submit": "Gửi yêu cầu",
+          "cancel": "Hủy"
+        }
+      }
+    },
+    "profile": {
+      "edit": {
+        "label": "Cập nhật hồ sơ",
+        "title": "Hồ sơ người dùng",
+        "description": "Cập nhật thông tin hồ sơ.",
+        "image": {
+          "label": "Ảnh hồ sơ",
+          "description": "Tải ảnh hồ sơ.",
+          "error": "Ảnh hồ sơ là bắt buộc."
+        },
+        "name": {
+          "label": "Tên",
+          "description": "* Nhập tên.",
+          "placeholder": "Nhập tên",
+          "error": "Tên không được để trống."
+        },
+        "phone": {
+          "label": "Số điện thoại",
+          "description": "* Nhập số điện thoại.",
+          "placeholder": "Nhập số điện thoại",
+          "error": "Số điện thoại không được để trống."
+        },
+        "address": {
+          "label": "Địa chỉ",
+          "description": "* Nhập địa chỉ.",
+          "placeholder": "Nhập địa chỉ",
+          "error": "Địa chỉ không được để trống."
+        },
+        "button": {
+          "cancel": "Hủy",
+          "save": "Lưu thay đổi"
+        }
+      },
+      "configureBank": {
+        "title": "Cấu hình ngân hàng",
+        "description": "Cập nhật thông tin cấu hình ngân hàng.",
+        "noBankConfig": "Không tìm thấy cấu hình ngân hàng.",
+        "button": {
+          "cancel": "Hủy",
+          "save": "Lưu cấu hình",
+          "configure": "Cấu hình ngân hàng",
+          "update": "Cập nhật cấu hình ngân hàng"
+        },
+        "accountNo": {
+          "label": "Số tài khoản",
+          "description": "* Nhập số tài khoản ngân hàng.",
+          "placeholder": "Nhập số tài khoản",
+          "error": "Số tài khoản không được để trống."
+        },
+        "accountName": {
+          "label": "Tên tài khoản",
+          "description": "* Nhập tên tài khoản ngân hàng.",
+          "placeholder": "Nhập tên tài khoản",
+          "error": "Tên tài khoản không được để trống."
+        },
+        "bank": {
+          "label": "Tên ngân hàng",
+          "description": "* Chọn tên ngân hàng.",
+          "placeholder": "Chọn tên ngân hàng",
+          "error": "Tên ngân hàng không được để trống."
+        }
+      },
+      "permission": {
+        "label": "Quyền",
+        "description": "Tất cả quyền được gán cho tài khoản này.",
+        "noPermission": "Không có quyền nào được gán cho tài khoản này"
+      }
+    },
+    "plan": {
+      "table-session": "Phiên bảng gói",
+      "create": {
+        "title": "Tạo gói mới",
+        "description": "Điền thông tin để tạo gói mới.",
+        "name.label": "Tên gói",
+        "name.description": "* Nhập tên gói.",
+        "name.placeholder": "Nhập tên gói",
+        "name.error": "Tên gói là bắt buộc.",
+        "period.label": "Thời hạn gói",
+        "period.description": "* Nhập thời hạn gói theo ngày.",
+        "period.placeholder": "Nhập thời hạn gói",
+        "period.error": "Thời hạn gói là bắt buộc.",
+        "description.label": "Mô tả gói",
+        "description.description": "* Nhập mô tả ngắn về gói.",
+        "description.placeholder": "Nhập mô tả gói",
+        "description.error": "Mô tả gói là bắt buộc.",
+        "price.label": "Giá",
+        "price.description": "* Nhập giá của gói.",
+        "price.placeholder": "Nhập giá",
+        "price.error": "Giá là bắt buộc."
+      },
+      "edit": {
+        "title": "Chỉnh sửa gói",
+        "description": "Cập nhật thông tin gói.",
+        "name.error": "Tên gói không được để trống.",
+        "period.error": "Thời hạn gói không được để trống.",
+        "price.error": "Giá không được để trống."
+      },
+      "action": {
+        "cancel": "Hủy",
+        "create": "Tạo gói",
+        "edit": "Chỉnh sửa gói",
+        "createNew": "Tạo gói mới",
+        "extend": "Gia hạn"
+      }
+    },
+    "orderRequest": {
+      "create": {
+        "branch.error": "Chi nhánh là bắt buộc.",
+        "area.error": "Khu vực là bắt buộc.",
+        "service_unit.error": "Bàn là bắt buộc.",
+        "guestName.error": "Tên khách không được để trống."
+      }
+    },
+    "filter": {
+      "title": "Tùy chọn lọc",
+      "description": "Chọn tùy chọn lọc để thu hẹp kết quả tìm kiếm.",
+      "branch": {
+        "label": "Lọc chi nhánh",
+        "description": "* Chọn chi nhánh để lọc.",
+        "placeholder": "Chọn chi nhánh",
+        "error": "Phải chọn chi nhánh."
+      },
+      "area": {
+        "label": "Lọc khu vực",
+        "description": "* Chọn khu vực để lọc.",
+        "placeholder": "Chọn khu vực",
+        "error": "Phải chọn khu vực."
+      },
+      "table": {
+        "label": "Lọc bàn",
+        "description": "* Chọn bàn để lọc.",
+        "placeholder": "Chọn bàn",
+        "error": "Phải chọn bàn."
+      },
+      "status": {
+        "label": "Lọc trạng thái",
+        "description": "* Chọn trạng thái để lọc.",
+        "placeholder": "Chọn trạng thái",
+        "error": "Phải chọn trạng thái."
+      },
+      "button": {
+        "apply": "Áp dụng bộ lọc",
+        "clear": "Xóa bộ lọc"
+      }
+    },
+    "order": {
+      "noOrderFound": "Không tìm thấy đơn hàng.",
+      "view": {
+        "title": "Chi tiết đơn hàng",
+        "description": "Thông tin chi tiết và thuộc tính của đơn hàng này."
+      },
+      "unassignedRequestSession": "Các yêu cầu nào chưa được phân công",
+      "orderSession": "Các đơn hàng"
+    },
+    "request": {
+      "noRequestAvailable": "Không có yêu cầu nào."
+    },
+    "card": {
+      "guestName": "Tên khách",
+      "reason": "Lý do",
+      "price": "Giá",
+      "button": {
+        "confirm": "Xác nhận"
+      }
+    },
+    "status": {
+      "waiting": "Đang chờ",
+      "completed": "Hoàn thành",
+      "cancelled": "Đã hủy",
+      "inProgress": "Đang xử lý",
+      "pending": "Đang chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Bị từ chối",
+      "unpaid": "Chưa thanh toán",
+      "paid": "Đã thanh toán",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động"
     }
   }
 }

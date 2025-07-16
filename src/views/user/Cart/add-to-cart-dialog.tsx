@@ -89,7 +89,7 @@ const AddToCartDialog: React.FC<AddToCartDialogProps> = ({ children, item, open,
                 {item.description || 'No description available'}
               </DialogDescription>
               <div className="flex items-center space-x-2 text-sm">
-                <p className="text-muted-foreground">Price (once item):</p>
+                <p className="text-muted-foreground">{t('module.card.price')} :</p>
                 <p className="text-xl font-semibold text-primary">
                   {(
                     item.variants[sizesOptions.findIndex((option) => option.value === selectedSize)]?.price +

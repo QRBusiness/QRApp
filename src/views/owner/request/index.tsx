@@ -1,23 +1,25 @@
 import React from 'react';
 import { useRequests } from '@/services/owner/request-service';
 import { FunnelPlus, FunnelX } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { CustomVariantsSelect } from '../menu-management/dialog/custom-variants-select';
 import CartRequest from '../order-management/card/cart-request';
 
 const RequestPage = () => {
+  const { t } = useTranslation();
   const [selectedStatus, setSelectedStatus] = React.useState<string>('Waiting');
   const { requests } = useRequests({ status: selectedStatus, type: 'Request' });
   const statusOptions = React.useMemo(() => {
     return [
       {
         value: 'Waiting',
-        label: 'Waiting',
+        label: t('module.status.waiting') || 'Waiting',
       },
       {
         value: 'Completed',
-        label: 'Completed',
+        label: t('module.status.completed') || 'Completed',
       },
     ];
   }, []);
@@ -30,23 +32,23 @@ const RequestPage = () => {
         <div className="flex items-center justify-between space-x-2 w-full">
           <div className="flex items-center space-x-2">
             <FunnelPlus className="size-4 md:size-5" />
-            <Label className="font-semibold text-base ">Filters Options</Label>
+            <Label className="font-semibold text-base ">{t('module.filter.title')}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <Button variant="destructive" size="sm" onClick={handleClearFilters} disabled={selectedStatus === ''}>
               <FunnelX className="size-4 md:size-5" />
-              Clear Filters
+              {t('module.filter.button.clear')}
             </Button>
           </div>
         </div>
         <div className="grid grid-cols-3 w-full items-center justify-between flex-wrap gap-2">
           <div className="flex flex-col items-start justify-center space-y-2">
-            <Label className="text-muted-foreground">Status Filter</Label>
+            <Label className="text-muted-foreground">{t('module.filter.status.label')}</Label>
             <CustomVariantsSelect
               options={statusOptions}
               value={selectedStatus}
               onChange={setSelectedStatus}
-              placeholder="Select Status"
+              placeholder={t('module.filter.status.placeholder')}
             />
           </div>
         </div>

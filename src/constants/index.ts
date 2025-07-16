@@ -40,6 +40,7 @@ export const SIDEBAR_WIDTH_ICON = '3rem';
 export const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
 // Local Storage Constants
+export const LANGUAGE_STORAGE = 'LANGUAGE';
 export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const USER_SESSION = 'USER_SESSION';

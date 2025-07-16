@@ -3,6 +3,7 @@ import { useAreas } from '@/services/owner/area-service';
 import { type OrderResponseProps, useOrders } from '@/services/owner/order-service';
 import { getTables } from '@/services/owner/table-service';
 import { FunnelPlus, FunnelX } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Loading from '@/components/common/loading';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -10,17 +11,19 @@ import { CustomVariantsSelect } from '../../menu-management/dialog/custom-varian
 import CardOrderItem from './card-order-item';
 
 export const CardOrders = () => {
-  const { areas } = useAreas({ page: 1, limit: 50 });
+  const { t } = useTranslation();
   const [selectedArea, setSelectedArea] = React.useState<string>('');
   const [selectedTable, setSelectedTable] = React.useState<string>('');
   const [selectedStatus, setSelectedStatus] = React.useState<string>('Unpaid');
+  const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([]);
+
+  const { areas } = useAreas({ page: 1, limit: 50 });
   const { orders, isLoading, refetch } = useOrders({
     area: selectedArea,
     table: selectedTable,
     status: selectedStatus,
   });
   const data = orders as OrderResponseProps[];
-  const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([]);
 
   const areaOptions = React.useMemo(() => {
     if (!areas || areas.length === 0) {
@@ -31,15 +34,16 @@ export const CardOrders = () => {
       label: area.name,
     }));
   }, [areas]);
+
   const statusOptions = React.useMemo(() => {
     return [
       {
         value: 'Unpaid',
-        label: 'Unpaid',
+        label: t('module.status.unpaid') || 'Unpaid',
       },
       {
         value: 'Paid',
-        label: 'Paid',
+        label: t('module.status.paid') || 'Paid',
       },
     ];
   }, []);
@@ -92,7 +96,7 @@ export const CardOrders = () => {
         <div className="flex items-center justify-between space-x-2 w-full">
           <div className="flex items-center space-x-2">
             <FunnelPlus className="size-4 md:size-5" />
-            <Label className="font-semibold text-base ">Filters Options</Label>
+            <Label className="font-semibold text-base ">{t('module.filter.title')}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <Button
@@ -102,46 +106,46 @@ export const CardOrders = () => {
               disabled={selectedArea === '' && selectedTable === '' && selectedStatus === ''}
             >
               <FunnelX className="size-4 md:size-5" />
-              Clear Filters
+              {t('module.filter.button.clear')}
             </Button>
           </div>
         </div>
         <div className="grid grid-cols-2 xl:grid-cols-3 w-full items-center justify-between flex-wrap gap-2">
           <div className="flex flex-col items-start justify-center space-y-2">
-            <Label className="text-muted-foreground">Area Filter</Label>
+            <Label className="text-muted-foreground">{t('module.filter.area.label')}</Label>
             <CustomVariantsSelect
               options={areaOptions}
               value={selectedArea}
               onChange={handleAreaChange}
-              placeholder="Select Area"
+              placeholder={t('module.filter.area.placeholder')}
             />
           </div>
 
           <div className="flex flex-col items-start justify-center space-y-2">
-            <Label className="text-muted-foreground">Table Filter</Label>
+            <Label className="text-muted-foreground">{t('module.filter.table.label')}</Label>
             <CustomVariantsSelect
               options={tableOptions}
               value={selectedTable}
               onChange={setSelectedTable}
               disabled={selectedArea === ''}
-              placeholder="Select Table"
+              placeholder={t('module.filter.table.placeholder')}
             />
           </div>
 
           <div className="flex flex-col items-start justify-center space-y-2">
-            <Label className="text-muted-foreground">Status Filter</Label>
+            <Label className="text-muted-foreground">{t('module.filter.status.label')}</Label>
             <CustomVariantsSelect
               options={statusOptions}
               value={selectedStatus}
               onChange={setSelectedStatus}
-              placeholder="Select Status"
+              placeholder={t('module.filter.status.placeholder')}
             />
           </div>
         </div>
       </div>
       {data.length === 0 && (
         <div className="col-span-1 md:col-span-2 lg:col-span-3 2xl:col-span-4 flex justify-center items-center h-96">
-          <p className="text-muted-foreground">No orders found</p>
+          <p className="text-muted-foreground">{t('module.orderRequest.noOrderFound')}</p>
         </div>
       )}
       {data.map((order) => (

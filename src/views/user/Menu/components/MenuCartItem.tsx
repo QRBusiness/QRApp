@@ -72,7 +72,7 @@ const MenuCardItem: React.FC<Menu> = ({
           }}
         >
           <Button size="icon" className="rounded-full" disabled={!available} variant={'outline'}>
-            <ScanText className="size-4 md:size-5" />
+            <ScanText className="size-5" />
           </Button>
         </ReadOnlyMenuItemDialog>
         <AddToCartDialog
@@ -93,7 +93,7 @@ const MenuCardItem: React.FC<Menu> = ({
           onSubmit={(cartItem: CartItem) => addToCart(cartItem)}
         >
           <Button size="icon" className="rounded-full" disabled={!available} variant={'default'}>
-            <Plus className="size-4 md:size-5" />
+            <Plus className="size-5" />
           </Button>
         </AddToCartDialog>
       </div>

@@ -1,12 +1,12 @@
 import React from 'react';
 import type { OrderResponseProps } from '@/services/owner/order-service';
-import { format } from 'date-fns';
 import { CircleUser, Clock, CreditCard, Info, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { formattedDate } from '@/libs/utils';
 import OrderDetailsDialog from '../details/order-details-dialog';
 import StatusBadge from '../status/status-baged';
 
@@ -14,7 +14,7 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const formattedDate = format(new Date(order.created_at), 'h:mm a - MMM dd, yyyy');
+  const orderCreatedAt = formattedDate(order.created_at, 'MMM dd, yyyy • h:mm a');
   const navigate = useNavigate();
 
   return (
@@ -42,7 +42,7 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
             </div>
             <div className="flex items-center">
               <Clock className="inline size-4 mr-1" />
-              {formattedDate}
+              {orderCreatedAt}
             </div>
           </div>
         </div>
@@ -95,14 +95,14 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
         {/* Footer card */}
         <div className="flex justify-between space-x-2 w-full">
           <OrderDetailsDialog isOpen={isOpen} onOpenChange={setIsOpen} data={order}>
-            <Button variant="outline" size="sm" className="flex-1 items-center space-x-2">
+            <Button variant="secondary" size="sm" className="flex-1 items-center space-x-2">
               <Info className="size-4 md:size-5" />
               {t('module.orderManagement.orderCard.details')}
             </Button>
           </OrderDetailsDialog>
           {order.status !== 'Paid' && (
             <Button
-              variant="outline"
+              variant="default"
               size="sm"
               className="flex-1 items-center space-x-2"
               onClick={() => navigate(order._id)}

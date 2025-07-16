@@ -1,16 +1,16 @@
 import { type RequestResponseProps, useProcessRequest } from '@/services/owner/request-service';
-import { format } from 'date-fns';
 import { Check, CircleUser, Clock, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { formattedDate } from '@/libs/utils';
 import StatusBadge from '../status/status-baged';
 
 const CardRequestOrder = ({ order }: { order: RequestResponseProps }) => {
   const { t } = useTranslation();
   const { processRequest } = useProcessRequest();
-  const formattedDate = format(new Date(order.created_at), 'h:mm a - MMM dd, yyyy');
+  const orderCreatedAt = formattedDate(order.created_at, 'MMM dd, yyyy • h:mm a');
   const totalQuantity = order.data.reduce((total, item) => total + item.quantity, 0);
   const totalAmount = order.data.reduce((total, item) => total + item.price * item.quantity, 0);
   const onConfirm = async () => {
@@ -35,7 +35,7 @@ const CardRequestOrder = ({ order }: { order: RequestResponseProps }) => {
             </div>
             <div className="flex items-center">
               <Clock className="inline size-4 mr-1" />
-              {formattedDate}
+              {orderCreatedAt}
             </div>
           </div>
           <StatusBadge status={order.status as 'Cancelled' | 'Completed' | 'Pending' | 'Waiting' | 'Paid' | 'Unpaid'} />

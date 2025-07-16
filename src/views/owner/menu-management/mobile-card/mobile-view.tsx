@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Hint } from '@/components/common/hint';
 import { useCartTotalQuantity } from '@/components/common/states/cartState';
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/libs/utils';
 import type { Menu } from '../tables/columns';
 import MenuCardItem from './mobile-card-item';
 
@@ -14,6 +16,7 @@ interface MobileMenuViewProps {
 const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
   const navigate = useNavigate();
   const { totalQuantity } = useCartTotalQuantity();
+  const isMobile = useIsMobile();
   return (
     <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 px-4 w-full">
       {items.map((item) => (
@@ -31,7 +34,7 @@ const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
           updated_at={item.updated_at}
         />
       ))}
-      <div className="fixed bottom-17 md:bottom-4 right-4 flex flex-col gap-3 z-50">
+      <div className={cn('fixed right-4 flex flex-col gap-3 z-50', isMobile ? 'bottom-17' : 'bottom-4')}>
         <Hint label="View Cart Items" align="end">
           <Button
             variant="default"

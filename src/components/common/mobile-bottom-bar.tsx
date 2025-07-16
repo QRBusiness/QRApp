@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/libs/utils';
 import { Button } from '../ui/button';
 
@@ -17,9 +18,10 @@ const MobileBottomBar = ({ items }: MobileBottomBarProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const params = useLocation();
+  const isMobile = useIsMobile();
 
   // Check if the screen width is less than 768px
-  if (window.innerWidth >= 768) return null; // Hide on larger screens
+  if (!isMobile) return null; // Hide on larger screens
   // Hide the bottom bar on larger screens
   return (
     <div

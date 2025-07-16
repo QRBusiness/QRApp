@@ -1,5 +1,6 @@
 import { useProcessRequest } from '@/services/owner/request-service';
 import { Check, Clock9, MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -25,8 +26,9 @@ export interface CartRequestProps {
 }
 
 const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, reason }: CartRequestProps) => {
-  const { processRequest } = useProcessRequest();
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
+  const { processRequest } = useProcessRequest();
 
   const onConfirm = async () => {
     await processRequest(_id);
@@ -51,18 +53,18 @@ const CartRequest = ({ _id, created_at, status, area, service_unit, guest_name, 
         </p>
 
         <div className="flex items-center space-x-2">
-          <span>Guest Name:</span> <p className="font-semibold">{guest_name || 'N/A'}</p>
+          <span>{t('module.card.guestName')}:</span> <p className="font-semibold">{guest_name || 'N/A'}</p>
         </div>
         {reason && (
           <div className="flex items-center space-x-2">
-            <span>Reason:</span> <p className="font-semibold">{reason || 'N/A'}</p>
+            <span>{t('module.card.reason')}:</span> <p className="font-semibold">{reason || 'N/A'}</p>
           </div>
         )}
         <div className={cn('flex flex-col items-end justify-end h-full w-full', isMobile ? 'block' : 'block')}>
           {status === 'Waiting' && (
             <Button onClick={onConfirm} className="w-full" variant="default">
               <Check />
-              Confirm
+              {t('module.card.button.confirm')}
             </Button>
           )}
         </div>

@@ -29,16 +29,22 @@ class WebSocketService {
 
     this.socket.onmessage = (event) => {
       console.log('Message from server:', event.data);
-      // Play notification sound when a message is received
-      const notificationSound = document.getElementById('notification-sound') as HTMLAudioElement;
-      if (notificationSound) {
-        notificationSound.play().catch((error) => {
-          console.error('Error playing notification sound:', error);
-        });
+      const receivedData = JSON.parse(event.data);
+      if (
+        receivedData?.message?.includes('RequestType.REQUEST') ||
+        receivedData?.message?.includes('RequestType.ORDER')
+      ) {
+        // Play notification sound when a message is received
+        const notificationSound = document.getElementById('notification-sound') as HTMLAudioElement;
+        if (notificationSound) {
+          notificationSound.play().catch((error) => {
+            console.error('Error playing notification sound:', error);
+          });
+        }
+        // Invalidate the query client to refresh data
+        queryClient.invalidateQueries({ queryKey: ['orders'] });
+        queryClient.invalidateQueries({ queryKey: ['requests'] });
       }
-      // Invalidate the query client to refresh data
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
-      queryClient.invalidateQueries({ queryKey: ['requests'] });
     };
 
     this.socket.onerror = (error) => {

@@ -70,14 +70,14 @@ const UserMenuPage: React.FC = () => {
   };
 
   return (
-    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-2 w-full mx-auto pb-10">
+    <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:col-span-4 gap-4 px-2 w-full mx-auto pb-10">
       <UserInputModel
         open={openUserInputModel}
         onOpenChange={setOpenUserInputModel}
         onSubmit={(values) => useSetGuestName(values.name)}
       />
       <HorizontalFilterScroll
-        className="col-span-1 md:col-span-2 lg:col-span-4 mb-4 w-full"
+        className="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4 mb-4 w-full"
         orderStatuses={categoryOptions.map((category) => ({
           label: category.label,
           value: category.value,

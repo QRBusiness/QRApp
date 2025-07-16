@@ -52,7 +52,15 @@
         "variants": "Variants",
         "options": "Options",
         "period": "Period",
-        "days": "Days"
+        "days": "Days",
+        "expiration": "Expiration Date",
+        "join": "Join",
+        "bank": "Bank",
+        "bankNO": "Bank Number",
+        "bankName": "Bank Name",
+        "area": "Area",
+        "table": "Table",
+        "guestName": "Guest Name"
       }
     },
     "authentication": {
@@ -265,6 +273,11 @@
           "goToNextPage": "Go to Next Page",
           "goToLastPage": "Go to Last Page"
         }
+      },
+      "card": {
+        "branch": "Branch",
+        "area": "Area",
+        "table": "Table"
       },
       "preview": {
         "title": "QR Code Preview",
@@ -755,6 +768,7 @@
     },
     "profile": {
       "edit": {
+        "label": "Update Profile",
         "title": "User profile",
         "description": "Update your profile information.",
         "image": {
@@ -788,9 +802,12 @@
       "configureBank": {
         "title": "Configure Bank",
         "description": "Update the bank configuration details.",
+        "noBankConfig": "No bank configuration found.",
         "button": {
           "cancel": "Cancel",
-          "save": "Save Configure"
+          "save": "Save Configure",
+          "configure": "Configure Bank",
+          "update": "Update Config Bank"
         },
         "accountNo": {
           "label": "Account Number",
@@ -810,6 +827,11 @@
           "placeholder": "Select bank's name",
           "error": "Bank name cannot be empty."
         }
+      },
+      "permission": {
+        "label": "Permission",
+        "description": "All permissions assigned to this account.",
+        "noPermission": "No permissions assigned to this account"
       }
     },
     "plan": {
@@ -845,7 +867,8 @@
         "cancel": "Cancel",
         "create": "Create Plan",
         "edit": "Edit Plan",
-        "createNew": "Create New Plan"
+        "createNew": "Create New Plan",
+        "extend": "Extend Expiration"
       }
     },
     "orderRequest": {
@@ -855,6 +878,71 @@
         "service_unit.error": "Table is required.",
         "guestName.error": "Guest name cannot be empty."
       }
+    },
+    "filter": {
+      "title": "Filter Options",
+      "description": "Select the filter options to narrow down your search.",
+      "branch": {
+        "label": "Branch Filter",
+        "description": "* Select a branch to filter by.",
+        "placeholder": "Select branch",
+        "error": "Branch must be selected."
+      },
+      "area": {
+        "label": "Area Filter",
+        "description": "* Select an area to filter by.",
+        "placeholder": "Select area",
+        "error": "Area must be selected."
+      },
+      "table": {
+        "label": "Table Filter",
+        "description": "* Select a table to filter by.",
+        "placeholder": "Select table",
+        "error": "Table must be selected."
+      },
+      "status": {
+        "label": "Status Filter",
+        "description": "* Select a status to filter by.",
+        "placeholder": "Select status",
+        "error": "Status must be selected."
+      },
+      "button": {
+        "apply": "Apply Filters",
+        "clear": "Clear Filters"
+      }
+    },
+    "order": {
+      "noOrderFound": "No orders found.",
+      "view": {
+        "title": "Order Details",
+        "description": "Below are the detailed information and attributes of this order."
+      },
+      "orderSession": "Order Session",
+      "unassignedRequestSession": "Unassigned Requests"
+    },
+    "request": {
+      "noRequestAvailable": "No requests available."
+    },
+    "card": {
+      "guestName": "Guest Name",
+      "reason": "Reason",
+      "price": "Price",
+      "button": {
+        "confirm": "Confirm"
+      }
+    },
+    "status": {
+      "waiting": "Waiting",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "inProgress": "In Progress",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "unpaid": "Unpaid",
+      "paid": "Paid",
+      "active": "Active",
+      "inactive": "Inactive"
     }
   }
 }

@@ -77,19 +77,19 @@ const MobileCardItem: React.FC<MobileCardItemProps> = ({ id, table, area, availa
         <div className="space-y-2">
           <div className="flex items-start gap-2">
             <div className="text-muted-foreground w-20 flex-shrink-0 text-base flex items-center space-x-2">
-              <Table /> <p>Table:</p>
+              <Table className="size-4.5" /> <p>{t('module.qrManagement.card.table')}:</p>
             </div>
             <span className="font-medium text-black">{table}</span>
           </div>
           <div className="flex items-start gap-2">
             <div className="text-muted-foreground w-20 flex-shrink-0 text-base flex items-center space-x-2">
-              <Locate /> <p>Area:</p>
+              <Locate className="size-4.5" /> <p>{t('module.qrManagement.card.area')}:</p>
             </div>
             <span className="text-black">{area}</span>
           </div>
           <div className="flex items-start gap-2">
             <div className="text-muted-foreground w-20 flex-shrink-0 text-base flex items-center space-x-2">
-              <Building2 /> <p>Branch:</p>
+              <Building2 className="size-4.5" /> <p>{t('module.qrManagement.card.branch')}:</p>
             </div>
             <span className="text-black">{branch}</span>
           </div>

@@ -126,7 +126,7 @@ const CartItemsDetails: React.FC = () => {
   };
 
   return (
-    <div className="relative flex flex-col min-h-full p-4 border w-full max-w-5xl rounded-lg mx-auto">
+    <div className="relative flex flex-col min-h-full w-full max-w-5xl rounded-lg mx-auto">
       {(user.role === OWNER_ROLE || user.role === STAFF_ROLE) && (
         <CreateNewOrderRequest
           open={createOrderRequestDialog}
@@ -226,10 +226,9 @@ const CartItemsDetails: React.FC = () => {
       {/* Price Summary and Action Buttons */}
       {cartItems.length > 0 && (
         <div
-          className={cn(
-            'fixed md:absolute bottom-0 left-0 right-0 w-full border-t shadow-lg bg-background ',
-            isMobile && 'pb-14'
-          )}
+          className={
+            'fixed md:absolute bottom-0 left-0 right-0 w-full border-t shadow-lg bg-background pb-14 md:pb-0 md:border md:rounded-xl'
+          }
         >
           <div className="px-4 py-3">
             <div className="space-y-2 mb-4">
