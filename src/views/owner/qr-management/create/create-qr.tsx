@@ -498,7 +498,7 @@ const CreateQR = () => {
             </Label>
             <Select value={downloadFormat} onValueChange={setDownloadFormat}>
               <SelectTrigger id="format" className="w-32">
-                <SelectValue placeholder="Format" />
+                <SelectValue placeholder={t('module.placeholders.format')} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="png">PNG</SelectItem>

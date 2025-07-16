@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 const ForgotPassword = () => {
+  const { t } = useTranslation();
   return (
     <div>
-      <h1>Forgot Password</h1>
-      <p>Please enter your email to reset your password.</p>
+      <h1>{t('module.forgotPassword.title')}</h1>
+      <p>{t('module.forgotPassword.description')}</p>
     </div>
   );
 };

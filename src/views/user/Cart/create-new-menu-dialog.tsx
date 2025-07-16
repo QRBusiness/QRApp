@@ -276,7 +276,7 @@ const CreateNewMenuDialog = ({
                       name={`variants.${index}.price`}
                       render={({ field }) => (
                         <FormItem className="col-span-2">
-                          <FormLabel>Price</FormLabel>
+                          <FormLabel>{t('module.price.label')}</FormLabel>
                           <FormControl>
                             <Input
                               type="number"

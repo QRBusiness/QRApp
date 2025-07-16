@@ -80,7 +80,7 @@ const QRManagement = () => {
         <div className="flex items-center justify-between space-x-2 w-full">
           <div className="flex items-center space-x-2">
             <FunnelPlus className="size-4 md:size-5" />
-            <Label className="font-semibold text-base ">Filters Options</Label>
+            <Label className="font-semibold text-base ">{t('module.filters.options')}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <Button
@@ -97,21 +97,21 @@ const QRManagement = () => {
 
         <div className="grid grid-cols-2 w-full items-center justify-between flex-wrap gap-2">
           <div className="flex flex-col items-start justify-center space-y-2">
-            <Label className="text-muted-foreground">Branch Filter</Label>
+            <Label className="text-muted-foreground">{t('module.filters.branchFilter')}</Label>
             <CustomVariantsSelect
               options={branchOptions}
               value={selectedBranch}
               onChange={handleBranchChange}
-              placeholder="Select Branch"
+              placeholder={t('module.placeholders.selectBranch')}
             />
           </div>
           <div className="flex flex-col items-start justify-center space-y-2">
-            <Label className="text-muted-foreground">Area Filter</Label>
+            <Label className="text-muted-foreground">{t('module.filters.areaFilter')}</Label>
             <CustomVariantsSelect
               options={areaOptions}
               value={selectedArea}
               onChange={setSelectedArea}
-              placeholder="Select Area"
+              placeholder={t('module.placeholders.selectArea')}
             />
           </div>
         </div>

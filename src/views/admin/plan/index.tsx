@@ -71,7 +71,7 @@ const PlanPage = () => {
           <div className="flex items-center justify-between space-x-2 w-full">
             <div className="flex items-center space-x-2">
               <FunnelPlus className="size-4 md:size-5" />
-              <Label className="font-semibold text-base ">Filters Options</Label>
+              <Label className="font-semibold text-base ">{t('module.filters.options')}</Label>
             </div>
             <div className="flex items-center space-x-2">
               <Button variant="destructive" size="sm" onClick={handleClearFilters} disabled={selectedStatus === ''}>
@@ -82,12 +82,12 @@ const PlanPage = () => {
           </div>
           <div className="grid grid-cols-3 w-full items-center justify-between flex-wrap gap-2">
             <div className="flex flex-col items-start justify-center space-y-2">
-              <Label className="text-muted-foreground">Status Filter</Label>
+              <Label className="text-muted-foreground">{t('module.filters.statusFilter')}</Label>
               <CustomVariantsSelect
                 options={statusOptions}
                 value={selectedStatus}
                 onChange={setSelectedStatus}
-                placeholder="Select Status"
+                placeholder={t('module.placeholders.selectStatus')}
               />
             </div>
           </div>

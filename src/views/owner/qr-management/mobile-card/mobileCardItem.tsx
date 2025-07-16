@@ -71,7 +71,7 @@ const MobileCardItem: React.FC<MobileCardItemProps> = ({ id, table, area, availa
         <StatusBadge status={available ? 'Active' : 'Inactive'} />
       </div>
       <CardHeader>
-        <CardTitle className="flex justify-between items-center">ID: {id}</CardTitle>
+        <CardTitle className="flex justify-between items-center">{t('module.tableHeaders.id')}: {id}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">

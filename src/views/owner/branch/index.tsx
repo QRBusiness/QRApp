@@ -82,8 +82,8 @@ const BranchManagement = () => {
       <div className="flex items-center justify-between">
         <Tabs value={selectedTab} onValueChange={handleTabChange}>
           <TabsList className="w-full space-x-2">
-            <TabsTrigger value="branch">Branch</TabsTrigger>
-            <TabsTrigger value="area">Area</TabsTrigger>
+            <TabsTrigger value="branch">{t('module.tabs.branch')}</TabsTrigger>
+            <TabsTrigger value="area">{t('module.tabs.area')}</TabsTrigger>
           </TabsList>
         </Tabs>
         {selectedTab === 'branch' ? (

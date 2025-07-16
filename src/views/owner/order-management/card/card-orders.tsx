@@ -3,6 +3,7 @@ import { useAreas } from '@/services/owner/area-service';
 import { type OrderResponseProps, useOrders } from '@/services/owner/order-service';
 import { getTables } from '@/services/owner/table-service';
 import { FunnelPlus, FunnelX } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Loading from '@/components/common/loading';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -10,6 +11,7 @@ import { CustomVariantsSelect } from '../../menu-management/dialog/custom-varian
 import CardOrderItem from './card-order-item';
 
 export const CardOrders = () => {
+  const { t } = useTranslation();
   const { areas } = useAreas({ page: 1, limit: 50 });
   const [selectedArea, setSelectedArea] = React.useState<string>('');
   const [selectedTable, setSelectedTable] = React.useState<string>('');
@@ -113,7 +115,7 @@ export const CardOrders = () => {
               options={areaOptions}
               value={selectedArea}
               onChange={handleAreaChange}
-              placeholder="Select Area"
+              placeholder={t('module.placeholders.selectArea')}
             />
           </div>
 
@@ -124,7 +126,7 @@ export const CardOrders = () => {
               value={selectedTable}
               onChange={setSelectedTable}
               disabled={selectedArea === ''}
-              placeholder="Select Table"
+              placeholder={t('module.placeholders.selectTable')}
             />
           </div>
 
@@ -134,7 +136,7 @@ export const CardOrders = () => {
               options={statusOptions}
               value={selectedStatus}
               onChange={setSelectedStatus}
-              placeholder="Select Status"
+              placeholder={t('module.placeholders.selectStatus')}
             />
           </div>
         </div>

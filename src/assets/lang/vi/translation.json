@@ -1,18 +1,69 @@
 {
   "module": {
     "authentication": {
-      "title": "Đăng nhập",
+      "title": "CHÀO MỪNG TRỞ LẠI!",
+      "subtitle": "Đăng nhập để truy cập bảng điều khiển và dịch vụ cá nhân của bạn.",
       "phone": "Số điện thoại",
-      "phoneDescription": "* Đây là tên hiển thị công khai của bạn.",
+      "phoneDescription": "* Đây là số điện thoại đã đăng ký với chúng tôi.",
       "phonePlaceholder": "Nhập số điện thoại của bạn",
       "phoneErrorLength": "Số điện thoại phải có ít nhất 10 ký tự.",
       "phoneErrorFormat": "Vui lòng nhập số điện thoại hợp lệ.",
+      "username": "Tên người dùng",
+      "usernameDescription": "* Đây là tên người dùng của bạn.",
+      "usernamePlaceholder": "Nhập tên người dùng",
+      "usernameError": "Tên người dùng phải có ít nhất 5 ký tự.",
+      "usernameErrorFormat": "Tên người dùng chỉ có thể chứa chữ cái, số và dấu gạch dưới.",
       "password": "Mật khẩu",
-      "passwordDescription": "* Đây là khóa riêng tư của bạn.",
+      "passwordDescription": "* Đây là mật khẩu của bạn.",
       "passwordPlaceholder": "Nhập mật khẩu của bạn",
-      "passwordError": "Vui lòng nhập mật khẩu hợp lệ.",
+      "passwordError": "Mật khẩu phải có ít nhất 6 ký tự.",
+      "passwordComplexityError": "Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường và một số.",
       "loginButton": "Đăng nhập",
-      "forgotPassword": "Quên mật khẩu?"
+      "forgotPassword": "Quên mật khẩu?",
+      "logout": "Đăng xuất"
+    },
+    "landingPage": {
+      "welcome": "Chào mừng đến với Trang chủ",
+      "description": "Đây là nội dung trang chủ tạm thời."
+    },
+    "forgotPassword": {
+      "title": "Quên mật khẩu",
+      "description": "Vui lòng nhập email để đặt lại mật khẩu."
+    },
+    "filters": {
+      "options": "Tùy chọn bộ lọc",
+      "statusFilter": "Lọc theo trạng thái",
+      "branchFilter": "Lọc theo chi nhánh",
+      "areaFilter": "Lọc theo khu vực"
+    },
+    "placeholders": {
+      "selectStatus": "Chọn trạng thái",
+      "selectBranch": "Chọn chi nhánh",
+      "selectArea": "Chọn khu vực",
+      "selectTable": "Chọn bàn",
+      "format": "Định dạng",
+      "searchPermissionGroup": "Tìm kiếm nhóm quyền..."
+    },
+    "userInfo": {
+      "cantGetUserInfo": "Không thể lấy thông tin người dùng",
+      "noBankInfo": "Không có thông tin ngân hàng",
+      "status": "Trạng thái:",
+      "allPermissions": "Tất cả quyền được gán cho tài khoản này",
+      "noPermissions": "Không có quyền nào được gán cho tài khoản này"
+    },
+    "imageUpload": {
+      "noImage": "Không có hình ảnh"
+    },
+    "price": {
+      "label": "Giá",
+      "onceItem": "Giá (mỗi sản phẩm):"
+    },
+    "tabs": {
+      "branch": "Chi nhánh",
+      "area": "Khu vực"
+    },
+    "tableHeaders": {
+      "id": "ID"
     }
   }
 }

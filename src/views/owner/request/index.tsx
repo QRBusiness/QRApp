@@ -1,12 +1,14 @@
 import React from 'react';
 import { useRequests } from '@/services/owner/request-service';
 import { FunnelPlus, FunnelX } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { CustomVariantsSelect } from '../menu-management/dialog/custom-variants-select';
 import CartRequest from '../order-management/card/cart-request';
 
 const RequestPage = () => {
+  const { t } = useTranslation();
   const [selectedStatus, setSelectedStatus] = React.useState<string>('Waiting');
   const { requests } = useRequests({ status: selectedStatus, type: 'Request' });
   const statusOptions = React.useMemo(() => {
@@ -46,7 +48,7 @@ const RequestPage = () => {
               options={statusOptions}
               value={selectedStatus}
               onChange={setSelectedStatus}
-              placeholder="Select Status"
+              placeholder={t('module.placeholders.selectStatus')}
             />
           </div>
         </div>

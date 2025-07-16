@@ -855,6 +855,49 @@
         "service_unit.error": "Table is required.",
         "guestName.error": "Guest name cannot be empty."
       }
+    },
+    "landingPage": {
+      "welcome": "Welcome to the Landing Page",
+      "description": "This is a placeholder for the landing page content."
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "description": "Please enter your email to reset your password."
+    },
+    "filters": {
+      "options": "Filters Options",
+      "statusFilter": "Status Filter",
+      "branchFilter": "Branch Filter",
+      "areaFilter": "Area Filter"
+    },
+    "placeholders": {
+      "selectStatus": "Select Status",
+      "selectBranch": "Select Branch",
+      "selectArea": "Select Area",
+      "selectTable": "Select Table",
+      "format": "Format",
+      "searchPermissionGroup": "Search permission group..."
+    },
+    "userInfo": {
+      "cantGetUserInfo": "Can't get user information",
+      "noBankInfo": "No Bank Information Available",
+      "status": "Status:",
+      "allPermissions": "All permissions assigned to this account",
+      "noPermissions": "No permissions assigned to this account"
+    },
+    "imageUpload": {
+      "noImage": "No Image"
+    },
+    "price": {
+      "label": "Price",
+      "onceItem": "Price (once item):"
+    },
+    "tabs": {
+      "branch": "Branch",
+      "area": "Area"
+    },
+    "tableHeaders": {
+      "id": "ID"
     }
   }
 }

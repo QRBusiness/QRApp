@@ -20,6 +20,7 @@ import {
   User,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type z from 'zod';
 import {
   defaultUserState,
@@ -52,6 +53,7 @@ const ItemCard = ({ label, value, icon }: { label: string; value: string; icon: 
 };
 
 const UserProfile = () => {
+  const { t } = useTranslation();
   const user = useUserState();
   const { permissions } = useUserPermissions();
   const [openEditDialog, setOpenEditDialog] = React.useState<boolean>(false);
@@ -82,7 +84,7 @@ const UserProfile = () => {
   if (!user || !permissions) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-muted-foreground">Can't get user information</p>
+        <p className="text-muted-foreground">{t('module.userInfo.cantGetUserInfo')}</p>
       </div>
     );
   }
@@ -190,11 +192,11 @@ const UserProfile = () => {
                 />
               </>
             ) : (
-              <div>No Bank Information Available</div>
+              <div>{t('module.userInfo.noBankInfo')}</div>
             )}
             <Separator />
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Status:</span>
+              <span className="text-sm text-muted-foreground">{t('module.userInfo.status')}</span>
               <StatusBadge status={user?.available ? 'Active' : 'Inactive'} />
             </div>
             <EditUserProfileDialog
@@ -250,7 +252,7 @@ const UserProfile = () => {
               <Shield className="w-5 h-5" />
               Permissions ({permissions.length})
             </CardTitle>
-            <CardDescription>All permissions assigned to this account</CardDescription>
+            <CardDescription>{t('module.userInfo.allPermissions')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -272,7 +274,7 @@ const UserProfile = () => {
             {permissions.length === 0 && (
               <div className="text-center py-8 text-muted-foreground">
                 <Shield className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>No permissions assigned to this account</p>
+                <p>{t('module.userInfo.noPermissions')}</p>
               </div>
             )}
           </CardContent>

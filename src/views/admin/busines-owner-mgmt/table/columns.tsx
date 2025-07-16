@@ -84,11 +84,12 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     accessorKey: 'image_url',
     header: 'Image',
     cell: ({ row }) => {
+      const { t } = useTranslation();
       const imageUrl = row.getValue('image_url') as string | undefined;
       return imageUrl ? (
         <img src={imageUrl} alt="Business Owner" className="w-10 h-10 rounded-full" />
       ) : (
-        <span className="text-sm text-gray-500">No Image</span>
+        <span className="text-sm text-gray-500">{t('module.imageUpload.noImage')}</span>
       );
     },
   },
