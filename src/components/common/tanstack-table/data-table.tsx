@@ -24,7 +24,7 @@ import { cn, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 
 // Extend the ColumnMeta type to include className
 declare module '@tanstack/react-table' {
-  interface ColumnMeta<TData extends unknown = unknown, TValue = unknown> {
+  interface ColumnMeta<TData = unknown, TValue = unknown> {
     className?: string;
   }
 }
