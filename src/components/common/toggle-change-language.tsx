@@ -4,11 +4,12 @@ import VietnamFlag from '@/assets/svg/vietnam-flag-icon.svg';
 import { LANGUAGE_STORAGE } from '@/constants';
 import { useTranslation } from 'react-i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { saveToLocalStorage } from '@/libs/utils';
+import { loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 
 export const ToggleChangeLanguage = () => {
   const { i18n } = useTranslation();
-  const [language, setLanguage] = useState('en');
+
+  const [language, setLanguage] = useState(loadFromLocalStorage(LANGUAGE_STORAGE, 'en'));
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value);

@@ -19,7 +19,7 @@ export type ApiResponse<T> = SuccessResponse<T> & ErrorResponse;
 // Config axios instance
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
-  withCredentials: true, // ✅ Cho phép gửi cookies với request
+  // withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
@@ -37,8 +37,7 @@ apiClient.interceptors.request.use(
       config.headers['Authorization'] = `Bearer ${token}`;
     }
 
-    // ✅ Đảm bảo withCredentials được set cho mỗi request
-    config.withCredentials = true;
+    // config.withCredentials = true;
 
     return config;
   },
@@ -71,7 +70,7 @@ apiClient.interceptors.response.use(
               ...config.headers,
               Authorization: `Bearer ${access_token}`,
             },
-            withCredentials: true, // ✅ Đảm bảo retry request cũng có withCredentials
+            // withCredentials: true,
           });
         } catch (refreshError) {
           // Nếu refresh token thất bại, chuyển hướng đến /login
