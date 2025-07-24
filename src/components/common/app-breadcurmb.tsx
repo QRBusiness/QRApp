@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '../ui/button';
 import { useViewState } from './states/viewState';
+import { ToggleChangeLanguage } from './toggle-change-language';
 
 const AppBreadcrumb = () => {
   const location = useLocation();
@@ -39,7 +40,9 @@ const AppBreadcrumb = () => {
             <ChevronLeft className="size-6" />
           </Button>
           <h1 className="text-xl font-semibold flex-1 text-center">{renderMobilePathnameLabel(pathnames)}</h1>
-          <div className="w-10"></div> {/* Spacer for balance */}
+          <div className="mr-0">
+            <ToggleChangeLanguage />
+          </div>
         </div>
       </div>
     );

@@ -134,7 +134,9 @@
       "business": "Doanh nghiệp",
       "branch": "Chi nhánh",
       "business-owner-management": "Chủ",
-      "business-type": "Loại hình"
+      "business-type": "Loại hình",
+      "order": "Đơn hàng",
+      "cart": "Giỏ hàng"
     },
     "area": {
       "title": "Chọn khu vực",

@@ -134,7 +134,9 @@
       "business": "Business",
       "branch": "Branch",
       "business-owner-management": "Owner",
-      "business-type": "Type"
+      "business-type": "Type",
+      "order": "Order",
+      "cart": "Cart"
     },
 
     "area": {

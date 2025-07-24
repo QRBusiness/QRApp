@@ -2,7 +2,7 @@ import { USER_CART_STORAGE } from '@/constants';
 import { proxy, useSnapshot } from 'valtio';
 import { loadFromSessionStorage, saveToSessionStorage } from '@/libs/utils';
 
-interface CartItem {
+export interface CartItem {
   _id: string;
   name: string;
   img_url: string; // Optional, in case some items don't have images

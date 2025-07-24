@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex flex-col space-y-4">
-      <div className="flex flex-row items-center justify-between w-full px-2">
+      <div className="flex flex-row items-center justify-between w-full">
         {FilterComponent && <div className="flex items-center space-x-2">{FilterComponent}</div>}
         {/* Render the filter component if provided */}
         <DropdownMenu>
