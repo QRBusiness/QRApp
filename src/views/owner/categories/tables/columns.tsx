@@ -4,9 +4,10 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formattedDate } from '@/libs/utils';
+import { formattedDate, havePermissions } from '@/libs/utils';
 import CreateNewCategory from '../dialog/create-categories-dialog';
 import ReadOnlyDialog from '../dialog/read-only-category-dialog';
 
@@ -84,6 +85,9 @@ export const columns: ColumnDef<CategogyProps>[] = [
     header: 'Actions Buttons',
     cell: ({ row }) => {
       const { t } = useTranslation();
+      const { permissions } = useUserPermissions();
+      const permissionCodes = permissions.map((permission) => permission.code);
+
       const [openViewDialog, setOpenViewDialog] = React.useState(false);
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
 
@@ -97,6 +101,7 @@ export const columns: ColumnDef<CategogyProps>[] = [
               variant={'outline'}
               className="hover:bg-primary hover:text-primary-foreground"
               onClick={() => setOpenViewDialog(true)}
+              disabled={!havePermissions(permissionCodes, ['view.category'])}
             >
               <Eye className="mr-2" />
               {t('module.qrManagement.table.actionButton.view')}
@@ -109,7 +114,11 @@ export const columns: ColumnDef<CategogyProps>[] = [
             initialData={row.original}
             onSubmit={(values) => updateCategory({ id: row.original._id, category: values })}
           >
-            <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+            <Button
+              variant={'outline'}
+              className="hover:bg-primary hover:text-primary-foreground"
+              disabled={!havePermissions(permissionCodes, ['update.category'])}
+            >
               <Edit className="mr-2" />
               {t('module.qrManagement.table.actionButton.edit')}
             </Button>
@@ -120,7 +129,11 @@ export const columns: ColumnDef<CategogyProps>[] = [
             description={t('module.qrManagement.alertDialog.description')}
             onSubmit={() => deleteCategory(row.original._id)}
           >
-            <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground">
+            <Button
+              variant={'destructive'}
+              className="hover:bg-destructive hover:text-destructive-foreground"
+              disabled={!havePermissions(permissionCodes, ['delete.category'])}
+            >
               <Trash className="mr-2" />
               {t('module.qrManagement.table.actionButton.delete')}
             </Button>

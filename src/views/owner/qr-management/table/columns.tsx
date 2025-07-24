@@ -5,9 +5,10 @@ import { CircleCheck, CircleX, Download, Edit, Eye, Image, Trash } from 'lucide-
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formattedDate } from '@/libs/utils';
+import { formattedDate, havePermissions } from '@/libs/utils';
 import PopUpQRCode from '../details/pop-up-qr-code';
 import EditTableDialog from '../edit/edit-table-dialog';
 
@@ -97,8 +98,10 @@ export const columns: ColumnDef<QRTable>[] = [
     id: 'actions',
     header: 'module.qrManagement.table.actions',
     cell: ({ row }) => {
-      const [open, setOpen] = React.useState(false);
       const { t } = useTranslation();
+      const { permissions } = useUserPermissions();
+      const permissionCodes = permissions.map((permission) => permission.code);
+      const [open, setOpen] = React.useState(false);
 
       const { deleteTable } = useDeleteTable();
 
@@ -167,7 +170,11 @@ export const columns: ColumnDef<QRTable>[] = [
             url={row.original.qr_code || ''}
             onDownload={() => handleDownload(row.original.qr_code || '')}
           >
-            <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+            <Button
+              variant={'outline'}
+              className="hover:bg-primary hover:text-primary-foreground"
+              disabled={!havePermissions(permissionCodes, ['view.serviceunit'])}
+            >
               <Eye className="mr-2" />
               {t('module.qrManagement.table.actionButton.view')}
             </Button>
@@ -176,6 +183,7 @@ export const columns: ColumnDef<QRTable>[] = [
             variant={'outline'}
             className="hover:bg-primary hover:text-primary-foreground"
             onClick={() => handleDownload(row.original.qr_code || '')}
+            disabled={!havePermissions(permissionCodes, ['view.serviceunit'])}
           >
             <Download className="mr-2" />
             {t('module.qrManagement.table.actionButton.download')}
@@ -193,7 +201,11 @@ export const columns: ColumnDef<QRTable>[] = [
             onSubmit={() => setOpen(false)}
             onCancel={() => setOpen(false)}
           >
-            <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+            <Button
+              variant={'outline'}
+              className="hover:bg-primary hover:text-primary-foreground"
+              disabled={!havePermissions(permissionCodes, ['update.serviceunit'])}
+            >
               <Edit className="mr-2" />
               {t('module.qrManagement.table.actionButton.edit')}
             </Button>
@@ -203,7 +215,11 @@ export const columns: ColumnDef<QRTable>[] = [
             description={t('module.qrManagement.alertDialog.description')}
             onSubmit={async () => await deleteTable(row.original._id)}
           >
-            <Button variant={'destructive'} className="hover:bg-destructive hover:text-destructive-foreground">
+            <Button
+              variant={'destructive'}
+              className="hover:bg-destructive hover:text-destructive-foreground"
+              disabled={!havePermissions(permissionCodes, ['delete.serviceunit'])}
+            >
               <Trash className="mr-2" />
               {t('module.qrManagement.table.actionButton.delete')}
             </Button>

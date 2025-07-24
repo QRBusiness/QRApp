@@ -5,9 +5,10 @@ import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type z from 'zod';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import type { createBranchSchema } from '@/utils/schemas';
-import { formattedDate } from '@/libs/utils';
+import { formattedDate, havePermissions } from '@/libs/utils';
 import CreateNewBranch from '../dialog/create-branch-dialog';
 import ReadOnlyDialog from '../dialog/read-only-branch-dialog';
 
@@ -68,6 +69,8 @@ export const columns: ColumnDef<BranchType>[] = [
     header: 'Actions',
     cell: ({ row }) => {
       const { t } = useTranslation();
+      const { permissions } = useUserPermissions();
+      const permissionCodes = permissions.map((permission) => permission.code);
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
       const [openViewDialog, setOpenViewDialog] = React.useState(false);
       const { updateBranch } = useUpdateBranch();
@@ -80,7 +83,7 @@ export const columns: ColumnDef<BranchType>[] = [
       return (
         <div className="flex gap-2">
           <ReadOnlyDialog isOpen={openViewDialog} onClose={setOpenViewDialog} data={row.original}>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={!havePermissions(permissionCodes, ['view.branch'])}>
               <Eye className="mr-2" />
               {t('module.common.view')}
             </Button>
@@ -92,7 +95,7 @@ export const columns: ColumnDef<BranchType>[] = [
             initialData={row.original}
             onSubmit={handleUpdateBranch}
           >
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={!havePermissions(permissionCodes, ['update.branch'])}>
               <Edit className="mr-2" />
               {t('module.common.edit')}
             </Button>
@@ -102,7 +105,7 @@ export const columns: ColumnDef<BranchType>[] = [
             description={t('module.qrManagement.alertDialog.description')}
             onSubmit={() => deleteBranch(row.original.id)}
           >
-            <Button variant="destructive" size="sm">
+            <Button variant="destructive" size="sm" disabled={!havePermissions(permissionCodes, ['delete.branch'])}>
               <Trash className="mr-2" />
               {t('module.qrManagement.alertDialog.confirmButton')}
             </Button>

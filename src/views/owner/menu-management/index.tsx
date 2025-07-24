@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ADMIN_ROLE, OWNER_ROLE } from '@/constants';
 import { useSubcategories } from '@/services/owner/categories-service';
 import { useCreateProduct, useProducts } from '@/services/owner/product-services';
 import { Laptop, Plus, Tablet } from 'lucide-react';
@@ -7,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { Hint } from '@/components/common/hint';
 import HorizontalFilterScroll from '@/components/common/horizontal-filter-scroll';
 import { toggleMenuDisplayOptionState, useMenuDisplayOptionState } from '@/components/common/states/menuStates';
-import { useUserState } from '@/components/common/states/userState';
+import { useUserPermissions, useUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
+import { havePermissions } from '@/libs/utils';
 import CreateNewMenuDialog from '../../user/Cart/create-new-menu-dialog';
 import MobileMenuView from './mobile-card/mobile-view';
 import type { Menu } from './tables/columns';
@@ -16,7 +16,8 @@ import MenuTable from './tables/page';
 
 const MenuManagement = () => {
   const { t } = useTranslation();
-  const user = useUserState();
+  const { permissions } = useUserPermissions();
+  const permissionCodes = permissions.map((permission) => permission.code);
   const { isTable: isTableView } = useMenuDisplayOptionState();
 
   const [openCreateNewMenuDialog, setOpenCreateNewMenuDialog] = useState(false);
@@ -61,22 +62,20 @@ const MenuManagement = () => {
     return () => clearTimeout(timeoutId);
   }, [currentFilterSubcategory, refetch]);
 
-  const isShowAction = user?.role === OWNER_ROLE || user?.role === ADMIN_ROLE;
-
   return (
     <div className="mx-auto pb-10 space-y-4 w-full">
-      {isShowAction && (
-        <div className="flex items-center space-x-2 justify-between mr-4 md:mr-0 w-full px-4 lg:px-0">
-          {/* subcategory filter */}
-          <HorizontalFilterScroll
-            orderStatuses={categoryOptions.map((category) => ({
-              label: category.label,
-              value: category.value,
-            }))}
-            onChange={setCurrentFilterSubcategory}
-          />
-          <div className="flex items-center space-x-2">
-            {/* Create new Menu Item Dialog */}
+      <div className="flex items-center space-x-2 justify-between mr-4 md:mr-0 w-full px-4 lg:px-0">
+        {/* subcategory filter */}
+        <HorizontalFilterScroll
+          orderStatuses={categoryOptions.map((category) => ({
+            label: category.label,
+            value: category.value,
+          }))}
+          onChange={setCurrentFilterSubcategory}
+        />
+        <div className="flex items-center space-x-2">
+          {/* Create new Menu Item Dialog */}
+          {havePermissions(permissionCodes, ['create.product']) && (
             <CreateNewMenuDialog
               open={openCreateNewMenuDialog}
               onOpenChange={setOpenCreateNewMenuDialog}
@@ -90,22 +89,23 @@ const MenuManagement = () => {
                 <p className="text-sm hidden md:block">{t('module.menuManagement.action.add')}</p>
               </Button>
             </CreateNewMenuDialog>
-          </div>
-          {isTableView ? (
-            <Hint label="Switch to Card View" align="end">
-              <Button variant={'outline'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
-                <Tablet className="size-5" strokeWidth={2.5} />
-              </Button>
-            </Hint>
-          ) : (
-            <Hint label="Switch to Table View">
-              <Button variant={'secondary'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
-                <Laptop className="size-5" strokeWidth={2.5} />
-              </Button>
-            </Hint>
           )}
         </div>
-      )}
+        {isTableView ? (
+          <Hint label="Switch to Card View" align="end">
+            <Button variant={'outline'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
+              <Tablet className="size-5" strokeWidth={2.5} />
+            </Button>
+          </Hint>
+        ) : (
+          <Hint label="Switch to Table View">
+            <Button variant={'secondary'} size={'icon'} onClick={() => toggleMenuDisplayOptionState()}>
+              <Laptop className="size-5" strokeWidth={2.5} />
+            </Button>
+          </Hint>
+        )}
+      </div>
+
       {isTableView ? <MenuTable data={productsTransformed} /> : <MobileMenuView items={productsTransformed} />}
     </div>
   );

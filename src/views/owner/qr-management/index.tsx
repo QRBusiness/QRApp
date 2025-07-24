@@ -4,10 +4,12 @@ import { useBranches } from '@/services/owner/branch-service';
 import { useTables } from '@/services/owner/table-service';
 import { ChevronLeft, FunnelPlus, FunnelX } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { useViewState } from '@/components/common/states/viewState';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Label } from '@/components/ui/label';
+import { havePermissions } from '@/libs/utils';
 import { CustomVariantsSelect } from '../menu-management/dialog/custom-variants-select';
 import CreateQR from './create/create-qr';
 import MobileTable from './mobile-card';
@@ -17,13 +19,18 @@ import QRTable from './table/page';
 const QRManagement = () => {
   const { isMobile } = useViewState();
   const { t } = useTranslation();
+  const { permissions } = useUserPermissions();
   const [selectedArea, setSelectedArea] = React.useState<string>('');
   const [selectedBranch, setSelectedBranch] = React.useState<string>('');
   const [areaOptions, setAreaOptions] = React.useState<{ value: string; label: string }[]>([]);
+
+  const permissionsCodes = permissions.map((permission) => permission.code);
+
   const { branches } = useBranches({
     page: 1,
     limit: 50,
   });
+
   const branchOptions = branches.map((branch) => ({
     value: branch._id,
     label: branch.name,
@@ -40,7 +47,7 @@ const QRManagement = () => {
     _id: table._id,
     name: table.name,
     qr_code: table.qr_code,
-    area: typeof table.area === 'string' ? table.area : table.area?.name || '', // Use area name or fallback
+    area: typeof table.area === 'string' ? table.area : table.area?.name || '',
     branch: table.area.branch.name,
     available: typeof table.available === 'boolean' ? table.available : true,
     created_at: table.created_at,
@@ -130,17 +137,19 @@ const QRManagement = () => {
         </div>
       ) : (
         <div className="w-full p-4 mx-auto flex flex-col gap-4">
-          <Collapsible className="group/collapsible" defaultOpen={false} key={'create-qr-collapsible'}>
-            <CollapsibleTrigger asChild>
-              <Button variant="secondary">
-                <p>{t('module.qrManagement.createCollapse')}</p>
-                <ChevronLeft className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="py-4">
-              <CreateQR />
-            </CollapsibleContent>
-          </Collapsible>
+          {havePermissions(permissionsCodes, ['create.serviceunit']) && (
+            <Collapsible className="group/collapsible" defaultOpen={false} key={'create-qr-collapsible'}>
+              <CollapsibleTrigger asChild>
+                <Button variant="secondary">
+                  <p>{t('module.qrManagement.createCollapse')}</p>
+                  <ChevronLeft className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="py-4">
+                <CreateQR />
+              </CollapsibleContent>
+            </Collapsible>
+          )}
           <Filters />
           <QRTable data={formatedTables} />
         </div>

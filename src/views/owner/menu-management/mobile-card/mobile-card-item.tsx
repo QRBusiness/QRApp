@@ -5,10 +5,12 @@ import { Edit, Plus, ScanText, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { CustomAlertDialog } from '@/components/common/dialog/custom-alert-dialog';
 import { addToCart } from '@/components/common/states/cartState';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import AddToCartDialog from '@/views/user/Cart/add-to-cart-dialog';
+import { havePermissions } from '@/libs/utils';
 import CreateNewMenuDialog from '../../../user/Cart/create-new-menu-dialog';
 import ReadOnlyMenuItemDialog from '../dialog/read-only-menu-item-dialog';
 import type { Menu } from '../tables/columns';
@@ -26,6 +28,8 @@ const MenuCardItem: React.FC<Menu> = ({
   updated_at,
 }) => {
   const { t } = useTranslation();
+  const { permissions } = useUserPermissions();
+  const permissionCodes = permissions.map((permission) => permission.code);
   const [viewDialogOpen, setViewDialogOpen] = React.useState(false);
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
   const [addToCartDialogOpen, setAddToCartDialogOpen] = React.useState(false);
@@ -33,8 +37,7 @@ const MenuCardItem: React.FC<Menu> = ({
   const { uploadProductImage } = useUploadProductImage();
   const { updateProduct } = useUpdateProduct();
   const { deleteProduct } = useDeleteProduct();
-  const price = variants[0]?.price || 0; // Placeholder for price, can be replaced with actual price logic
-  const available = true; // Placeholder for availability, can be replaced with actual availability logic
+  const price = variants[0]?.price || 0;
   return (
     <Card key={_id} className="flex overflow-hidden border shadow-sm p-1 relative flex-col justify-between">
       <div className="flex flex-row gap-2 items-start">
@@ -84,7 +87,12 @@ const MenuCardItem: React.FC<Menu> = ({
             updated_at,
           }}
         >
-          <Button size="icon" className="rounded-full" disabled={!available} variant={'outline'}>
+          <Button
+            size="icon"
+            className="rounded-full"
+            disabled={!havePermissions(permissionCodes, ['view.product'])}
+            variant={'outline'}
+          >
             <ScanText className="size-4 md:size-5" />
           </Button>
         </ReadOnlyMenuItemDialog>
@@ -106,7 +114,12 @@ const MenuCardItem: React.FC<Menu> = ({
             setEditDialogOpen(false);
           }}
         >
-          <Button size="icon" className="rounded-full" disabled={!available} variant={'outline'}>
+          <Button
+            size="icon"
+            className="rounded-full"
+            disabled={!havePermissions(permissionCodes, ['update.product'])}
+            variant={'outline'}
+          >
             <Edit className="size-4 md:size-5" />
           </Button>
         </CreateNewMenuDialog>
@@ -127,7 +140,12 @@ const MenuCardItem: React.FC<Menu> = ({
           }}
           onSubmit={(cartItem: CartItem) => addToCart(cartItem)}
         >
-          <Button size="icon" className="rounded-full" disabled={!available} variant={'default'}>
+          <Button
+            size="icon"
+            className="rounded-full"
+            disabled={!havePermissions(permissionCodes, ['create.product'])}
+            variant={'default'}
+          >
             <Plus className="size-4 md:size-5" />
           </Button>
         </AddToCartDialog>
@@ -136,7 +154,12 @@ const MenuCardItem: React.FC<Menu> = ({
           description={t('module.qrManagement.alertDialog.description')}
           onSubmit={() => deleteProduct(_id)}
         >
-          <Button size="icon" className="rounded-full" disabled={!available} variant={'destructive'}>
+          <Button
+            size="icon"
+            className="rounded-full"
+            disabled={!havePermissions(permissionCodes, ['delete.product'])}
+            variant={'destructive'}
+          >
             <X className="size-4 md:size-5" />
           </Button>
         </CustomAlertDialog>

@@ -37,6 +37,7 @@ import { useViewState } from '@/components/common/states/viewState';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
 import webSocketService from '@/config/socket';
+import { havePermissions } from '@/libs/utils';
 
 interface RootAppProps {
   role: string[];
@@ -51,6 +52,7 @@ const RootApp = ({ role }: RootAppProps) => {
   const { isMobile } = useViewState();
   const { role: currentRole } = useUserState();
   const { permissions } = useUserPermissions();
+  const permissionsList = permissions.map((permission) => permission.code);
 
   if (!role.includes(currentRole)) {
     return <Navigate to={LOGIN} replace={true} />;
@@ -116,10 +118,6 @@ const RootApp = ({ role }: RootAppProps) => {
     }
   }, [role, currentRole]);
 
-  const haveViewGroupAndUserPermissions = permissions.some(
-    (permission) => permission.code === 'view.group' || permission.code === 'view.user'
-  );
-
   const sidebarItems: SidebarItem[] = useMemo(() => {
     if (role.includes(ADMIN_ROLE)) {
       return [
@@ -144,60 +142,96 @@ const RootApp = ({ role }: RootAppProps) => {
           icon: <CalendarPlus />,
         },
       ];
-    }
-    const bissinessOptions: SidebarItem[] = [
-      {
-        title: 'module.sidebar.dashboard',
-        path_url: DASHBOARD,
-        icon: <ChartNoAxesCombined />,
-      },
-      {
-        title: 'module.sidebar.qr-management',
-        path_url: QR_MANAGEMENT,
-        icon: <QrCode />,
-      },
-      {
-        title: 'module.sidebar.menu-management',
-        path_url: MENU_MANAGEMENT,
-        icon: <UtensilsCrossed />,
-        children: [
-          {
-            title: 'module.sidebar.menu-management.categories',
-            path_url: CATEGORY_MANAGEMENT,
-            icon: <ChartColumnStacked />,
+    } else {
+      const businessOptions: SidebarItem[] = [];
+      const permissionMap: Array<{
+        codes: string[];
+        item: SidebarItem | (() => SidebarItem);
+      }> = [
+        {
+          codes: ['view.dashboard'],
+          item: {
+            title: 'module.sidebar.dashboard',
+            path_url: DASHBOARD,
+            icon: <ChartNoAxesCombined />,
           },
-          {
-            title: 'module.sidebar.menu-management.subcategories',
-            path_url: SUBCATEGORY_MANAGEMENT,
-            icon: <ChartColumnStacked />,
+        },
+        {
+          codes: ['view.serviceunit'],
+          item: {
+            title: 'module.sidebar.qr-management',
+            path_url: QR_MANAGEMENT,
+            icon: <QrCode />,
           },
-        ],
-      },
-      {
-        title: 'module.sidebar.order-management',
-        path_url: ORDER_MANAGEMENT,
-        icon: <HandPlatter />,
-      },
-      {
-        title: 'module.sidebar.request',
-        path_url: REQUEST,
-        icon: <Bell />,
-      },
-      {
-        title: 'module.sidebar.branch',
-        path_url: BRANCH,
-        icon: <Building2 />,
-      },
-    ];
-    if (haveViewGroupAndUserPermissions) {
-      bissinessOptions.push({
-        title: 'module.sidebar.staff-management',
-        path_url: STAFF_MANAGEMENT,
-        icon: <UserCog />,
+        },
+        {
+          codes: ['view.product'],
+          item: () => {
+            const children: SidebarItem[] = [];
+            if (havePermissions(permissionsList, ['view.category'])) {
+              children.push({
+                title: 'module.sidebar.menu-management.categories',
+                path_url: CATEGORY_MANAGEMENT,
+                icon: <ChartColumnStacked />,
+              });
+            }
+            if (havePermissions(permissionsList, ['view.subcategory'])) {
+              children.push({
+                title: 'module.sidebar.menu-management.subcategories',
+                path_url: SUBCATEGORY_MANAGEMENT,
+                icon: <ChartColumnStacked />,
+              });
+            }
+            return {
+              title: 'module.sidebar.menu-management',
+              path_url: MENU_MANAGEMENT,
+              icon: <UtensilsCrossed />,
+              children,
+            };
+          },
+        },
+        {
+          codes: ['view.order'],
+          item: {
+            title: 'module.sidebar.order-management',
+            path_url: ORDER_MANAGEMENT,
+            icon: <HandPlatter />,
+          },
+        },
+        {
+          codes: ['view.request'],
+          item: {
+            title: 'module.sidebar.request',
+            path_url: REQUEST,
+            icon: <Bell />,
+          },
+        },
+        {
+          codes: ['view.branch', 'view.area'],
+          item: {
+            title: 'module.sidebar.branch',
+            path_url: BRANCH,
+            icon: <Building2 />,
+          },
+        },
+        {
+          codes: ['view.user', 'view.group'],
+          item: {
+            title: 'module.sidebar.staff-management',
+            path_url: STAFF_MANAGEMENT,
+            icon: <UserCog />,
+          },
+        },
+      ];
+
+      permissionMap.forEach(({ codes, item }) => {
+        if (havePermissions(permissionsList, codes)) {
+          businessOptions.push(typeof item === 'function' ? item() : item);
+        }
       });
+      return businessOptions;
     }
-    return bissinessOptions;
-  }, [location.pathname, role]);
+  }, [location.pathname, permissionsList]);
 
   if (isMobile) {
     return (

@@ -126,3 +126,8 @@ export const resetTableStorage = () => {
   removeFromLocalStorage(SUBCATEGORY_MANAGEMENT_TABLE + '_visibility'); //11
   removeFromLocalStorage(PLAN_MANAGEMENT_TABLE + '_visibility'); //12
 };
+
+// check at least one permission in the list
+export const havePermissions = (permissions: string[], permissionToCheck: string[]): boolean => {
+  return permissions.some((permission) => permissionToCheck.includes(permission));
+};

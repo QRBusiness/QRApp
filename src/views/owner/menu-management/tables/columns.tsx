@@ -12,9 +12,10 @@ import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type z from 'zod';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import type { createProductSchema } from '@/utils/schemas';
-import { formattedDate } from '@/libs/utils';
+import { formattedDate, havePermissions } from '@/libs/utils';
 import CreateNewMenuDialog from '../../../user/Cart/create-new-menu-dialog';
 import ReadOnlyMenuItemDialog from '../dialog/read-only-menu-item-dialog';
 
@@ -101,6 +102,8 @@ export const columns: ColumnDef<Menu>[] = [
     header: 'Actions Buttons',
     cell: ({ row }) => {
       const { t } = useTranslation();
+      const { permissions } = useUserPermissions();
+      const permissionCodes = permissions.map((permission) => permission.code);
       const [openViewDialog, setOpenViewDialog] = React.useState(false);
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
 
@@ -119,6 +122,7 @@ export const columns: ColumnDef<Menu>[] = [
               variant={'outline'}
               className="hover:bg-primary hover:text-primary-foreground"
               onClick={() => setOpenViewDialog(true)}
+              disabled={!havePermissions(permissionCodes, ['view.product'])}
             >
               <Eye className="mr-2" />
               {t('module.qrManagement.table.actionButton.view')}
@@ -138,7 +142,11 @@ export const columns: ColumnDef<Menu>[] = [
             onOpenChange={setOpenEditDialog}
             onSubmit={handleEditSubmit}
           >
-            <Button variant={'outline'} className="hover:bg-primary hover:text-primary-foreground">
+            <Button
+              variant={'outline'}
+              className="hover:bg-primary hover:text-primary-foreground"
+              disabled={!havePermissions(permissionCodes, ['update.product'])}
+            >
               <Edit className="mr-2" />
               {t('module.qrManagement.table.actionButton.edit')}
             </Button>
@@ -148,7 +156,11 @@ export const columns: ColumnDef<Menu>[] = [
             description={t('module.qrManagement.alertDialog.description')}
             onSubmit={() => deleteProduct(row.original._id)}
           >
-            <Button variant={'outline'} className="hover:bg-destructive hover:text-destructive-foreground">
+            <Button
+              variant={'destructive'}
+              className="hover:bg-destructive hover:text-destructive-foreground"
+              disabled={!havePermissions(permissionCodes, ['delete.product'])}
+            >
               <Trash className="mr-2" />
               {t('module.qrManagement.table.actionButton.delete')}
             </Button>

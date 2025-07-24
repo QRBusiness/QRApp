@@ -5,10 +5,11 @@ import { useBranches, useCreateBranch } from '@/services/owner/branch-service';
 import { CirclePlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { createBranchSchema } from '@/utils/schemas';
-import { loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
+import { havePermissions, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 import CreateNewArea from './areas/dialog/create-new-area-dialog';
 import type { AreaProps } from './areas/tables/columns';
 import AreasTable from './areas/tables/page';
@@ -18,6 +19,8 @@ import type { BranchType } from './table/columns';
 
 const BranchManagement = () => {
   const { t } = useTranslation();
+  const { permissions } = useUserPermissions();
+  const permissionCodes = permissions.map((permission) => permission.code);
   const [selectedTab, setSelectedTab] = React.useState<string>(
     loadFromLocalStorage(BRANCH_AREA_SWITCH_SELECT, 'branch')
   );
@@ -87,19 +90,27 @@ const BranchManagement = () => {
           </TabsList>
         </Tabs>
         {selectedTab === 'branch' ? (
-          <CreateNewBranch open={openCreateDialog} onOpenChange={setOpenCreateDialog} onSubmit={handleCreateBranch}>
-            <Button variant="default">
-              <CirclePlus className="mr-2 size-4 md:size-5" />
-              {t('module.branchManagement.createNew')}
-            </Button>
-          </CreateNewBranch>
+          <>
+            {havePermissions(permissionCodes, ['create.branch']) && (
+              <CreateNewBranch open={openCreateDialog} onOpenChange={setOpenCreateDialog} onSubmit={handleCreateBranch}>
+                <Button variant="default">
+                  <CirclePlus className="mr-2 size-4 md:size-5" />
+                  {t('module.branchManagement.createNew')}
+                </Button>
+              </CreateNewBranch>
+            )}
+          </>
         ) : (
-          <CreateNewArea open={openCreateDialog} onOpenChange={setOpenCreateDialog} onSubmit={createArea}>
-            <Button variant="default">
-              <CirclePlus className="mr-2 size-4 md:size-5" />
-              {t('module.qrManagement.addAreaField.create')}
-            </Button>
-          </CreateNewArea>
+          <>
+            {havePermissions(permissionCodes, ['create.area']) && (
+              <CreateNewArea open={openCreateDialog} onOpenChange={setOpenCreateDialog} onSubmit={createArea}>
+                <Button variant="default">
+                  <CirclePlus className="mr-2 size-4 md:size-5" />
+                  {t('module.qrManagement.addAreaField.create')}
+                </Button>
+              </CreateNewArea>
+            )}
+          </>
         )}
       </div>
       {selectedTab === 'branch' ? <BranchTypeTable data={branchData} /> : <AreasTable data={areaData} />}

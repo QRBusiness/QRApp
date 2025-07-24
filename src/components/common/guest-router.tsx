@@ -25,7 +25,7 @@ const GuestRouter = () => {
     },
   ];
   return (
-    <header>
+    <div>
       {/* Add guest router content here */}
       <header className="flex justify-between items-center bg-muted p-2 shadow-md">
         <div className="w-15"></div>
@@ -36,7 +36,7 @@ const GuestRouter = () => {
       <main className="px-4 py-8 flex flex-col items-center justify-center">
         <Outlet />
       </main>
-    </header>
+    </div>
   );
 };
 

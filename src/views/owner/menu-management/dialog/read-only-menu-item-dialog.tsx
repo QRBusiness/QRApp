@@ -43,7 +43,7 @@ const ReadOnlyMenuItemDialog: React.FC<ReadOnlyDialogProps> = ({ isOpen, onClose
 
         <div className="flex items-center justify-center">
           <div className="flex items-center justify-center p-2 h-40 w-40 md:w-56 md:h-56 border border-dashed rounded-lg">
-            <img src={data.image} alt="Image Menu Item" className="object-cover rounded-lg" />
+            <img src={data.image} alt="Image Menu Item" className="object-cover w-full h-full rounded-lg" />
           </div>
         </div>
         <ScrollArea className="h-96 md:h-[400px] mt-4">

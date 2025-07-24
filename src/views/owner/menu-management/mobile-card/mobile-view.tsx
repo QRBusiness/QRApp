@@ -18,7 +18,7 @@ const MobileMenuView: React.FC<MobileMenuViewProps> = ({ items }) => {
   const { totalQuantity } = useCartTotalQuantity();
   const isMobile = useIsMobile();
   return (
-    <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 px-4 w-full">
+    <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 w-full">
       {items.map((item) => (
         <MenuCardItem
           key={item._id}

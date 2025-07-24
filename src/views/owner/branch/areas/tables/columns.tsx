@@ -4,8 +4,9 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
-import { formattedDate } from '@/libs/utils';
+import { formattedDate, havePermissions } from '@/libs/utils';
 import type { BranchType } from '../../table/columns';
 import CreateNewArea from '../dialog/create-new-area-dialog';
 import ReadOnlyDialog from '../dialog/read-only-area-dialog';
@@ -69,6 +70,8 @@ export const columns: ColumnDef<AreaProps>[] = [
     header: 'Actions',
     cell: ({ row }) => {
       const { t } = useTranslation();
+      const { permissions } = useUserPermissions();
+      const permissionCodes = permissions.map((permission) => permission.code);
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
       const [openViewDialog, setOpenViewDialog] = React.useState(false);
       const { updateArea } = useUpdateArea();
@@ -77,7 +80,7 @@ export const columns: ColumnDef<AreaProps>[] = [
       return (
         <div className="flex gap-2">
           <ReadOnlyDialog data={row.original} isOpen={openViewDialog} onClose={setOpenViewDialog}>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={!havePermissions(permissionCodes, ['view.area'])}>
               <Eye className="mr-2" />
               {t('module.common.view')}
             </Button>
@@ -93,7 +96,7 @@ export const columns: ColumnDef<AreaProps>[] = [
             }}
             onSubmit={(values) => updateArea({ id: row.original.id, data: values })}
           >
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={!havePermissions(permissionCodes, ['update.area'])}>
               <Edit className="mr-2" />
               {t('module.common.edit')}
             </Button>
@@ -104,7 +107,7 @@ export const columns: ColumnDef<AreaProps>[] = [
             description={t('module.qrManagement.alertDialog.description')}
             onSubmit={() => deleteArea(row.original.id)}
           >
-            <Button variant="destructive" size="sm">
+            <Button variant="destructive" size="sm" disabled={!havePermissions(permissionCodes, ['delete.area'])}>
               <Trash className="mr-2" />
               {t('module.qrManagement.alertDialog.confirmButton')}
             </Button>
