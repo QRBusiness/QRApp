@@ -26,7 +26,7 @@ export function CustomVariantsSelect({
   disabled = false,
 }: CustomVariantsSelectProps) {
   return (
-    <Select value={value} onValueChange={onChange} defaultValue={value}>
+    <Select value={value} onValueChange={onChange} defaultValue={value} disabled={disabled}>
       <SelectTrigger className={`w-full min-w-[156px]`}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

@@ -1,4 +1,4 @@
-import { CART, MENU_MANAGEMENT, ORDER_MANAGEMENT } from '@/constants';
+import { CART, MENU_MANAGEMENT, ORDER_MANAGEMENT, REQUEST } from '@/constants';
 import { HandPlatter, ShoppingCart, UtensilsCrossed } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
@@ -18,6 +18,12 @@ const GuestRouter = () => {
       path_url: CART,
       icon: <ShoppingCart />,
     },
+    {
+      title: t('module.mobileSidebar.request'),
+      path_url: REQUEST,
+      icon: <HandPlatter />,
+    },
+
     {
       title: t('module.mobileSidebar.order'),
       path_url: ORDER_MANAGEMENT,

@@ -1,24 +1,35 @@
 import React from 'react';
 import type { OrderResponseProps } from '@/services/owner/order-service';
-import { CircleUser, Clock, CreditCard, Info, MapPin } from 'lucide-react';
+import { CircleUser, Clock, CreditCard, EllipsisVertical, Info, MapPin, SquareDashedMousePointer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useSetOrderSelectedState } from '@/components/common/states/orderSeletedState';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { formattedDate } from '@/libs/utils';
 import OrderDetailsDialog from '../details/order-details-dialog';
 import StatusBadge from '../status/status-baged';
+import CardActionButton from './card-action-button';
 
 const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [checked, setChecked] = React.useState(false);
 
   const orderCreatedAt = formattedDate(order.created_at, 'MMM dd, yyyy • h:mm a');
   const navigate = useNavigate();
 
+  const handleSelectOrder = () => {
+    setChecked(!checked);
+    useSetOrderSelectedState(order);
+  };
+
   return (
-    <Card key={order._id} className="py-2 flex flex-col justify-between h-full">
+    <Card
+      key={order._id}
+      className={`relative py-2 flex flex-col justify-between h-full group ${checked ? 'transition-transform duration-300 -translate-y-2 border-primary ease-in-out' : ''}`}
+    >
       <CardContent className="px-2 py-0">
         {/* Header card */}
         <div className="flex justify-between items-center p-1 bg-background relative">
@@ -94,8 +105,16 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
       <CardFooter className="px-2 bg-background">
         {/* Footer card */}
         <div className="flex justify-between space-x-2 w-full">
+          <Button
+            variant="secondary"
+            size="icon"
+            onClick={handleSelectOrder}
+            className={`${checked && 'border-primary bg-primary/10 hover:bg-primary/20'}`}
+          >
+            <SquareDashedMousePointer className={`size-4 md:size-5 ${checked && 'fill-primary'}`} />
+          </Button>
           <OrderDetailsDialog isOpen={isOpen} onOpenChange={setIsOpen} data={order}>
-            <Button variant="secondary" size="sm" className="flex-1 items-center space-x-2">
+            <Button variant="secondary" size="default" className="flex-1 items-center space-x-2">
               <Info className="size-4 md:size-5" />
               {t('module.orderManagement.orderCard.details')}
             </Button>
@@ -103,7 +122,7 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
           {order.status !== 'Paid' && (
             <Button
               variant="default"
-              size="sm"
+              size="default"
               className="flex-1 items-center space-x-2"
               onClick={() => navigate(order._id)}
             >
@@ -111,6 +130,11 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
               {t('module.orderManagement.orderCard.payment')}
             </Button>
           )}
+          <CardActionButton side="right" align="start">
+            <Button variant="default" size="icon" className={`${checked ? 'flex' : 'hidden'}`}>
+              <EllipsisVertical className="size-4 md:size-5" />
+            </Button>
+          </CardActionButton>
         </div>
       </CardFooter>
     </Card>

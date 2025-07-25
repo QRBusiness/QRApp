@@ -1,8 +1,10 @@
 import { USER_CART_STORAGE } from '@/constants';
+import { v4 as uuidv4 } from 'uuid';
 import { proxy, useSnapshot } from 'valtio';
 import { loadFromSessionStorage, saveToSessionStorage } from '@/libs/utils';
 
 export interface CartItem {
+  id?: string; // unique identifier for the item
   _id: string;
   name: string;
   img_url: string; // Optional, in case some items don't have images
@@ -24,14 +26,19 @@ const initialCartFromStorage: typeof initialCart = loadFromSessionStorage(USER_C
 const cartState = proxy(initialCartFromStorage);
 
 export const addToCart = (item: CartItem) => {
-  const existingItemIndex = cartState.items.findIndex((cartItem) => cartItem._id === item._id);
-
+  const existingItemIndex = cartState.items.findIndex(
+    (cartItem) =>
+      cartItem._id === item._id &&
+      cartItem.variant === item.variant &&
+      JSON.stringify(cartItem.options) === JSON.stringify(item.options) &&
+      cartItem.note === item.note
+  );
   if (existingItemIndex > -1) {
     // Update existing item
     cartState.items[existingItemIndex].quantity += item.quantity;
   } else {
     // Add new item
-    cartState.items.push(item);
+    cartState.items.push({ ...item, id: uuidv4() });
   }
   updateCartTotals();
   saveToSessionStorage(USER_CART_STORAGE, cartState);
@@ -42,8 +49,8 @@ function updateCartTotals() {
   cartState.totalPrice = cartState.items.reduce((total, item) => total + item.quantity * item.price, 0);
 }
 
-export const updateCartItemQuantity = (itemId: string, quantity: number) => {
-  const itemIndex = cartState.items.findIndex((item) => item._id === itemId);
+export const updateCartItemQuantity = (id: string, quantity: number) => {
+  const itemIndex = cartState.items.findIndex((item) => item.id === id);
   if (itemIndex > -1 && quantity > 0) {
     cartState.items[itemIndex].quantity = quantity;
     updateCartTotals();
@@ -51,8 +58,8 @@ export const updateCartItemQuantity = (itemId: string, quantity: number) => {
   }
 };
 
-export const removeFromCart = (itemId: string) => {
-  cartState.items = cartState.items?.filter((item) => item._id !== itemId);
+export const removeFromCart = (id: string) => {
+  cartState.items = cartState.items?.filter((item) => item.id !== id);
   updateCartTotals();
   saveToSessionStorage(USER_CART_STORAGE, cartState);
 };

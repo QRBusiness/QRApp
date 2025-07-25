@@ -147,8 +147,8 @@ const CartItemsDetails: React.FC = () => {
           <EmptyCartView />
         ) : (
           <div className={cn('space-y-4', isMobile ? 'mb-68' : 'mb-48')}>
-            {cartItems.map((item) => (
-              <Card key={item._id} className="p-4 border shadow-sm">
+            {cartItems.map((item, index) => (
+              <Card key={item._id + index} className="p-4 border shadow-sm">
                 <div className="gap-3 flex">
                   <div className="w-20 h-20 flex-shrink-0">
                     <img
@@ -163,7 +163,7 @@ const CartItemsDetails: React.FC = () => {
                       <CustomAlertDialog
                         title={t('module.menuManagement.cart.removeItemTitle')}
                         description={t('module.menuManagement.cart.removeItemDescription')}
-                        onSubmit={() => item._id && removeItem(item._id)}
+                        onSubmit={() => item.id && removeItem(item.id)}
                         buttonSubmitLabel={t('module.menuManagement.cart.remove')}
                       >
                         <Button variant="destructive" size="icon" className="group">
@@ -200,7 +200,7 @@ const CartItemsDetails: React.FC = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                          onClick={() => item.id && updateQuantity(item.id, item.quantity - 1)}
                           className="rounded-full"
                         >
                           <Minus />
@@ -209,7 +209,7 @@ const CartItemsDetails: React.FC = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                          onClick={() => item.id && updateQuantity(item.id, item.quantity + 1)}
                           className="rounded-full"
                         >
                           <Plus />

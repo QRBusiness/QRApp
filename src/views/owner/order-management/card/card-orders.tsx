@@ -1,10 +1,12 @@
 import React from 'react';
-import { useAreas } from '@/services/owner/area-service';
+import { getAreas, useAreas } from '@/services/owner/area-service';
+import { useBranches } from '@/services/owner/branch-service';
 import { type OrderResponseProps, useOrders } from '@/services/owner/order-service';
 import { getTables } from '@/services/owner/table-service';
 import { FunnelPlus, FunnelX } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Loading from '@/components/common/loading';
+import { useUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { CustomVariantsSelect } from '../../menu-management/dialog/custom-variants-select';
@@ -12,28 +14,34 @@ import CardOrderItem from './card-order-item';
 
 export const CardOrders = () => {
   const { t } = useTranslation();
+  const user = useUserState();
+  const [selectedBranch, setSelectedBranch] = React.useState<string>(user?.branch?._id || '');
   const [selectedArea, setSelectedArea] = React.useState<string>('');
   const [selectedTable, setSelectedTable] = React.useState<string>('');
   const [selectedStatus, setSelectedStatus] = React.useState<string>('Unpaid');
+
+  const [areaOptions, setAreaOptions] = React.useState<{ value: string; label: string }[]>([]);
   const [tableOptions, setTableOptions] = React.useState<{ value: string; label: string }[]>([]);
 
+  const { branches } = useBranches({ page: 1, limit: 50 });
   const { areas } = useAreas({ page: 1, limit: 50 });
   const { orders, isLoading, refetch } = useOrders({
+    branch: selectedBranch,
     area: selectedArea,
     table: selectedTable,
     status: selectedStatus,
   });
   const data = orders as OrderResponseProps[];
 
-  const areaOptions = React.useMemo(() => {
-    if (!areas || areas.length === 0) {
+  const branchOptions = React.useMemo(() => {
+    if (!branches || branches.length === 0) {
       return [];
     }
-    return areas.map((area) => ({
-      value: area._id,
-      label: area.name,
+    return branches.map((branch) => ({
+      value: branch._id,
+      label: branch.name,
     }));
-  }, [areas]);
+  }, [branches]);
 
   const statusOptions = React.useMemo(() => {
     return [
@@ -47,6 +55,27 @@ export const CardOrders = () => {
       },
     ];
   }, []);
+
+  const handleBranchChange = async (value: string) => {
+    setSelectedBranch(value);
+    if (value === '') {
+      setAreaOptions([]);
+      setSelectedArea('');
+      setTableOptions([]);
+      setSelectedTable('');
+      return;
+    }
+    const branch = branches.find((branch) => branch._id === value);
+    const areas = await getAreas({ page: 1, limit: 50, branch: branch?._id });
+    const areaOptions = areas.map((area: any) => ({
+      value: area._id,
+      label: area.name,
+    }));
+    setSelectedArea('');
+    setAreaOptions(areaOptions);
+    setTableOptions([]);
+    setSelectedTable('');
+  };
 
   const handleAreaChange = async (value: string) => {
     setSelectedArea(value);
@@ -68,17 +97,18 @@ export const CardOrders = () => {
 
   React.useEffect(() => {
     const timeout = setTimeout(() => {
-      if (selectedArea !== '' || selectedTable !== '' || selectedStatus !== '') {
+      if (selectedArea !== '' || selectedTable !== '' || selectedStatus !== '' || selectedBranch !== '') {
         refetch();
       }
     }, 3000);
     return () => clearTimeout(timeout); // Refetch every 3 seconds
-  }, [selectedArea, selectedTable, selectedStatus]);
+  }, [selectedArea, selectedTable, selectedStatus, selectedBranch]);
 
   const handleClearFilters = () => {
     setSelectedArea('');
     setSelectedStatus('');
     setSelectedTable('');
+    setSelectedBranch('');
   };
 
   if (isLoading) {
@@ -103,14 +133,23 @@ export const CardOrders = () => {
               variant="destructive"
               size="sm"
               onClick={handleClearFilters}
-              disabled={selectedArea === '' && selectedTable === '' && selectedStatus === ''}
+              disabled={selectedArea === '' && selectedTable === '' && selectedStatus === '' && selectedBranch === ''}
             >
               <FunnelX className="size-4 md:size-5" />
               {t('module.filter.button.clear')}
             </Button>
           </div>
         </div>
-        <div className="grid grid-cols-2 xl:grid-cols-3 w-full items-center justify-between flex-wrap gap-2">
+        <div className="grid grid-cols-2 xl:grid-cols-4 w-full items-center justify-between flex-wrap gap-2">
+          <div className="flex flex-col items-start justify-center space-y-2">
+            <Label className="text-muted-foreground">{t('module.filter.branch.label')}</Label>
+            <CustomVariantsSelect
+              options={branchOptions}
+              value={selectedBranch}
+              onChange={handleBranchChange}
+              placeholder={t('module.filter.branch.placeholder')}
+            />
+          </div>
           <div className="flex flex-col items-start justify-center space-y-2">
             <Label className="text-muted-foreground">{t('module.filter.area.label')}</Label>
             <CustomVariantsSelect
@@ -118,6 +157,7 @@ export const CardOrders = () => {
               value={selectedArea}
               onChange={handleAreaChange}
               placeholder={t('module.filter.area.placeholder')}
+              disabled={selectedBranch === ''}
             />
           </div>
 

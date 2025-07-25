@@ -61,6 +61,7 @@ const PaymentOrderPage = React.lazy(() => import('@/views/owner/order-management
 const RequestPage = React.lazy(() => import('@/views/owner/request'));
 const PlanPage = React.lazy(() => import('@/views/admin/plan'));
 const UserOrder = React.lazy(() => import('@/views/user/UserOrder'));
+const UserRequestPage = React.lazy(() => import('@/views/user/Request'));
 
 function App() {
   const { t } = useTranslation();
@@ -105,6 +106,10 @@ function App() {
             {
               path: ORDER_MANAGEMENT,
               element: <UserOrder />,
+            },
+            {
+              path: REQUEST,
+              element: <UserRequestPage />,
             },
           ],
         },

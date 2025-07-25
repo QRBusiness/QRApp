@@ -56,6 +56,7 @@ export interface OrderGetResponse {
 }
 
 export interface OrderRequestProps {
+  branch?: string;
   area?: string;
   table?: string;
   status?: string;
@@ -63,13 +64,16 @@ export interface OrderRequestProps {
 const getOrders = async (params: OrderRequestProps): Promise<OrderResponseProps[]> => {
   try {
     const queryParams: Record<string, string> = {};
-    if (params.area && params.area !== 'all') {
+    if (params.branch) {
+      queryParams.branch = params.branch;
+    }
+    if (params.area) {
       queryParams.area = params.area;
     }
-    if (params.table && params.table !== 'all') {
+    if (params.table) {
       queryParams.service_unit = params.table;
     }
-    if (params.status && params.status !== 'all') {
+    if (params.status) {
       queryParams.status = params.status;
     }
 
@@ -91,10 +95,10 @@ const getOrders = async (params: OrderRequestProps): Promise<OrderResponseProps[
   }
 };
 
-export const useOrders = ({ area, table, status }: OrderRequestProps) => {
+export const useOrders = ({ branch, area, table, status }: OrderRequestProps) => {
   const { data, isLoading, isError, error, isFetching, refetch } = useQuery({
-    queryKey: ['orders', { area, table, status }],
-    queryFn: () => getOrders({ area, table, status }),
+    queryKey: ['orders', { branch, area, table, status }],
+    queryFn: () => getOrders({ branch, area, table, status }),
     refetchInterval: 10000, // Refetch every 10 seconds
     refetchOnWindowFocus: true, // Refetch when the window is focused
     refetchOnReconnect: true, // Refetch when the network reconnects
