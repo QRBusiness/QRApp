@@ -99,6 +99,7 @@ export const createBusinessOwnerSchema = z.object({
     .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
       message: 'module.createBusinessOwnerField.step2.phone.formatError',
     }),
+  email_BO: z.string().email({ message: 'module.createBusinessOwnerField.step2.email.error' }),
 });
 
 export const createAccoutSchema = z.object({
@@ -144,6 +145,7 @@ export const editUserSchema = z.object({
   role: z.string().min(1, { message: 'module.businessOwner.editField.role.error' }),
   available: z.boolean(),
   username: z.string().min(5, { message: 'module.businessOwner.editField.username.error' }),
+  email: z.string().email({ message: 'module.staffManagement.create.email.error' }),
 });
 
 export const createBranchSchema = z.object({
@@ -164,7 +166,7 @@ export const updateTableSchema = z.object({
 });
 
 export const createUserSchema = z.object({
-  name: z.string().min(1, { message: 'module.staffManagement.create.name.error' }).nullish(),
+  name: z.string().min(0, { message: 'module.staffManagement.create.name.error' }).nullish(),
   username: z.string().min(5, { message: 'module.staffManagement.create.username.error' }),
   password: z
     .string()
@@ -180,9 +182,9 @@ export const createUserSchema = z.object({
     .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
       message: 'module.staffManagement.create.phone.formatError',
     })
-    .optional() // Optional for guest users
     .nullish(),
-  address: z.string().min(1, { message: 'module.staffManagement.create.address.error' }).nullish(),
+  address: z.string().min(0, { message: 'module.staffManagement.create.address.error' }).nullish(),
+  email: z.string().email({ message: 'module.staffManagement.create.email.error' }),
   branch: z.string().min(1, { message: 'module.staffManagement.create.branch.error' }),
 });
 

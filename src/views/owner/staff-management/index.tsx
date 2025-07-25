@@ -2,26 +2,26 @@ import React from 'react';
 import { STAFF_SWITCH_SELECT } from '@/constants';
 import { useUsers } from '@/services/admin/business-owner-service';
 import { useCreateUser } from '@/services/admin/business-owner-service';
-import { type GroupResponse, useCreateGroup, useGroups } from '@/services/owner/group-service';
+import { useCreateGroup, useGroups } from '@/services/owner/group-service';
 import { Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { createGroupSchema, createUserSchema } from '@/utils/schemas';
-import { loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
+import { havePermissions, loadFromLocalStorage, saveToLocalStorage } from '@/libs/utils';
 import CreateNewUser from './dialog/create-staff-dialog';
 import CreateNewGroup from './group/dialog/create-group-dialog';
-import type { GroupProps } from './group/tables/columns';
 import GroupTable from './group/tables/page';
-import type { UserProps } from './tables/columns';
 import StaffTable from './tables/page';
 
 const StaffManagement = () => {
   const { t } = useTranslation();
 
-  const [staffData, setStaffData] = React.useState<UserProps[]>([]);
-  const [groupData, setGroupData] = React.useState<GroupProps[]>([]);
+  const { permissions } = useUserPermissions();
+  const permissionCodes = permissions?.map((permission) => permission.code) || [];
+
   const [createUserDialog, setCreateUserDialog] = React.useState<boolean>(false);
   const [createGroupDialog, setCreateGroupDialog] = React.useState<boolean>(false);
   const prevSelectedTab = loadFromLocalStorage(STAFF_SWITCH_SELECT, 'users');
@@ -30,41 +30,6 @@ const StaffManagement = () => {
   const { users } = useUsers({ page: 1, limit: 50 });
   const { createUser } = useCreateUser();
   const { createGroup } = useCreateGroup();
-
-  React.useEffect(() => {
-    if (users.length > 0) {
-      setStaffData(
-        users.map((user) => ({
-          id: user._id,
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          phone: user.phone,
-          address: user.address,
-          role: user.role,
-          available: user.available,
-          created_at: user.created_at,
-          updated_at: user.updated_at,
-        }))
-      );
-    }
-  }, [users]);
-
-  React.useEffect(() => {
-    if (groups.length > 0) {
-      setGroupData(
-        groups.map((group: GroupResponse) => ({
-          _id: group._id,
-          name: group.name,
-          description: group.description,
-          permissions: group.permissions ?? [],
-          created_at: group.created_at,
-          updated_at: group.updated_at,
-          users: group.users ?? [],
-        }))
-      );
-    }
-  }, [groups]);
 
   const handleTabChange = (value: string) => {
     setSelectedTab(value);
@@ -81,32 +46,44 @@ const StaffManagement = () => {
           </TabsList>
         </Tabs>
         {selectedTab === 'users' ? (
-          <CreateNewUser
-            open={createUserDialog}
-            onOpenChange={setCreateUserDialog}
-            onSubmit={(values: z.infer<typeof createUserSchema>) => createUser(values)}
-            create
-          >
-            <Button className="self-end flex items-center space-x-2">
-              <Plus className="size-4 md:size-5" />
-              {t('module.staffManagement.button.create')}
-            </Button>
-          </CreateNewUser>
+          <>
+            {havePermissions(permissionCodes, ['create.user']) && (
+              <CreateNewUser
+                open={createUserDialog}
+                onOpenChange={setCreateUserDialog}
+                onSubmit={(values: z.infer<typeof createUserSchema>) => createUser(values)}
+                create
+              >
+                <Button className="self-end flex items-center space-x-2">
+                  <Plus className="size-4 md:size-5" />
+                  {t('module.staffManagement.button.create')}
+                </Button>
+              </CreateNewUser>
+            )}
+          </>
         ) : (
-          <CreateNewGroup
-            open={createGroupDialog}
-            onOpenChange={setCreateGroupDialog}
-            onSubmit={(values: z.infer<typeof createGroupSchema>) => createGroup(values)}
-            create
-          >
-            <Button className="self-end flex items-center space-x-2">
-              <Plus className="size-4 md:size-5" />
-              {t('module.groupManagement.button.create')}
-            </Button>
-          </CreateNewGroup>
+          <>
+            {havePermissions(permissionCodes, ['create.group']) && (
+              <CreateNewGroup
+                open={createGroupDialog}
+                onOpenChange={setCreateGroupDialog}
+                onSubmit={(values: z.infer<typeof createGroupSchema>) => createGroup(values)}
+                create
+              >
+                <Button className="self-end flex items-center space-x-2">
+                  <Plus className="size-4 md:size-5" />
+                  {t('module.groupManagement.button.create')}
+                </Button>
+              </CreateNewGroup>
+            )}
+          </>
         )}
       </div>
-      {selectedTab === 'users' ? <StaffTable data={staffData} /> : <GroupTable data={groupData} />}
+      {selectedTab === 'users' ? (
+        <StaffTable data={users.map((user) => ({ ...user, id: user._id }))} />
+      ) : (
+        <GroupTable data={groups} />
+      )}
     </div>
   );
 };

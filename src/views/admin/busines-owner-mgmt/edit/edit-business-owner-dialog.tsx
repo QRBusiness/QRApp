@@ -99,6 +99,33 @@ const EditBusinessOwnerDialog = ({
             />
             <FormField
               control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {isUser
+                      ? t('module.staffManagement.create.email.label')
+                      : t('module.businessOwner.editField.email.label')}
+                    {!editUserSchema.shape.email.isOptional() && <p className="text-red-700">*</p>}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder={t('module.businessOwner.editField.email.placeholder')}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {isUser
+                      ? t('module.staffManagement.create.email.description')
+                      : t('module.businessOwner.editField.email.description')}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="address"
               render={({ field }) => (
                 <FormItem>

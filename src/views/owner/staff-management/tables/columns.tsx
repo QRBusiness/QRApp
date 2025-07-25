@@ -4,10 +4,11 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { CircleCheck, CircleX, Edit, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import EditBusinessOwnerDialog from '@/views/admin/busines-owner-mgmt/edit/edit-business-owner-dialog';
-import { formattedDate } from '@/libs/utils';
+import { formattedDate, havePermissions } from '@/libs/utils';
 import ReadOnlyStaffDialog from '../dialog/read-only-staff-dialog';
 
 export type UserProps = {
@@ -19,6 +20,7 @@ export type UserProps = {
   image_url?: string;
   available: boolean;
   username: string;
+  email: string;
   created_at: string;
   updated_at: string;
 };
@@ -49,7 +51,13 @@ export const columns: ColumnDef<UserProps>[] = [
     accessorKey: 'role',
     header: 'Role',
   },
-
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    cell: ({ row }) => {
+      return <span>{row.getValue('email') || 'No Email'}</span>;
+    },
+  },
   {
     accessorKey: 'phone',
     header: 'Contact',
@@ -113,6 +121,8 @@ export const columns: ColumnDef<UserProps>[] = [
     header: 'Actions',
     cell: ({ row }) => {
       const { t } = useTranslation();
+      const { permissions } = useUserPermissions();
+      const permissionCodes = permissions.map((permission) => permission.code);
       const [openEditDialog, setOpenEditDialog] = React.useState(false);
       const [openReadOnlyDialog, setOpenReadOnlyDialog] = React.useState(false);
       const { toggleAvailabilityUser } = useToggleAvailabilityUser();
@@ -124,12 +134,18 @@ export const columns: ColumnDef<UserProps>[] = [
         username: row.original.username,
         role: row.original.role,
         available: row.original.available,
+        email: row.original.email,
       };
 
       return (
         <div className="flex gap-2">
           <ReadOnlyStaffDialog isOpen={openReadOnlyDialog} onClose={setOpenReadOnlyDialog} data={row.original}>
-            <Button variant="outline" size="sm" onClick={() => setOpenReadOnlyDialog(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setOpenReadOnlyDialog(true)}
+              disabled={!havePermissions(permissionCodes, ['view.user'])}
+            >
               <Eye className="mr-2" />
               {t('module.common.view')}
             </Button>
@@ -143,7 +159,7 @@ export const columns: ColumnDef<UserProps>[] = [
               updateUser({ id: row.original.id, data });
             }}
           >
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={!havePermissions(permissionCodes, ['update.user'])}>
               <Edit className="mr-2" />
               {t('module.common.edit')}
             </Button>
@@ -159,12 +175,12 @@ export const columns: ColumnDef<UserProps>[] = [
             buttonSubmitLabel={row.original.available ? t('module.common.disable') : t('module.common.enable')}
           >
             {row.original.available ? (
-              <Button variant="destructive" size="sm">
+              <Button variant="destructive" size="sm" disabled={!havePermissions(permissionCodes, ['update.user'])}>
                 <CircleX className="mr-2" />
                 {t('module.common.disable')}
               </Button>
             ) : (
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" disabled={!havePermissions(permissionCodes, ['update.user'])}>
                 <CircleCheck className="mr-2" />
                 {t('module.common.enable')}
               </Button>

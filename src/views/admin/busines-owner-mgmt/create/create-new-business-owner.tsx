@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2Icon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import type { ZodObject } from 'zod';
 import CustomSelect from '@/components/common/custom-select';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ import { cn, getTypeOfField } from '@/libs/utils';
 const CreateNewBusinessOwner = () => {
   const totalSteps = 3;
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [step, setStep] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const steps: { key: string; title: string; description: string; schema: ZodObject<any> }[] = [
@@ -101,6 +103,7 @@ const CreateNewBusinessOwner = () => {
         return;
       } finally {
         setIsLoading(false);
+        navigate('..');
         // Reset step and form data after successful submission
       }
       setStep(0);

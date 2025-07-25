@@ -59,7 +59,10 @@ const Login = () => {
         username: user.data.username,
         available: user.data.available,
         business: {
-          _id: user.data.business?._id || '1',
+          _id: user.data.business?._id,
+        },
+        branch: {
+          _id: user.data.branch?._id,
         },
         expired_at: user.data.business?.expired_at || '',
       });

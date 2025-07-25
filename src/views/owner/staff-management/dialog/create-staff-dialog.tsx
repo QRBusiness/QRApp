@@ -32,7 +32,7 @@ interface CreateNewUserProps {
 
 const CreateNewUser = ({
   create = true,
-  initialData = { username: '', password: '', branch: '' },
+  initialData = { username: '', password: '', branch: '', email: '' },
   children,
   open,
   onOpenChange,
@@ -89,7 +89,7 @@ const CreateNewUser = ({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmitForm)}
-            className="space-y-6 w-full"
+            className="space-y-4 w-full"
             key={open ? JSON.stringify(initialData) : 'closed'}
           >
             <FormField
@@ -139,6 +139,23 @@ const CreateNewUser = ({
                     <Input {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>{t('module.staffManagement.create.name.description')}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('module.staffManagement.create.email.label')}
+                    {!createUserSchema.shape.email.isOptional() && <p className="text-red-700">*</p>}
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value || ''} type="email" />
+                  </FormControl>
+                  <FormDescription>{t('module.staffManagement.create.email.description')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

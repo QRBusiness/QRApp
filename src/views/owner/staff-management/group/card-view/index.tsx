@@ -132,9 +132,9 @@ const GroupCardView: React.FC<GroupCardViewProps> = ({
           </div>
         </div>
         <div className="p-4 flex items-center justify-between">
-          <div className="flex items-center flex-1">
+          <div className="flex items-center flex-1 max-w-[calc(100%-100px)]">
             <Info className="size-4 md:size-5 mr-1" />
-            <p className="truncate">{description}</p>
+            <p className="truncate w-full">{description}</p>
           </div>
           <Button onClick={handleSubmit} className="ml-4">
             Save

@@ -7,9 +7,10 @@ import { CircleArrowOutDownRight, Edit, Eye, Trash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import CustomAlertDialog from '@/components/common/dialog/custom-alert-dialog';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formattedDate } from '@/libs/utils';
+import { formattedDate, havePermissions } from '@/libs/utils';
 import CreateNewGroup from '../dialog/create-group-dialog';
 import ReadOnlyGroupDialog from '../dialog/read-only-group-dialog';
 
@@ -80,6 +81,8 @@ export const columns: ColumnDef<GroupProps>[] = [
     cell: ({ row }) => {
       const { t } = useTranslation();
       const navigate = useNavigate();
+      const { permissions } = useUserPermissions();
+      const permissionCodes = permissions.map((permission) => permission.code);
       const [editGroupDialog, setEditGroupDialog] = React.useState<boolean>(false);
       const [viewGroupDialog, setViewGroupDialog] = React.useState<boolean>(false);
       const { updateGroup } = useUpdateGroup(); // Assuming you have a hook for updating groups
@@ -98,7 +101,7 @@ export const columns: ColumnDef<GroupProps>[] = [
               updated_at: row.original.updated_at,
             }}
           >
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={!havePermissions(permissionCodes, ['view.group'])}>
               <Eye className="mr-2" />
               {t('module.common.view')}
             </Button>
@@ -112,12 +115,17 @@ export const columns: ColumnDef<GroupProps>[] = [
               updateGroup({ data, id: row.original._id });
             }}
           >
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={!havePermissions(permissionCodes, ['update.group'])}>
               <Edit className="mr-2" />
               {t('module.common.edit')}
             </Button>
           </CreateNewGroup>
-          <Button variant="outline" size="sm" onClick={() => navigate(`${GROUP}/${row.original._id}`)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(`${GROUP}/${row.original._id}`)}
+            disabled={!havePermissions(permissionCodes, ['update.group', 'view.group'])}
+          >
             <CircleArrowOutDownRight className="mr-2" />
             {t('module.common.more')}
           </Button>
@@ -126,7 +134,7 @@ export const columns: ColumnDef<GroupProps>[] = [
             description={t('module.qrManagement.alertDialog.description')}
             onSubmit={() => deleteGroup(row.original._id)}
           >
-            <Button variant="destructive" size="sm">
+            <Button variant="destructive" size="sm" disabled={!havePermissions(permissionCodes, ['delete.group'])}>
               <Trash className="mr-2" />
               {t('module.common.delete')}
             </Button>

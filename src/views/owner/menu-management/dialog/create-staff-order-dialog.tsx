@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { OWNER_ROLE, STAFF_ROLE } from '@/constants';
 import { type AreaResponse, getAreas } from '@/services/owner/area-service';
 import { useBranches } from '@/services/owner/branch-service';
 import { getTables } from '@/services/owner/table-service';
@@ -8,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import CustomSelect from '@/components/common/custom-select';
+import { useUserState } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -26,16 +28,12 @@ interface createOrderRequestProps {
   onOpenChange: (open: boolean) => void;
   onSubmit?: (data: z.infer<typeof createOrderRequestSchema>) => void;
   onCancel?: () => void;
+  initialData?: z.infer<typeof createOrderRequestSchema>;
 }
 
-const CreateNewOrderRequest = ({ open, onOpenChange, onSubmit, onCancel }: createOrderRequestProps) => {
-  const initialData = {
-    branch: '',
-    area: '',
-    service_unit: '',
-    guest_name: '',
-  };
+const CreateNewOrderRequest = ({ open, onOpenChange, onSubmit, onCancel, initialData }: createOrderRequestProps) => {
   const { t } = useTranslation();
+  const user = useUserState();
 
   const { branches } = useBranches({ page: 1, limit: 50 });
   const branchOptions = branches.map((branch) => ({
@@ -93,6 +91,15 @@ const CreateNewOrderRequest = ({ open, onOpenChange, onSubmit, onCancel }: creat
     onOpenChange(false);
   };
 
+  useEffect(() => {
+    if (initialData?.branch && user?.role === STAFF_ROLE) {
+      handleBranchChange(initialData.branch);
+    }
+    if (initialData?.area) {
+      handleAreaChange(initialData.area);
+    }
+  }, [initialData, form]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-5xl overflow-y-scroll max-h-9/10">
@@ -109,33 +116,35 @@ const CreateNewOrderRequest = ({ open, onOpenChange, onSubmit, onCancel }: creat
             className="space-y-6 w-full"
             key={open ? JSON.stringify(initialData) : 'closed'}
           >
-            <FormField
-              control={form.control}
-              name="branch"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {t('module.branchManagement.title')}
-                    <p className="text-red-700">*</p>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex items-center justify-start space-x-2">
-                      <CustomSelect
-                        options={branchOptions}
-                        onFieldChange={(props) => {
-                          field.onChange(props);
-                          handleBranchChange(props);
-                        }}
-                        value={field.value || ''}
-                        placeholder={t('module.branchManagement.placeholder')}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormDescription>{t('module.branchManagement.description')}</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {user?.role === OWNER_ROLE && (
+              <FormField
+                control={form.control}
+                name="branch"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t('module.branchManagement.title')}
+                      <p className="text-red-700">*</p>
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex items-center justify-start space-x-2">
+                        <CustomSelect
+                          options={branchOptions}
+                          onFieldChange={(props) => {
+                            field.onChange(props);
+                            handleBranchChange(props);
+                          }}
+                          value={field.value || ''}
+                          placeholder={t('module.branchManagement.placeholder')}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormDescription>{t('module.branchManagement.description')}</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="area"

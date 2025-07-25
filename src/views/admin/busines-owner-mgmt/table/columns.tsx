@@ -19,6 +19,7 @@ export type BusinessOwner = {
   image_url?: string;
   available: boolean;
   username: string;
+  email: string;
   created_at: string;
   updated_at: string;
 };
@@ -49,7 +50,13 @@ export const columns: ColumnDef<BusinessOwner>[] = [
     accessorKey: 'role',
     header: 'Role',
   },
-
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    cell: ({ row }) => {
+      return <span>{row.getValue('email') || 'No Email'}</span>;
+    },
+  },
   {
     accessorKey: 'phone',
     header: 'Contact',

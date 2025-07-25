@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Hint } from '@/components/common/hint';
 import HorizontalFilterScroll from '@/components/common/horizontal-filter-scroll';
 import { toggleMenuDisplayOptionState, useMenuDisplayOptionState } from '@/components/common/states/menuStates';
-import { useUserPermissions, useUserState } from '@/components/common/states/userState';
+import { useUserPermissions } from '@/components/common/states/userState';
 import { Button } from '@/components/ui/button';
 import { havePermissions } from '@/libs/utils';
 import CreateNewMenuDialog from '../../user/Cart/create-new-menu-dialog';

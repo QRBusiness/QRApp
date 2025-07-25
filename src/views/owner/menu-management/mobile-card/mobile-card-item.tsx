@@ -140,12 +140,7 @@ const MenuCardItem: React.FC<Menu> = ({
           }}
           onSubmit={(cartItem: CartItem) => addToCart(cartItem)}
         >
-          <Button
-            size="icon"
-            className="rounded-full"
-            disabled={!havePermissions(permissionCodes, ['create.product'])}
-            variant={'default'}
-          >
+          <Button size="icon" className="rounded-full" variant={'default'}>
             <Plus className="size-4 md:size-5" />
           </Button>
         </AddToCartDialog>

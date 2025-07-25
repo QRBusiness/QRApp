@@ -35,6 +35,14 @@ export interface UserProfile {
       };
       expired_at: string;
     };
+    branch: {
+      _id: string;
+      name: string;
+      address: string;
+      contact: string;
+      created_at: string;
+      updated_at: string;
+    };
   };
 }
 

@@ -132,6 +132,12 @@ const CartItemsDetails: React.FC = () => {
           open={createOrderRequestDialog}
           onOpenChange={setCreateOrderRequestDialog}
           onSubmit={(data) => onStaffCheckout(data)}
+          initialData={{
+            branch: user.branch._id,
+            area: '',
+            service_unit: '',
+            guest_name: '',
+          }}
         />
       )}
 

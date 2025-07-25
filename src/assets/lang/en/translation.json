@@ -461,7 +461,13 @@
         "address_BO.description": "* Enter your personal address.",
         "address_BO.placeholder": "Enter your personal address",
         "address_BO.error": "Personal address must be a valid address.",
-        "address_BO.errorFormat": "Please enter a valid address."
+        "address_BO.errorFormat": "Please enter a valid address.",
+
+        "email_BO.label": "Email Address",
+        "email_BO.description": "* Enter your email address.",
+        "email_BO.placeholder": "Enter your email address",
+        "email_BO.error": "Email address must be a valid email.",
+        "email_BO.errorFormat": "Please enter a valid email address."
       },
       "step3": {
         "title": "Edit Business",
@@ -566,6 +572,10 @@
         "username.label": "Business Owner Username",
         "username.description": "Enter the username of the business owner.",
         "username.error": "Business owner username is required.",
+        "email.label": "Business Owner Email",
+        "email.description": "Enter the email address of the business owner.",
+        "email.error": "Business owner email is required.",
+        "email.placeholder": "Enter an email",
         "available.label": "Available",
         "available.description": "Is the business owner available?",
         "button.cancel": "Cancel",
@@ -646,6 +656,9 @@
         "branch.description": "Select the branch for this staff member.",
         "branch.error": "Branch must be selected.",
         "branch.placeholder": "Select branch",
+        "email.label": "Email",
+        "email.description": "Enter the email address of the user.",
+        "email.error": "Email is required.",
         "available": {
           "label": "Available",
           "description": "Is the staff member available?"

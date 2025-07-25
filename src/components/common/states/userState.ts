@@ -17,7 +17,10 @@ interface userPros {
   business: {
     _id: string;
   };
-  expired_at?: string; // Optional field for business expiration date
+  branch: {
+    _id: string;
+  };
+  expired_at: string; // Optional field for business expiration date
 }
 interface permissionProps {
   permissions: Permission[];
@@ -37,6 +40,10 @@ export const defaultUserState: userPros = {
   business: {
     _id: '',
   },
+  branch: {
+    _id: '',
+  },
+  expired_at: '',
 };
 
 export const defaultPermissionState: permissionProps = {
