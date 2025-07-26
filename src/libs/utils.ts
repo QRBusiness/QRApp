@@ -5,6 +5,7 @@ import {
   BUSINESS_TABLE,
   BUSINESS_TYPE_TABLE,
   CATEGORY_MANAGEMENT_TABLE,
+  DASHBOARD_TABLE,
   GROUP_MANAGEMENT_TABLE,
   MENU_MANAGEMENT_TABLE,
   ORDER_MANAGEMENT_TABLE,
@@ -127,6 +128,7 @@ export const resetTableStorage = () => {
   removeFromLocalStorage(SUBCATEGORY_MANAGEMENT_TABLE + '_visibility'); //11
   removeFromLocalStorage(PLAN_MANAGEMENT_TABLE + '_visibility'); //12
   removeFromLocalStorage(GROUP_MANAGEMENT_TABLE + '_visibility'); //13
+  removeFromLocalStorage(DASHBOARD_TABLE + '_visibility'); //14
 };
 
 // check at least one permission in the list

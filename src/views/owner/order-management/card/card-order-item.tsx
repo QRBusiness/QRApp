@@ -105,14 +105,16 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
       <CardFooter className="px-2 bg-background">
         {/* Footer card */}
         <div className="flex justify-between space-x-2 w-full">
-          <Button
-            variant="secondary"
-            size="icon"
-            onClick={handleSelectOrder}
-            className={`${checked && 'border-primary bg-primary/10 hover:bg-primary/20'}`}
-          >
-            <SquareDashedMousePointer className={`size-4 md:size-5 ${checked && 'fill-primary'}`} />
-          </Button>
+          {order.status === 'Unpaid' && (
+            <Button
+              variant="secondary"
+              size="icon"
+              onClick={handleSelectOrder}
+              className={`${checked && 'border-primary bg-primary/10 hover:bg-primary/20'}`}
+            >
+              <SquareDashedMousePointer className={`size-4 md:size-5 ${checked && 'fill-primary'}`} />
+            </Button>
+          )}
           <OrderDetailsDialog isOpen={isOpen} onOpenChange={setIsOpen} data={order}>
             <Button variant="secondary" size="default" className="flex-1 items-center space-x-2">
               <Info className="size-4 md:size-5" />

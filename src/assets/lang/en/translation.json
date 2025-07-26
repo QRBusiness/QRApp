@@ -923,6 +923,38 @@
         "placeholder": "Select status",
         "error": "Status must be selected."
       },
+      "startDate": {
+        "label": "Start Date",
+        "description": "* Select a start date for the filter.",
+        "placeholder": "Select start date",
+        "error": "Start date cannot be empty."
+      },
+      "endDate": {
+        "label": "End Date",
+        "description": "* Select an end date for the filter.",
+        "placeholder": "Select end date",
+        "error": "End date cannot be empty."
+      },
+      "paymentMethod": {
+        "label": "Payment Method Filter",
+        "description": "* Select a payment method to filter by.",
+        "placeholder": "Select payment method",
+        "error": "Payment method must be selected.",
+        "cash": "Cash Payment",
+        "bank": "Bank Payment"
+      },
+      "staff": {
+        "label": "Staff Filter",
+        "description": "* Select a staff member to filter by.",
+        "placeholder": "Select staff",
+        "error": "Staff must be selected."
+      },
+      "product": {
+        "label": "Product Filter",
+        "description": "* Select a product to filter by.",
+        "placeholder": "Select product",
+        "error": "Product must be selected."
+      },
       "button": {
         "apply": "Apply Filters",
         "clear": "Clear Filters"
@@ -960,6 +992,9 @@
       "paid": "Paid",
       "active": "Active",
       "inactive": "Inactive"
+    },
+    "dashboard": {
+      "toggleFilter": "Toggle Dashboard Filter"
     }
   }
 }

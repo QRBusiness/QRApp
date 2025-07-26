@@ -12,7 +12,7 @@ const BusinessOwnerManagement = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [data, setData] = React.useState<BusinessOwner[]>([]);
-  const { users, isLoading } = useUsers({ page: 1, limit: 50 });
+  const { users, isLoading } = useUsers({ page: 1, limit: 50, role: OWNER_ROLE });
 
   React.useEffect(() => {
     if (users.length > 0) {

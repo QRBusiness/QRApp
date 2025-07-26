@@ -1,5 +1,5 @@
 import React from 'react';
-import { STAFF_SWITCH_SELECT } from '@/constants';
+import { STAFF_ROLE, STAFF_SWITCH_SELECT } from '@/constants';
 import { useUsers } from '@/services/admin/business-owner-service';
 import { useCreateUser } from '@/services/admin/business-owner-service';
 import { useCreateGroup, useGroups } from '@/services/owner/group-service';
@@ -27,7 +27,7 @@ const StaffManagement = () => {
   const prevSelectedTab = loadFromLocalStorage(STAFF_SWITCH_SELECT, 'users');
   const [selectedTab, setSelectedTab] = React.useState<string>(prevSelectedTab);
   const { groups } = useGroups();
-  const { users } = useUsers({ page: 1, limit: 50 });
+  const { users } = useUsers({ page: 1, limit: 50, role: STAFF_ROLE });
   const { createUser } = useCreateUser();
   const { createGroup } = useCreateGroup();
 

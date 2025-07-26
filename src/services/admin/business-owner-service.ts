@@ -7,6 +7,7 @@ import type { createUserSchema, editUserSchema } from '@/utils/schemas';
 interface BusinessOwnerInputProps {
   page: number;
   limit: number;
+  role?: 'Admin' | 'BusinessOwner' | 'Staff';
 }
 
 interface UserResponse {
@@ -26,10 +27,14 @@ export interface User {
   updated_at: string;
 }
 
-const getUsers = async ({ page = 1, limit = 50 }: BusinessOwnerInputProps): Promise<User[]> => {
+const getUsers = async ({ page = 1, limit = 50, role }: BusinessOwnerInputProps): Promise<User[]> => {
   try {
+    const params: Record<string, any> = { page, limit };
+    if (role) {
+      params.role = role;
+    }
     const response: ApiResponse<UserResponse> = await apiClient.get('/users', {
-      params: { page, limit },
+      params,
     });
     if (response.status !== 200) {
       toast.error(response.error, {
@@ -47,10 +52,10 @@ const getUsers = async ({ page = 1, limit = 50 }: BusinessOwnerInputProps): Prom
   }
 };
 
-export const useUsers = ({ page = 1, limit = 50 }: BusinessOwnerInputProps) => {
+export const useUsers = ({ page = 1, limit = 50, role }: BusinessOwnerInputProps) => {
   const { data, error, isLoading, isFetching, isSuccess, refetch } = useQuery<User[]>({
-    queryKey: ['usersQuery', { page, limit }],
-    queryFn: () => getUsers({ page, limit }),
+    queryKey: ['usersQuery', { page, limit, role }],
+    queryFn: () => getUsers({ page, limit, role }),
   });
 
   return {

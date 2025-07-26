@@ -246,6 +246,8 @@ interface OrderByTokenResponse {
       created_at: string;
       updated_at: string;
       items: Array<ItemOrderProps>;
+      amount: number;
+      status: string;
     }[];
   };
 }
@@ -284,6 +286,116 @@ export const useOrderByToken = (token: string) => {
   return {
     items: data?.data?.orders,
     qr_code: data?.data?.qr_code,
+    isLoading,
+    isError,
+    error,
+  };
+};
+
+export interface OrderReportRequestProps {
+  branch?: string;
+  area?: string;
+  service_unit?: string;
+  product?: string;
+  staff?: string;
+  method?: 'Cash' | 'Bank';
+  start_date?: Date | string;
+  end_date?: Date | string;
+}
+
+export interface OrderReportResponse {
+  _id: string;
+  created_at: string;
+  updated_at: string;
+  items: Array<ItemOrderProps>;
+  status: string;
+  branch: {
+    _id: string;
+    name: string;
+    address: string;
+    contact: string;
+    created_at: string;
+    updated_at: string;
+  };
+  area: {
+    _id: string;
+    name: string;
+    description: string;
+
+    created_at: string;
+    updated_at: string;
+  };
+  service_unit: {
+    _id: string;
+    name: string;
+    qr_code: string;
+    created_at: string;
+    updated_at: string;
+  };
+  request: {
+    _id: string;
+    guest_name: string;
+    type: string;
+    reason: string;
+    status: string;
+  };
+  payment_method: string;
+}
+
+export interface OrderReportResponseProps {
+  data: {
+    orders: OrderReportResponse[];
+    total_amount: number;
+    total_count: number;
+  };
+}
+
+const getOrderReport = async ({
+  branch,
+  area,
+  service_unit,
+  product,
+  staff,
+  method,
+  start_date,
+  end_date,
+}: OrderReportRequestProps): Promise<OrderReportResponseProps> => {
+  const params = new URLSearchParams();
+  if (branch) params.append('branch', branch);
+  if (area) params.append('area', area);
+  if (service_unit) params.append('service_unit', service_unit);
+  if (product) params.append('product', product);
+  if (staff) params.append('staff', staff);
+  if (method) params.append('method', method);
+  if (start_date) params.append('start_date', start_date instanceof Date ? start_date.toISOString() : start_date);
+  if (end_date) params.append('end_date', end_date instanceof Date ? end_date.toISOString() : end_date);
+  try {
+    const response: ApiResponse<OrderReportResponseProps> = await apiClient.get(`/orders/report?${params.toString()}`);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error fetching order report', {
+        description: response.errorMessage || 'An error occurred while fetching the order report.',
+      });
+      throw new Error(response.errorMessage || 'Error fetching order report');
+    }
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error fetching order report', {
+      description: error.errorMessage || 'An error occurred while fetching the order report.',
+    });
+    throw new Error(error.errorMessage || 'Error fetching order report');
+  }
+};
+
+export const useOrderReport = (params: OrderReportRequestProps) => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['orderReport', params],
+    queryFn: () => getOrderReport(params),
+  });
+
+  return {
+    orders: data?.data?.orders || [],
+    total_amount: data?.data?.total_amount || 0,
+    total_count: data?.data?.total_count || 0,
     isLoading,
     isError,
     error,
