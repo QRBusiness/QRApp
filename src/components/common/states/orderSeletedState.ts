@@ -28,3 +28,7 @@ export const useSetOrderSelectedState = (order: OrderResponseProps) => {
     orderSelectedState.orders.push(order);
   }
 };
+
+export const resetOrderSelectedState = () => {
+  orderSelectedState.orders = [];
+};

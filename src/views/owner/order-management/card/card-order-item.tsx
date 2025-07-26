@@ -1,5 +1,5 @@
 import React from 'react';
-import type { OrderResponseProps } from '@/services/owner/order-service';
+import { type OrderResponseProps, mergeOrders } from '@/services/owner/order-service';
 import { CircleUser, Clock, CreditCard, EllipsisVertical, Info, MapPin, SquareDashedMousePointer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -124,7 +124,10 @@ const CardOrderItem = ({ order }: { order: OrderResponseProps }) => {
               variant="default"
               size="default"
               className="flex-1 items-center space-x-2"
-              onClick={() => navigate(order._id)}
+              onClick={async () => {
+                const token = await mergeOrders([order._id]);
+                navigate(`${order._id}?token=${token}`);
+              }}
             >
               <CreditCard className="size-4 md:size-5" />
               {t('module.orderManagement.orderCard.payment')}

@@ -4,22 +4,23 @@ import { toast } from 'sonner';
 import type { ProductProps } from './product-services';
 
 // OrderResponseProps interface based on provided JSON structure
+export interface ItemOrderProps {
+  name: string;
+  img_url: string;
+  quantity: number;
+  price: number;
+  variant: string;
+  options: string[];
+  note: string;
+  product: ProductProps;
+}
 
 export interface OrderResponseProps {
   table: any;
   _id: string;
   created_at: string;
   updated_at: string;
-  items: Array<{
-    name: string;
-    img_url: string;
-    quantity: number;
-    price: number;
-    variant: string;
-    options: string[];
-    note: string;
-    product: ProductProps;
-  }>;
+  items: Array<ItemOrderProps>;
   amount: number;
   status: string;
   business: {
@@ -115,16 +116,22 @@ export const useOrders = ({ branch, area, table, status }: OrderRequestProps) =>
 };
 
 const checkoutOrder = async ({
-  orderId,
+  token,
   method = 'Cash',
 }: {
-  orderId: string;
+  token: string;
   method?: string;
 }): Promise<OrderResponseProps> => {
   try {
-    const response: ApiResponse<{ data: OrderResponseProps }> = await apiClient.post(`/orders/checkout/${orderId}`, {
-      method,
-    });
+    const params = new URLSearchParams();
+    params.append('method', method);
+    if (!token) {
+      throw new Error('Token is required to checkout order');
+    }
+    params.append('token', token);
+    const response: ApiResponse<{ data: OrderResponseProps }> = await apiClient.post(
+      `/orders/checkout?${params.toString()}`
+    );
     if (response.status !== 200 && response.status !== 201) {
       toast.error(response.error || 'Error checking out order', {
         description: response.errorMessage || 'An error occurred while checking out the order.',
@@ -145,10 +152,8 @@ export const useCheckoutOrder = () => {
   const { mutate, isError, error } = useMutation({
     mutationKey: ['checkoutOrder'],
     mutationFn: checkoutOrder,
-    onSuccess: (data) => {
-      toast.success('Order checked out successfully', {
-        description: `Order ID: ${data._id}`,
-      });
+    onSuccess: () => {
+      toast.success('Order checked out successfully');
     },
   });
 
@@ -165,39 +170,6 @@ export interface QRPaymentProps {
     qrDataURL: string;
   };
 }
-const getQRPayment = async (orderId: string): Promise<QRPaymentProps> => {
-  try {
-    const response: ApiResponse<{ data: QRPaymentProps }> = await apiClient.get(
-      `/orders/${orderId}/qrcode?template=compact`
-    );
-    if (response.status !== 200 && response.status !== 201) {
-      toast.error(response.error || 'Error fetching QR payment', {
-        description: response.errorMessage || 'An error occurred while fetching the QR payment.',
-      });
-      throw new Error(response.errorMessage || 'Error fetching QR payment');
-    }
-    return response.data.data;
-  } catch (error: ErrorResponse | any) {
-    toast.error(error.message || 'Error fetching QR payment', {
-      description: error.errorMessage || 'An error occurred while fetching the QR payment.',
-    });
-    throw new Error(error.errorMessage || 'Error fetching QR payment');
-  }
-};
-
-export const useQRPayment = (orderId: string) => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['qrPayment', orderId],
-    queryFn: () => getQRPayment(orderId),
-  });
-
-  return {
-    qrPayment: data,
-    isLoading,
-    isError,
-    error,
-  };
-};
 
 const getOrderById = async (orderId: string): Promise<OrderResponseProps> => {
   try {
@@ -225,6 +197,93 @@ export const useOrderById = (orderId: string) => {
 
   return {
     orderDetails: data,
+    isLoading,
+    isError,
+    error,
+  };
+};
+
+export const mergeOrders = async (orderIds: string[]): Promise<string> => {
+  try {
+    const response: ApiResponse<{ data: string }> = await apiClient.post('/orders/qrcode', [...orderIds]);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error merging orders', {
+        description: response.errorMessage || 'An error occurred while merging the orders.',
+      });
+      throw new Error(response.errorMessage || 'Error merging orders');
+    }
+    return response.data.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error merging orders', {
+      description: error.errorMessage || 'An error occurred while merging the orders.',
+    });
+    throw new Error(error.errorMessage || 'Error merging orders');
+  }
+};
+
+export const useMergeOrders = () => {
+  const { mutate, isError, error, data } = useMutation({
+    mutationKey: ['mergeOrders'],
+    mutationFn: mergeOrders,
+    onSuccess: () => {
+      toast.success('Orders merged successfully');
+    },
+  });
+
+  return {
+    token: data,
+    mergeOrders: mutate,
+    isError,
+    error,
+  };
+};
+
+interface OrderByTokenResponse {
+  data: {
+    qr_code: string;
+    orders: {
+      _id: string;
+      created_at: string;
+      updated_at: string;
+      items: Array<ItemOrderProps>;
+    }[];
+  };
+}
+
+const getOrderByToken = async (token: string): Promise<OrderByTokenResponse> => {
+  try {
+    const params = new URLSearchParams();
+    params.append('template', 'compact');
+    if (!token) {
+      throw new Error('Token is required to fetch order by token');
+    }
+    params.append('token', token);
+    const response: ApiResponse<OrderByTokenResponse> = await apiClient.get(`/orders/checkout?${params.toString()}`);
+    if (response.status !== 200 && response.status !== 201) {
+      toast.error(response.error || 'Error fetching order by token', {
+        description: response.errorMessage || 'An error occurred while fetching the order by token.',
+      });
+      throw new Error(response.errorMessage || 'Error fetching order by token');
+    }
+    return response.data;
+  } catch (error: ErrorResponse | any) {
+    toast.error(error.message || 'Error fetching order by token', {
+      description: error.errorMessage || 'An error occurred while fetching the order by token.',
+    });
+    throw new Error(error.errorMessage || 'Error fetching order by token');
+  }
+};
+
+export const useOrderByToken = (token: string) => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['orderByToken', token],
+    queryFn: () => getOrderByToken(token),
+    enabled: !!token, // Only run the query if token is provided
+  });
+
+  return {
+    items: data?.data?.orders,
+    qr_code: data?.data?.qr_code,
     isLoading,
     isError,
     error,

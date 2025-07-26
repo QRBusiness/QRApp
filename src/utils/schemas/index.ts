@@ -117,17 +117,17 @@ export const createAccoutSchema = z.object({
 });
 
 export const createBusinessSchema = z.object({
-  name_B: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.name.error' }),
-  address_B: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.address.error' }),
+  name_B: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.name_B.error' }),
+  address_B: z.string().min(1, { message: 'module.createBusinessOwnerField.step3.address_B.error' }),
   contact_B: z
     .string()
-    .min(10, { message: 'module.createBusinessOwnerField.step3.contact.error' })
-    .max(11, { message: 'module.createBusinessOwnerField.step3.contact.error' })
+    .min(10, { message: 'module.createBusinessOwnerField.step3.contact_B.error' })
+    .max(11, { message: 'module.createBusinessOwnerField.step3.contact_B.error' })
     .regex(/^(0[3|5|7|8|9])+([0-9]{8})$/, {
-      message: 'module.createBusinessOwnerField.step3.contact.formatError',
+      message: 'module.createBusinessOwnerField.step3.contact_B.formatError',
     }),
   businessType: z.string().min(1, {
-    message: 'module.createBusinessOwnerField.step3.businessType.error',
+    message: 'module.createBusinessOwnerField.step3.businessType_B.error',
   }),
   businessTaxCode: z.string().nullish(),
 });

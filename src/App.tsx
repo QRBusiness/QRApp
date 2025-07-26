@@ -216,7 +216,6 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <title>{t('module.app.name')}</title>
         <meta name="description" content={t('module.app.description')} />
-
         <Suspense fallback={<Loading />}>
           <RouterProvider router={routers} />
         </Suspense>

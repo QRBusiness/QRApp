@@ -266,6 +266,9 @@ export const useDeleteProduct = () => {
 const uploadProductImage = async ({ id, file }: { id: string; file: File }): Promise<string> => {
   try {
     const formData = new FormData();
+    if (!file) {
+      return '';
+    }
     formData.append('image', file);
     const response: ApiResponse<{ data: { url: string } }> = await apiClient.post(`/products/image/${id}`, formData, {
       headers: {

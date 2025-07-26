@@ -888,6 +888,7 @@
       }
     },
     "orderRequest": {
+      "noOrderFound": "No orders found.",
       "create": {
         "branch.error": "Branch is required.",
         "area.error": "Area is required.",
