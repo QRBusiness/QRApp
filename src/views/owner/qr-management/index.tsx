@@ -83,7 +83,7 @@ const QRManagement = () => {
 
   const Filters = () => {
     return (
-      <div className="flex items-start justify-start gap-2 flex-col p-3 border rounded-lg w-full">
+      <div className="flex items-start justify-start gap-2 flex-col p-2 md:p-3 border rounded-lg w-full">
         <div className="flex items-center justify-between space-x-2 w-full">
           <div className="flex items-center space-x-2">
             <FunnelPlus className="size-4 md:size-5" />

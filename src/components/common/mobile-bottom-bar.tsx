@@ -1,8 +1,10 @@
+import { AlignJustify } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/libs/utils';
 import { Button } from '../ui/button';
+import MobileDropdownMenu from './mobile-dropdown-menu';
 
 export interface SidebarItem {
   title: string;
@@ -12,20 +14,22 @@ export interface SidebarItem {
 }
 export interface MobileBottomBarProps {
   items?: SidebarItem[];
+  dropdownItems?: SidebarItem[];
 }
 
-const MobileBottomBar = ({ items }: MobileBottomBarProps) => {
+const MobileBottomBar = ({ items, dropdownItems }: MobileBottomBarProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const params = useLocation();
   const isMobile = useIsMobile();
 
+  console.log({ dropdownItems });
   // Check if the screen width is less than 768px
   if (!isMobile) return null; // Hide on larger screens
   // Hide the bottom bar on larger screens
   return (
     <div
-      className={`grid grid-cols-${items?.length} h-14 fixed bottom-0 left-0 right-0 w-full bg-white border-t z-50 items-center`}
+      className={`grid grid-cols-${items && dropdownItems?.length !== 0 ? items?.length + 1 : items?.length} h-14 fixed bottom-0 left-0 right-0 w-full bg-white border-t z-50 items-center`}
     >
       {items?.map((item) => (
         <Button
@@ -51,6 +55,14 @@ const MobileBottomBar = ({ items }: MobileBottomBarProps) => {
           </span>
         </Button>
       ))}
+      {dropdownItems && dropdownItems.length > 0 && (
+        <MobileDropdownMenu items={dropdownItems} side="top" align="end" sideOffset={20} alignOffset={10}>
+          <Button variant="ghost" className="flex flex-col justify-center items-center text-black border-primary">
+            <AlignJustify strokeWidth={2} className="size-5" />
+            <span className="text-sm">{t('module.mobileSidebar.more')}</span>
+          </Button>
+        </MobileDropdownMenu>
+      )}
     </div>
   );
 };

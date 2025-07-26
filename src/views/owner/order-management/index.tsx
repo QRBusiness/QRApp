@@ -5,7 +5,7 @@ import RequestBar from './request';
 const OrderManager = () => {
   const { t } = useTranslation();
   return (
-    <div className="w-full p-4 mx-auto flex flex-col gap-4">
+    <div className="w-full px-2 md:px-0 mx-auto flex flex-col gap-4">
       <div className="flex flex-col gap-2 mb-4">
         <h1 className="text-xl font-semibold">{t('module.order.unassignedRequestSession')}</h1>
         <RequestBar />

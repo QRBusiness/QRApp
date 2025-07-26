@@ -121,8 +121,8 @@ const UserProfile = () => {
     }
   };
   return (
-    <div className="container mx-auto p-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+    <div className="mx-auto px-2 md:p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full pb-12 md:pb-0">
         {/* Profile Info Card */}
         <Card className="lg:col-span-1">
           <CardHeader className="text-center">
@@ -263,7 +263,7 @@ const UserProfile = () => {
             <CardDescription>{t('module.profile.permission.description')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {permissions.map((permission) => (
                 <div
                   key={permission._id}

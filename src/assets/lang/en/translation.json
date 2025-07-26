@@ -136,7 +136,8 @@
       "business-owner-management": "Owner",
       "business-type": "Type",
       "order": "Order",
-      "cart": "Cart"
+      "cart": "Cart",
+      "more": "More"
     },
 
     "area": {

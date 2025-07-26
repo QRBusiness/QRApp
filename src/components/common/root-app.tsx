@@ -64,57 +64,105 @@ const RootApp = ({ role }: RootAppProps) => {
         {
           title: 'module.mobileSidebar.business-type',
           path_url: BUSINESS_TYPE,
-          icon: <Building2 />,
+          icon: <Building2 strokeWidth={2} className="size-5" />,
         },
         {
           title: 'module.mobileSidebar.business',
           path_url: BUSINESS,
-          icon: <Building2 />,
+          icon: <Building2 strokeWidth={2} className="size-5" />,
         },
         {
           title: 'module.mobileSidebar.business-owner-management',
           path_url: BUSINESS_OWNER_MANAGEMENT,
-          icon: <Contact />,
+          icon: <Contact strokeWidth={2} className="size-5" />,
         },
         {
           title: 'module.mobileSidebar.plan',
           path_url: PLAN,
-          icon: <CalendarPlus />,
+          icon: <CalendarPlus strokeWidth={2} className="size-5" />,
         },
         {
           title: 'module.mobileSidebar.profile',
           path_url: PROFILE,
-          icon: <User />,
+          icon: <User strokeWidth={2} className="size-5" />,
         },
       ];
     } else {
-      return [
+      const permissionMap: Array<{
+        codes: string[];
+        item: SidebarItem | (() => SidebarItem);
+        withoutPermission?: boolean;
+      }> = [
         {
-          title: 'module.mobileSidebar.qr-management',
-          path_url: QR_MANAGEMENT,
-          icon: <QrCode />,
+          codes: ['view.serviceunit'],
+          item: {
+            title: 'module.mobileSidebar.qr-management',
+            path_url: QR_MANAGEMENT,
+            icon: <QrCode strokeWidth={2} className="size-5" />,
+          },
         },
         {
-          title: 'module.mobileSidebar.menu-management',
-          path_url: MENU_MANAGEMENT,
-          icon: <UtensilsCrossed />,
+          codes: ['view.product'],
+          item: {
+            title: 'module.mobileSidebar.menu-management',
+            path_url: MENU_MANAGEMENT,
+            icon: <UtensilsCrossed strokeWidth={2} className="size-5" />,
+          },
         },
         {
-          title: 'module.mobileSidebar.order-management',
-          path_url: ORDER_MANAGEMENT,
-          icon: <HandPlatter />,
+          codes: ['view.order'],
+          item: {
+            title: 'module.mobileSidebar.order-management',
+            path_url: ORDER_MANAGEMENT,
+            icon: <HandPlatter strokeWidth={2} className="size-5" />,
+          },
         },
         {
-          title: 'module.mobileSidebar.request',
-          path_url: REQUEST,
-          icon: <Bell />,
+          codes: ['view.request'],
+          item: {
+            title: 'module.mobileSidebar.request',
+            path_url: REQUEST,
+            icon: <Bell strokeWidth={2} className="size-5" />,
+          },
         },
         {
-          title: 'module.mobileSidebar.profile',
-          path_url: PROFILE,
-          icon: <User />,
+          codes: ['view.dashboard'],
+          withoutPermission: true, // Allow access without specific permission
+          item: {
+            title: 'module.mobileSidebar.dashboard',
+            path_url: DASHBOARD,
+            icon: <ChartNoAxesCombined strokeWidth={2} className="size-5" />,
+          },
+        },
+        {
+          codes: ['view.branch', 'view.area'],
+          item: {
+            title: 'module.mobileSidebar.branch',
+            path_url: BRANCH,
+            icon: <Building2 strokeWidth={2} className="size-5" />,
+          },
+        },
+        {
+          codes: ['view.user', 'view.group'],
+          item: {
+            title: 'module.mobileSidebar.staff-management',
+            path_url: STAFF_MANAGEMENT,
+            icon: <UserCog strokeWidth={2} className="size-5" />,
+          },
         },
       ];
+      const mobileItems: SidebarItem[] = [];
+      permissionMap.forEach(({ codes, item, withoutPermission }) => {
+        if (havePermissions(permissionsList, codes) || withoutPermission) {
+          mobileItems.push(typeof item === 'function' ? item() : item);
+        }
+      });
+      mobileItems.push({
+        title: 'module.mobileSidebar.profile',
+        path_url: PROFILE,
+        icon: <User />,
+      });
+      return mobileItems;
     }
   }, [role, currentRole]);
 
@@ -147,9 +195,11 @@ const RootApp = ({ role }: RootAppProps) => {
       const permissionMap: Array<{
         codes: string[];
         item: SidebarItem | (() => SidebarItem);
+        withoutPermission?: boolean;
       }> = [
         {
           codes: ['view.dashboard'],
+          withoutPermission: true, // Allow access without specific permission
           item: {
             title: 'module.sidebar.dashboard',
             path_url: DASHBOARD,
@@ -224,8 +274,8 @@ const RootApp = ({ role }: RootAppProps) => {
         },
       ];
 
-      permissionMap.forEach(({ codes, item }) => {
-        if (havePermissions(permissionsList, codes)) {
+      permissionMap.forEach(({ codes, item, withoutPermission }) => {
+        if (havePermissions(permissionsList, codes) || withoutPermission) {
           businessOptions.push(typeof item === 'function' ? item() : item);
         }
       });
@@ -233,11 +283,21 @@ const RootApp = ({ role }: RootAppProps) => {
     }
   }, [location.pathname, permissionsList]);
 
+  // Create copies to avoid mutating the original arrays
+  let displayMobileItems = [...mobileSidebarItems];
+  const dropdownMobileItems: SidebarItem[] = [];
+
+  if (displayMobileItems.length > 5) {
+    // Use slice instead of splice to avoid mutating
+    dropdownMobileItems.push(...displayMobileItems.slice(4));
+    displayMobileItems = displayMobileItems.slice(0, 4);
+  }
+
   if (isMobile) {
     return (
       <SidebarProvider defaultOpen={cookie === 'true'}>
         {/* Mobile Bottom Bar */}
-        <MobileBottomBar items={mobileSidebarItems} />
+        <MobileBottomBar items={displayMobileItems} dropdownItems={dropdownMobileItems} />
         <div className="w-full h-full flex flex-col items-center justify-center p-0 py-4">
           <Headers />
           <Outlet />

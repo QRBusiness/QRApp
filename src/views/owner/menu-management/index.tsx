@@ -63,8 +63,8 @@ const MenuManagement = () => {
   }, [currentFilterSubcategory, refetch]);
 
   return (
-    <div className="mx-auto pb-10 space-y-4 w-full">
-      <div className="flex items-center space-x-2 justify-between mr-4 md:mr-0 w-full px-4 lg:px-0">
+    <div className="mx-auto pb-10 space-y-4 w-full px-2 md:px-0">
+      <div className="flex items-center space-x-2 justify-between mr-4 md:mr-0 w-full md:px-0">
         {/* subcategory filter */}
         <HorizontalFilterScroll
           orderStatuses={categoryOptions.map((category) => ({

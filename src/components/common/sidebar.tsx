@@ -1,7 +1,7 @@
 import React from 'react';
-import { ACCESS_TOKEN, ADMIN_ROLE, PROFILE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constants';
+import { ACCESS_TOKEN, PROFILE, REFRESH_TOKEN, USER_PERMISSIONS, USER_SESSION } from '@/constants';
 import { logoutService } from '@/services/auth-service';
-import { ChevronLeft, ChevronRight, CircleHelp, LogOut, Settings, User, UserCog } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CircleHelp, LogOut, Settings, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -46,20 +46,8 @@ const SidebarApp = ({ items }: SidebarProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const params = useLocation();
-  const location = useLocation();
   const user = useUserState();
   const [open, setOpen] = React.useState(false);
-  let accentItems: { label: string; icon: React.ReactNode; onClick: () => void }[] = [];
-
-  if (user.role === ADMIN_ROLE && location.pathname.split('/')[1] !== 'admin') {
-    accentItems.push({
-      label: t('module.sidebar.admin'),
-      icon: <UserCog />,
-      onClick: () => {
-        navigate('/admin');
-      },
-    });
-  }
 
   const handleLogout = async () => {
     try {
@@ -89,14 +77,6 @@ const SidebarApp = ({ items }: SidebarProps) => {
       onClick: async () => await handleLogout(),
     },
   ];
-
-  defaultItems.map((item) => {
-    accentItems.push({
-      label: item.label,
-      icon: item.icon,
-      onClick: item.onClick,
-    });
-  });
 
   return (
     <Sidebar side="left" variant="sidebar" collapsible="offcanvas">
@@ -191,7 +171,7 @@ const SidebarApp = ({ items }: SidebarProps) => {
                     open={open}
                     onOpenChange={() => setOpen(!open)}
                     label={t('module.sidebar.greeting', { name: user.name || 'User' })}
-                    items={accentItems}
+                    items={defaultItems}
                   >
                     <Button variant={'ghost'} className="w-full justify-between px-4 cursor-pointer">
                       <div className="flex items-center gap-2">
